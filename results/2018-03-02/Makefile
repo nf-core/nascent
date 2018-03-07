@@ -10,6 +10,6 @@ IMR24h_eRNA_IMR90_unique_coverage.bam
 
 all: $(objects)
 
+# Run coverageBed on all available bam files
 %_eRNA_IMR90_unique_coverage.bam: ../2018-02-06/bam/%.bam ../2018-01-29/eRNA_IMR90_hg19_No_Overlap.bed
-	# Run coverageBed on all available bam files
-	coverageBed -d -header -sorted -a *h.bam -b eRNA > $@
+	coverageBed -d -header -sorted -a $< -b (word 2, $^) > $@
