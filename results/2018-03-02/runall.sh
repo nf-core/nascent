@@ -2,6 +2,9 @@
 
 input_IMR90_data='../2018-02-06/bam'
 
+# Sort GM eRNA
+sortBed -i ../../data/2018-01-25/eRNA_GM_hg19.bed > eRNA_GM_hg19_sorted.bed                                                    
+
 # IMR90 Unique eRNAs Analysis
 mkdir IMR90_Unique
 
@@ -47,7 +50,7 @@ mv *.bam $output_IMR90_Overlap
 mkdir Overlap
 
 Overlap='../2018-01-27/eRNA_IMR90_Overlap.bed'
-output_Overlap='./IMR90_All/'
+output_Overlap='./Overlap/'
 
 for i in `ls ${input_IMR90_data}/*.bam | cut -d "_" -f 1` ;
 do
@@ -66,7 +69,7 @@ mv *.bam $output_Overlap
 # GM and overlap Analysis
 mkdir GM_Overlap
 
-GM_Unique='../../data/2018-01-25/eRNA_GM_hg19.bed'
+GM_Unique='eRNA_GM_hg19_sorted.bed'
 output_GM_Overlap='./GM_Overlap/'
 
 for i in `ls ${input_IMR90_data}/*.bam | cut -d "_" -f 1` ;
