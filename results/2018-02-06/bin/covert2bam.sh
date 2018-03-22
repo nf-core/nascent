@@ -12,5 +12,8 @@ do
 done;
 
 mkdir bam
-mv *.sam *.bam
+# Rename all *.sam to *.bam
+for f in *.sam; do 
+    mv -- "$f" "${f%.sam}.bam"
+done
 mv *.bam bam/
