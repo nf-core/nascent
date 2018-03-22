@@ -19,6 +19,9 @@ getGMData:
 
 compareIMR90toGM: predicteRNAs getGMData
 
-differentialAnalysis: compareIMR90toGM
-	# Run Create Coverage
-	results/2018-03-02/runall.sh
+covertSam:
+	./results/2018-02-06/runall.sh
+
+differentialAnalysis: compareIMR90toGM covertSam
+# Run Create Coverage
+	./results/2018-03-02/runall.sh
