@@ -20,9 +20,3 @@ do
     bowtie2 --very-sensitive -t -p 4 -x $genomePath $i -S ${i##*/} ;
     echo "Finish $i"
 done ;
-
-mkdir sam/
-mv *.fastq *.sam
-mv *.sam sam/
-
-# tar it!

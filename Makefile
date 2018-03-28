@@ -10,6 +10,7 @@ getRefGenome:
 
 refGenomeAlignment: getRefGenome getIMR90Data
 	./results/2017-06-27/bin/bowtie4all.sh
+	./results/2017-06-27/bin/moveFastq.sh
 
 createHomerTags: refGenomeAlignment
 
