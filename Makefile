@@ -4,10 +4,12 @@
 getIMR90Data:
 
 qualityCheck: getIMR90Data
+	./results/2017-06-22/bin/runFastqc.sh
 
 getRefGenome:
 
 refGenomeAlignment: getRefGenome getIMR90Data
+	./results/2017-06-27/bin/bowtie4all.sh
 
 createHomerTags: refGenomeAlignment
 
@@ -25,3 +27,6 @@ covertSam:
 differentialAnalysis: compareIMR90toGM covertSam
 # Run Create Coverage
 	./results/2018-03-02/runall.sh
+
+CompressAll:
+	tar -zcvf /results/2017-06-27/shIMR90_sam.tar.gz /results/2017-06-27/sam/
