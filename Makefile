@@ -23,11 +23,16 @@ getGMData:
 compareIMR90toGM: predicteRNAs getGMData
 
 covertSam:
-	./results/2018-02-06/runall.sh
+	./results/2018-02-06/bin/covert2bam.sh
+	./results/2018-02-06/bin/covert2bed.sh
 
 differentialAnalysis: compareIMR90toGM covertSam
 # Run Create Coverage
-	./results/2018-03-02/runall.sh
+	./results/2018-03-02/bin/run_Unique.sh
+	./results/2018-03-02/bin/run_Unique_Overlap.sh
+	./results/2018-03-02/bin/run_Overlap.sh
+	./results/2018-03-02/bin/run_GM_Overlap.sh
+	./results/2018-03-02/bin/run_GM.sh
 
 CompressAll:
 	tar -zcvf /results/2017-06-27/shIMR90_sam.tar.gz /results/2017-06-27/sam/
