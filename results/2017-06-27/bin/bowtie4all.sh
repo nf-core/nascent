@@ -5,7 +5,7 @@ command -v bowtie2 >/dev/null 2>&1 || { echo >&2 "I require Bowtie2 but it's not
 
 # NOTE Correct the genome location on local computer
 genomePath='/media/enhancer/Homo_sapiens/UCSC/hg19/Sequence/Bowtie2Index/genome'
-fastqPath='../../data/2017-06-21/fastq'
+fastqPath='/../../../data/2017-06-21/fastq'
 # Make sure the Genome is there
 if [ -f "$genomePath" ]
 then
