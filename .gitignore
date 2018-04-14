@@ -1,0 +1,10 @@
+*.fastq
+*.sam
+*.bigwig
+*.wig
+*.bed
+*.zip
+*.bam
+# Ignore for now
+data/2017-06-21/IMR90_GROseq.tar.gz
+data/2017-10-23/RoadmapBigWig.tar.gz
