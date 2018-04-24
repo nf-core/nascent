@@ -17,3 +17,8 @@ source activate myworkflow
 # execute workflow
 snakemake -n
 ```
+
+## View the DAG
+```snakemake --forceall --dag | dot -Tpng > dag.png```
+![Snakemake directed acyclic graph (DAG).][dag]
+[dag]: https://github.com/emiller88/IMR90/blob/master/kallisto/dag.png

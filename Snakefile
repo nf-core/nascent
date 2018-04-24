@@ -1,23 +1,49 @@
-```
+'''
 IMR90.Snakefile
 Edmund Miller
 
 Predict eRNA Transcripts from GRO-Seq data
-``` 
+'''
 from os.path import join, basename, dirname 
 
-IMR0h IMR30min IMR1h IMR2h IMR4h IMR6h IMR12h IMR24h   
+IMR90 = ["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h"]   
+configfile: 'config.yml'
+
+# hg19 = config['hg19']
 
 rule all:
+    input:
+        "results/2017-07-27/All_together/IMR90tsspeak.txt"
 
-# rule getIMR90Data:
+# rule report:
+#     input:
+#         "results/2017-07-27/All_together/IMR90tsspeak.txt"
 #     output:
-#         "data/2017-06-21/{IMR90}.fastq"
-#     shell:    
-#         # TODO
-#         "wget https://functionalgenomics.org/data/gro-seq/IMR90/{IMR90}.fastq"
+#         "report.html"
+#     run:
+#         from snakemake.utils import report
+#         with open(input[0]) as vcf:
+#             n_calls = sum(1 for l in vcf if not l.startswith("#"))
 
-rule qualityCheck: 
+#         report("""
+#         An example variant calling workflow
+#         ===================================
+
+#         Reads were mapped to the Yeast
+#         reference genome and variants were called jointly with
+#         SAMtools/BCFtools.
+
+#         This resulted in {n_calls} variants (see Table T1_).
+#         """, output[0], T1=input[0])
+rule IMR90_Data:
+    output:
+        "data/2017-06-21/{IMR90}.fastq"
+    run:    
+        # TODO https
+        shell('wget http://functionalgenomics.org/data/gro-seq/IMR90_GROseq.tar.gz')
+        shell('tar -xvf IMR90_GROseq.tar.gz data/2017-06-21/.')
+
+rule fastqc: 
     input: 
         "data/2017-06-21/{IMR90}.fastq"
     output:
@@ -25,13 +51,13 @@ rule qualityCheck:
     shell:
         "fastqc {input} -o={output} -t=6"
     
-rule getRefGenome:
+rule Bowtie2_Reference_Genome:
     output:
         "data/2017-06-27/hg19.zip"
     shell:
         "wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie2_indexes/hg19.zip --output-document={output}"
         
-rule buildRefGenome:
+rule Build_Ref_Genome:
     input:
         "data/2017-06-27/hg19.zip"
     output:
@@ -41,25 +67,77 @@ rule buildRefGenome:
         "hg19.4.bt2"
     threads: 4
     log:
-        join(dirname(CDNA), 'kallisto/kallisto.index.log')
+        #join(dirname(hg19), 'bt2.log')
+        "data/2017-06-27/buildRefGenome.log"
     run:
         shell('unzip {input}')
         shell('bash make_hg19.sh 2> {log}')
-# rule refGenomeAlignment: getRefGenome getIMR90Data
-# 	./results/2017-06-27/bin/bowtie4all.sh
-# 	./results/2017-06-27/bin/moveFastq.sh
 
-# rule createHomerTags: refGenomeAlignment
+# FIXME Hard coded the bowtie2 index
+rule Bowtie2:
+    input:
+        "data/2017-06-21/{IMR90}.fastq",
+        index = "data/2017-06-27/hg19.1.bt2"
+    output:
+        "results/2017-06-27/{IMR90}.sam"
+    log:
+        "results/2017-06-27/bowtie2Alignment.log"
+    # FIXME
+    # conda:
+    #     "envs/bowtie2.yaml"
+    threads:4
+    run: 
+        shell('bowtie2'
+              ' --time'
+              ' --threads={threads}'
+              ' --index=data/2017-06-27/hg19.1.bt2' #{input.index}'
+              ' -- very-sensitive'
+              '-x {IMR90}'
+              '-S {output}')
 
-# rule createHomerPeaks: createHomerTags
+rule makeTagDirectory:
+    input:
+        "results/2017-06-27/{IMR90}.sam"
+    output:
+        "results/2017-07-27/Tags/{IMR90}/"
+    shell:
+        "makeTagDirectory tags/{input} -genome hg19 -checkGC {output}"
+        
+rule AllTogether_makeTagDirectory:
+    input:
+        "results/2017-06-27/*.sam"
+    output:
+        "results/2017-07-27/All_together/"
+    shell:
+        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
-# rule predicteRNAs: createHomerPeaks
+rule findPeaks:
+    input:
+        "results/2017-07-27/All_together/"
+    output:
+        "results/2017-07-27/All_together/IMR90tsspeak.txt"
+    shell:
+        "findPeaks {input} -o {output} -style groseq"
 
-# rule getGMData:
+# FIXME
+rule predicteRNAs: 
 
-# rule compareIMR90toGM: predicteRNAs getGMData
+rule getGMData:
+    output:
+        "data/2018-01-25/eRNA_GM_hg19.bed"
+    shell:
+        "http://functionalgenomics.org/data/gro-seq/GM/eRNA_GM_hg19.bed {output}"
 
-# rule covertSam:
+# FIXME
+rule intersectBed:
+    input:
+        eGM = "data/2018-01-25/eRNA_GM_hg19.bed",
+        eIMR = "results/"
+    output:
+    run:
+        shell('intersectBed -wo -a {input.eIMR} -b {input.eGM} > {output}')
+
+# Sam:
 # 	./results/2018-02-06/bin/covert2bam.sh
 # 	./results/2018-02-06/bin/covert2bed.sh
 
