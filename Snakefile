@@ -13,8 +13,8 @@ configfile: 'config.yml'
 
 rule all:
     input:
-        "results/2017-07-27/All_together/IMR90tsspeak.txt"
-
+        "results/2017-08-02/GroseqIMR90peak.gtf",
+        "results/2018-01-25/eRNA_IMR90_GM_hg19_Overlap.bed"
 # rule report:
 #     input:
 #         "results/2017-07-27/All_together/IMR90tsspeak.txt"
@@ -115,14 +115,59 @@ rule findPeaks:
     input:
         "results/2017-07-27/All_together/"
     output:
-        "results/2017-07-27/All_together/IMR90tsspeak.txt"
+        "results/2017-08-02/GroseqIMR90peak.gtf"
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
 # FIXME
-rule predicteRNAs: 
+rule pos2bed: 
+    input:
+        "results/2017-08-02/GroseqIMR90peak.gtf"
+    output:
+        "results/2017-08-02/GroseqIMR90peak.bed"
+    run:
+     shell('pos2bed.pl {input} > {output}')
+     # shell('bedtools intersect -a GroseqIMR90peak.bed -b slop-refseqhg19.bed -v > GroseqIMR90nogenes.bed')
 
-rule getGMData:
+# FIXME
+rule getRefSeqhg19:     
+    output: 
+        "data/2017-08-02/refseqhg19.bed"
+
+# FIXME
+rule slopRefSeq:
+    input:
+        "data/2017-08-02/refseqhg19.bed"
+    output:
+        "data/2017-08-02/sloprefseqhg19.bed"
+
+# FIXME
+rule RemoveGenes:
+    input:
+        IMR = "results/2017-08-02/GroseqIMR90peak.bed",
+        refseq = "data/2017-08-02/sloprefseqhg19.bed"
+    output:
+        "results/2017-08-02/GroseqIMR90nogenes.bed"
+    run:
+     shell('bedtools intersect -a {input.IMR} -b {refseq} -v > {output}')
+
+# FIXME     
+rule getHistones:
+    output:
+        "results/2017-10-23/E017-H3K27ac.pval.signal.bigwig",
+        "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
+
+# FIXME
+rule Histones:
+    input:
+        IMR90 = "results/2017-08-02/GroseqIMR90nogenes.bed",
+        H3K27ac = "results/2017-10-23/E017-H3K27ac.pval.signal.bigwig",
+        H3K4me1 = "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
+    output:
+        "results/2017-11-01/eRNA_IMR90_hg19.bed"
+
+# FIXME
+rule GMData:
     output:
         "data/2018-01-25/eRNA_GM_hg19.bed"
     shell:
@@ -132,8 +177,9 @@ rule getGMData:
 rule intersectBed:
     input:
         eGM = "data/2018-01-25/eRNA_GM_hg19.bed",
-        eIMR = "results/"
+        eIMR = "results/2017-11-01/eRNA_IMR90_hg19.bed"
     output:
+        "results/2018-01-25/eRNA_IMR90_GM_hg19_Overlap.bed"
     run:
         shell('intersectBed -wo -a {input.eIMR} -b {input.eGM} > {output}')
 
