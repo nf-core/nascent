@@ -13,8 +13,8 @@ configfile: 'config.yml'
 
 rule all:
     input:
-        "results/2017-08-02/GroseqIMR90peak.gtf",
         "results/2018-01-25/eRNA_IMR90_GM_hg19_Overlap.bed"
+
 # rule report:
 #     input:
 #         "results/2017-07-27/All_together/IMR90tsspeak.txt"
@@ -35,11 +35,12 @@ rule all:
 
 #         This resulted in {n_calls} variants (see Table T1_).
 #         """, output[0], T1=input[0])
+
 rule IMR90_Data:
     output:
         "data/2017-06-21/{IMR90}.fastq"
     run:    
-        # TODO https
+        # FIXME https
         shell('wget http://functionalgenomics.org/data/gro-seq/IMR90_GROseq.tar.gz')
         shell('tar -xvf IMR90_GROseq.tar.gz data/2017-06-21/.')
 
@@ -54,10 +55,11 @@ rule fastqc:
 rule Bowtie2_Reference_Genome:
     output:
         "data/2017-06-27/hg19.zip"
-    shell:
-        "wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie2_indexes/hg19.zip --output-document={output}"
-        
-rule Build_Ref_Genome:
+    run:
+        shell('wget' 
+            ' ftp://ftp.ccb.jhu.edu/pub/data/bowtie2_indexes/hg19.zip' 
+            ' --output-document={output}')
+rule Build_bowtieRef_Genome:
     input:
         "data/2017-06-27/hg19.zip"
     output:
@@ -73,7 +75,6 @@ rule Build_Ref_Genome:
         shell('unzip {input}')
         shell('bash make_hg19.sh 2> {log}')
 
-# FIXME Hard coded the bowtie2 index
 rule Bowtie2:
     input:
         "data/2017-06-21/{IMR90}.fastq",
@@ -82,7 +83,7 @@ rule Bowtie2:
         "results/2017-06-27/{IMR90}.sam"
     log:
         "results/2017-06-27/bowtie2Alignment.log"
-    # FIXME
+    # FIXME Hard coded the bowtie2 index
     # conda:
     #     "envs/bowtie2.yaml"
     threads:4
@@ -119,28 +120,39 @@ rule findPeaks:
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
-# FIXME
 rule pos2bed: 
     input:
         "results/2017-08-02/GroseqIMR90peak.gtf"
     output:
         "results/2017-08-02/GroseqIMR90peak.bed"
     run:
-     shell('pos2bed.pl {input} > {output}')
-     # shell('bedtools intersect -a GroseqIMR90peak.bed -b slop-refseqhg19.bed -v > GroseqIMR90nogenes.bed')
+        shell('pos2bed.pl {input} > {output}')
 
 # FIXME
-rule getRefSeqhg19:     
+rule RefSeqhg19:     
     output: 
         "data/2017-08-02/refseqhg19.bed"
+
+rule Genomehg19:
+    output:
+        tar = "data/2018-07-27/chromFa.tar.gz",
+    run:
+        shell('wget --timestamping'
+            ' ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz'
+            ' -O {output.tar}')
+        shell('tar xvzf {output.tar}')
 
 # FIXME
 rule slopRefSeq:
     input:
         "data/2017-08-02/refseqhg19.bed"
+        # genome=""
     output:
         "data/2017-08-02/sloprefseqhg19.bed"
-
+    run:
+         shell('slopBed -i refseqhg19.bed'
+         ' -g {input.genome}'
+         ' -l 1000 -r 10000 > {output}')
 # FIXME
 rule RemoveGenes:
     input:
@@ -158,6 +170,9 @@ rule getHistones:
         "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
 
 # FIXME
+rule changeHistones:
+
+# FIXME
 rule Histones:
     input:
         IMR90 = "results/2017-08-02/GroseqIMR90nogenes.bed",
@@ -165,6 +180,8 @@ rule Histones:
         H3K4me1 = "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
     output:
         "results/2017-11-01/eRNA_IMR90_hg19.bed"
+    shell:
+        ""
 
 # FIXME
 rule GMData:

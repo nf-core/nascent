@@ -1,4 +1,6 @@
 *.fastq
+*.fa
+.snakemake
 *.sam
 *.bigwig
 *.wig
