@@ -161,8 +161,11 @@ rule RemoveGenes:
         refseq = "results/2017-08-02/sloprefseqhg19.bed"
     output:
         "results/2017-08-02/GroseqIMR90nogenes.bed"
+    log:
+        "log/RemoveGenes.log"
     run:
-     shell('bedtools intersect -a {input.IMR} -b {input.refseq} -v > {output}')
+     shell('bedtools intersect -a {input.IMR} -b {input.refseq} -v'
+           ' | sort -k1,1 -k2,2n - > {output} 2> {log}')
 
 # TODO pysam the unzipping and add conda support
 rule wgetH3K27ac:
@@ -172,7 +175,8 @@ rule wgetH3K27ac:
         "log/wgetH3K27ac.log"
     run:
         shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469967/suppl/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz -O data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz 2> {log}')
-        shell('bgzip -d data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz {output} 2> {log}')
+        shell('bgzip -d data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz'
+           ' | sort -k1,1 -k2,2n -k3,3n -k4,4n - 2> {log}')
 
 rule wgetH3K4me3:
     output:
@@ -181,7 +185,8 @@ rule wgetH3K4me3:
         "log/wgetH3K4me3.log"
     run:
         shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469970/suppl/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz -O data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz 2> {log}')
-        shell('bgzip -d data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz {output} 2> {log}')
+        shell('bgzip -d data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz'
+            ' | sort -k1,1 -k2,2n -k3,3n -k4,4n - 2> {log}')
 
 # FIXME
 rule HistonesIntersect:
