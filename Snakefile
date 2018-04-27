@@ -129,29 +129,30 @@ rule pos2bed:
         shell('pos2bed.pl {input} > {output}')
 
 # FIXME
+# Can't find where to redownload
 rule RefSeqhg19:     
     output: 
         "data/2017-08-02/refseqhg19.bed"
 
-rule Genomehg19:
-    output:
-        tar = "data/2018-07-27/chromFa.tar.gz",
-    run:
-        shell('wget --timestamping'
-            ' ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz'
-            ' -O {output.tar}')
-        shell('tar xvzf {output.tar}')
+# Not necessary just saved fastq file of lengths
+# rule Genomehg19:
+#     output:
+#         tar = "data/2017-07-27/chromFa.tar.gz",
+#     run:
+#         shell('wget --timestamping'
+#             ' ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz'
+#             ' -O {output.tar}')
+#         shell('tar xvzf {output.tar}')
 
-# FIXME
 rule slopRefSeq:
     input:
-        "data/2017-08-02/refseqhg19.bed"
-        # genome=""
+        refSeq="data/2017-08-02/refseqhg19.bed",
+        chromLen="data/2017-07-27/genome.fa.fai"
     output:
-        "data/2017-08-02/sloprefseqhg19.bed"
+        "results/2017-08-02/sloprefseqhg19.bed"
     run:
-         shell('slopBed -i refseqhg19.bed'
-         ' -g {input.genome}'
+         shell('slopBed -i {input.refSeq}'
+         ' -g {input.chromLen}'
          ' -l 1000 -r 10000 > {output}')
 # FIXME
 rule RemoveGenes:
