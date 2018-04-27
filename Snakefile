@@ -164,11 +164,13 @@ rule RemoveGenes:
     run:
      shell('bedtools intersect -a {input.IMR} -b {input.refseq} -v > {output}')
 
-# FIXME     
 rule getHistones:
     output:
-        "results/2017-10-23/E017-H3K27ac.pval.signal.bigwig",
-        "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
+        H3K27ac = "data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz",
+        H3K4me3 = "data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz"
+    run:
+        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469967/suppl/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz -o {output.H3K27ac}')
+        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469970/suppl/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz -o {output.H3K4me3}')
 
 # FIXME
 rule changeHistones:
