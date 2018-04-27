@@ -36,13 +36,13 @@ rule all:
 #         This resulted in {n_calls} variants (see Table T1_).
 #         """, output[0], T1=input[0])
 
-rule IMR90_Data:
-    output:
-        "data/2017-06-21/{IMR90}.fastq"
-    run:    
-        # FIXME https
-        shell('wget http://functionalgenomics.org/data/gro-seq/IMR90_GROseq.tar.gz')
-        shell('tar -xvf IMR90_GROseq.tar.gz data/2017-06-21/.')
+# rule IMR90_Data:
+#     output:
+#         "data/2017-06-21/{IMR90}.fastq"
+#     run:    
+#         # FIXME https
+#         shell('wget http://functionalgenomics.org/data/gro-seq/IMR90_GROseq.tar.gz')
+#         shell('tar -xvf IMR90_GROseq.tar.gz data/2017-06-21/.')
 
 rule fastqc: 
     input: 
@@ -134,7 +134,7 @@ rule RefSeqhg19:
     output: 
         "data/2017-08-02/refseqhg19.bed"
 
-# Not necessary just saved fastq file of lengths
+# Not necessary just git fa file of lengths
 # rule Genomehg19:
 #     output:
 #         tar = "data/2017-07-27/chromFa.tar.gz",
@@ -154,15 +154,15 @@ rule slopRefSeq:
          shell('slopBed -i {input.refSeq}'
          ' -g {input.chromLen}'
          ' -l 1000 -r 10000 > {output}')
-# FIXME
+
 rule RemoveGenes:
     input:
         IMR = "results/2017-08-02/GroseqIMR90peak.bed",
-        refseq = "data/2017-08-02/sloprefseqhg19.bed"
+        refseq = "results/2017-08-02/sloprefseqhg19.bed"
     output:
         "results/2017-08-02/GroseqIMR90nogenes.bed"
     run:
-     shell('bedtools intersect -a {input.IMR} -b {refseq} -v > {output}')
+     shell('bedtools intersect -a {input.IMR} -b {input.refseq} -v > {output}')
 
 # FIXME     
 rule getHistones:
