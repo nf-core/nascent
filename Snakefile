@@ -188,7 +188,6 @@ rule wgetH3K4me3:
         shell('bgzip -d data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz'
             ' | sort -k1,1 -k2,2n -k3,3n -k4,4n - 2> {log}')
 
-# FIXME
 rule HistonesIntersect:
     input:
         IMR90nogenes = "results/2017-08-02/GroseqIMR90nogenes.bed",
@@ -197,9 +196,9 @@ rule HistonesIntersect:
     output:
         "results/2017-11-01/eRNA_IMR90_hg19.bed"
     log:
-        "results/2017-11-01/HistonesIntersect.log"
+        "log/HistonesIntersect.log"
     shell:
-        "bedtools intersect -a {input.IMR90nogenes} -b {input.H3K27ac} {input.H3K4me3} -sorted -u > {output} 2> {log}"
+        "bedtools intersect -a {input.IMR90nogenes} -b {input.H3K27ac} {input.H3K4me3} -u > {output} 2> {log}"
 
 # FIXME
 rule GMData:
