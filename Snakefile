@@ -164,27 +164,37 @@ rule RemoveGenes:
     run:
      shell('bedtools intersect -a {input.IMR} -b {input.refseq} -v > {output}')
 
-rule getHistones:
+# TODO pysam the unzipping and add conda support
+rule wgetH3K27ac:
     output:
-        H3K27ac = "data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz",
-        H3K4me3 = "data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz"
+        "data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed",
+    log:
+        "log/wgetH3K27ac.log"
     run:
-        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469967/suppl/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz -o {output.H3K27ac}')
-        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469970/suppl/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz -o {output.H3K4me3}')
+        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469967/suppl/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz -O data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz 2> {log}')
+        shell('bgzip -d data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed.gz {output} 2> {log}')
+
+rule wgetH3K4me3:
+    output:
+        "data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed"
+    log:
+        "log/wgetH3K4me3.log"
+    run:
+        shell('wget ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469970/suppl/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz -O data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz 2> {log}')
+        shell('bgzip -d data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed.gz {output} 2> {log}')
 
 # FIXME
-rule changeHistones:
-
-# FIXME
-rule Histones:
+rule HistonesIntersect:
     input:
-        IMR90 = "results/2017-08-02/GroseqIMR90nogenes.bed",
-        H3K27ac = "results/2017-10-23/E017-H3K27ac.pval.signal.bigwig",
-        H3K4me1 = "results/2017-10-23/E017-H3K4me1.pval.signal.bigwig"
+        IMR90nogenes = "results/2017-08-02/GroseqIMR90nogenes.bed",
+        H3K27ac = "data/2017-10-23/GSM469967_UCSD.IMR90.H3K27ac.LL235.bed",
+        H3K4me3 = "data/2017-10-23/GSM469970_UCSD.IMR90.H3K4me3.LL221.bed"
     output:
         "results/2017-11-01/eRNA_IMR90_hg19.bed"
+    log:
+        "results/2017-11-01/HistonesIntersect.log"
     shell:
-        ""
+        "bedtools intersect -a {input.IMR90nogenes} -b {input.H3K27ac} {input.H3K4me3} -sorted -u > {output} 2> {log}"
 
 # FIXME
 rule GMData:
