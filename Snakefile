@@ -7,8 +7,7 @@
 
 rule all:
     input:
-        # The first rule should define the default target files
-        # Subsequent target rules can be specified below. They should start with all_*.
+        html=expand("results/2018-10-03/fastqc/{sample}.html",samples=SAMPLES),
+        zip=expand("results/2018-10-03/fastqc/{sample}.zip",samples=SAMPLES),
 
-
-include: "rules/other.smk"
+include: "rules/fastqc.smk"
