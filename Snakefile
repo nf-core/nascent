@@ -11,6 +11,8 @@ rule all:
         html=expand("results/2018-10-03/fastqc/{sample}.html",sample=SAMPLES),
         zip=expand("results/2018-10-03/fastqc/{sample}.zip",sample=SAMPLES),
         bam=expand("results/2018-10-04/{sample}.bam", sample=SAMPLES),
+        maketag="results/2017-07-27/All_together/"
 
 include: "rules/fastqc.smk"
 include: "rules/bowtie2.smk"
+include: "rules/homerMakeTagDir.smk"
