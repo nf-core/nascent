@@ -11,9 +11,10 @@ rule all:
         html=expand("results/2018-10-03/fastqc/{sample}.html",sample=SAMPLES),
         zip=expand("results/2018-10-03/fastqc/{sample}.zip",sample=SAMPLES),
         bam=expand("results/2018-10-04/{sample}.bam", sample=SAMPLES),
-        peaks="results/2018-11-07/GroseqIMR90peak.gtf",
+        bed_peaks="results/2018-11-08/groseq_GM_peak.gtf",
 
 include: "rules/fastqc.smk"
 include: "rules/bowtie2.smk"
 include: "rules/homerMakeTagDir.smk"
 include: "rules/homerFindPeaks.smk"
+include: "rules/pos2bed.smk"
