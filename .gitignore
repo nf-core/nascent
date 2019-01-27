@@ -16,6 +16,9 @@ scripts/.snakemake*
 !README.md
 !rules
 !rules/*
+!rules/GM18/*
+!rules/GM19/*
+!rules/IMR/*
 !.gitignore
 !.gitattributes
 !.editorconfig

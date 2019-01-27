@@ -1,0 +1,7 @@
+channels:
+  - r
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - bedops

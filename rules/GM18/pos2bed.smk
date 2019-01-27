@@ -4,6 +4,6 @@ rule pos2bed:
     output:
         "results/2018-11-08/groseq_GM_peak.bed"
     conda:
-        "../envs/homer.yaml"
-    run:
-        shell('pos2bed.pl {input} > {output}')
+        "../../envs/homer.yaml"
+    shell:
+        "pos2bed.pl {input} > {output}"

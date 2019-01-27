@@ -1,6 +1,6 @@
-rule fastqc:
+rule GM_fastqc:
     input:
-        "data/2018-06-23/{sample}.fastq"
+        "data/2018-06-23/GM/{sample}.fastq"
     output:
         html="results/2018-10-03/fastqc/{sample}.html",
         zip="results/2018-10-03/fastqc/{sample}.zip"
