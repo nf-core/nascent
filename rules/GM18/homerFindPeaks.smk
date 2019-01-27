@@ -1,8 +1,8 @@
-rule findPeaks:
+rule GM18_findPeaks:
     input:
-        "results/2018-11-07/All_together/"
+        "results/2018-11-07/GM18_meta_tagDir/"
     output:
-        "results/2018-11-07/groseq_GM_peak.gtf"
+        "results/2018-11-07/GM18_meta_groseq_peak.gtf"
     # conda:
     #     "../envs/homer.yaml"
     shell:

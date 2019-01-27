@@ -1,4 +1,4 @@
-rule pos2bed:
+rule GM18_pos2bed:
     input:
         "results/2018-11-07/groseq_GM_peak.gtf"
     output:

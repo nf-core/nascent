@@ -31,10 +31,10 @@ rule fixBEDcoordinates:
 # Take the slopped genes and remove them from the Peaks file
 rule RemoveGenes:
     input:
-        GM="results/2018-11-08/groseq_GM_peak.bed",
+        GM="results/2018-11-07/GM18_meta_groseq_peak.bed",
         refseq="data/2018-11-09/hg18_slop_refseq.sorted.bed",
     output:
-        "results/2018-11-09/groseq_GM_noGenes.bed"
+        "results/2018-11-09/GM18_meta_groseq_noGenes.bed"
     log:
         "logs/RemoveGenes.log"
     conda:

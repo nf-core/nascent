@@ -7,11 +7,11 @@ def get_trimmed(wildcards):
     return "data/2018-06-23/{unit}.fastq".format(**wildcards)
 
 
-rule bowtie2:
+rule GM18_bowtie2:
     input:
         sample=["data/2018-06-23/GM/{unit}.fastq"]
     output:
-        "results/2018-10-04/GM/{unit}.bam"
+        "results/2018-10-04/GM18/{unit}.bam"
     log:
         "logs/bowtie2/{unit}.log"
     params:

@@ -1,4 +1,4 @@
-rule alignHistones_hg18:
+rule GM18_alignHistones:
     input:
         sample=["data/2018-11-13/GM_{unit}.fastq"]
     output:
@@ -12,7 +12,7 @@ rule alignHistones_hg18:
     wrapper:
         "0.27.1/bio/bowtie2/align"
 
-rule convert_Histones_to_Bed:
+rule GM18_convert_Histones_to_Bed:
     input:
         "results/2018-11-13/GM_{unit}_hg18.bam",
     output:
@@ -23,7 +23,7 @@ rule convert_Histones_to_Bed:
     shell:
         "bamToBed -i {input} > {output}"
 
-rule sort_Histones_Bed:
+rule GM18_sort_Histones_Bed:
     input:
         "results/2018-11-24/GM_{unit}_hg18.bed",
     output:
@@ -34,13 +34,13 @@ rule sort_Histones_Bed:
     shell:
         "sortBed -i {input} > {output}"
 
-rule HistonesIntersect:
+rule GM18_HistonesIntersect:
     input:
-        GM_no_genes="results/2018-11-09/groseq_GM_noGenes.bed",
-        H3K27ac="results/2018-11-24/GM_H3K27ac_hg18.sorted.bed",
-        H3K4me1="results/2018-11-24/GM_H3K4me1_hg18.sorted.bed",
+        GM_no_genes="results/2018-11-09/GM18_meta_groseq_noGenes.bed",
+        H3K27ac="results/2018-11-24/GM18_H3K27ac.sorted.bed",
+        H3K4me1="results/2018-11-24/GM18_H3K4me1.sorted.bed",
     output:
-        "results/2018-11-10/eRNA_GM_hg18.bed"
+        "results/2018-11-10/GM18_eRNA.bed"
     log:
         "logs/HistonesIntersect.log"
     conda:
