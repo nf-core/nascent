@@ -85,7 +85,7 @@ rule hg19_download_refSeq:
         "../envs/awscli.yaml"
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {output.hg19}"
+        "-b {params.build} -t {params.typeOf} -o {output.hg19_genes}"
 
 # RefSeq
 
