@@ -1,10 +1,10 @@
-rule GM_hg19_bowtie2:
+rule GM19_bowtie2:
     input:
         sample=["data/2018-06-23/GM/{unit}.fastq"]
     output:
-        "results/2018-11-27/GM/{unit}.bam"
+        "results/2018-11-27/GM19/{unit}.bam"
     log:
-        "logs/hg19/GM/bowtie2/{unit}.log"
+        "logs/GM19/bowtie2/{unit}.log"
     params:
         index="data/2018-11-27/genome",
         extra=""

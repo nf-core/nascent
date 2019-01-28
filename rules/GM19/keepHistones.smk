@@ -2,7 +2,7 @@ rule hg19_alignHistones:
     input:
         sample=["data/2018-11-13/GM_{unit}.fastq"]
     output:
-        "data/2018-11-29/GM_{unit}_hg19.bam"
+        "data/2018-11-29/GM19_{unit}.bam"
     log:
         "logs/bowtie2/{unit}.log"
     params:
@@ -14,9 +14,9 @@ rule hg19_alignHistones:
 
 rule hg19_convert_Histones_to_Bed:
     input:
-        "data/2018-11-29/GM_{unit}_hg19.bam",
+        "data/2018-11-29/GM19_{unit}.bam",
     output:
-        "data/2018-11-29/GM_{unit}_hg19.bed",
+        "data/2018-11-29/GM19_{unit}.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 2
@@ -25,9 +25,9 @@ rule hg19_convert_Histones_to_Bed:
 
 rule hg19_sort_Histones_Bed:
     input:
-        "data/2018-11-29/GM_{unit}_hg19.bed",
+        "data/2018-11-29/GM19_{unit}.bed",
     output:
-        "data/2018-11-29/GM_{unit}_hg19.sorted.bed",
+        "data/2018-11-29/GM19_{unit}.sorted.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 2
@@ -36,11 +36,11 @@ rule hg19_sort_Histones_Bed:
 
 rule GM_hg19_HistonesIntersect:
     input:
-        GM_no_genes="results/2018-11-29/groseq_GM_hg19_noGenes.bed",
-        H3K27ac="data/2018-11-29/GM_H3K27ac_hg19.sorted.bed",
-        H3K4me1="data/2018-11-29/GM_H3K4me1_hg19.sorted.bed",
+        GM_no_genes="results/2018-11-29/GM19_meta_groseq_noGenes.bed",
+        H3K27ac="data/2018-11-29/GM19_H3K27ac.sorted.bed",
+        H3K4me1="data/2018-11-29/GM19_H3K4me1.sorted.bed",
     output:
-        "results/2018-11-29/eRNA_GM_hg19.bed"
+        "results/2018-11-29/GM19_eRNA.bed"
     log:
         "logs/HistonesIntersect.log"
     conda:
