@@ -3,6 +3,8 @@
 !scripts/*
 !scripts/common
 !scripts/common/*
+!scripts/analysis
+!scripts/analysis/*
 scripts/.snakemake*
 !Snakefile
 !config.yaml
