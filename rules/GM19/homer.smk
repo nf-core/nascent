@@ -1,4 +1,14 @@
-rule GM_hg19_findPeaks:
+rule GM19_meta_makeTagDirectory:
+    input:
+        expand("results/2018-11-27/GM19/{unit}.bam",unit=GM_SAMPLES)
+    output:
+        "results/2018-11-28/GM19_meta_tagDir/"
+    # conda:
+    #     "../../envs/homer.yaml"
+    shell:
+        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
+
+rule GM19_meta_findPeaks:
     input:
         "results/2018-11-28/GM19_meta_tagDir/"
     output:
@@ -9,7 +19,7 @@ rule GM_hg19_findPeaks:
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
-rule GM_hg19_pos2bed:
+rule GM19_meta_pos2bed:
     input:
         "results/2018-11-28/GM19_meta_groseq_peak.gtf"
     output:
