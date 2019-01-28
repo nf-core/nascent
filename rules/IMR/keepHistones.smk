@@ -36,7 +36,7 @@ rule IMR_hg19_sort_Histones_Bed:
 
 rule IMR_hg19_HistonesIntersect:
     input:
-        IMR_no_genes="results/2018-12-02/groseq_IMR_hg19_noGenes.bed",
+        IMR_no_genes="results/2018-12-02/IMR_hg19_groseq_noGenes.bed",
         H3K27ac="data/2018-12-02/IMR_H3K27ac_hg19.sorted.bed",
         H3K4me1="data/2018-12-02/IMR_H3K4me1_hg19.sorted.bed",
     output:

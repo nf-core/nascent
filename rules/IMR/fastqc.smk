@@ -6,6 +6,6 @@ rule IMR_fastqc:
         zip="results/2018-12-01/fastqc/{sample}.zip"
     params: ""
     log:
-        "logs/fastqc/{sample}.log"
+        "logs/IMR/fastqc/{sample}.log"
     wrapper:
         "0.27.1/bio/fastqc"

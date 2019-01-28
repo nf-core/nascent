@@ -4,7 +4,7 @@ rule IMR_hg19_bowtie2:
     output:
         "results/2018-12-01/IMR/{unit}.bam"
     log:
-        "logs/hg19/IMR/bowtie2/{unit}.log"
+        "logs/IMR/bowtie2/{unit}.log"
     params:
         index="data/2018-11-27/genome",
         extra=""
