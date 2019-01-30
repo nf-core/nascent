@@ -20,10 +20,12 @@ rule all:
         # GM18_test1="results/2018-11-10/hg18_eRNA_overlaps.bed",
         # GM18_test2="results/2018-11-25/hg19_eRNA_overlaps.bed",
         # GM hg19
+        GM_counts=expand("results/2019-01-28/GM/{unit}_groseq_peak.bed", unit=GM_SAMPLES),
         # hg19eRNA="results/2018-11-29/eRNA_GM_hg19.bed",
         # GM19_test1="results/2018-11-30/hg19_eRNA_overlaps_Peng.bed",
         # GM19_test2="results/2018-11-30/hg19_eRNA_overlaps_liftOver.bed",
         # IMR hg19
+        IMR_counts=expand("results/2019-01-28/IMR/{unit}_groseq_peak.bed", unit=IMR_SAMPLES),
         # IMR_eRNA="results/2018-12-02/eRNA_IMR_hg19.bed",
         IMR_test1="results/2018-12-03/IMR_hg19_vs_Peng.bed",
         IMR_test2="results/2018-12-03/IMR_hg19_vs_liftOver.bed",
