@@ -36,7 +36,7 @@ rule IMR_hg19_sample_makeTagDirectory:
     output:
         "results/2019-01-28/IMR/{unit}_tagDir/",
     shell:
-        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
+        "makeTagDirectory {output} -genome hg19 -checkGC {input.sample}"
 
 rule IMR_hg19_sample_findPeaks:
     input:

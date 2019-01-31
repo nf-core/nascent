@@ -2,7 +2,7 @@ rule GM19_eRNA_makeTagDirectory:
     input:
         "results/2018-11-29/GM19_eRNA.bed",
     output:
-        "results/2018-01-30/GM19_eRNA_tagDir/",
+        "results/2019-01-31/GM19_eRNA_tagDir/",
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../envs/homer.yaml"
@@ -12,9 +12,9 @@ rule GM19_eRNA_makeTagDirectory:
 rule GM19_sample_DiffPeaksReplicates:
     input:
         sampleTags=expand("results/2019-01-28/GM/{unit}_tagDir/",unit=GM_SAMPLES),
-        eRNATags="results/2018-01-30/GM19_eRNA_tagDir/",
+        eRNATags="results/2019-01-31/GM19_eRNA_tagDir/",
     output:
-        "results/2018-01-30/GM19_eRNA_diffPeaks.txt",
+        "results/2019-01-31/GM19_eRNA_diffPeaks.txt",
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../envs/homer_R.yaml"
@@ -22,4 +22,4 @@ rule GM19_sample_DiffPeaksReplicates:
         genome="hg19",
     shell:
         "getDifferentialPeaksReplicates.pl -t {input.eRNATags} \ "
-        "-i {input.sampleTags} -genome hg19 > {output}"
+        "-i {input.sampleTags} -genome {params.genome} > {output}"
