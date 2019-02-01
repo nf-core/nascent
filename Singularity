@@ -4,7 +4,7 @@ Bootstrap:docker
 %labels
     MAINTAINER Ignacio Tripodi, Margaret Gruca
     DESCRIPTION Singularity image containing all requirements for the nf-core/nascent pipeline
-    VERSION 1.0dev
+    VERSION 1.0
 
 %environment
     PATH=/opt/conda/envs/nf-core-nascent-1.0dev/bin:$PATH
