@@ -1,5 +1,5 @@
 FROM nfcore/base
-LABEL authors="Ignacio Tripodi, Margaret Gruca" \
+LABEL authors="Ignacio Tripodi (ignacio.tripodi@colorado.edu), Margaret Gruca (margaret.gruca@colorado.edu)" \
       description="Docker image containing all requirements for nf-core/nascent pipeline"
 
 COPY environment.yml /
