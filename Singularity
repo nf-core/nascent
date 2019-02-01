@@ -7,7 +7,7 @@ Bootstrap:docker
     VERSION 1.0
 
 %environment
-    PATH=/opt/conda/envs/nf-core-nascent-1.0dev/bin:$PATH
+    PATH=/opt/conda/envs/nf-core-nascent-1.0/bin:$PATH
     export PATH
 
 %files
