@@ -119,15 +119,16 @@ output_docs = file("$baseDir/docs/output.md")
 
 // Validate inputs
 
-if ( params.genome ){
-    genome = file(params.genome)
-    if( !genome.exists() ) exit 1, "Genome directory not found: ${params.genome}"
+if ( params.fasta ){
+   // genome_fasta = file(params.fasta)
+   // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
+    Channel.fromPath(params.fasta)
+           .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
+           .into { genome_fasta; ch_fasta_for_hisat_index}
 }
-
-if ( params.chrom_sizes ){
-    chrom_sizes = file(params.chrom_sizes)
-    if( !chrom_sizes.exists() ) exit 1, "Genome chrom sizes file not found: ${params.chrom_sizes}"
- }
+else {
+    params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
+}
 
 if ( params.bbmap_adapters ){
     bbmap_adapters = file("${params.bbmap_adapters}")
@@ -222,7 +223,7 @@ summary['Run Name']     = custom_runName ?: workflow.runName
 if(params.reads) summary['Reads']            = params.reads
 if(params.fastqs) summary['Fastqs']           = params.fastqs
 if(params.sras) summary['SRAs']             = params.sras
-summary['Genome Ref']       = params.genome
+summary['Genome Ref']       = params.fasta
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
 summary['Data Type']        = params.singleEnd ? 'Single-End' : 'Paired-End'
 summary['Save All fastq']   = params.saveAllfq ? 'YES' : 'NO'
@@ -360,6 +361,54 @@ process sra_dump {
         """
     }
 }
+
+
+/*
+ * PREPROCESSING - Build HISAT2 index (borrowed from nf-core/rnaseq)
+ */
+// TODO: do we need --ss and --exon? probably not, need to check what was the actual hisat2-builder arguments used to generate the indices we have on fiji
+if(!params.hisat2_indices && params.fasta){
+    process makeHISATindex {
+        tag "$fasta"
+        publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
+                   saveAs: { params.saveReference ? it : null }, mode: 'copy'
+
+        input:
+        file fasta from ch_fasta_for_hisat_index
+        file indexing_splicesites from indexing_splicesites
+        file gtf from gtf_makeHISATindex
+
+        output:
+        file "${fasta.baseName}.*.ht2" into hs2_indices
+
+        script:
+        if( !task.memory ){
+            log.info "[HISAT2 index build] Available memory not known - defaulting to 0. Specify process memory requirements to change this."
+            avail_mem = 0
+        } else {
+            log.info "[HISAT2 index build] Available memory: ${task.memory}"
+            avail_mem = task.memory.toGiga()
+        }
+        if( avail_mem > params.hisatBuildMemory ){
+            log.info "[HISAT2 index build] Over ${params.hisatBuildMemory} GB available, so using splice sites and exons in HISAT2 index"
+            extract_exons = "hisat2_extract_exons.py $gtf > ${gtf.baseName}.hisat2_exons.txt"
+            ss = "--ss $indexing_splicesites"
+            exon = "--exon ${gtf.baseName}.hisat2_exons.txt"
+        } else {
+            log.info "[HISAT2 index build] Less than ${params.hisatBuildMemory} GB available, so NOT using splice sites and exons in HISAT2 index."
+            log.info "[HISAT2 index build] Use --hisatBuildMemory [small number] to skip this check."
+            extract_exons = ''
+            ss = ''
+            exon = ''
+        }
+        """
+        $extract_exons
+        hisat2-build -p ${task.cpus} $fasta ${fasta.baseName}.hisat2_index
+        #hisat2-build -p ${task.cpus} $ss $exon $fasta ${fasta.baseName}.hisat2_index
+        """
+    }
+}
+
 
 /*
  * STEP 1b - FastQC
@@ -585,9 +634,9 @@ process gzip_trimmed {
  */
 
 process hisat2 {
-    // NOTE: this is poorly written and sends output there even in
-    // successful (exit code 0) termination, so we have to ignore errors for
-    // now, and the next process will blow up from missing a SAM file instead.
+    // NOTE: this tool sends output there even in successful (exit code 0) 
+    // termination, so we have to ignore errors for now, and the next 
+    // process will blow up from missing a SAM file instead.
     //errorStrategy 'ignore'
     tag "$name"
     validExitStatus 0,143
@@ -886,7 +935,7 @@ process dreg_prep {
 
     input:
     set val(name), file(bam_file) from sorted_bams_for_dreg_prep
-    file(chrom_sizes) from chrom_sizes
+    file chrom_sizes from chrom_sizes_for_bed.collect()
 
     output:
         set val(name), file("*.bw") into dreg_bigwig
@@ -931,7 +980,7 @@ process normalized_bigwigs {
     input:
     set val(name), file(neg_bedgraph) from bedgraph_bigwig_neg
     set val(name), file(pos_bedgraph) from bedgraph_bigwig_pos
-    file(chrom_sizes) from chrom_sizes
+    file chrom_sizes from chrom_sizes_for_bigwig.collect()
 
     output:
     set val(name), file("*.rcc.bw") into normalized_bigwig
@@ -959,7 +1008,7 @@ process igvtools {
 
     input:
     set val(name), file(normalized_bg) from bedgraph_tdf
-    file(chrom_sizes) from chrom_sizes
+    file chrom_sizes from chrom_sizes_for_igv.collect()
 
     output:
     set val(name), file("*.tdf") into tiled_data_ch
@@ -976,7 +1025,7 @@ process igvtools {
 /*
  * STEP 9 - MultiQC
  */
-process multiQC {
+process multiqc {
     validExitStatus 0,1,143
     errorStrategy 'ignore'
     publishDir "${params.outdir}/multiqc/", mode: 'copy', pattern: "multiqc_report.html"
@@ -1012,6 +1061,29 @@ process multiQC {
     """
 }
 
+
+/* Idea borrowed from the nf-core/atacseq workflow:
+ * Just generate the chromosome sizes file using samtools, if not provided.
+ */
+process make_chromosome_sizes {
+    tag "$fasta"
+    publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
+             saveAs: { params.saveReference ? it : null }, mode: 'copy'
+
+    input:
+    file fasta from genome_fasta
+
+    output:
+    file "*.sizes" into chrom_sizes_for_bed,  // CHROMOSOME SIZES FILE FOR BEDTOOLS
+                        chrom_sizes_for_bigwig,
+                        chrom_sizes_for_igv
+
+    script:
+    """
+    samtools faidx $fasta
+    cut -f 1,2 ${fasta}.fai > ${fasta}.sizes
+    """
+}
 
 
 /*
