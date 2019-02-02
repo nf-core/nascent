@@ -18,17 +18,14 @@ rule GM19_diffExpression:
     shell:
         "getDiffExpression.pl {input} {unit} eRNA -peaks > {output}"
 
-rule GM19_sample_DiffPeaksReplicates:
+# Lacks Normalization
+rule GM19_diff_Peaks:
     input:
-        sampleTags=expand("results/2019-01-28/GM/{unit}_tagDir/",unit=GM_SAMPLES),
-        eRNATags="results/2019-01-31/GM19_eRNA_tagDir/",
+        eRNAPeak="results/2019-01-31/GM19_eRNA_peak.gtf",
+        sampleTags="results/2019-01-28/GM/{unit}_tagDir/",
+        GM0hTags="results/2019-01-28/GM/GM0h_tagDir/",
     output:
-        "results/2019-01-31/GM19_eRNA_diffPeaks.txt",
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer_R.yaml"
+        "results/2019-02-01/GM_annotations/{unit}_diffOutput.tsv"
     params:
-        genome="hg19",
     shell:
-        "getDifferentialPeaksReplicates.pl -t {input.eRNATags} \ "
-        "-i {input.sampleTags} -genome {params.genome} > {output}"
+        "getDifferentialPeaks {input.eRNAPeak} {input.sampleTags} {input.GM0hTags} > {output}"

@@ -30,6 +30,8 @@ rule all:
         IMR_test1="results/2018-12-03/IMR_hg19_vs_Peng.bed",
         IMR_test2="results/2018-12-03/IMR_hg19_vs_liftOver.bed",
         IMR_test3="results/2018-12-03/IMR_hg19_vs_GM_hg19.bed",
+        # Differential Analysis
+        GM_diffPeaks=expand("results/2019-02-01/GM_annotations/{unit}_diffOutput.txt", unit=GM_SAMPLES),
 
 include: "rules/data.smk"
 
@@ -46,6 +48,7 @@ include: "rules/GM19/homer.smk"
 include: "rules/GM19/removeGenes.smk"
 include: "rules/GM19/keepHistones.smk"
 include: "rules/GM19/test_eRNAs.smk"
+include: "rules/GM19/eRNAcleaning.smk"
 include: "rules/GM19/differentialPeak.smk"
 
 include: "rules/IMR/fastqc.smk"

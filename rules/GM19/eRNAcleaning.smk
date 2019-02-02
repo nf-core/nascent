@@ -13,24 +13,13 @@ rule GM19_merge_sample_peaks:
         "mergePeaks -d {params.maxDistance} {input} > {output}"
 
 # FIXME uses unmerged regions of eRNAs
-rule GM19_eRNA_makeTagDirectory:
+rule GM19_eRNA_peak:
     input:
         "results/2018-11-29/GM19_eRNA.bed",
     output:
-        "results/2019-01-31/GM19_eRNA_tagDir/",
+        "results/2019-01-31/GM19_eRNA_peak.gtf",
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../envs/homer.yaml"
     shell:
-        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
-
-rule GM19_eRNA_findPeaks:
-    input:
-        "results/2019-01-31/GM19_eRNA_tagDir/",
-    output:
-        "results/2019-01-31/GM19_eRNA_peak.gtf"
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer.yaml"
-    shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "bed2pos.pl {input} > {output}"
