@@ -11,12 +11,13 @@ rule GM19_annotatePeaks_sample:
 
 rule GM19_diffExpression:
     input:
-        "results/2019-01-31/GM_annotations/{unit}_countTable.tsv",
+        eRNAPeak="results/2019-01-31/GM19_eRNA_peak.gtf",
+        count="results/2019-01-31/GM_annotations/{unit}_countTable.tsv",
     output:
-        expand("results/2019-01-31/GM_annotations/{unit}_diffOutput.txt",unit=GM_SAMPLES),
+        "results/2019-01-31/GM_annotations/{unit}_diffExpression.txt"
     params:
     shell:
-        "getDiffExpression.pl {input} {unit} eRNA -peaks > {output}"
+        "getDiffExpression.pl {input} eRNA -peaks > {output}"
 
 # Lacks Normalization
 rule GM19_diff_Peaks:
