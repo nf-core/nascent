@@ -16,7 +16,7 @@
 Pipeline steps:
 
     1. Pre-processing sra/fastq
-        1a. SRA tools -- fasterq-dump sra to generate fastq file
+        1a. SRA tools -- fastq-dump sra to generate fastq file
         1b. FastQC (pre-trim) -- perform pre-trim FastQC on fastq files
         1c. Gzip fastq -- compress fastq files for storage
 
@@ -284,35 +284,36 @@ ${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style
 /*
  * Parse software version numbers
  */
-process get_software_versions {
-
-    output:
-    file 'software_versions_mqc.yaml' into software_versions_yaml
-
-    script:
-    """
-    echo $workflow.manifest.version > v_pipeline.txt
-    echo $workflow.nextflow.version > v_nextflow.txt
-    fastqc --version > v_fastqc.txt
-    bbversion.sh --version > v_bbduk.txt
-    hisat2 --version > v_hisat2.txt
-    samtools --version > v_samtools.txt
-    fasterq-dump --version > v_fastq-dump.txt
-    preseq --version > v_preseq.txt
-    seqkit version > v_seqkit.txt
-    echo "2.0.3" > v_preseq.txt    
-    bedtools --version > v_bedtools.txt
-    igvtools version > v_igv-tools.txt
-
-    # Can't call this before running MultiQC or it breaks it
-    read_distribution.py --version > v_rseqc.txt
-
-    for X in `ls *.txt`; do
-        cat \$X >> all_versions.txt;
-    done
-    scrape_software_versions.py > software_versions_mqc.yaml
-    """
-}
+// This may become obsolete now that all tools are coming from a Docker container
+//process get_software_versions {
+//
+//    output:
+//    file 'software_versions_mqc.yaml' into software_versions_yaml
+//
+//    script:
+//    """
+//    echo $workflow.manifest.version > v_pipeline.txt
+//    echo $workflow.nextflow.version > v_nextflow.txt
+//    fastqc --version > v_fastqc.txt
+//    bbversion.sh --version > v_bbduk.txt
+//    hisat2 --version > v_hisat2.txt
+//    samtools --version > v_samtools.txt
+//    fastq-dump --version > v_fastq-dump.txt
+//    preseq --version > v_preseq.txt
+//    seqkit version > v_seqkit.txt
+//    echo "2.0.3" > v_preseq.txt    
+//    bedtools --version > v_bedtools.txt
+//    igvtools version > v_igv-tools.txt
+//
+//    # Can't call this before running MultiQC or it breaks it
+//    read_distribution.py --version > v_rseqc.txt
+//
+//    for X in `ls *.txt`; do
+//        cat \$X >> all_versions.txt;
+//    done
+//    scrape_software_versions.py > software_versions_mqc.yaml
+//    """
+//}
 
 /*
  * Step 1a -- get fastq files from downloaded sras
@@ -331,11 +332,6 @@ process sra_dump {
 
     output:
     set val(prefix), file("*.fastq") into fastq_reads_qc_sra, fastq_reads_trim_sra, fastq_reads_gzip_sra
-
-/* Updated to new version of sra tools which has "fasterq-dump" -- automatically splits files that have multiple reads
-  * (i.e. paired-end data) and is much quicker relative to fastq-dump. Also has multi-threading (currently set with -e 8)
-  * and requires a temp directory which is set to the nextflow temp directory
-  */
 
     script:
     prefix = reads.baseName
@@ -535,7 +531,7 @@ process bbduk {
 
         bbduk.sh -Xmx20g \
                   t=16 \
-                  in=${name}_R1fastq \
+                  in=${name}_R1.fastq \
                   in2=${name}_R2.fastq \
                   out=${name}_R1.trim.fastq \
                   out2=${name}_R2.trim.fastq \
@@ -740,6 +736,7 @@ process preseq {
     tag "$name"
     memory '20 GB'
     time '8h'
+    errorStrategy 'ignore'
     publishDir "${params.outdir}/qc/preseq/", mode: 'copy', pattern: "*.txt"
 
     input:
@@ -1035,8 +1032,7 @@ process igvtools {
 
     script:
     """
-
-    /opt/igvtools/2.3.75/igvtools toTDF ${normalized_bg} ${name}.rcc.tdf ${chrom_sizes}
+    igvtools toTDF ${normalized_bg} ${name}.rcc.tdf ${chrom_sizes}
     """
  }
 
