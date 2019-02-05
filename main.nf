@@ -285,6 +285,8 @@ ${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style
  * Parse software version numbers
  */
 process get_software_versions {
+    validExitStatus 0,1,127
+    publishDir "${params.outdir}/software_versions/", mode: 'copy', pattern: '*.txt'
 
     output:
     file 'software_versions_mqc.yaml' into software_versions_yaml
