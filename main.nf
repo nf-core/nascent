@@ -332,11 +332,6 @@ process get_software_versions {
 
 process sra_dump {
     tag "$prefix"
-    if (params.threadfqdump) {
-        cpus 8 }
-    else {
-        cpus 1
-    }
 
     input:
     set val(prefix), file(reads) from read_files_sra
@@ -417,7 +412,6 @@ if(!params.hisat2_indices && params.fasta){
 process fastQC {
     validExitStatus 0,1
     tag "$prefix"
-    memory '8 GB'
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
 
@@ -444,7 +438,6 @@ process fastQC {
 
 process gzip_fastq {
     tag "$name"
-    memory '4 GB'
     publishDir "${params.outdir}/fastq", mode: 'copy'
 
     when:
@@ -470,8 +463,6 @@ process gzip_fastq {
 process bbduk {
     validExitStatus 0,1
     tag "$name"
-    cpus 16
-    memory '20 GB'
     publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.txt"
 
     input:
@@ -583,7 +574,6 @@ process bbduk {
 process fastqc_trimmed {
     validExitStatus 0,1
     tag "$prefix"
-    memory '4 GB'
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
 
@@ -609,7 +599,6 @@ process fastqc_trimmed {
 
 process gzip_trimmed {
     tag "$prefix"
-    memory '4 GB'
     publishDir "${params.outdir}/trimmed", mode: 'copy'
 
     when:
@@ -640,9 +629,6 @@ process hisat2 {
     //errorStrategy 'ignore'
     tag "$name"
     validExitStatus 0,143
-    cpus 32
-    memory '100 GB'
-    time '2h'
 
     input:
     file(indices_path) from hisat2_indices
@@ -691,8 +677,6 @@ process hisat2 {
 
 process samtools {
     tag "$prefix"
-    memory '100 GB'
-    cpus 16
     publishDir "${params.outdir}/mapped/bams", mode: 'copy', pattern: "${prefix}.sorted.bam"
     publishDir "${params.outdir}/mapped/bams", mode: 'copy', pattern: "${prefix}.sorted.bam.bai"
     publishDir "${params.outdir}/qc/mapstats", mode: 'copy', pattern: "${prefix}.sorted.bam.flagstat"
@@ -745,8 +729,6 @@ sorted_bam_indices_ch
 
 process preseq {
     tag "$name"
-    memory '20 GB'
-    time '8h'
     errorStrategy 'ignore'
     publishDir "${params.outdir}/qc/preseq/", mode: 'copy', pattern: "*.txt"
 
@@ -775,9 +757,7 @@ process preseq {
 
 process rseqc {
     tag "$name"
-    time '8h'
     validExitStatus 0,143
-    memory '40 GB'
     publishDir "${params.outdir}/qc/rseqc" , mode: 'copy',
         saveAs: {filename ->
                  if (filename.indexOf("infer_experiment.txt") > 0)              "infer_experiment/$filename"
@@ -824,7 +804,6 @@ process rseqc {
 
 process pileup {
     tag "$name"
-    memory '50 GB'
     publishDir "${params.outdir}/qc/pileup", mode: 'copy', pattern: "*.txt"
 
     input:
@@ -851,8 +830,6 @@ process pileup {
 process bedgraphs {
     validExitStatus 0,143
     tag "$name"
-    memory '80 GB'
-    time '4h'
     publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "*{neg,pos}.bedGraph"
     publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "${name}.bedGraph"
     publishDir "${params.outdir}/mapped/rcc_bedgraphs", mode: 'copy', pattern: "${name}.rcc.bedGraph"
@@ -958,7 +935,6 @@ process dreg_prep {
     validExitStatus 0,143
     errorStrategy 'ignore'
     tag "$name"
-    memory '100 GB'
     publishDir "${params.outdir}/mapped/dreg_input", mode: 'copy', pattern: "*.bw"
 
     input:
@@ -1002,7 +978,6 @@ process dreg_prep {
 process normalized_bigwigs {
     validExitStatus 0
     tag "$name"
-    memory '30 GB'
     publishDir "${params.outdir}/mapped/rcc_bigwig", mode: 'copy'
 
     input:
@@ -1027,8 +1002,6 @@ process normalized_bigwigs {
 
 process igvtools {
     tag "$name"
-    memory '200 GB'
-    time '1h'
     // This often blows up due to a ceiling in memory usage, so we can ignore
     // and re-run later as it's non-essential.
     errorStrategy 'ignore'
