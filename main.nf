@@ -138,6 +138,9 @@ if( params.chrom_sizes ){
                 chrom_sizes_for_bigwig;
                 chrom_sizes_for_igv }
 }
+else {
+    params.chrom_sizes = null
+}
 
 if ( params.bbmap_adapters ){
     bbmap_adapters = file("${params.bbmap_adapters}")
@@ -146,9 +149,15 @@ if ( params.bbmap_adapters ){
 if ( params.hisat2_indices ){
     hisat2_indices = file("${params.hisat2_indices}")
 }
+else {
+    hisat2_indices = null
+}
 
 if ( params.genome_refseq ){
     genome_refseq = file("${params.genome_refseq}")
+}
+else {
+    genome_refseq = null
 }
 
 // Has the run name been specified by the user?
@@ -194,6 +203,7 @@ else {
     Channel
         .empty()
         .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
+    params.fastqs = null
 }
 
 if (params.sras) {
@@ -303,6 +313,7 @@ process get_software_versions {
     preseq > v_preseq.txt
     seqkit version > v_seqkit.txt
     bedtools --version > v_bedtools.txt
+    export LC_ALL=C
     igvtools version > v_igv-tools.txt
 
     # Can't call this before running MultiQC or it breaks it
@@ -1032,6 +1043,7 @@ process igvtools {
 
     script:
     """
+    export LC_ALL=C
     igvtools toTDF ${normalized_bg} ${name}.rcc.tdf ${chrom_sizes}
     """
  }
