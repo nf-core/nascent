@@ -404,8 +404,6 @@ if(!params.hisat2_indices && params.fasta){
             avail_mem = task.memory.toGiga()
         }
         """
-        echo ${fasta.baseName}
-        ls -l ${fasta}
         hisat2-build -p ${task.cpus} ${fasta} ${fasta.baseName}.hisat2_index
         """
     }
