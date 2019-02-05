@@ -379,7 +379,7 @@ process sra_dump {
  */
 // TODO: do we need --ss and --exon? probably not, need to check what was the actual hisat2-builder arguments used to generate the indices we have on fiji
 if(!params.hisat2_indices && params.fasta){
-    process makeHISATindex {
+    process make_hisat_index {
         tag "$fasta"
         publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
                    saveAs: { params.saveReference ? it : null }, mode: 'copy'
@@ -409,7 +409,7 @@ if(!params.hisat2_indices && params.fasta){
  * STEP 1b - FastQC
  */
 
-process fastQC {
+process fastqc {
     validExitStatus 0,1
     tag "$prefix"
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
