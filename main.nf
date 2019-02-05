@@ -284,36 +284,34 @@ ${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style
 /*
  * Parse software version numbers
  */
-// This may become obsolete now that all tools are coming from a Docker container
-//process get_software_versions {
-//
-//    output:
-//    file 'software_versions_mqc.yaml' into software_versions_yaml
-//
-//    script:
-//    """
-//    echo $workflow.manifest.version > v_pipeline.txt
-//    echo $workflow.nextflow.version > v_nextflow.txt
-//    fastqc --version > v_fastqc.txt
-//    bbversion.sh --version > v_bbduk.txt
-//    hisat2 --version > v_hisat2.txt
-//    samtools --version > v_samtools.txt
-//    fastq-dump --version > v_fastq-dump.txt
-//    preseq --version > v_preseq.txt
-//    seqkit version > v_seqkit.txt
-//    echo "2.0.3" > v_preseq.txt    
-//    bedtools --version > v_bedtools.txt
-//    igvtools version > v_igv-tools.txt
-//
-//    # Can't call this before running MultiQC or it breaks it
-//    read_distribution.py --version > v_rseqc.txt
-//
-//    for X in `ls *.txt`; do
-//        cat \$X >> all_versions.txt;
-//    done
-//    scrape_software_versions.py > software_versions_mqc.yaml
-//    """
-//}
+process get_software_versions {
+
+    output:
+    file 'software_versions_mqc.yaml' into software_versions_yaml
+
+    script:
+    """
+    echo $workflow.manifest.version > v_pipeline.txt
+    echo $workflow.nextflow.version > v_nextflow.txt
+    fastqc --version > v_fastqc.txt
+    bbversion.sh --version > v_bbduk.txt
+    hisat2 --version > v_hisat2.txt
+    samtools --version > v_samtools.txt
+    fastq-dump --version > v_fastq-dump.txt
+    preseq > v_preseq.txt
+    seqkit version > v_seqkit.txt
+    bedtools --version > v_bedtools.txt
+    igvtools version > v_igv-tools.txt
+
+    # Can't call this before running MultiQC or it breaks it
+    read_distribution.py --version > v_rseqc.txt
+
+    for X in `ls *.txt`; do
+        cat \$X >> all_versions.txt;
+    done
+    scrape_software_versions.py > software_versions_mqc.yaml
+    """
+}
 
 /*
  * Step 1a -- get fastq files from downloaded sras
