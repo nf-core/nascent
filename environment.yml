@@ -14,3 +14,4 @@ dependencies:
   - igvtools=2.3.75
   - bbmap=38.06
   - fastx_toolkit=0.0.14
+  - sra-tools=2.9.1
