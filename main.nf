@@ -130,6 +130,15 @@ else {
     params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
 }
 
+if( params.chrom_sizes ){
+    Channel
+        .fromPath(params.chrom_sizes, checkIfExists: true)
+        .ifEmpty { exit 1, "Chrom sizes file not found: ${params.chrom_sizes}" }
+        .into { chrom_sizes_for_bed;
+                chrom_sizes_for_bigwig;
+                chrom_sizes_for_igv }
+}
+
 if ( params.bbmap_adapters ){
     bbmap_adapters = file("${params.bbmap_adapters}")
 }
@@ -375,11 +384,9 @@ if(!params.hisat2_indices && params.fasta){
 
         input:
         file fasta from ch_fasta_for_hisat_index
-        file indexing_splicesites from indexing_splicesites
-        file gtf from gtf_makeHISATindex
 
         output:
-        file "${fasta.baseName}.*.ht2" into hs2_indices
+        file "${fasta.baseName}.*.ht2" into hisat2_indices
 
         script:
         if( !task.memory ){
@@ -389,22 +396,8 @@ if(!params.hisat2_indices && params.fasta){
             log.info "[HISAT2 index build] Available memory: ${task.memory}"
             avail_mem = task.memory.toGiga()
         }
-        if( avail_mem > params.hisatBuildMemory ){
-            log.info "[HISAT2 index build] Over ${params.hisatBuildMemory} GB available, so using splice sites and exons in HISAT2 index"
-            extract_exons = "hisat2_extract_exons.py $gtf > ${gtf.baseName}.hisat2_exons.txt"
-            ss = "--ss $indexing_splicesites"
-            exon = "--exon ${gtf.baseName}.hisat2_exons.txt"
-        } else {
-            log.info "[HISAT2 index build] Less than ${params.hisatBuildMemory} GB available, so NOT using splice sites and exons in HISAT2 index."
-            log.info "[HISAT2 index build] Use --hisatBuildMemory [small number] to skip this check."
-            extract_exons = ''
-            ss = ''
-            exon = ''
-        }
         """
-        $extract_exons
         hisat2-build -p ${task.cpus} $fasta ${fasta.baseName}.hisat2_index
-        #hisat2-build -p ${task.cpus} $ss $exon $fasta ${fasta.baseName}.hisat2_index
         """
     }
 }
@@ -645,8 +638,8 @@ process hisat2 {
     time '2h'
 
     input:
-    file(indices) from hisat2_indices
-    val(indices_path) from hisat2_indices
+    file(indices_path) from hisat2_indices
+    //val(indices_path) from hisat2_indices
     set val(name), file(trimmed_reads) from trimmed_reads_hisat2
 
     output:
@@ -922,6 +915,33 @@ process bedgraphs {
     """
  }
 
+
+/* Idea borrowed from the nf-core/atacseq workflow:
+ * Just generate the chromosome sizes file using samtools, if not provided.
+  */
+if(!params.chrom_sizes) {
+  process make_chromosome_sizes {
+      tag "$fasta"
+      publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
+              saveAs: { params.saveReference ? it : null }, mode: 'copy'
+
+      input:
+      file fasta from genome_fasta
+
+      output:
+      file("${fasta}.sizes") into chrom_sizes_ch
+
+      script:
+      """
+      samtools faidx $fasta
+      cut -f 1,2 ${fasta}.fai > ${fasta}.sizes
+      """
+  }
+}
+
+chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_bigwig; chrom_sizes_for_igv}
+
+
 /*
  *STEP 6b - Create bedGraphs and bigwigs for dREG
  */
@@ -935,7 +955,7 @@ process dreg_prep {
 
     input:
     set val(name), file(bam_file) from sorted_bams_for_dreg_prep
-    file chrom_sizes from chrom_sizes_for_bed.collect()
+    file(chr_sizes) from chrom_sizes_for_bed
 
     output:
         set val(name), file("*.bw") into dreg_bigwig
@@ -952,16 +972,16 @@ process dreg_prep {
 
     echo positive strand processed to bedGraph
 
-    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chrom_sizes} -strand + > ${name}.pos.bedGraph
+    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chr_sizes} -strand + > ${name}.pos.bedGraph
     sortBed -i ${name}.pos.bedGraph > ${name}.pos.sort.bedGraph
-    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chrom_sizes} -strand - \
+    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chr_sizes} -strand - \
     | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' > ${name}.neg.bedGraph
     sortBed -i ${name}.neg.bedGraph > ${name}.neg.sort.bedGraph
 
     echo negative strand processed to bedGraph
 
-    ${params.bedGraphToBigWig} ${name}.pos.sort.bedGraph ${chrom_sizes} ${name}.pos.bw
-    ${params.bedGraphToBigWig} ${name}.neg.sort.bedGraph ${chrom_sizes} ${name}.neg.bw
+    ${params.bedGraphToBigWig} ${name}.pos.sort.bedGraph ${chr_sizes} ${name}.pos.bw
+    ${params.bedGraphToBigWig} ${name}.neg.sort.bedGraph ${chr_sizes} ${name}.neg.bw
 
     echo bedGraph to bigwig done
     """
@@ -980,7 +1000,7 @@ process normalized_bigwigs {
     input:
     set val(name), file(neg_bedgraph) from bedgraph_bigwig_neg
     set val(name), file(pos_bedgraph) from bedgraph_bigwig_pos
-    file chrom_sizes from chrom_sizes_for_bigwig.collect()
+    file chrom_sizes from chrom_sizes_for_bigwig
 
     output:
     set val(name), file("*.rcc.bw") into normalized_bigwig
@@ -1008,7 +1028,7 @@ process igvtools {
 
     input:
     set val(name), file(normalized_bg) from bedgraph_tdf
-    file chrom_sizes from chrom_sizes_for_igv.collect()
+    file chrom_sizes from chrom_sizes_for_igv
 
     output:
     set val(name), file("*.tdf") into tiled_data_ch
@@ -1060,31 +1080,6 @@ process multiqc {
     multiqc . -f $rtitle $rfilename --config $multiqc_config
     """
 }
-
-
-/* Idea borrowed from the nf-core/atacseq workflow:
- * Just generate the chromosome sizes file using samtools, if not provided.
- */
-process make_chromosome_sizes {
-    tag "$fasta"
-    publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
-             saveAs: { params.saveReference ? it : null }, mode: 'copy'
-
-    input:
-    file fasta from genome_fasta
-
-    output:
-    file "*.sizes" into chrom_sizes_for_bed,  // CHROMOSOME SIZES FILE FOR BEDTOOLS
-                        chrom_sizes_for_bigwig,
-                        chrom_sizes_for_igv
-
-    script:
-    """
-    samtools faidx $fasta
-    cut -f 1,2 ${fasta}.fai > ${fasta}.sizes
-    """
-}
-
 
 /*
  * Completion e-mail notification
