@@ -413,7 +413,6 @@ if(!params.hisat2_indices && params.fasta){
  */
 
 process fastqc {
-    validExitStatus 0,1
     tag "$prefix"
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
@@ -427,10 +426,21 @@ process fastqc {
     script:
     prefix = reads.baseName
     """
-    echo ${prefix}
+#    echo `which gunzip`
 
     fastqc $reads
-		extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
+		#extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
+#    GC=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt \
+#            | grep "%GC" | grep -o "[0-9]*")
+#    SEQ=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
+#              grep "Total Sequences" | \
+#              grep -o "[0-9]*")
+#    DEDUP=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
+#                grep "#Total Deduplicated Percentage" | \
+#                grep -o "[0-9,.]*")
+#
+#    echo -e "SRR\t%GC\tTotal_Sequences\t%Total_Deduplicated" > ${prefix}_stats_fastqc.txt
+#    echo -e "${prefix}""\$(printf "\\t")""\$GC""\$(printf "\\t")""\$SEQ""\$(printf "\\t")""\$DEDUP" >> ${prefix}_stats_fastqc.txt
     """
 }
 
