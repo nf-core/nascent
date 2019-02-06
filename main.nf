@@ -87,6 +87,9 @@ def helpMessage() {
         --saveTrim                     Compresses and saves trimmed fastq reads.
         --saveAll                      Compresses and saves all fastq reads.
 
+    References                      If not specified in the configuration file or you wish to overwrite any of the references.
+      --saveReference               Save the generated reference files the the Results directory.
+
     QC Options:
         --skipMultiQC                  Skip running MultiQC report.
 
@@ -109,7 +112,7 @@ params.name = false
 params.multiqc_config = "$baseDir/conf/multiqc_config.yaml"
 params.email = false
 params.plaintext_email = false
-params.bbmap_adapters = "$baseDir/bin/adapters.fa"
+params.bbmap_adapters = "$baseDir/assets/adapters.fa"
 params.bedGraphToBigWig = "$baseDir/bin/bedGraphToBigWig"
 params.rcc = "$baseDir/bin/rcc.py"
 params.workdir = "./nextflowTemp"
@@ -239,6 +242,7 @@ def summary = [:]
 summary['Pipeline Name']  = 'nf-core/nascent'
 summary['Pipeline Version'] = workflow.manifest.version
 summary['Run Name']     = custom_runName ?: workflow.runName
+summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
 if(params.reads) summary['Reads']            = params.reads
 if(params.fastqs) summary['Fastqs']           = params.fastqs
 if(params.sras) summary['SRAs']             = params.sras
@@ -352,7 +356,7 @@ process sra_dump {
         export PATH=~/.local/bin:$PATH
 
         parallel-fastq-dump \
-            --threads 8 \
+            --threads ${task.cpus} \
             --split-3 \
             --sra-id ${reads}
         """
@@ -367,7 +371,7 @@ process sra_dump {
         export PATH=~/.local/bin:$PATH
 
         parallel-fastq-dump \
-            --threads 8 \
+            --threads ${task.cpus} \
             --sra-id ${reads}
         """
     }
@@ -388,7 +392,7 @@ if(!params.hisat2_indices && params.fasta){
         file fasta from ch_fasta_for_hisat_index
 
         output:
-        file "${fasta.baseName}.*.ht2" into hisat2_indices
+        file "*.ht2" into hisat2_indices
 
         script:
         if( !task.memory ){
@@ -399,7 +403,7 @@ if(!params.hisat2_indices && params.fasta){
             avail_mem = task.memory.toGiga()
         }
         """
-        hisat2-build -p ${task.cpus} ${fasta} ${fasta.baseName}.hisat2_index
+        hisat2-build -p ${task.cpus} ${fasta} ${fasta.baseName}-hisat2_index
         """
     }
 }
@@ -474,6 +478,7 @@ process bbduk {
 
     script:
 //    prefix = fastq.baseName
+    bbduk_mem = task.memory.toGiga()
     if (!params.singleEnd && params.flip) {
         """
         echo ${name}
@@ -488,8 +493,8 @@ process bbduk {
 
         
 
-        bbduk.sh -Xmx20g \
-                  t=16 \
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
                   in=${name}_R1.flip.fastq \
                   in2=${name}_R2.flip.fastq \
                   out=${name}_R1.flip.trim.fastq \
@@ -513,8 +518,8 @@ process bbduk {
                   -o ${name}.flip.fastq
 
         
-        bbduk.sh -Xmx20g \
-                  t=16 \
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
                   in=${name}.flip.fastq \
                   out=${name}.flip.trim.fastq \
                   ref=${bbmap_adapters} \
@@ -531,8 +536,8 @@ process bbduk {
         """
         echo ${name}      
 
-        bbduk.sh -Xmx20g \
-                  t=16 \
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
                   in=${name}_R1.fastq \
                   in2=${name}_R2.fastq \
                   out=${name}_R1.trim.fastq \
@@ -549,9 +554,10 @@ process bbduk {
     } else {
         """
         echo ${name}
+        echo ${bbduk_mem}
         
-        bbduk.sh -Xmx20g \
-                  t=16 \
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
                   in=${name}.fastq \
                   out=${name}.trim.fastq \
                   ref=${bbmap_adapters} \
@@ -631,23 +637,22 @@ process hisat2 {
     validExitStatus 0,143
 
     input:
-    file(indices_path) from hisat2_indices
-    //val(indices_path) from hisat2_indices
+    val(indices) from hisat2_indices.first()
     set val(name), file(trimmed_reads) from trimmed_reads_hisat2
 
     output:
     set val(name), file("*.sam") into hisat2_sam
 
     script:
-    //prefix = trimmed_reads.baseName
+    index_base = indices[0].toString() - ~/.\d.ht2/
     if (!params.singleEnd) {
         """
         echo ${name}
     
-        hisat2  -p 32 \
+        hisat2  -p ${task.cpus} \
                 --very-sensitive \
                 --no-spliced-alignment \
-                -x ${indices_path} \
+                -x ${index_base} \
                 -1 ${name}_R1.trim.fastq \
                 -2 ${name}_R2.trim.fastq
                 > ${name}.sam
@@ -656,10 +661,10 @@ process hisat2 {
         """
         echo ${name}
     
-        hisat2  -p 32 \
+        hisat2  -p ${task.cpus} \
                 --very-sensitive \
                 --no-spliced-alignment \
-                -x ${indices_path}\
+                -x ${index_base}\
                 -U ${trimmed_reads} \
                 > ${name}.sam
         """
@@ -698,19 +703,19 @@ process samtools {
     if (!params.singleEnd) {
     """
 
-    samtools view -@ 16 -bS -o ${prefix}.bam ${mapped_sam}
-    samtools sort -@ 16 ${prefix}.bam > ${prefix}.sorted.bam
+    samtools view -@ ${task.cpus} -bS -o ${prefix}.bam ${mapped_sam}
+    samtools sort -@ ${task.cpus} ${prefix}.bam > ${prefix}.sorted.bam
     samtools flagstat ${prefix}.sorted.bam > ${prefix}.sorted.bam.flagstat
-    samtools view -@ 16 -F 0x40 ${prefix}.sorted.bam | cut -f1 | sort | uniq | wc -l > ${prefix}.sorted.bam.millionsmapped
+    samtools view -@ ${task.cpus} -F 0x40 ${prefix}.sorted.bam | cut -f1 | sort | uniq | wc -l > ${prefix}.sorted.bam.millionsmapped
     samtools index ${prefix}.sorted.bam ${prefix}.sorted.bam.bai
     """
     } else {
     """
 
-    samtools view -@ 16 -bS -o ${prefix}.bam ${mapped_sam}
-    samtools sort -@ 16 ${prefix}.bam > ${prefix}.sorted.bam
+    samtools view -@ ${task.cpus} -bS -o ${prefix}.bam ${mapped_sam}
+    samtools sort -@ ${task.cpus} ${prefix}.bam > ${prefix}.sorted.bam
     samtools flagstat ${prefix}.sorted.bam > ${prefix}.sorted.bam.flagstat
-    samtools view -@ 16 -F 0x904 -c ${prefix}.sorted.bam > ${prefix}.sorted.bam.millionsmapped
+    samtools view -@ ${task.cpus} -F 0x904 -c ${prefix}.sorted.bam > ${prefix}.sorted.bam.millionsmapped
     samtools index ${prefix}.sorted.bam ${prefix}.sorted.bam.bai
     """
     }
@@ -814,9 +819,10 @@ process pileup {
     file("*.txt") into pileup_results
 
     script:
+    pileup_mem = task.memory.toGiga()
     """
 
-    pileup.sh -Xmx20g \
+    pileup.sh -Xmx${pileup_mem}g \
               in=${bam_file} \
               out=${name}.coverage.stats.txt \
               hist=${name}.coverage.hist.txt
