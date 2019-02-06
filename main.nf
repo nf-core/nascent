@@ -197,7 +197,7 @@ if (params.fastqs) {
     } else {
         Channel
             .fromFilePairs( params.fastqs, size: params.singleEnd ? 1 : 2 )
-            .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
+            .ifEmpty { exit 1, "Cannot find any reads matching: ${params.fastqs}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
             .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     }
 }
@@ -218,7 +218,7 @@ if (params.sras) {
     } else {
          Channel
              .fromFilePairs( params.sras, size: params.singleEnd ? 1 : 2 )
-             .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
+             .ifEmpty { exit 1, "Cannot find any reads matching: ${params.fastqs}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
              .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     }
 }
@@ -243,7 +243,6 @@ summary['Pipeline Name']  = 'nf-core/nascent'
 summary['Pipeline Version'] = workflow.manifest.version
 summary['Run Name']     = custom_runName ?: workflow.runName
 summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
-if(params.reads) summary['Reads']            = params.reads
 if(params.fastqs) summary['Fastqs']           = params.fastqs
 if(params.sras) summary['SRAs']             = params.sras
 summary['Genome Ref']       = params.fasta
