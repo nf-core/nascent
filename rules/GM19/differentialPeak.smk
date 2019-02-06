@@ -1,23 +1,21 @@
-rule GM19_annotatePeaks_sample:
+rule GM19_eRNA_analyzeRepeats:
     input:
-        peakFile="results/2019-01-28/GM/{unit}_groseq_peak.gtf",
-        eRNAPeak="results/2019-01-31/GM19_eRNA_peak.gtf",
+        eRNAs="results/2019-01-31/GM19_eRNA_peak.gtf",
+        GM_tags=expand("results/2019-01-28/GM/{unit}_tagDir/", unit=GM_SAMPLES),
     output:
-        "results/2019-01-31/GM_annotations/{unit}_countTable.tsv"
+        "results/2019-02-05/GM/GM19_eRNA_outputannotation.txt"
     params:
         genome="hg19",
     shell:
-        "annotatePeaks.pl {input.peakFile} {input.eRNAPeak} {params.genome} -raw > {output}"
+        "analyzeRepeats.pl {input.eRNAs} {params.genome} -count genes -raw -d {input.GM_tags} > {output}"
 
-rule GM19_diffExpression:
+rule GM19_eRNAdiffExpression:
     input:
-        eRNAPeak="results/2019-01-31/GM19_eRNA_peak.gtf",
-        count="results/2019-01-31/GM_annotations/{unit}_countTable.tsv",
+        "results/2019-02-05/GM/GM19_eRNA_outputannotation.txt"
     output:
-        "results/2019-01-31/GM_annotations/{unit}_diffExpression.txt"
-    params:
+        "results/2019-02-05/GM/diffOutput.genes.txt"
     shell:
-        "getDiffExpression.pl {input} eRNA -peaks > {output}"
+        "getDiffExpression.pl {input} {GM_SAMPLES} -edgeR -simpleNorm -dispersion 0.05 > {output}"
 
 # Lacks Normalization
 rule GM19_diff_Peaks:
