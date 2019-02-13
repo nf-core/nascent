@@ -31,7 +31,9 @@ rule all:
         IMR_test2="results/2018-12-03/IMR_hg19_vs_liftOver.bed",
         IMR_test3="results/2018-12-03/IMR_hg19_vs_GM_hg19.bed",
         # Differential Analysis
-        GM_diffPeaks=expand("results/2019-02-01/GM_annotations/{unit}_diffOutput.txt", unit=GM_SAMPLES),
+        # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
+        # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
+        # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
 
 include: "rules/data.smk"
 
