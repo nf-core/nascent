@@ -16,7 +16,7 @@ and processes data using the following steps:
 * [Samtools](#samtools) - convert the mapped reads as SAM files to BAM format
 * [Preseq](#preseq) - estimate complexity of the sample
 * [RSeQC](#rseqc) - analyze read distributions, infer experiment (SE/PE, whether reads need to be flipped), & read duplication
-* [Pileup](#pileup) - analyze coverage
+* [BBMap](#pileup) - analyze coverage
 * [bedtools](#bedtools) - create both normalized and non-normalized coverage files in bedGraph format
 * [igvtools](#igvtools) - create compressed files to visualize the sample in the Integrative Genomics Viewer ([IGV](http://software.broadinstitute.org/software/igv/home))
 
@@ -119,7 +119,7 @@ If the necessary indices for mapping are not provided/present, a separate proces
 
 
 ## pileup
-[Pileup](xxxxxxxxxxxxxxxx) analyzes the sequencing coverage for each sample.
+[BBMap](https://github.com/BioInfoTools/BBMap/blob/master/sh/pileup.sh) includes a tool called `pileup`, which analyzes the sequencing coverage for each sample.
 
 **Output directory: `results/qc/pileup`**
 
