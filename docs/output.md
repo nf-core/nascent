@@ -9,13 +9,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/)
 and processes data using the following steps:
 
 * [fastq-dump](#fastqdump) - if needed, extract the fastq file[s] from a sample
-* [SeqKit/bbduk](#seqkitbbduk) - trim reads and remove adapters
+* [SeqKit/bbduk](#seqkitbbduk) - flip reads (experiment specific) & trim reads for adapters/quality/length
 * [FastQC](#fastqc) - read quality control
 * [MultiQC](#multiqc) - aggregate report, describing results of the whole pipeline
 * [HISAT2](#hisat2) - map reads to the reference genome
 * [Samtools](#samtools) - convert the mapped reads as SAM files to BAM format
 * [Preseq](#preseq) - estimate complexity of the sample
-* [RSeQC](#rseqc) - analyze read distributions
+* [RSeQC](#rseqc) - analyze read distributions, infer experiment (SE/PE, whether reads need to be flipped), & read duplication
 * [Pileup](#pileup) - analyze coverage
 * [bedtools](#bedtools) - create both normalized and non-normalized coverage files in bedGraph format
 * [igvtools](#igvtools) - create compressed files to visualize the sample in the Integrative Genomics Viewer ([IGV](http://software.broadinstitute.org/software/igv/home))
@@ -30,13 +30,15 @@ and processes data using the following steps:
   * FastQ file to process, from the corresponding sample.
 
 
-## seqkitbbduk
-[SeqKit](https://bioinf.shenwei.me/seqkit/) is a toolkit for fasta and fastq file manipulation, used in the pipeline for xxxxxxxxxxxxxxxxxxxxxxxxx. [BBDuk](https://www.geneious.com/plugins/bbduk/) is an adapter trimming tool used to leave only the useful part of a sequenced read.
+## seqkit & bbduk
+[SeqKit](https://bioinf.shenwei.me/seqkit/) is a toolkit for fasta and fastq file manipulation, used in the pipeline if the positive/negative strands need to be flipped (dependent on library prep protocol). [BBDuk](https://www.geneious.com/plugins/bbduk/) is trimming tool used to filter reads for adapters, read quality, and overall length after adapter removal.
 
-**Output directory: `results/bbduk`**
+**Output directory: `results/bbduk, qc/trimstats`**
 
 * `sample.trim.fastq`
   * Trimmed FastQ file for each sample.
+* `{refstats,trimstats,ehist}.txt`
+  * Trimming details including adapters removed, percentages of reads removed that did not meet minimum quality/length
 
 
 ## FastQC
@@ -91,9 +93,9 @@ If the necessary indices for mapping are not provided/present, a separate proces
 **Output directory: `results/qc/mapstats`**
 
 * `sample.trim.sorted.bam.flagstat`
-  * xxxxxxxxxxxxxxxxxxx
+  * Overall mapping statistics
 * `sample.trim.sorted.bam.millionsmapped`
-  * xxxxxxxxxxxxxxxxxxx
+  * File that contains number of uniquely mapped reads (not total multi-mapped). Used in normalization
 
 
 ## preseq
@@ -102,9 +104,9 @@ If the necessary indices for mapping are not provided/present, a separate proces
 **Output directory: `results/qc/preseq`**
 
 * `sample.trim.c_curve.txt`
-  * xxxxxxxxxxxxxxxxx
+  * Curve generated based on number of unique reads vs. total reads sequenced
 * `sample.trim.lc_extrap.txt`
-  * xxxxxxxxxxxxxxxxx
+  * Extrapolation of the c_curve that attempts to model the predicted number of unique reads if the sample was seqeunced to a greater depth
 
 
 ## rseqc
@@ -113,7 +115,7 @@ If the necessary indices for mapping are not provided/present, a separate proces
 **Output directory: `results/qc/rseqc`**
 
 * `sample.trim.read_dist.txt`
-  * xxxxxxxxxxxxxxxxx
+  * Relative distribution of reads relative to a gene reference file
 
 
 ## pileup
@@ -122,9 +124,9 @@ If the necessary indices for mapping are not provided/present, a separate proces
 **Output directory: `results/qc/pileup`**
 
 * `sample.trim.coverage.hist.txt`
-  * xxxxxxxxxxxxxxxxx
+  * Histogram of read coverage over each chromosome
 * `sample.trim.coverage.stats.txt`
-  * xxxxxxxxxxxxxxxxx
+  * Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
 
 
 ## bedtools
