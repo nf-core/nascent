@@ -14,7 +14,8 @@ before_install:
   - docker pull ignaciot/nascent:dev
   # Fake the tag locally so that the pipeline runs properly
   #- docker tag ignaciot/nascent ignaciot/nascent:latest
-  - docker tag ignaciot/nascent:dev ignaciot/nascent:latest
+  #- docker tag ignaciot/nascent:dev ignaciot/nascent:latest
+  - docker tag nfcore/nascent:dev nfcore/nascent:1.0
 
 install:
   # Install Nextflow
