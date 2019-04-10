@@ -38,7 +38,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 
 ## Arguments
 
-**Required Arguments**
+### Required Arguments
 | Argument  | Usage                            | Description                                                          |
 |-----------|----------------------------------|----------------------------------------------------------------------|
 | -profile  | \<base,slurm\>                    | Configuration profile to use.                                       |
@@ -48,7 +48,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --workdir | \</project/tmp/\>                | Nextflow working directory where all intermediate files are saved.   |
 | --email   | \<EMAIL\>                        | Where to send workflow report email.                                 |
 
-**Save Options**
+### Save Options
 | Arguments  | Usage         | Description                                               |
 |------------|---------------|-----------------------------------------------------------|
 | --outdir   | \</project/\> | Specifies where to save the output from the nextflow run. |
@@ -57,24 +57,24 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --saveAll  |               | Compresses and saves all fastq reads.                     |
 | --skipBAM  |               | Skips saving BAM files (only save CRAM). Default=False    |
 
-**Input File Options**
+### Input File Options
 | Arguments    | Usage       | Description                                                                  |
 |--------------|-------------|------------------------------------------------------------------------------|
 | --singleEnd  |             | Specifies that the input files are not paired reads (default is paired-end). |
 | --flip       |             | Reverse complements each strand. Necessary for some library preps.           |
 
-**Performance Options**
+### Performance Options
 
 | Arguments       | Usage       | Description                                             |
 |-----------------|-------------|---------------------------------------------------------|
 | --threadfqdump  |             | Runs multi-threading for fastq-dump for sra processing. |
 
-**QC Options**
+### QC Options
 
 | Arguments       | Usage       | Description                                             |
 |-----------------|-------------|---------------------------------------------------------|
 | --skipMultiQC   |             | Skip running MultiQC.                                   |
 | --skipRSeQC     |             | Skip running RSeQC.                                     |
 
-### Credits
+## Credits
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
