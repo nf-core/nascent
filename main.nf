@@ -64,13 +64,13 @@ def helpMessage() {
 
     The typical command for running the pipeline is as follows:
 
-    nextflow run nf-core/nascent -profile slurm --fastqs '/project/*_{R1,R2}*.fastq' --outdir '/project/'
+    nextflow run nf-core/nascent -profile slurm --reads '/project/*_{R1,R2}*.fastq' --outdir '/project/'
     nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
 
     Required arguments:
          -profile                      Configuration profile to use. <base, fiji>
-         --fastqs                      Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
-         --sras                        Directory pattern for SRA files: /project/*.sras (Required if --fastqs not specified)
+         --reads                      Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
+         --sras                        Directory pattern for SRA files: /project/*.sras (Required if --reads not specified)
          --workdir                     Nextflow working directory where all intermediate files are saved.
          --email                       Where to send workflow report email.
 
@@ -183,20 +183,20 @@ if( workflow.profile == 'awsbatch') {
 /*
  * Create a channel for input read files
  */
-if (params.fastqs) {
+if (params.reads) {
     if (params.singleEnd) {
         fastq_reads_qc = Channel
-                            .fromPath(params.fastqs)
+                            .fromPath(params.reads)
                             .map { file -> tuple(file.baseName, file) }
         fastq_reads_trim = Channel
-                            .fromPath(params.fastqs)
+                            .fromPath(params.reads)
                             .map { file -> tuple(file.baseName, file) }
         fastq_reads_gzip = Channel
-                            .fromPath(params.fastqs)
+                            .fromPath(params.reads)
                             .map { file -> tuple(file.baseName, file) }
     } else {
         Channel
-            .fromFilePairs( params.fastqs, size: params.singleEnd ? 1 : 2 )
+            .fromFilePairs( params.reads, size: params.singleEnd ? 1 : 2 )
             .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
             .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     }
@@ -206,7 +206,7 @@ else {
     Channel
         .empty()
         .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
-    params.fastqs = null
+    params.reads = null
 }
 
 if (params.sras) {
@@ -243,8 +243,7 @@ summary['Pipeline Name']  = 'nf-core/nascent'
 summary['Pipeline Version'] = workflow.manifest.version
 summary['Run Name']     = custom_runName ?: workflow.runName
 summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
-if(params.reads) summary['Reads']            = params.reads
-if(params.fastqs) summary['Fastqs']           = params.fastqs
+if(params.reads) summary['Fastqs']           = params.reads
 if(params.sras) summary['SRAs']             = params.sras
 summary['Genome Ref']       = params.fasta
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
@@ -414,7 +413,6 @@ if(!params.hisat2_indices && params.fasta){
  */
 
 process fastqc {
-    validExitStatus 0,1
     tag "$prefix"
     publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
@@ -428,10 +426,21 @@ process fastqc {
     script:
     prefix = reads.baseName
     """
-    echo ${prefix}
+#    echo `which gunzip`
 
     fastqc $reads
-		extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
+		#extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
+#    GC=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt \
+#            | grep "%GC" | grep -o "[0-9]*")
+#    SEQ=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
+#              grep "Total Sequences" | \
+#              grep -o "[0-9]*")
+#    DEDUP=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
+#                grep "#Total Deduplicated Percentage" | \
+#                grep -o "[0-9,.]*")
+#
+#    echo -e "SRR\t%GC\tTotal_Sequences\t%Total_Deduplicated" > ${prefix}_stats_fastqc.txt
+#    echo -e "${prefix}""\$(printf "\\t")""\$GC""\$(printf "\\t")""\$SEQ""\$(printf "\\t")""\$DEDUP" >> ${prefix}_stats_fastqc.txt
     """
 }
 
