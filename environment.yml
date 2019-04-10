@@ -1,4 +1,4 @@
-name: nf-core-nascent-1.0
+name: nf-core-nascent-1.0dev
 channels:
   - conda-forge
   - bioconda
