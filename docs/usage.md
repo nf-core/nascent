@@ -49,6 +49,7 @@ NXF_OPTS='-Xms1g -Xmx4g'
 
 ## Running the pipeline
 The typical command for running the pipeline is as follows:
+
 ```bash
 nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
 ```
@@ -82,22 +83,22 @@ This version number will be logged in reports when you run the pipeline, so that
 ## Main Arguments
 
 ### `-profile`
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. 
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
 * `docker`
-    * A generic configuration profile to be used with [Docker](http://docker.com/)
-    * Pulls software from dockerhub: [`nfcore/nascent`](http://hub.docker.com/r/nfcore/nascent/)
+  * A generic configuration profile to be used with [Docker](http://docker.com/)
+  * Pulls software from dockerhub: [`nfcore/nascent`](http://hub.docker.com/r/nfcore/nascent/)
 * `singularity`
-    * A generic configuration profile to be used with [Singularity](http://singularity.lbl.gov/)
-    * Pulls software from singularity-hub
+  * A generic configuration profile to be used with [Singularity](http://singularity.lbl.gov/)
+  * Pulls software from singularity-hub
 * `conda`
-    * A generic configuration profile to be used with [conda](https://conda.io/docs/)
-    * Pulls most software from [Bioconda](https://bioconda.github.io/)
+  * A generic configuration profile to be used with [conda](https://conda.io/docs/)
+  * Pulls most software from [Bioconda](https://bioconda.github.io/)
 * `awsbatch`
-    * A generic configuration profile to be used with AWS Batch.
+  * A generic configuration profile to be used with AWS Batch.
 * `test`
-    * A profile with a complete configuration for automated testing
-    * Includes links to test data so needs no other parameters
+  * A profile with a complete configuration for automated testing
+  * Includes links to test data so needs no other parameters
 
 ### `--reads`
 Use this to specify the location of your input FastQ files. For example:
