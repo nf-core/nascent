@@ -16,10 +16,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 #### Reference
 
 If you've used this pipeline in your research, you can cite this pipeline using DOI xxxxxxxxxxxxxxxxxxx ([OSF project](https://osf.io/xxxxxxxxxxx/)).
-    
+
 ### Documentation
 The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
-
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration
     * [Local installation](https://nf-co.re/usage/local_installation)
@@ -40,8 +39,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 ## Arguments
 
 **Required Arguments**
-
-| Arugment  | Usage                            | Description                                                          |
+| Argument  | Usage                            | Description                                                          |
 |-----------|----------------------------------|----------------------------------------------------------------------|
 | -profile  | \<base,slurm\>                    | Configuration profile to use.                                       |
 | --fastqs  | \</project/\*\_{R1,R2}\*.fastq\> | Directory pattern for fastq files.                                   |
@@ -51,7 +49,6 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --email   | \<EMAIL\>                        | Where to send workflow report email.                                 |
 
 **Save Options**
-
 | Arguments  | Usage         | Description                                               |
 |------------|---------------|-----------------------------------------------------------|
 | --outdir   | \</project/\> | Specifies where to save the output from the nextflow run. |
@@ -61,7 +58,6 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --skipBAM  |               | Skips saving BAM files (only save CRAM). Default=False    |
 
 **Input File Options**
-
 | Arguments    | Usage       | Description                                                                  |
 |--------------|-------------|------------------------------------------------------------------------------|
 | --singleEnd  |             | Specifies that the input files are not paired reads (default is paired-end). |
@@ -79,7 +75,6 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 |-----------------|-------------|---------------------------------------------------------|
 | --skipMultiQC   |             | Skip running MultiQC.                                   |
 | --skipRSeQC     |             | Skip running RSeQC.                                     |
-
 
 ### Credits
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).

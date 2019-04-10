@@ -55,7 +55,7 @@ For further reading and documentation see the [FastQC help](http://www.bioinform
 
 
 ## MultiQC
-[MultiQC](http://multiqc.info) is a visualisation tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in within the report data directory.
+[MultiQC](https://multiqc.info) is a visualisation tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in within the report data directory.
 
 The pipeline has special steps which allow the software versions used to be reported in the MultiQC output for future traceability.
 
@@ -66,17 +66,13 @@ The pipeline has special steps which allow the software versions used to be repo
 * `Project_multiqc_data/`
   * Directory containing parsed statistics from the different tools used in the pipeline
 
-For more information about how to use MultiQC reports, see http://multiqc.info
+For more information about how to use MultiQC reports, see [https://multiqc.info](https://multiqc.info)
 
 
 ## hisat2
 [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) is a sequence alignment tool to map the trimmed sequenced reads to the corresponding reference genome. Due to their size, the resulting sam files are not conserved after the pipeline has completed execution.
 
 If the necessary indices for mapping are not provided/present, a separate process will build them first. This step can take a few minutes, however it should only be executed once.
-
-**Output directory: none**
-
-
 
 ## samtools
 [Samtools](http://www.htslib.org/) is a suite of tools to handle format conversions, among other things, for high-throughput sequencing data. We also use Samtools to generate the list of chromosome sizes, if not provided for the desired reference genome.
