@@ -175,6 +175,22 @@ if( workflow.profile == 'awsbatch') {
 /*
  * Create a channel for input read files
  */
+
+if(params.readPaths){
+    if(params.singleEnd){
+        Channel
+            .from(params.readPaths)
+            .map { row -> [ row[0], [file(row[1][0])]] }
+            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
+            .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
+    } else {
+        Channel
+            .from(params.readPaths)
+            .map { row -> [ row[0], [file(row[1][0]), file(row[1][1])]] }
+            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
+            .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
+    }
+} 
 if (params.reads) {
     if (params.singleEnd) {
         fastq_reads_qc = Channel
@@ -1061,7 +1077,7 @@ process multiqc {
     !params.skipMultiQC
 
     input:
-    file multiqc_config
+    file multiqc_config from ch_multiqc_config.collect()
     file (fastqc:'qc/fastqc/*') from fastqc_results.collect()
     file ('qc/fastqc/*') from trimmed_fastqc_results.collect()
     file ('qc/trimstats/*') from trim_stats.collect()
