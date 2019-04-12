@@ -181,6 +181,7 @@ if(params.readPaths){
         Channel
             .from(params.readPaths)
             .map { row -> [ row[0], [file(row[1][0])]] }
+            .dump()
             .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
             .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     } else {
@@ -533,8 +534,7 @@ process bbduk {
                   refstats=${name}.refstats.txt \
                   ehist=${name}.ehist.txt
         """
-    }
-        else if (!params.singleEnd) {
+    }else if (!params.singleEnd) {
         """
         echo ${name}      
 
