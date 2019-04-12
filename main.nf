@@ -188,10 +188,10 @@ if(params.readPaths){
             .from(params.readPaths)
             .map { row -> [ row[0], [file(row[1][0]), file(row[1][1])]] }
             .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
+            .dump()
             .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     }
-} 
-if (params.reads) {
+} else {
     if (params.singleEnd) {
         fastq_reads_qc = Channel
                             .fromPath(params.reads)
@@ -208,13 +208,6 @@ if (params.reads) {
             .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
             .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
     }
-}
-
-else {
-    Channel
-        .empty()
-        .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_gzip }
-    params.reads = null
 }
 
 if (params.sras) {
@@ -234,32 +227,6 @@ if (params.sras) {
 else {
     read_files_sra = Channel.empty()
  }
-
-
-/*
- * Create a channel for input read files
- */
-if(params.readPaths){
-    if(params.singleEnd){
-        Channel
-            .from(params.readPaths)
-            .map { row -> [ row[0], [file(row[1][0])]] }
-            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { read_files_fastqc; read_files_trimming }
-    } else {
-        Channel
-            .from(params.readPaths)
-            .map { row -> [ row[0], [file(row[1][0]), file(row[1][1])]] }
-            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { read_files_fastqc; read_files_trimming }
-    }
-} else {
-    Channel
-        .fromFilePairs( params.reads, size: params.singleEnd ? 1 : 2 )
-        .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
-        .into { read_files_fastqc; read_files_trimming }
-}
-
 
 // Header log info
 log.info nfcoreHeader()
