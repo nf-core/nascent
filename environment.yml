@@ -5,9 +5,9 @@ channels:
   - defaults
 dependencies:
   - fastqc=0.11.8
-  - multiqc=1.6
+  - multiqc=1.7
   - hisat2=2.1.0
-  - samtools=1.8
+  - samtools=1.9
   - preseq=2.0.3
   - seqkit=0.9.0
   - bedtools=2.25.0
