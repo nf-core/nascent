@@ -374,7 +374,6 @@ process sra_dump {
 /*
  * PREPROCESSING - Build HISAT2 index (borrowed from nf-core/rnaseq)
  */
-// TODO: do we need --ss and --exon? probably not, need to check what was the actual hisat2-builder arguments used to generate the indices we have on fiji
 if(!params.hisat2_indices && params.fasta){
     process make_hisat_index {
         tag "$fasta"
@@ -420,21 +419,7 @@ process fastqc {
     script:
     prefix = reads.baseName
     """
-#    echo `which gunzip`
-
     fastqc $reads
-		#extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
-#    GC=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt \
-#            | grep "%GC" | grep -o "[0-9]*")
-#    SEQ=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
-#              grep "Total Sequences" | \
-#              grep -o "[0-9]*")
-#    DEDUP=\$(gunzip -c "\$(find . -name *_fastqc.zip)" "${prefix}"_fastqc/fastqc_data.txt | \
-#                grep "#Total Deduplicated Percentage" | \
-#                grep -o "[0-9,.]*")
-#
-#    echo -e "SRR\t%GC\tTotal_Sequences\t%Total_Deduplicated" > ${prefix}_stats_fastqc.txt
-#    echo -e "${prefix}""\$(printf "\\t")""\$GC""\$(printf "\\t")""\$SEQ""\$(printf "\\t")""\$DEDUP" >> ${prefix}_stats_fastqc.txt
     """
 }
 
@@ -480,7 +465,6 @@ process bbduk {
     file "*.txt" into trim_stats
 
     script:
-//    prefix = fastq.baseName
     bbduk_mem = task.memory.toGiga()
     if (!params.singleEnd && params.flip) {
         """
@@ -634,7 +618,6 @@ process hisat2 {
     // NOTE: this tool sends output there even in successful (exit code 0) 
     // termination, so we have to ignore errors for now, and the next 
     // process will blow up from missing a SAM file instead.
-    //errorStrategy 'ignore'
     tag "$name"
     validExitStatus 0,143
 
@@ -700,7 +683,7 @@ process samtools {
 
     script:
     prefix = mapped_sam.baseName
-// Note that the millionsmapped arugments below are only good for SE data. When PE is added, it will need to be changed to:
+    // Note that the millionsmapped arugments below are only good for SE data. When PE is added, it will need to be changed to:
     // -F 0x40 rootname.sorted.bam | cut -f1 | sort | uniq | wc -l  > rootname.bam.millionsmapped
     if (!params.singleEnd) {
     """
@@ -1061,7 +1044,6 @@ process multiqc {
     rtitle = custom_runName ? "--title \"$custom_runName\"" : ''
     rfilename = custom_runName ? "--filename " + custom_runName.replaceAll('\\W','_').replaceAll('_+','_') + "_multiqc_report" : ''
 
-//TO DO : Need to build a new multiqc container for the newest version
 
     """
     export PATH=~/.local/bin:$PATH
