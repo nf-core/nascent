@@ -15,7 +15,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 #### Reference
 
-If you've used this pipeline in your research, you can cite this pipeline using DOI xxxxxxxxxxxxxxxxxxx ([OSF project](https://osf.io/xxxxxxxxxxx/)).
+If you've used this pipeline in your research, you can cite this pipeline using DOI 10.17605/OSF.IO/SV4UB ([OSF project](https://osf.io/sv4ub/)).
 
 ### Documentation
 The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
