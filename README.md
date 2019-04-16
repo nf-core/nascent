@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.com/nf-core/nascent.svg?branch=master)](https://travis-ci.com/nf-core/nascent)
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.32.0-brightgreen.svg)](https://www.nextflow.io/)
+[![DOI](https://zenodo.org/badge/157735234.svg)](https://zenodo.org/badge/latestdoi/157735234)
+
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](http://bioconda.github.io/)
 [![Docker](https://img.shields.io/docker/automated/nfcore/nascent.svg)](https://hub.docker.com/r/nfcore/nascent)
 ![Singularity Container available](
