@@ -1,13 +1,12 @@
 # nf-core/nascent: Usage
 
 ## Table of contents
-
 * [Introduction](#general-nextflow-info)
 * [Running the pipeline](#running-the-pipeline)
 * [Updating the pipeline](#updating-the-pipeline)
 * [Reproducibility](#reproducibility)
 * [Main arguments](#main-arguments)
-    * [`-profile`](#-profile-single-dash)
+  * [`-profile`](#-profile-single-dash)
         * [`docker`](#docker)
         * [`awsbatch`](#awsbatch)
         * [`standard`](#standard)
@@ -17,28 +16,31 @@
     * [`--reads`](#--reads)
     * [`--singleEnd`](#--singleend)
 * [Reference Genomes](#reference-genomes)
-    * [`--genome`](#--genome)
-    * [`--fasta`](#--fasta)
+  * [`--genome`](#--genome)
+  * [`--fasta`](#--fasta)
 * [Job Resources](#job-resources)
 * [Automatic resubmission](#automatic-resubmission)
 * [Custom resource requests](#custom-resource-requests)
 * [AWS batch specific parameters](#aws-batch-specific-parameters)
-    * [`-awsbatch`](#-awsbatch)
-    * [`--awsqueue`](#--awsqueue)
-    * [`--awsregion`](#--awsregion)
+  * [`-awsbatch`](#-awsbatch)
+  * [`--awsqueue`](#--awsqueue)
+  * [`--awsregion`](#--awsregion)
 * [Other command line parameters](#other-command-line-parameters)
-    * [`--outdir`](#--outdir)
-    * [`--email`](#--email)
-    * [`-name`](#-name-single-dash)
-    * [`-resume`](#-resume-single-dash)
-    * [`-c`](#-c-single-dash)
-    * [`--max_memory`](#--max_memory)
-    * [`--max_time`](#--max_time)
-    * [`--max_cpus`](#--max_cpus)
-    * [`--plaintext_emails`](#--plaintext_emails)
-    * [`--sampleLevel`](#--sampleLevel)
-    * [`--multiqc_config`](#--multiqc_config)
-
+  * [`--outdir`](#--outdir)
+  * [`--email`](#--email)
+  * [`-name`](#-name-single-dash)
+  * [`-resume`](#-resume-single-dash)
+  * [`-c`](#-c-single-dash)
+  * [`--max_memory`](#--max_memory)
+  * [`--max_time`](#--max_time)
+  * [`--max_cpus`](#--max_cpus)
+  * [`--plaintext_emails`](#--plaintext_emails)
+  * [`--sampleLevel`](#--sampleLevel)
+  * [`--multiqc_config`](#--multiqc_config)
+  * [`--chrom_sizes`](#--chrom_sizes)
+  * [`--hisat_indices`](#--hisat_indices)
+  * [`--genome_refseq`](#--genome_refseq)
+  * [`--sras`](#--sras)
 
 ## General Nextflow info
 Nextflow handles job submissions on SLURM or other environments, and supervises running the jobs. Thus the Nextflow process must run until the pipeline is finished. We recommend that you put the process running in the background through `screen` / `tmux` or similar tool. Alternatively you can run nextflow within a cluster job submitted your job scheduler.
@@ -51,6 +53,7 @@ NXF_OPTS='-Xms1g -Xmx4g'
 
 ## Running the pipeline
 The typical command for running the pipeline is as follows:
+
 ```bash
 nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
 ```
@@ -84,35 +87,23 @@ This version number will be logged in reports when you run the pipeline, so that
 ## Main Arguments
 
 ### `-profile`
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. Note that multiple profiles can be loaded, for example: `-profile standard,docker` - the order of arguments is important!
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-* `standard`
-    * The default profile, used if `-profile` is not specified at all.
-    * Runs locally and expects all software to be installed and available on the `PATH`.
 * `docker`
-    * A generic configuration profile to be used with [Docker](http://docker.com/)
-    * Pulls software from dockerhub: [`nfcore/nascent`](http://hub.docker.com/r/nfcore/nascent/)
+  * A generic configuration profile to be used with [Docker](http://docker.com/)
+  * Pulls software from dockerhub: [`nfcore/nascent`](http://hub.docker.com/r/nfcore/nascent/)
 * `singularity`
-    * A generic configuration profile to be used with [Singularity](http://singularity.lbl.gov/)
-    * Pulls software from singularity-hub
+  * A generic configuration profile to be used with [Singularity](http://singularity.lbl.gov/)
+  * Pulls software from singularity-hub
 * `conda`
-    * A generic configuration profile to be used with [conda](https://conda.io/docs/)
-    * Pulls most software from [Bioconda](https://bioconda.github.io/)
-* `binac`
-    * A profile for the [BinAC](https://www.bwhpc-c5.de/wiki/index.php/Category:BwForCluster_BinAC) cluster
-    * Pulls images via Singularity from Dockerhub automatically
-* `cfc`
-    * A profile for the Core Facility Cluster at QBiC Tuebingen
-    * Pulls images via Singularity from Dockerhub automatically
+  * A generic configuration profile to be used with [conda](https://conda.io/docs/)
+  * Pulls most software from [Bioconda](https://bioconda.github.io/)
 * `awsbatch`
-    * A generic configuration profile to be used with AWS Batch.
+  * A generic configuration profile to be used with AWS Batch.
 * `test`
-    * A profile with a complete configuration for automated testing
-    * Includes links to test data so needs no other parameters
-* `none`
-    * No configuration at all. Useful if you want to build your own config from scratch and want to avoid loading in the default `base` config profile (not recommended).
+  * A profile with a complete configuration for automated testing
+  * Includes links to test data so needs no other parameters
 
-<!-- TODO nf-core: Document required command line parameters -->
 ### `--reads`
 Use this to specify the location of your input FastQ files. For example:
 
@@ -138,7 +129,7 @@ By default, the pipeline expects paired-end data. If you have single-end data, y
 It is not possible to run a mixture of single-end and paired-end files in one run.
 
 
-## Reference Genomes
+## Reference genomes
 
 The pipeline config files come bundled with paths to the illumina iGenomes reference index files. If running with docker or AWS, the configuration is set up to use the [AWS-iGenomes](https://ewels.github.io/AWS-iGenomes/) resource.
 
@@ -162,7 +153,6 @@ Note that you can use the same configuration setup to save sets of reference fil
 
 The syntax for this reference configuration is as follows:
 
-<!-- TODO nf-core: Update reference genome example according to what is needed -->
 ```nextflow
 params {
   genomes {
@@ -174,7 +164,6 @@ params {
 }
 ```
 
-<!-- TODO nf-core: Describe reference path flags -->
 ### `--fasta`
 If you prefer, you can specify the full path to your reference genome when you run the pipeline:
 
@@ -182,12 +171,19 @@ If you prefer, you can specify the full path to your reference genome when you r
 --fasta '[path to Fasta reference]'
 ```
 
-## Job Resources
+### `--igenomesIgnore`
+Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`.
+
+## Job resources
 ### Automatic resubmission
 Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with an error code of `143` (exceeded requested resources) it will automatically resubmit with higher requests (2 x original, then 3 x original). If it still fails after three times then the pipeline is stopped.
 
 ### Custom resource requests
-Wherever process-specific requirements are set in the pipeline, the default value can be changed by creating a custom config file. See the files in [`conf`](../conf) for examples.
+Wherever process-specific requirements are set in the pipeline, the default value can be changed by creating a custom config file. See the files hosted at [`nf-core/configs`](https://github.com/nf-core/configs/tree/master/conf) for examples.
+
+If you are likely to be running `nf-core` pipelines regularly it may be a good idea to request that your custom config file is uploaded to the `nf-core/configs` git repository. Before you do this please can you test that the config file works with your pipeline of choice using the `-c` parameter (see definition below). You can then create a pull request to the `nf-core/configs` repository with the addition of your config file, associated documentation file (see examples in [`nf-core/configs/docs`](https://github.com/nf-core/configs/tree/master/docs)), and amending [`nfcore_custom.config`](https://github.com/nf-core/configs/blob/master/nfcore_custom.config) to include your custom profile.
+
+If you have any questions or issues please send us a message on [Slack](https://nf-core-invite.herokuapp.com/).
 
 ## AWS Batch specific parameters
 Running the pipeline on AWS Batch requires a couple of specific parameters to be set according to your AWS Batch configuration. Please use the `-awsbatch` profile and then specify all of the following parameters.
@@ -200,13 +196,11 @@ Please make sure to also set the `-w/--work-dir` and `--outdir` parameters to a 
 
 ## Other command line parameters
 
-<!-- TODO nf-core: Describe any other command line flags here -->
-
 ### `--outdir`
 The output directory where the results will be saved.
 
 ### `--email`
-Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to speicfy this on the command line for every run.
+Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.
 
 ### `-name`
 Name for the pipeline run. If not specified, Nextflow will automatically generate a random mnemonic.
@@ -229,9 +223,37 @@ Specify the path to a specific config file (this is a core NextFlow command).
 
 Note - you can use this to override pipeline defaults.
 
+### `--custom_config_version`
+Provide git commit id for custom Institutional configs hosted at `nf-core/configs`. This was implemented for reproducibility purposes. Default is set to `master`.
+
+```bash
+## Download and use config file with following git commid id
+--custom_config_version d52db660777c4bf36546ddb188ec530c3ada1b96
+```
+
+### `--custom_config_base`
+If you're running offline, nextflow will not be able to fetch the institutional config files
+from the internet. If you don't need them, then this is not a problem. If you do need them,
+you should download the files from the repo and tell nextflow where to find them with the
+`custom_config_base` option. For example:
+
+```bash
+## Download and unzip the config files
+cd /path/to/my/configs
+wget https://github.com/nf-core/configs/archive/master.zip
+unzip master.zip
+
+## Run the pipeline
+cd /path/to/my/data
+nextflow run /path/to/pipeline/ --custom_config_base /path/to/my/configs/configs-master/
+```
+
+> Note that the nf-core/tools helper package has a `download` command to download all required pipeline
+> files + singularity containers + institutional configs in one go for you, to make this process easier.
+
 ### `--max_memory`
 Use to set a top-limit for the default memory requirement for each process.
-Should be a string in the format integer-unit. eg. `--max_memory '8.GB'``
+Should be a string in the format integer-unit. eg. `--max_memory '8.GB'`
 
 ### `--max_time`
 Use to set a top-limit for the default time requirement for each process.
@@ -244,5 +266,20 @@ Should be a string in the format integer-unit. eg. `--max_cpus 1`
 ### `--plaintext_email`
 Set to receive plain-text e-mails instead of HTML formatted.
 
-### `--multiqc_config`
+### `--monochrome_logs`
+Set to disable colourful command line output and live life in monochrome.
+
+### `--multiqc_config`
 Specify a path to a custom MultiQC configuration file.
+
+### `--chrom_sizes`
+Specify a path to a file listing the number of nucleotides on each chromosome, for the reference quenome in question.
+
+### `--hisat_indices`
+Specify a path to the Hisat2 index directory. If not provided, hese indices will be generated the first time this pipeline is executed.
+
+### `--genome_refseq`
+Specify a path to the RefSeq genome annotation file. Optional, but useful to collect stats via RseQC.
+
+### `--sras`
+Specify a path to a directory (can use regular expressions) containing SRR files obtained from the Gene Expression Omnibus (GEO) platform. This is an alternative to providing fastq files if re-analizing existing public datasets.
