@@ -37,6 +37,10 @@
   * [`--plaintext_emails`](#--plaintext_emails)
   * [`--sampleLevel`](#--sampleLevel)
   * [`--multiqc_config`](#--multiqc_config)
+  * [`--chrom_sizes`](#--chrom_sizes)
+  * [`--hisat_indices`](#--hisat_indices)
+  * [`--genome_refseq`](#--genome_refseq)
+  * [`--sras`](#--sras)
 
 ## General Nextflow info
 Nextflow handles job submissions on SLURM or other environments, and supervises running the jobs. Thus the Nextflow process must run until the pipeline is finished. We recommend that you put the process running in the background through `screen` / `tmux` or similar tool. Alternatively you can run nextflow within a cluster job submitted your job scheduler.
@@ -267,3 +271,15 @@ Set to disable colourful command line output and live life in monochrome.
 
 ### `--multiqc_config`
 Specify a path to a custom MultiQC configuration file.
+
+### `--chrom_sizes`
+Specify a path to a file listing the number of nucleotides on each chromosome, for the reference quenome in question.
+
+### `--hisat_indices`
+Specify a path to the Hisat2 index directory. If not provided, hese indices will be generated the first time this pipeline is executed.
+
+### `--genome_refseq`
+Specify a path to the RefSeq genome annotation file. Optional, but useful to collect stats via RseQC.
+
+### `--sras`
+Specify a path to a directory (can use regular expressions) containing SRR files obtained from the Gene Expression Omnibus (GEO) platform. This is an alternative to providing fastq files if re-analizing existing public datasets.
