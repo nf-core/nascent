@@ -78,3 +78,5 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 
 ## Credits
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
+
+Many thanks to the nf-core team and all who provided invaluable feedback and assistance along the way, particularly to [@apeltzer](https://github.com/apeltzer), [@ewels](https://github.com/ewels), [@drpatelh](https://github.com/drpatelh), and [@pditommaso](https://github.com/pditommaso).
