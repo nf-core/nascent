@@ -8,6 +8,7 @@ rule GM19_bowtie2:
     params:
         index="data/2018-11-27/genome",
         extra=""
-    threads: 4
+    threads: 8
+    conda: "../../envs/bowtie2.yaml"
     wrapper:
         "0.27.1/bio/bowtie2/align"
