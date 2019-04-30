@@ -13,13 +13,15 @@ rule GM19_merge_sample_peaks:
         "mergePeaks -d {params.maxDistance} {input} > {output}"
 
 # FIXME uses unmerged regions of eRNAs
-rule GM19_eRNA_peak:
+rule GM19_eRNA_gff:
     input:
         "results/2018-11-29/GM19_eRNA.bed",
     output:
-        "results/2019-01-31/GM19_eRNA_peak.gtf",
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer.yaml"
+        "results/2019-01-31/GM19_eRNA_peak.gff",
+    conda:
+        "../../envs/gawk.yaml"
     shell:
-        "bed2pos.pl {input} > {output}"
+        # https://bedops.readthedocs.io/en/latest/content/reference/file-management/conversion/gtf2bed.html
+        """awk '{{print $1"\\thomer\\tenhancer\\t"($2+1)"\\t"$3"\
+        \\t"$5"\\t"$6"\\t"$9"\\t"(substr($0, index($0,$10)))\
+        }}' {input} > {output}"""

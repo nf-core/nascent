@@ -1,0 +1,7 @@
+channels:
+  - bioconda
+  - r
+dependencies:
+  - r
+  - bioconductor-edger
+  - bioconductor-org.Hs.eg.db

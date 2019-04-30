@@ -1,0 +1,4 @@
+channels:
+  - bioconda
+dependencies:
+  - bioconductor-rsubread
