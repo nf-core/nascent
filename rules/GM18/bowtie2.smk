@@ -13,11 +13,10 @@ rule GM18_bowtie2:
     output:
         "results/2018-10-04/GM18/{unit}.bam"
     log:
-        "logs/GM18/bowtie2/{unit}.log"
+        "logs/bowtie2/{unit}.log"
     params:
         index="data/2018-06-24/genome",
         extra=""
-    threads: 8
-    conda: "../../envs/bowtie2.yaml"
+    threads: 4
     wrapper:
         "0.27.1/bio/bowtie2/align"

@@ -8,7 +8,6 @@ rule IMR_hg19_bowtie2:
     params:
         index="data/2018-11-27/genome",
         extra=""
-    threads: 8
-    conda: "../../envs/bowtie2.yaml"
+    threads: 4
     wrapper:
         "0.27.1/bio/bowtie2/align"
