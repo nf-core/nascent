@@ -1,4 +1,4 @@
-# nf-core/nascent
+# ![nfcore/nascent](docs/images/nascent_logo.png)
 
 **Nascent Transcription Processing Pipeline**.
 
