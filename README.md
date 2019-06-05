@@ -1,6 +1,4 @@
-# nf-core/nascent
-
-**Nascent Transcription Processing Pipeline**.
+# ![nfcore/nascent](docs/images/nascent_logo.png)
 
 [![Build Status](https://travis-ci.com/nf-core/nascent.svg?branch=master)](https://travis-ci.com/nf-core/nascent)
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.32.0-brightgreen.svg)](https://www.nextflow.io/)
@@ -12,7 +10,7 @@
 https://img.shields.io/badge/singularity-available-7E4C74.svg)
 
 ### Introduction
-The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It comes with docker / singularity containers making installation trivial and results highly reproducible.
+This nascent transcription processing pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It comes with docker / singularity containers making installation trivial and results highly reproducible.
 
 
 #### Reference
