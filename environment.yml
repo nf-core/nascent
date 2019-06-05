@@ -1,0 +1,8 @@
+name: eRNA
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+dependencies:
+  - snakemake
+  - pandas
