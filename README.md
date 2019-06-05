@@ -15,7 +15,7 @@ This nascent transcription processing pipeline is built using [Nextflow](https:/
 
 #### Reference
 
-If you've used this pipeline in your research, you can cite this pipeline using DOI 10.17605/OSF.IO/SV4UB ([OSF project](https://osf.io/sv4ub/)).
+If you have used this pipeline in your research, please cite it using the DOI mentioned above.
 
 ### Documentation
 The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
