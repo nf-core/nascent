@@ -40,7 +40,7 @@ rule GM_hg19_HistonesIntersect:
         H3K27ac="data/2018-11-29/GM19_H3K27ac.sorted.bed",
         H3K4me1="data/2018-11-29/GM19_H3K4me1.sorted.bed",
     output:
-        "results/2018-11-29/GM19_eRNA.bed"
+        "results/2018-12-02/GM19_eRNA.bed"
     log:
         "logs/HistonesIntersect.log"
     conda:
