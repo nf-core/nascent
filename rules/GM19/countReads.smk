@@ -88,3 +88,50 @@ rule GM19_normalize_counts:
         counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
         norm_counts = np.log2(normalize_counts(counts) + 1)
         norm_counts.to_csv(output[0], sep="\t", index=True)
+
+rule GM19_eRNA_feature_counts:
+    input:
+        bam="results/2018-11-27/GM19/{sample}.bam",
+        # bai="bam/final/{sample}.bam.bai",
+    output:
+        counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
+        summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
+    params:
+        annotation="results/2019-06-07/IMR_eRNA.saf",
+        extra='-F "SAF"' #feature_counts_extra
+    threads:
+        config["feature_counts"]["threads"]
+    log:
+        "logs/{sample}/feature_counts/{sample}.txt"
+    wrapper:
+        "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
+
+
+rule GM19_eRNA_merge_counts:
+    input:
+        expand("results/2019-06-03/eRNA/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
+    output:
+        "results/2019-06-03/eRNA/counts/merged.txt"
+    run:
+        # Merge count files.
+        frames = (pd.read_csv(fp, sep="\t", skiprows=1,
+                        index_col=list(range(6)))
+            for fp in input)
+        merged = pd.concat(frames, axis=1)
+
+        # Extract sample names.
+        merged = merged.rename(
+            columns=lambda c: path.splitext(path.basename(c))[0])
+
+        merged.to_csv(output[0], sep="\t", index=True)
+
+
+rule GM19_eRNA_normalize_counts:
+    input:
+        "results/2019-06-03/eRNA/counts/merged.txt"
+    output:
+        "results/2019-06-03/eRNA/counts/merged.log2.txt"
+    run:
+        counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
+        norm_counts = np.log2(normalize_counts(counts) + 1)
+        norm_counts.to_csv(output[0], sep="\t", index=True)
