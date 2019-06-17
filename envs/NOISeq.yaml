@@ -1,0 +1,11 @@
+channels:
+  - r
+  - bioconda
+dependencies:
+  - r
+  - r-dplyr
+  - bioconductor-noiseq
+  - bioconductor-biomart
+  # If not using biomart
+  # - bioconductor-homo.sapiens
+  # - bioconductor-annotationdbi
