@@ -1,7 +1,7 @@
 # Snakemake workflow: IMR90&GM_eRNAs
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥3.12.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.com/Emiller88/IMR90.svg?token=4xxfcp3gAkNPaDFsDwgn&branch=master)](https://travis-ci.com/Emiller88/IMR90)
+[![Build Status](https://travis-ci.com/Emiller88/eRNA-GRO-Seq.svg?token=4xxfcp3gAkNPaDFsDwgn&branch=develop)](https://travis-ci.com/Emiller88/eRNA-GRO-Seq)
 
 This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
 Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
