@@ -5,3 +5,7 @@ feature_counts:
   annotation: '/media/enhancer/IMR90/data/2018-11-28/genes.gtf'
   extra: ''
   threads: 4
+
+GM:
+    A: data/samples/A.fastq
+    B: data/samples/B.fastq
