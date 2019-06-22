@@ -14,7 +14,7 @@ rule test_IMR90_hg19_vs_Peng:
 
 rule test_IMR_hg19_vs_liftOver:
     input:
-        GM_liftOver="results/2018-11-29/GM19_eRNA.bed",
+        GM_liftOver="results/2018-11-25/eRNA_GM_liftover_hg19.sorted.bed",
         IMR_hg19eRNAs="results/2018-12-02/IMR_eRNA.bed",
     output:
         "results/2018-12-03/IMR_hg19_vs_liftOver.bed"

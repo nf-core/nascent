@@ -20,9 +20,9 @@ rule GM18_meta_findPeaks:
 
 rule GM18_meta_pos2bed:
     input:
-        "results/2018-11-07/groseq_GM_peak.gtf"
+        "results/2018-11-07/GM18_meta_groseq_peak.gtf",
     output:
-        "results/2018-11-08/groseq_GM_peak.bed"
+        "results/2018-11-07/GM18_meta_groseq_peak.bed"
     conda:
         "../../envs/homer.yaml"
     shell:

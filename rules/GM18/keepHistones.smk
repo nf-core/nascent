@@ -2,7 +2,7 @@ rule GM18_alignHistones:
     input:
         sample=["data/2018-11-13/GM_{unit}.fastq"]
     output:
-        "results/2018-11-13/GM_{unit}_hg18.bam"
+        "results/2018-11-13/GM18_{unit}.bam"
     log:
         "logs/bowtie2/{unit}.log"
     params:
@@ -14,9 +14,9 @@ rule GM18_alignHistones:
 
 rule GM18_convert_Histones_to_Bed:
     input:
-        "results/2018-11-13/GM_{unit}_hg18.bam",
+        "results/2018-11-13/GM18{unit}.bam",
     output:
-        "results/2018-11-24/GM_{unit}_hg18.bed",
+        "results/2018-11-24/GM18{unit}.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 2
@@ -25,9 +25,9 @@ rule GM18_convert_Histones_to_Bed:
 
 rule GM18_sort_Histones_Bed:
     input:
-        "results/2018-11-24/GM_{unit}_hg18.bed",
+        "results/2018-11-24/GM18_{unit}.bed",
     output:
-        "results/2018-11-24/GM_{unit}_hg18.sorted.bed",
+        "results/2018-11-24/GM18_{unit}.sorted.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 4
