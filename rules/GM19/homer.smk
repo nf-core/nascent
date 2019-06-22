@@ -2,7 +2,7 @@ rule GM19_meta_makeTagDirectory:
     input:
         expand("results/2018-11-27/GM19/{unit}.bam",unit=GM_SAMPLES)
     output:
-        "results/2018-11-28/GM19_meta_tagDir/"
+        directory("results/2018-11-28/GM19_meta_tagDir/")
     # conda:
     #     "../../envs/homer.yaml"
     shell:

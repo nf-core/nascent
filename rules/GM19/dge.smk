@@ -16,7 +16,7 @@ rule GM19_genes_NOIseq:
     input:
         "results/2019-06-03/eRNA/counts/GM19_merged.txt"
     output:
-        "results/2019-06-13/DEGS/GM19/deg_12h.txt"
+        directory("results/2019-06-13/DEGS/GM19/"),
     # singularity:
     #     "docker://emiller88/noiseq:0.0.2"
     conda:
