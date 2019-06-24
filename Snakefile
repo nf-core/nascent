@@ -1,6 +1,6 @@
 import pandas as pd
 
-singularity: "docker://continuumio/miniconda3:4.6.14"
+# singularity: "docker://continuumio/miniconda3:4.6.14"
 configfile: "config.yaml"
 
 GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h", "GM18h", "GM24h", "GM48h", "GM72h",]
