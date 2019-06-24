@@ -4,9 +4,8 @@ rule GM19_merge_sample_peaks:
         expand("results/2019-01-28/GM/{unit}_groseq_peak.gtf",unit=GM_SAMPLES),
     output:
         "results/2019-01-31/GM/GM19_merged_peaks.gtf"
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     params:
         maxDistance="100"
     shell:

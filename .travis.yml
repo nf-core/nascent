@@ -2,6 +2,9 @@ language: python
 python:
   # We don't actually use the Travis Python, but this keeps it organized.
   - "3.6"
+cache:
+  directories:
+  - .snakemake/conda
 
 branches:
   only:
@@ -30,4 +33,4 @@ script:
   # run the workflow
   # put a test case into the subfolder .test (e.g., use https://github.com/snakemake-workflows/ngs-test-data as a submodule)
   # - snakemake --use-conda --directory .test
-  - snakemake --use-conda -n
+  - snakemake --use-conda --use-singularity -n

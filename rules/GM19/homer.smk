@@ -3,8 +3,8 @@ rule GM19_meta_makeTagDirectory:
         expand("results/2018-10-04/GM19/{unit}.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/GM19_meta_tagDir/")
-    # conda:
-    #     "../../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
@@ -13,9 +13,8 @@ rule GM19_meta_findPeaks:
         "results/2018-11-07/GM19_meta_tagDir/"
     output:
         "results/2018-11-07/GM19_meta_groseq_peak.gtf"
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
@@ -42,9 +41,8 @@ rule GM19_sample_findPeaks:
         "results/2019-01-28/GM/{unit}_tagDir/",
     output:
         "results/2019-01-28/GM/{unit}_groseq_peak.gtf"
-    # FIXME Genomes don't work in a conda environment
-    # conda:
-    #     "../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
