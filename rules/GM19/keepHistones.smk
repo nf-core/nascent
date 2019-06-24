@@ -10,7 +10,7 @@ rule hg19_alignHistones:
         extra=""
     threads: 4
     wrapper:
-        "0.27.1/bio/bowtie2/align"
+        "0.35.1/bio/bowtie2/align"
 
 rule hg19_convert_Histones_to_Bed:
     input:

@@ -19,4 +19,4 @@ rule GM18_bowtie2:
         extra=""
     threads: 4
     wrapper:
-        "0.27.1/bio/bowtie2/align"
+        "0.35.1/bio/bowtie2/align"
