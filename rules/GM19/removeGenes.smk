@@ -3,10 +3,10 @@
 
 rule hg19_slopRefSeq:
     input:
-        refSeq="data/2018-11-28/genes.bed",
-        chromLen="data/2018-11-27/genome.fa.fai"
+        refSeq="data/2018-11-09/hg19/genes.bed",
+        chromLen="data/2018-06-24/hg19/genome.fa.fai"
     output:
-        "results/2018-11-29/sloprefseqhg19.bed"
+        "data/2018-11-09/hg19/hg19_slop_refseq.bed"
     conda:
         "../../envs/bedtools.yaml"
     shell:
@@ -16,11 +16,11 @@ rule hg19_slopRefSeq:
 
 rule hg19_fixBEDcoordinates:
     input:
-        "results/2018-11-29/sloprefseqhg19.bed"
+        "data/2018-11-09/hg19/hg19_slop_refseq.bed"
     output:
-        "results/2018-11-29/sloprefseqhg19.sorted.bed"
+        "data/2018-11-09/hg19/hg19_slop_refseq.sorted.bed"
     log:
-        "logs/RemoveGenes.log"
+        "logs/GM19/RemoveGenes.log"
     conda:
         "../../envs/bedops.yaml"
     shell:
@@ -29,14 +29,14 @@ rule hg19_fixBEDcoordinates:
          {input} | sort-bed - > {output}"
 
 # Take the slopped genes and remove them from the Peaks file
-rule hg19_RemoveGenes:
+rule GM19_RemoveGenes:
     input:
-        GM="results/2018-11-28/GM19_meta_groseq_peak.bed",
-        refseq="results/2018-11-29/sloprefseqhg19.sorted.bed",
+        GM="results/2018-11-07/GM19_meta_groseq_peak.bed",
+        refseq="data/2018-11-09/hg19/hg19_slop_refseq.sorted.bed",
     output:
-        "results/2018-11-29/GM19_meta_groseq_noGenes.bed"
+        "results/2018-11-09/GM19_meta_groseq_noGenes.bed"
     log:
-        "logs/RemoveGenes.log"
+        "logs/GM19/RemoveGenes.log"
     conda:
         "../../envs/bedtools.yaml"
     shell:

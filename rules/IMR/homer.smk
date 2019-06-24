@@ -1,8 +1,8 @@
 rule IMR_hg19_meta_makeTagDirectory:
     input:
-        expand("results/2018-12-01/IMR/{unit}.bam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/IMR/{unit}.bam",unit=IMR_SAMPLES)
     output:
-        directory("results/2018-12-02/IMR_meta_tagDir/")
+        directory("results/2018-11-07/IMR_meta_tagDir/")
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../../envs/homer.yaml"
@@ -11,9 +11,9 @@ rule IMR_hg19_meta_makeTagDirectory:
 
 rule IMR_hg19_meta_findPeaks:
     input:
-        "results/2018-12-02/IMR_meta_tagDir/",
+        "results/2018-11-07/IMR_meta_tagDir/",
     output:
-        "results/2018-12-02/IMR_meta_groseq_peak.gtf",
+        "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../envs/homer.yaml"
@@ -22,9 +22,9 @@ rule IMR_hg19_meta_findPeaks:
 
 rule IMR_hg19_meta_pos2bed:
     input:
-        "results/2018-12-02/IMR_meta_groseq_peak.gtf",
+        "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     output:
-        "results/2018-12-02/IMR_meta_groseq_peak.bed",
+        "results/2018-11-07/IMR_meta_groseq_peak.bed",
     conda:
         "../../envs/homer.yaml"
     shell:
@@ -32,7 +32,7 @@ rule IMR_hg19_meta_pos2bed:
 
 rule IMR_hg19_sample_makeTagDirectory:
     input:
-        sample=["results/2018-12-01/IMR/{unit}.bam"],
+        sample=["results/2018-10-04/IMR/{unit}.bam"],
     output:
         "results/2019-01-28/IMR/{unit}_tagDir/",
     shell:

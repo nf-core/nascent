@@ -1,48 +1,48 @@
-rule IMR_hg19_alignHistones:
+rule IMR_alignHistones:
     input:
-        sample=["data/2018-12-02/IMR_{unit}.fastq"]
+        sample=["data/2018-11-13/IMR_{unit}.fastq"]
     output:
-        "data/2018-12-02/IMR_{unit}_hg19.bam"
+        "data/2018-11-13/IMR/IMR_{unit}.bam"
     log:
-        "logs/bowtie2/{unit}.log"
+        "logs/IMR/bowtie2/{unit}.log"
     params:
-        index="data/2018-11-27/genome",
+        index="data/2018-06-24/hg19/genome",
         extra=""
     threads: 4
     wrapper:
         "0.27.1/bio/bowtie2/align"
 
-rule IMR_hg19_convert_Histones_to_Bed:
+rule IMR_convert_Histones_to_Bed:
     input:
-        "data/2018-12-02/IMR_{unit}_hg19.bam",
+        "data/2018-11-13/IMR/IMR_{unit}.bam",
     output:
-        "data/2018-12-02/IMR_{unit}_hg19.bed",
+        "data/2018-11-13/IMR/IMR_{unit}.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 2
     shell:
         "bamToBed -i {input} > {output}"
 
-rule IMR_hg19_sort_Histones_Bed:
+rule IMR_sort_Histones_Bed:
     input:
-        "data/2018-12-02/IMR_{unit}_hg19.bed",
+        "data/2018-11-13/IMR/IMR_{unit}.bed",
     output:
-        "data/2018-12-02/IMR_{unit}_hg19.sorted.bed",
+        "data/2018-11-13/IMR/IMR_{unit}.sorted.bed",
     conda:
         "../../envs/bedtools.yaml"
     threads: 2
     shell:
         "sortBed -i {input} > {output}"
 
-rule IMR_hg19_HistonesIntersect:
+rule IMR_HistonesIntersect:
     input:
-        IMR_no_genes="results/2018-12-02/IMR_hg19_groseq_noGenes.bed",
-        H3K27ac="data/2018-12-02/IMR_H3K27ac_hg19.sorted.bed",
-        H3K4me1="data/2018-12-02/IMR_H3K4me1_hg19.sorted.bed",
+        IMR_no_genes="results/2018-11-09/IMR_groseq_noGenes.bed",
+        H3K27ac="data/2018-11-13/IMR/IMR_H3K27ac.sorted.bed",
+        H3K4me1="data/2018-11-13/IMR/IMR_H3K4me1.sorted.bed",
     output:
         "results/2018-12-02/IMR_eRNA.bed"
     log:
-        "logs/HistonesIntersect.log"
+        "logs/IMR/HistonesIntersect.log"
     conda:
         "../../envs/bedtools.yaml"
     threads: 2

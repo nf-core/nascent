@@ -26,9 +26,9 @@ rule all:
         # IMR hg19
         IMR_counts=expand("results/2019-01-28/IMR/{unit}_groseq_peak.bed", unit=IMR_SAMPLES),
         # IMR_eRNA="results/2018-12-02/eRNA_IMR_hg19.bed",
-        IMR_test1="results/2018-12-03/IMR_hg19_vs_Peng.bed",
-        IMR_test2="results/2018-12-03/IMR_hg19_vs_liftOver.bed",
-        IMR_test3="results/2018-12-03/IMR_hg19_vs_GM_hg19.bed",
+        IMR_test1="results/2018-11-10/test/IMR_eRNA_vs_Peng.bed",
+        IMR_test2="results/2018-11-10/test/IMR_eRNA_vs_GM19.bed",
+        IMR_test3="results/2018-11-10/test/IMR_eRNA_vs_liftOver.bed",
         # Differential Analysis
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
@@ -36,7 +36,6 @@ rule all:
 
 include: "rules/data.smk"
 
-include: "rules/GM18/fastqc.smk"
 include: "rules/GM18/bowtie2.smk"
 include: "rules/GM18/homer.smk"
 include: "rules/GM18/removeGenes.smk"
@@ -44,6 +43,7 @@ include: "rules/GM18/keepHistones.smk"
 include: "rules/GM18/liftOver.smk"
 include: "rules/GM18/test_peng_eRNAs.smk"
 
+include: "rules/GM19/fastqc.smk"
 include: "rules/GM19/bowtie2.smk"
 include: "rules/GM19/homer.smk"
 include: "rules/GM19/removeGenes.smk"

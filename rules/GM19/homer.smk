@@ -1,8 +1,8 @@
 rule GM19_meta_makeTagDirectory:
     input:
-        expand("results/2018-11-27/GM19/{unit}.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/GM19/{unit}.bam",unit=GM_SAMPLES)
     output:
-        directory("results/2018-11-28/GM19_meta_tagDir/")
+        directory("results/2018-11-07/GM19_meta_tagDir/")
     # conda:
     #     "../../envs/homer.yaml"
     shell:
@@ -10,9 +10,9 @@ rule GM19_meta_makeTagDirectory:
 
 rule GM19_meta_findPeaks:
     input:
-        "results/2018-11-28/GM19_meta_tagDir/"
+        "results/2018-11-07/GM19_meta_tagDir/"
     output:
-        "results/2018-11-28/GM19_meta_groseq_peak.gtf"
+        "results/2018-11-07/GM19_meta_groseq_peak.gtf"
     # FIXME Genomes don't work in a conda environment
     # conda:
     #     "../envs/homer.yaml"
@@ -21,9 +21,9 @@ rule GM19_meta_findPeaks:
 
 rule GM19_meta_pos2bed:
     input:
-        "results/2018-11-28/GM19_meta_groseq_peak.gtf"
+        "results/2018-11-07/GM19_meta_groseq_peak.gtf"
     output:
-        "results/2018-11-28/GM19_meta_groseq_peak.bed"
+        "results/2018-11-07/GM19_meta_groseq_peak.bed"
     conda:
         "../../envs/homer.yaml"
     shell:
@@ -31,7 +31,7 @@ rule GM19_meta_pos2bed:
 
 rule GM19_sample_makeTagDirectory:
     input:
-        sample=["results/2018-11-27/GM19/{unit}.bam"],
+        sample=["results/2018-10-04/GM19/{unit}.bam"],
     output:
         "results/2019-01-28/GM/{unit}_tagDir/",
     shell:

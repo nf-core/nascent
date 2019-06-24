@@ -1,11 +1,11 @@
-rule IMR_hg19_RemoveGenes:
+rule IMR_RemoveGenes:
     input:
-        IMR="results/2018-12-02/IMR_meta_groseq_peak.bed",
-        refseq="results/2018-11-29/sloprefseqhg19.sorted.bed",
+        IMR="results/2018-11-07/IMR_meta_groseq_peak.bed",
+        refseq="data/2018-11-09/hg19/hg19_slop_refseq.sorted.bed",
     output:
-        "results/2018-12-02/IMR_hg19_groseq_noGenes.bed"
+        "results/2018-11-09/IMR_groseq_noGenes.bed"
     log:
-        "logs/RemoveGenes.log"
+        "logs/IMR/RemoveGenes.log"
     conda:
         "../../envs/bedtools.yaml"
     shell:

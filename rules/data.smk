@@ -22,14 +22,14 @@ rule GM_Original_eRNAs:
 
 rule hg18_reference_Genome:
     output:
-        chromLen="data/2018-06-24/genome.fa.fai",
+        chromLen="data/2018-06-24/hg18/genome.fa.fai",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="hg18",
         typeOf="bowtie2",
-        outDir="data/2018-06-24/",
+        outDir="data/2018-06-24/hg18/",
     conda:
         "../envs/awscli.yaml"
     params:
@@ -39,14 +39,14 @@ rule hg18_reference_Genome:
 
 rule hg19_reference_Genome:
     output:
-        chromLen="data/2018-11-27/genome.fa.fai",
+        chromLen="data/2018-06-24/hg19/genome.fa.fai",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="hg19",
         typeOf="bowtie2",
-        outDir="data/2018-11-27/",
+        outDir="data/2018-06-24/hg19/",
     conda:
         "../envs/awscli.yaml"
     shell:
@@ -57,14 +57,14 @@ rule hg19_reference_Genome:
 
 rule hg18_download_refSeq:
     output:
-        hg18_genes="data/2018-11-09/genes.bed",
+        hg18_genes="data/2018-11-09/hg18/genes.bed",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="hg18",
         typeOf="bed12",
-        outDir="data/2018-11-09/",
+        outDir="data/2018-11-09/hg18/",
     conda:
         "../envs/awscli.yaml"
     shell:
@@ -73,14 +73,14 @@ rule hg18_download_refSeq:
 
 rule hg19_download_refSeq:
     output:
-        hg19_genes="data/2018-11-28/genes.bed",
+        hg19_genes="data/2018-11-09/hg19/genes.bed",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="hg19",
         typeOf="bed12",
-        outDir="data/2018-11-28/",
+        outDir="data/2018-11-09/hg19/",
     conda:
         "../envs/awscli.yaml"
     shell:
@@ -132,13 +132,13 @@ IMR_h3k27ac_gz="https://www.encodeproject.org/files/ENCFF200XEH/@@download/ENCFF
 
 rule IMR_H3K4me1_fastq:
     output:
-        "data/2018-12-02/IMR_H3K4me1.fastq",
+        "data/2018-11-13/IMR_H3K4me1.fastq",
     shell:
         "curl -Ls {IMR_h3k4me1_gz} | gunzip > {output}"
 
 rule IMR_H3K27ac_fastq:
     output:
-        "data/2018-12-02/IMR_H3K27ac.fastq",
+        "data/2018-11-13/IMR_H3K27ac.fastq",
     shell:
         "curl -Ls {IMR_h3k27ac_gz} | gunzip > {output}"
 
