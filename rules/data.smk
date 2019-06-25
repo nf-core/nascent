@@ -2,7 +2,7 @@ rule AWS_iGenomes:
     output:
         "scripts/aws-igenomes.sh"
     shell:
-       "curl -fsSL https://ewels.github.io/AWS-iGenomes/aws-igenomes.sh > {output}"
+       "curl -fsSL https://ewels.github.io/AWS-iGenomes/aws-igenomes.sh > {output} && chmod +x {output}"
 
 # Datasets TODO
 
@@ -22,7 +22,8 @@ rule GM_Original_eRNAs:
 
 rule hg18_reference_Genome:
     output:
-        chromLen="data/2018-06-24/hg18/genome.fa.fai",
+        "data/2018-06-24/hg18/genome.fa.fai",
+        "data/2018-06-24/hg18/genome",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
@@ -32,14 +33,15 @@ rule hg18_reference_Genome:
         outDir="data/2018-06-24/hg18/",
     conda:
         "../envs/awscli.yaml"
-    params:
+    priority: 50
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {params.outDir}"
 
 rule hg19_reference_Genome:
     output:
-        chromLen="data/2018-06-24/hg19/genome.fa.fai",
+        "data/2018-06-24/hg19/genome.fa.fai",
+        "data/2018-06-24/hg19/genome",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
@@ -49,6 +51,7 @@ rule hg19_reference_Genome:
         outDir="data/2018-06-24/hg19/",
     conda:
         "../envs/awscli.yaml"
+    priority: 50
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {params.outDir}"
