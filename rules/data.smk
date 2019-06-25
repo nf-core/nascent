@@ -22,8 +22,7 @@ rule GM_Original_eRNAs:
 
 rule hg18_reference_Genome:
     output:
-        "data/2018-06-24/hg18/genome.fa.fai",
-        "data/2018-06-24/hg18/genome",
+        directory("data/2018-06-24/hg18/"),
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
@@ -36,25 +35,23 @@ rule hg18_reference_Genome:
     priority: 50
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
+        "-b {params.build} -t {params.typeOf} -o {output}"
 
 rule hg19_reference_Genome:
     output:
-        "data/2018-06-24/hg19/genome.fa.fai",
-        "data/2018-06-24/hg19/genome",
+        directory("data/2018-06-24/hg19/"),
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="hg19",
         typeOf="bowtie2",
-        outDir="data/2018-06-24/hg19/",
     conda:
         "../envs/awscli.yaml"
     priority: 50
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
+        "-b {params.build} -t {params.typeOf} -o {output}"
 
 # RefSeq
 
@@ -88,7 +85,7 @@ rule hg19_download_refSeq:
         "../envs/awscli.yaml"
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {output.hg19_genes}"
+        "-b {params.build} -t {params.typeOf} -o {output.outDir}"
 
 # RefSeq
 
