@@ -10,7 +10,7 @@ rule GM19_meta_makeTagDirectory:
 
 rule GM19_meta_findPeaks:
     input:
-        "results/2018-11-07/GM19_meta_tagDir/"
+        directory("results/2018-11-07/GM19_meta_tagDir/")
     output:
         "results/2018-11-07/GM19_meta_groseq_peak.gtf"
     singularity:
@@ -32,13 +32,13 @@ rule GM19_sample_makeTagDirectory:
     input:
         sample=["results/2018-10-04/GM19/{unit}.bam"],
     output:
-        "results/2019-01-28/GM/{unit}_tagDir/",
+        directory("results/2019-01-28/GM/{unit}_tagDir/"),
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
 rule GM19_sample_findPeaks:
     input:
-        "results/2019-01-28/GM/{unit}_tagDir/",
+        directory("results/2019-01-28/GM/{unit}_tagDir/"),
     output:
         "results/2019-01-28/GM/{unit}_groseq_peak.gtf"
     singularity:

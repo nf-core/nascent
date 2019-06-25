@@ -2,7 +2,7 @@ rule IMR_meta_makeTagDirectory:
     input:
         expand("results/2018-10-04/IMR/{unit}.bam",unit=IMR_SAMPLES)
     output:
-        directory("results/2018-11-07/IMR_meta_tagDir/")
+        directory("results/2018-11-07/IMR_meta_tagDir/"),
     singularity:
         "docker://emiller88/homer:latest"
     shell:
@@ -32,7 +32,7 @@ rule IMR_sample_makeTagDirectory:
     input:
         sample=["results/2018-10-04/IMR/{unit}.bam"],
     output:
-        "results/2019-01-28/IMR/{unit}_tagDir/",
+        directory("results/2019-01-28/IMR/{unit}_tagDir/"),
     singularity:
         "docker://emiller88/homer:latest"
     shell:

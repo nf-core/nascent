@@ -10,7 +10,7 @@ rule GM18_meta_makeTagDirectory:
 
 rule GM18_meta_findPeaks:
     input:
-        "results/2018-11-07/GM18_meta_tagDir/"
+        directory("results/2018-11-07/GM18_meta_tagDir/")
     output:
         "results/2018-11-07/GM18_meta_groseq_peak.gtf"
     singularity:
