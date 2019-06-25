@@ -3,8 +3,8 @@ rule GM18_meta_makeTagDirectory:
         expand("results/2018-10-04/GM18/{unit}.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/GM18_meta_tagDir/")
-    # conda:
-    #     "../../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     shell:
         "makeTagDirectory {output} -genome hg18 -checkGC {input}"
 
@@ -13,8 +13,8 @@ rule GM18_meta_findPeaks:
         "results/2018-11-07/GM18_meta_tagDir/"
     output:
         "results/2018-11-07/GM18_meta_groseq_peak.gtf"
-    # conda:
-    #     "../envs/homer.yaml"
+    singularity:
+        "docker://emiller88/homer:latest"
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
