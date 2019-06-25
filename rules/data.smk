@@ -54,6 +54,31 @@ rule hg19_reference_Genome:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {output.outDir}"
 
+rule hg18_fai:
+    input:
+        "data/2018-06-24/hg18/genome.fa",
+    output:
+        "data/2018-06-24/hg18/genome.fa.fai",
+    log:
+        "logs/hg18_fai.log"
+    threads: 4
+    conda:
+        "../envs/samtools.yaml"
+    shell:
+        "samtools faidx {input} > {output}"
+
+rule hg18_fai:
+    input:
+        "data/2018-06-24/hg19/genome.fa",
+    output:
+        "data/2018-06-24/hg19/genome.fa.fai",
+    log:
+        "logs/hg19_fai.log"
+    threads: 4
+    conda:
+        "../envs/samtools.yaml"
+    shell:
+        "samtools faidx {input} > {output}"
 # RefSeq
 
 rule hg18_download_refSeq:
