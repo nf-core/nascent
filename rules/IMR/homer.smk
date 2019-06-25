@@ -1,4 +1,4 @@
-rule IMR_hg19_meta_makeTagDirectory:
+rule IMR_meta_makeTagDirectory:
     input:
         expand("results/2018-10-04/IMR/{unit}.bam",unit=IMR_SAMPLES)
     output:
@@ -8,7 +8,7 @@ rule IMR_hg19_meta_makeTagDirectory:
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
-rule IMR_hg19_meta_findPeaks:
+rule IMR_meta_findPeaks:
     input:
         "results/2018-11-07/IMR_meta_tagDir/",
     output:
@@ -18,7 +18,7 @@ rule IMR_hg19_meta_findPeaks:
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
-rule IMR_hg19_meta_pos2bed:
+rule IMR_meta_pos2bed:
     input:
         "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     output:
@@ -28,7 +28,7 @@ rule IMR_hg19_meta_pos2bed:
     shell:
         "pos2bed.pl {input} > {output}"
 
-rule IMR_hg19_sample_makeTagDirectory:
+rule IMR_sample_makeTagDirectory:
     input:
         sample=["results/2018-10-04/IMR/{unit}.bam"],
     output:
@@ -38,7 +38,7 @@ rule IMR_hg19_sample_makeTagDirectory:
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input.sample}"
 
-rule IMR_hg19_sample_findPeaks:
+rule IMR_sample_findPeaks:
     input:
         "results/2019-01-28/IMR/{unit}_tagDir/",
     output:
@@ -48,7 +48,7 @@ rule IMR_hg19_sample_findPeaks:
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
-rule IMR_hg19_sample_pos2bed:
+rule IMR_sample_pos2bed:
     input:
         "results/2019-01-28/IMR/{unit}_groseq_peak.gtf"
     output:
