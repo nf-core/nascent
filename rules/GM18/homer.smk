@@ -2,7 +2,7 @@ rule GM18_meta_makeTagDirectory:
     input:
         expand("results/2018-10-04/GM18/{unit}.bam",unit=GM_SAMPLES)
     output:
-        directory("results/2018-11-07/GM18_meta_tagDir/")
+        directory("results/2018-11-07/GM18_meta_tagDir")
     singularity:
         "docker://emiller88/homer:latest"
     shell:
