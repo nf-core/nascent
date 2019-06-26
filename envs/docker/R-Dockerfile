@@ -1,0 +1,8 @@
+FROM r-base:3.6.0
+
+RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE))\
+    install.packages('BiocManager')"
+RUN R -e "BiocManager::install('AnnotationDbi')"
+# RUN R -e "source('https://bioconductor.org/biocLite.R')"
+RUN R -e "BiocManager::install('Homo.sapiens')"
+RUN R -e "install.packages('dplyr')"

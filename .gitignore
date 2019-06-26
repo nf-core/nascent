@@ -13,6 +13,7 @@ scripts/.snakemake*
 !resources/*
 !envs
 !envs/*
+!envs/docker/*
 !environment.yml
 !LICENSE
 !README.md
