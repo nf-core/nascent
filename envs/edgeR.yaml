@@ -3,5 +3,7 @@ channels:
   - r
 dependencies:
   - r
+  - r-tidyr
   - bioconductor-edger
+  - bioconductor-limma
   - bioconductor-org.Hs.eg.db

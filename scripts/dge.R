@@ -1,36 +1,39 @@
+library(tidyr)
 library(edgeR)
+library(limma)
 library(org.Hs.eg.db)
 
-fc <- readRDS(file = snakemake@input[[1]])
+## Read in Genes
+raw <- read_tsv(snakemake@input[[1]])
 
-group <- colnames(fc$counts)
-y <- DGEList(counts=fc$counts, group=group, genes=fc$annotation)
+## Take column 7 and beyond for counts
+## First Column is the RefSeqID
+y <- DGEList(counts=raw[,7:ncol(raw)], genes=raw[,1])
+head(y)
 
-Symbol <- mapIds(org.Hs.eg.db, keys=rownames(y), keytype="ENTREZID", column="SYMBOL")
-y$genes <- data.frame(Symbol=Symbol)
+## Keep only transcripts with IDs in NCBI
+idfound <- y$genes$RefSeqID %in% mappedRkeys(org.Hs.egREFSEQ)
+y <- y[idfound,]
 
-## Tae's
-rawdata_table <- y$counts
-genelen <- cbind(y$genes$GeneID, y$genes$Length)
-write.csv(rawdata_table, file=snakemake@output[[1]]) #you can use this file in PIVOT
-write.csv(genelen, file=snakemake@output[[2]]) #you need this file in PIVOT for normalization
+egREFSEQ <- toTable(org.Hs.egREFSEQ)
+m <- match(y$genes$RefSeqID, egREFSEQ$accession)
+y$genes$EntrezGene <- egREFSEQ$gene_id[m]
+egSYMBOL <- toTable(org.Hs.egSYMBOL)
 
-keep <- rowSums(cpm(y)>1) >= 2
-y <- y[keep, , keep.lib.sizes=FALSE]
-y <- calcNormFactors(y)
-## write.csv(y$counts, file=snakemake@output[[3]]) #you can use this file in PIVOT
+m <- match(y$genes$EntrezGene, egSYMBOL$gene_id)
+y$genes$Symbol <- egSYMBOL$symbol[m]
+head(y$genes)
 
+## Remove low counts
+keep <- filterByExpr(y, design)
+y <- y[keep,,keep.lib.sizes=FALSE]
+dge <- calcNormFactors(dge)
 
-bcv <- 0.2
-et <- exactTest(y, dispersion=bcv^2)
-## head(et)
-topGenes <- topTags(et)
-print(topGenes)
+## limma-trend
+logCPM <- cpm(dge, log=TRUE, prior.count=3)
 
-## Common dispersion
-## y1 <- y
-## y1$samples$group <- 1
-## y0 <- estimateDisp(y1[topGenes,], trend="none", tagwise=FALSE)
-## y$common.dispersion <- y0$common.dispersion
-## fit <- glmFit(y, design)
-## lrt <- glmLRT(fit)
+fit <- lmFit(logCPM, design)
+fit <- eBayes(fit, trend=TRUE)
+topTable(fit, coef=ncol(design))
+
+write_tsv(fit, snakemake@output[[1]])
