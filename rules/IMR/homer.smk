@@ -5,16 +5,18 @@ rule IMR_meta_makeTagDirectory:
         directory("results/2018-11-07/IMR_meta_tagDir"),
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 4
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
 rule IMR_meta_findPeaks:
     input:
-        "results/2018-11-07/IMR_meta_tagDir/",
+        "results/2018-11-07/IMR_meta_tagDir",
     output:
         "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 4
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
@@ -35,6 +37,7 @@ rule IMR_sample_makeTagDirectory:
         directory("results/2019-01-28/IMR/{unit}_tagDir"),
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 2
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input.sample}"
 
@@ -45,6 +48,7 @@ rule IMR_sample_findPeaks:
         "results/2019-01-28/IMR/{unit}_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 2
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
@@ -55,5 +59,6 @@ rule IMR_sample_pos2bed:
         "results/2019-01-28/IMR/{unit}_groseq_peak.bed"
     conda:
         "../../envs/homer.yaml"
+    threads: 2
     shell:
         "pos2bed.pl {input} > {output}"

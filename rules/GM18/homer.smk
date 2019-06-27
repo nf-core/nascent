@@ -5,16 +5,18 @@ rule GM18_meta_makeTagDirectory:
         directory("results/2018-11-07/GM18_meta_tagDir")
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 4
     shell:
         "makeTagDirectory {output} -genome hg18 -checkGC {input}"
 
 rule GM18_meta_findPeaks:
     input:
-        "results/2018-11-07/GM18_meta_tagDir/"
+        "results/2018-11-07/GM18_meta_tagDir"
     output:
         "results/2018-11-07/GM18_meta_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
+    threads: 4
     shell:
         "findPeaks {input} -o {output} -style groseq"
 
