@@ -20,65 +20,41 @@ rule GM_Original_eRNAs:
 
 # Reference Genomes
 
-rule hg18_reference_Genome:
+rule reference_Genome:
     output:
-        "data/2018-06-24/hg18/genome.fa",
-        outDir=directory("data/2018-06-24/hg19/"),
+        "data/2018-06-24/{unit}/genome.fa",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
-        build="hg18",
+        build="{unit}",
         typeOf="bowtie2",
+        outDir="data/2018-06-24/{unit}",
     conda:
         "../envs/awscli.yaml"
     priority: 50
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {output.outDir}"
+        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
 
-rule hg19_reference_Genome:
-    output:
-        "data/2018-06-24/hg19/genome.fa",
-        outDir=directory("data/2018-06-24/hg19/"),
-    params:
-        script="scripts/aws-igenomes.sh",
-        genome="Homo_sapiens",
-        source="UCSC",
-        build="hg19",
-        typeOf="bowtie2",
-    conda:
-        "../envs/awscli.yaml"
-    priority: 50
-    shell:
-        "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {output.outDir}"
-
-rule hg18_fai:
+rule fai:
     input:
-        "data/2018-06-24/hg18/genome.fa",
+        "data/2018-06-24/{unit}/genome.fa",
     output:
-        "data/2018-06-24/hg18/genome.fa.fai",
+        "data/2018-06-24/{unit}/genome.fa.fai",
     log:
-        "logs/hg18_fai.log"
+        "logs/{unit}_fai.log"
     threads: 4
     conda:
         "../envs/samtools.yaml"
     shell:
         "samtools faidx {input} > {output}"
 
-rule hg18_fai:
     input:
-        "data/2018-06-24/hg19/genome.fa",
     output:
-        "data/2018-06-24/hg19/genome.fa.fai",
     log:
-        "logs/hg19_fai.log"
     threads: 4
-    conda:
-        "../envs/samtools.yaml"
     shell:
-        "samtools faidx {input} > {output}"
 # RefSeq
 
 rule hg18_download_refSeq:
