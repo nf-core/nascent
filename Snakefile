@@ -35,6 +35,8 @@ rule all:
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
         GM19_limma="results/2019-06-26/dge/limma/GM19_limma.txt",
         IMR_limma="results/2019-06-26/dge/limma/IMR_limma.txt",
+        GM19_grohmm="results/2019-06-26/dge/grohmm/GM19_grohmm.txt",
+        IMR_grohmm="results/2019-06-26/dge/grohmm/IMR_grohmm.txt",
 
 include: "rules/data.smk"
 

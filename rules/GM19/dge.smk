@@ -22,3 +22,14 @@ rule GM19_genes_NOIseq:
     threads: 4
     script:
         "../../scripts/NOISeq_biomart.R"
+
+rule groHMM:
+    input:
+        "results/2019-06-03/eRNA/counts/{sample}_merged.txt"
+    output:
+        "results/2019-06-26/dge/grohmm/{sample}_grohmm.txt"
+    conda:
+        "../../envs/grohmm.yaml"
+    threads: 4
+    script:
+        "../../scripts/grohmm.R"
