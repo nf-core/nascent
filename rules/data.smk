@@ -18,7 +18,9 @@ rule GM_Original_eRNAs:
     output:
         "data/2018-01-25/eRNA_GM_hg19.sorted.bed"
 
-# Reference Genomes
+#############################
+# BowTie2 Reference Genomes #
+#############################
 
 rule reference_Genome:
     output:
@@ -63,59 +65,29 @@ rule chrom_len:
     shell:
         "cut -f 1,2 {input} > {output}"
 
-# RefSeq
+##########
+# RefSeq #
+##########
 
-rule hg18_download_refSeq:
+rule refSeq:
     output:
-        hg18_genes="data/2018-11-09/hg18/genes.bed",
+        "data/2018-11-09/{unit}/genes.bed",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
-        build="hg18",
+        build="{unit}",
         typeOf="bed12",
-        outDir="data/2018-11-09/hg18/",
+        outDir="data/2018-11-09/{unit}/",
     conda:
         "../envs/awscli.yaml"
     shell:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {params.outDir}"
 
-rule hg19_download_refSeq:
-    output:
-        hg19_genes="data/2018-11-09/hg19/genes.bed",
-    params:
-        script="scripts/aws-igenomes.sh",
-        genome="Homo_sapiens",
-        source="UCSC",
-        build="hg19",
-        typeOf="bed12",
-        outDir="data/2018-11-09/hg19/",
-    conda:
-        "../envs/awscli.yaml"
-    shell:
-        "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {output.hg19_genes}"
-
-# RefSeq
-
-rule download_refSeq_hg19:
-    output:
-        hg19="data/2018-11-28/",
-    params:
-        script="scripts/aws-igenomes.sh",
-        genome="Homo_sapiens",
-        source="UCSC",
-        build="hg19",
-        typeOf="bed12",
-        outDir="data/2018-11-28/",
-    conda:
-        "../envs/awscli.yaml"
-    shell:
-        "{params.script} -g {params.genome} -s {params.source} "
-        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
-
-# Histones
+############
+# Histones #
+############
 
 # https://www.encodeproject.org/experiments/ENCSR000AKF/
 GM_h3k4me1_gz="https://www.encodeproject.org/files/ENCFF000ASM/@@download/ENCFF000ASM.fastq.gz"
