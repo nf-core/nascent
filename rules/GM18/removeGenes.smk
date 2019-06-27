@@ -4,7 +4,7 @@
 rule hg18_slopRefSeq:
     input:
         refSeq="data/2018-11-09/hg18/genes.bed",
-        chromLen="data/2018-06-24/hg18/genome.fa.fai"
+        chromLen="data/2018-06-24/hg18/chrom.sizes"
     output:
         "data/2018-11-09/hg18/hg18_slop_refseq.bed"
     conda:

@@ -50,11 +50,19 @@ rule fai:
     shell:
         "samtools faidx {input} > {output}"
 
+rule chrom_len:
     input:
+        "data/2018-06-24/{unit}/genome.fa.fai",
     output:
+        "data/2018-06-24/{unit}/chrom.sizes",
     log:
+        "logs/{unit}_chrom.sizes.log"
     threads: 4
+    # conda:
+    #     "../envs/samtools.yaml"
     shell:
+        "cut -f 1,2 {input} > {output}"
+
 # RefSeq
 
 rule hg18_download_refSeq:
