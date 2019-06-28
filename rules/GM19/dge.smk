@@ -1,7 +1,7 @@
 # TODO only spits out counts
-rule GM19_genes_edgeR:
+rule genes_edgeR:
     input:
-        "results/2019-06-03/eRNA/counts/{sample}_merged.txt"
+        "results/2019-06-03/GM19/counts/merged.txt"
     output:
         "results/2019-06-26/dge/limma/{sample}_limma.txt"
     conda:

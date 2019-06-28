@@ -3,7 +3,7 @@
 
 rule hg19_slopRefSeq:
     input:
-        refSeq="data/2018-11-09/hg19/genes.bed",
+        refSeq="data/2018-11-09/hg19/genes.gtf",
         chromLen="data/2018-06-24/hg19/chrom.sizes"
     output:
         "data/2018-11-09/hg19/hg19_slop_refseq.bed"
@@ -32,7 +32,7 @@ rule hg19_fixBEDcoordinates:
 rule GM19_RemoveGenes:
     input:
         GM="results/2018-11-07/GM19_meta_groseq_peak.bed",
-        refseq="data/2018-11-09/hg19/hg19_slop_refseq.sorted.bed",
+        refseq="data/2018-11-09/hg18/genes.gtf",
     output:
         "results/2018-11-09/GM19_meta_groseq_noGenes.bed"
     log:

@@ -44,7 +44,7 @@ def estimate_size_factors(counts):
 
 rule GM19_feature_counts:
     input:
-        bam="results/2018-11-27/GM19/{sample}.bam",
+        bam="results/2018-10-04/GM19/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
         counts="results/2019-06-03/GM19/counts/per_sample/{sample}.txt",
@@ -91,8 +91,8 @@ rule GM19_normalize_counts:
 
 rule GM19_eRNA_feature_counts:
     input:
-        bam="results/2018-11-27/GM19/{sample}.bam",
-        # bai="bam/final/{sample}.bam.bai",
+        bam="results/2018-10-04/GM19/{sample}.bam",
+        annotation="results/2019-06-07/IMR_eRNA.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
         summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"

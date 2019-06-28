@@ -71,13 +71,13 @@ rule chrom_len:
 
 rule refSeq:
     output:
-        "data/2018-11-09/{unit}/genes.bed",
+        "data/2018-11-09/{unit}/genes.gtf",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="{unit}",
-        typeOf="bed12",
+        typeOf="gtf",
         outDir="data/2018-11-09/{unit}/",
     conda:
         "../envs/awscli.yaml"
