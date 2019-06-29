@@ -10,7 +10,7 @@ rule genes_edgeR:
     script:
         "../../scripts/dge.R"
 
-rule GM19_genes_NOIseq:
+rule genes_NOIseq:
     input:
         "results/2019-06-03/eRNA/counts/GM19_merged.txt"
     output:
