@@ -35,36 +35,36 @@ def estimate_size_factors(counts):
 ################################################################################
 
 
-# def feature_counts_extra(wildcards):
-#     extra = config["feature_counts"]["extra"]
-#     if is_paired:
-#         extra += " -p"
-#     return extra
+def feature_counts_extra(wildcards):
+    extra = config["feature_counts"]["extra"]
+    if is_paired:
+        extra += " -p"
+    return extra
 
 
-rule IMR_feature_counts:
+rule genes_feature_counts:
     input:
-        bam="results/2018-12-01/IMR/{sample}.bam",
+        bam="results/2018-12-01/{cell}/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
-        counts="results/2019-06-03/IMR/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/IMR/qc/feature_counts/{sample}.txt"
+        counts="results/2019-06-03/{cell}/counts/per_sample/{sample}.txt",
+        summary="results/2019-06-03/{cell}/qc/feature_counts/{sample}.txt"
     params:
         annotation=config["feature_counts"]["annotation"],
         extra='' #feature_counts_extra
     threads:
         config["feature_counts"]["threads"]
     log:
-        "logs/IMR/feature_counts/{sample}.txt"
+        "logs/{cell}/feature_counts/{sample}.txt"
     wrapper:
         "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
-rule IMR_merge_counts:
+rule genes_merge_counts:
     input:
-        expand("results/2019-06-03/IMR/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
+        expand("results/2019-06-03/{cell}/counts/per_sample/{sample}.txt", sample={cell}_SAMPLES)
     output:
-        "results/2019-06-03/IMR/counts/merged.txt"
+        "results/2019-06-03/{cell}/counts/merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -79,25 +79,25 @@ rule IMR_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 
-rule IMR_normalize_counts:
+rule genes_normalize_counts:
     input:
-        "results/2019-06-03/IMR/counts/merged.txt"
+        "results/2019-06-03/{cell}/counts/merged.txt"
     output:
-        "results/2019-06-03/IMR/counts/merged.log2.txt"
+        "results/2019-06-03/{cell}/counts/merged.log2.txt"
     run:
         counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
         norm_counts = np.log2(normalize_counts(counts) + 1)
         norm_counts.to_csv(output[0], sep="\t", index=True)
 
-rule IMR_eRNA_feature_counts:
+rule eRNA_feature_counts:
     input:
-        bam="results/2018-12-01/IMR/{sample}.bam",
-        # bai="bam/final/{sample}.bam.bai",
+        bam="results/2018-12-01/{cell}/{sample}.bam",
+        annotation="results/2019-06-07/{cell}_eRNA.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
         summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
     params:
-        annotation="results/2019-06-07/IMR_eRNA.saf",
+        annotation="results/2019-06-07/{cell}_eRNA.saf",
         extra='-F "SAF"' #feature_counts_extra
     threads:
         config["feature_counts"]["threads"]
@@ -107,11 +107,11 @@ rule IMR_eRNA_feature_counts:
         "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
-rule IMR_eRNA_merge_counts:
+rule eRNA_merge_counts:
     input:
         expand("results/2019-06-03/eRNA/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
     output:
-        "results/2019-06-03/eRNA/counts/IMR_merged.txt"
+        "results/2019-06-03/eRNA/counts/{cell}_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -126,11 +126,11 @@ rule IMR_eRNA_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 
-rule IMR_eRNA_normalize_counts:
+rule eRNA_normalize_counts:
     input:
-        "results/2019-06-03/eRNA/counts/IMR_merged.txt"
+        "results/2019-06-03/eRNA/counts/{cell}_merged.txt"
     output:
-        "results/2019-06-03/eRNA/counts/IMR_merged.log2.txt"
+        "results/2019-06-03/eRNA/counts/{cell}_merged.log2.txt"
     run:
         counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
         norm_counts = np.log2(normalize_counts(counts) + 1)
