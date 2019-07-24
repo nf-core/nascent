@@ -1,9 +1,13 @@
 # TODO only spits out counts
 rule genes_edgeR:
     input:
-        "results/2019-06-03/GM19/counts/merged.txt"
+        "results/2019-06-03/{cell}/counts/merged.txt"
     output:
-        "results/2019-06-26/dge/limma/{sample}_limma.txt"
+        # "results/2019-06-26/dge/limma/{cell}_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig1_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig2_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig3_limma.txt",
+    params:
     conda:
         "../../envs/edgeR.yaml"
     threads: 4
