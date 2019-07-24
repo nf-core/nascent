@@ -1,9 +1,11 @@
 channels:
   - bioconda
   - r
+  - conda-forge
 dependencies:
-  - r
-  - r-tidyr
-  - bioconductor-edger
+  - r-biocmanager
+  - r-readr
+  - r-rcolorbrewer
   - bioconductor-limma
-  - bioconductor-org.Hs.eg.db
+  - bioconductor-edger
+  - bioconductor-homo.sapiens

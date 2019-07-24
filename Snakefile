@@ -33,10 +33,7 @@ rule all:
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
-        GM19_limma="results/2019-06-26/dge/limma/GM19_limma.txt",
-        IMR_limma="results/2019-06-26/dge/limma/IMR_limma.txt",
-        GM19_grohmm="results/2019-06-26/dge/grohmm/GM19_grohmm.txt",
-        IMR_grohmm="results/2019-06-26/dge/grohmm/IMR_grohmm.txt",
+        limma=expand("results/2019-06-26/dge/limma/{unit}_fig1_limma.txt", unit=["GM19","IMR",]),
 
 include: "rules/data.smk"
 
