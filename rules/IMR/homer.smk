@@ -11,14 +11,15 @@ rule IMR_meta_makeTagDirectory:
 
 rule IMR_meta_findPeaks:
     input:
-        "results/2018-11-07/IMR_meta_tagDir",
+        tagdir="results/2018-11-07/IMR_meta_tagDir",
+        uniqmap="data/2019-07-26/hg19uniqmap",
     output:
         "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     singularity:
         "docker://emiller88/homer:latest"
     threads: 4
     shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "findPeaks {input.tagdir} -o {output} -style groseq -uniqmap {input.uniqmap}"
 
 rule IMR_meta_pos2bed:
     input:
@@ -43,14 +44,15 @@ rule IMR_sample_makeTagDirectory:
 
 rule IMR_sample_findPeaks:
     input:
-        "results/2019-01-28/IMR/{unit}_tagDir",
+        tagdir="results/2019-01-28/IMR/{unit}_tagDir",
+        uniqmap="data/2019-07-26/hg19uniqmap",
     output:
         "results/2019-01-28/IMR/{unit}_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
     threads: 2
     shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "findPeaks {input} -o {output} -style groseq -uniqmap {input.uniqmap}"
 
 rule IMR_sample_pos2bed:
     input:
