@@ -62,7 +62,7 @@ rule GM19_genes_feature_counts:
 
 rule GM19_genes_merge_counts:
     input:
-        expand("results/2019-06-03/GM19/counts/per_sample/{sample}.txt", sample=[GM_SAMPLES])
+        expand("results/2019-06-03/GM19/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
         "results/2019-06-03/GM19/counts/merged.txt"
     run:
@@ -99,7 +99,7 @@ rule IMR_genes_feature_counts:
 
 rule IMR_genes_merge_counts:
     input:
-        expand("results/2019-06-03/IMR/counts/per_sample/{sample}.txt", sample=[IMR_SAMPLES])
+        expand("results/2019-06-03/IMR/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
     output:
         "results/2019-06-03/IMR/counts/merged.txt"
     run:
