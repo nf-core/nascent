@@ -3,6 +3,8 @@ import pandas as pd
 # singularity: "docker://continuumio/miniconda3:4.6.14"
 configfile: "config.yaml"
 
+GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h", "GM18h", "GM24h", "GM48h", "GM72h",]
+IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h",]
 HISTONES=["H3K4me1", "H3K27ac"]
 
 rule all:
@@ -31,7 +33,7 @@ rule all:
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
-        limma=expand("results/2019-06-26/dge/limma/{unit}_fig1_limma.txt", unit=["GM19","IMR",]),
+        # limma=expand("results/2019-06-26/dge/limma/{unit}_fig1_limma.txt", unit=["GM19","IMR",]),
 
 include: "rules/data.smk"
 

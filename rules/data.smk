@@ -140,6 +140,14 @@ hg19uniqMap="http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
 
 rule download_hg19_uniqmap:
     output:
+        "data/2019-07-26/hg19uniqmap.zip"
+    shell:
+        "curl -fsSLO {hg19uniqMap} -o {output}"
+
+rule unzip_hg19_uniqmap:
+    input:
+        "data/2019-07-26/hg19uniqmap.zip"
+    output:
         "data/2019-07-26/hg19uniqmap"
     shell:
-        "curl -Ls {hg19uniqMap} | unzip > {output}"
+        "unzip {input} -d {output}"
