@@ -33,7 +33,7 @@ rule all:
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
-        limma=expand("results/2019-06-26/dge/limma/{unit}_fig1_limma.txt", unit=["GM19","IMR",]),
+        # limma=expand("results/2019-06-26/dge/limma/{unit}_fig1_limma.txt", unit=["GM19","IMR",]),
 
 include: "rules/data.smk"
 
@@ -50,9 +50,6 @@ include: "rules/GM19/homer.smk"
 include: "rules/GM19/removeGenes.smk"
 include: "rules/GM19/keepHistones.smk"
 include: "rules/GM19/test_eRNAs.smk"
-include: "rules/GM19/eRNAcleaning.smk"
-include: "rules/GM19/countReads.smk"
-include: "rules/GM19/dge.smk"
 
 include: "rules/IMR/fastqc.smk"
 include: "rules/IMR/bowtie2.smk"
@@ -60,5 +57,7 @@ include: "rules/IMR/homer.smk"
 include: "rules/IMR/removeGenes.smk"
 include: "rules/IMR/keepHistones.smk"
 include: "rules/IMR/test_eRNAs.smk"
-include: "rules/IMR/countReads.smk"
-include: "rules/IMR/dge.smk"
+
+include: "rules/eRNAcleaning.smk"
+include: "rules/countReads.smk"
+include: "rules/dge.smk"

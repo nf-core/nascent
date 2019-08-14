@@ -3,9 +3,10 @@ rule genes_edgeR:
     input:
         "results/2019-06-03/{cell}/counts/merged.txt"
     output:
-        "results/2019-06-26/dge/limma/{cell}_fig1_limma.png",
-        "results/2019-06-26/dge/limma/{cell}_fig2_limma.png",
-        "results/2019-06-26/dge/limma/{cell}_fig3_limma.png",
+        # "results/2019-06-26/dge/limma/{cell}_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig1_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig2_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig3_limma.txt",
     params:
     conda:
         "../../envs/edgeR.yaml"
@@ -13,7 +14,7 @@ rule genes_edgeR:
     script:
         "../../scripts/dge.R"
 
-rule GM19_genes_NOIseq:
+rule genes_NOIseq:
     input:
         "results/2019-06-03/eRNA/counts/GM19_merged.txt"
     output:

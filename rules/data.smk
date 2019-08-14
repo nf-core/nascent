@@ -6,17 +6,17 @@ rule AWS_iGenomes:
 
 # Datasets TODO
 
-rule GM_download:
-    output:
-        expand("data/2018-06-23/GM/{unit}.fastq",unit=GM_SAMPLES),
+# rule GM_download:
+#     output:
+#         expand("data/2018-06-23/GM/{unit}.fastq",unit=GM_SAMPLES),
 
-rule IMR_download:
-    output:
-        expand("data/2018-06-23/IMR/{unit}.fastq",unit=IMR_SAMPLES),
+# rule IMR_download:
+#     output:
+#         expand("data/2018-06-23/IMR/{unit}.fastq",unit=IMR_SAMPLES),
 
-rule GM_Original_eRNAs:
-    output:
-        "data/2018-01-25/eRNA_GM_hg19.sorted.bed"
+# rule GM_Original_eRNAs:
+#     output:
+#         "data/2018-01-25/eRNA_GM_hg19.sorted.bed"
 
 #############################
 # BowTie2 Reference Genomes #
@@ -132,3 +132,22 @@ rule download_mapChain:
         "data/2018-11-10/hg18ToHg19.over.chain"
     shell:
         "curl -Ls {hg18mapChain} | gunzip > {output}"
+
+#########
+# Homer #
+#########
+hg19uniqMap="http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
+
+rule download_hg19_uniqmap:
+    output:
+        "data/2019-07-26/hg19uniqmap.zip"
+    shell:
+        "curl -fsSL {hg19uniqMap} > {output}"
+
+rule unzip_hg19_uniqmap:
+    input:
+        "data/2019-07-26/hg19uniqmap.zip"
+    output:
+        directory("data/2019-07-26/hg19-50nt-uniqmap")
+    shell:
+        "unzip {input} -d data/2019-07-26"

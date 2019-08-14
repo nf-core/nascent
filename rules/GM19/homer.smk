@@ -11,14 +11,15 @@ rule GM19_meta_makeTagDirectory:
 
 rule GM19_meta_findPeaks:
     input:
-        "results/2018-11-07/GM19_meta_tagDir"
+        tagdir="results/2018-11-07/GM19_meta_tagDir",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2018-11-07/GM19_meta_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
     threads: 4
     shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "findPeaks {input.tagdir} -o {output} -style groseq -uniqmap {input.uniqmap}"
 
 rule GM19_meta_pos2bed:
     input:
@@ -42,14 +43,15 @@ rule GM19_sample_makeTagDirectory:
 
 rule GM19_sample_findPeaks:
     input:
-        "results/2019-01-28/GM/{unit}_tagDir"
+        tagdir="results/2019-01-28/GM/{unit}_tagDir",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2019-01-28/GM/{unit}_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
     threads: 2
     shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "findPeaks {input.tagdir} -o {output} -style groseq -uniqmap {input.uniqmap}"
 
 rule GM19_sample_pos2bed:
     input:
