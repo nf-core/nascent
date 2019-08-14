@@ -12,7 +12,7 @@ rule IMR_meta_makeTagDirectory:
 rule IMR_meta_findPeaks:
     input:
         tagdir="results/2018-11-07/IMR_meta_tagDir",
-        uniqmap="data/2019-07-26/hg19uniqmap",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2018-11-07/IMR_meta_groseq_peak.gtf",
     singularity:
@@ -45,7 +45,7 @@ rule IMR_sample_makeTagDirectory:
 rule IMR_sample_findPeaks:
     input:
         tagdir="results/2019-01-28/IMR/{unit}_tagDir",
-        uniqmap="data/2019-07-26/hg19uniqmap",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2019-01-28/IMR/{unit}_groseq_peak.gtf"
     singularity:

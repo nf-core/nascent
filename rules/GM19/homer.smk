@@ -12,7 +12,7 @@ rule GM19_meta_makeTagDirectory:
 rule GM19_meta_findPeaks:
     input:
         tagdir="results/2018-11-07/GM19_meta_tagDir",
-        uniqmap="data/2019-07-26/hg19uniqmap",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2018-11-07/GM19_meta_groseq_peak.gtf"
     singularity:
@@ -44,7 +44,7 @@ rule GM19_sample_makeTagDirectory:
 rule GM19_sample_findPeaks:
     input:
         tagdir="results/2019-01-28/GM/{unit}_tagDir",
-        uniqmap="data/2019-07-26/hg19uniqmap",
+        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
         "results/2019-01-28/GM/{unit}_groseq_peak.gtf"
     singularity:

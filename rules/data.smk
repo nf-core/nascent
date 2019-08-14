@@ -142,12 +142,12 @@ rule download_hg19_uniqmap:
     output:
         "data/2019-07-26/hg19uniqmap.zip"
     shell:
-        "curl -fsSLO {hg19uniqMap} -o {output}"
+        "curl -fsSL {hg19uniqMap} > {output}"
 
 rule unzip_hg19_uniqmap:
     input:
         "data/2019-07-26/hg19uniqmap.zip"
     output:
-        "data/2019-07-26/hg19uniqmap"
+        directory("data/2019-07-26/hg19-50nt-uniqmap")
     shell:
-        "unzip {input} -d {output}"
+        "unzip {input} -d data/2019-07-26"
