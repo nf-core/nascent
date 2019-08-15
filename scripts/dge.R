@@ -11,9 +11,15 @@ raw <- read.delim(snakemake@input[[1]],stringsAsFactors=FALSE,check.names=FALSE,
 ## Take column 7 and beyond for counts
 ## First Column is the RefSeqID
 y <- DGEList(counts=raw[,7:ncol(raw)], genes=raw[,1])
-samplenames <- substring(colnames(y), 12, nchar(colnames(y)))
 ## FIXME Do dynamically
-group <- as.factor(c("Early", "Early", "Early", "Middle", "Middle", "Late", "Late", "Late"))
+cn <- colnames(y)
+if (grepl("IMR", cn[1]) == TRUE) {
+    samplenames <- substring(colnames(y), 8, nchar(colnames(y)))
+    group <- as.factor(c("Early", "Early", "Early", "Middle", "Middle", "Late", "Late", "Late"))
+} else {
+    samplenames <- substring(colnames(y), 12, nchar(colnames(y)))
+    group <- as.factor(c("Early", "Early", "Early", "Early", "Middle", "Middle", "Middle", "Middle", "Late", "Late", "Late", "Late"))
+}
 y$samples$group <- group
 
 cpm <- cpm(y)

@@ -1,18 +1,17 @@
-# TODO only spits out counts
 rule genes_edgeR:
     input:
         "results/2019-06-03/{cell}/counts/merged.txt"
     output:
         # "results/2019-06-26/dge/limma/{cell}_limma.txt",
-        "results/2019-06-26/dge/limma/{cell}_fig1_limma.txt",
-        "results/2019-06-26/dge/limma/{cell}_fig2_limma.txt",
-        "results/2019-06-26/dge/limma/{cell}_fig3_limma.txt",
+        "results/2019-06-26/dge/limma/{cell}_fig1_limma.png",
+        "results/2019-06-26/dge/limma/{cell}_fig2_limma.png",
+        "results/2019-06-26/dge/limma/{cell}_fig3_limma.png",
     params:
     conda:
-        "../../envs/edgeR.yaml"
+        "../envs/edgeR.yaml"
     threads: 4
     script:
-        "../../scripts/dge.R"
+        "../scripts/dge.R"
 
 rule genes_NOIseq:
     input:
