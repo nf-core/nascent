@@ -6,6 +6,8 @@ rule genes_edgeR:
         "results/2019-06-26/dge/limma/{cell}_fig1_limma.png",
         "results/2019-06-26/dge/limma/{cell}_fig2_limma.png",
         "results/2019-06-26/dge/limma/{cell}_fig3_limma.png",
+        "results/2019-06-26/dge/limma/{cell}_fig4_limma.png", # FIXME
+        "results/2019-06-26/dge/limma/{cell}_results.txt",
     params:
     conda:
         "../envs/edgeR.yaml"

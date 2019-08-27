@@ -11,7 +11,6 @@ raw <- read.delim(snakemake@input[[1]],stringsAsFactors=FALSE,check.names=FALSE,
 ## Take column 7 and beyond for counts
 ## First Column is the RefSeqID
 y <- DGEList(counts=raw[,7:ncol(raw)], genes=raw[,1])
-## FIXME Do dynamically
 cn <- colnames(y)
 if (grepl("IMR", cn[1]) == TRUE) {
     samplenames <- substring(colnames(y), 8, nchar(colnames(y)))
@@ -86,7 +85,6 @@ title(main="B. Normalised data", ylab="Log-cpm")
 dev.off()
 
 ## Fig 3
-## TODO split into groups based on time (early, middle,late)
 numColmnSplit <- ncol(raw) / 3
 print(numColmnSplit)
 ## So take total number / 3, and then color each column accordingly
@@ -101,12 +99,41 @@ title(main="A. Sample groups")
 dev.off()
 
 ## DGE
-## library(splines)
-## X <- ns(y$Time, df=5)
-## Group <- factor(y$Group)
-## design <- model.matrix(~Group*X)
-## fit <- lmFit(y, design)
-## fit <- eBayes(fit)
-## topTable(fit, coef=8:12)
+## https://grokbase.com/t/r/bioconductor/095s2j4tcv/bioc-error-in-ebayes-no-residual-degrees-of-freedom-in-linear-model-fits
+## Went with groups because of the need for replicates
+## TODO figure out how to "eyeball" the log2 outputs between time points
+design <- model.matrix(~0+group)
+colnames(design) <- gsub("group", "", colnames(design))
+design
 
-## write_tsv(fit, snakemake@output[[1]])
+
+contr.matrix <- makeContrasts(
+   EarlyvsMiddle = Early - Middle,
+   MiddlevsLate = Middle - Late,
+   levels = colnames(design))
+contr.matrix
+
+print(1)
+## FIXME Doesn't work for IMR currently because the middle group only has 2 datapoints
+v <- voom(y, design, plot=TRUE)
+print(2)
+vfit <- lmFit(v, design)
+print(3)
+vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
+efit <- eBayes(vfit)
+plotSA(efit)
+summary(decideTests(efit))
+
+tfit <- treat(vfit, lfc=1)
+dt <- decideTests(tfit)
+summary(dt)
+
+de.common <- which(dt[,1]!=0 & dt[,2]!=0)
+length(de.common)
+
+head(tfit$genes$SYMBOL[de.common], n=20)
+
+png(snakemake@output[[4]])
+vennDiagram(dt[,1:2], circle.col=c("turquoise", "salmon"))
+dev.off()
+write.fit(tfit, dt, file=snakemake@output[[5]])
