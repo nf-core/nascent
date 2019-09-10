@@ -11,4 +11,4 @@ rule eRNA_link_genes:
     params:
         window="200000"
     shell:
-        "bedtools window -w {params.window} -a {input.dges} -b {input.eRNA} > {output}"
+        "bedtools window -u -w {params.window} -a {input.dges} -b {input.eRNA} > {output}"
