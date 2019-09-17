@@ -5,6 +5,8 @@
 !scripts/common/*
 !scripts/analysis
 !scripts/analysis/*
+!scripts/notebooks
+!scripts/notebooks/*
 scripts/.snakemake*
 !Snakefile
 !config.yaml
