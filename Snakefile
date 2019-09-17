@@ -33,7 +33,8 @@ rule all:
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
-        limma=expand("results/2019-06-26/dge/limma/{cell}_{fig}_limma.png", cell=["GM19"], fig=["fig1", "fig2", "fig3", "fig4"]),
+        genes_limma=expand("results/2019-06-26/dge/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
+        erna_limma=expand("results/2019-06-26/eRNA/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
         linkedeRNAs=expand("results/2019-08-26/{cell}_link_eRNA.bed", cell = ["GM19", "IMR"]),
 
 include: "rules/data.smk"

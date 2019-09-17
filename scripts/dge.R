@@ -102,38 +102,37 @@ dev.off()
 ## https://grokbase.com/t/r/bioconductor/095s2j4tcv/bioc-error-in-ebayes-no-residual-degrees-of-freedom-in-linear-model-fits
 ## Went with groups because of the need for replicates
 ## TODO figure out how to "eyeball" the log2 outputs between time points
-design <- model.matrix(~0+group)
-colnames(design) <- gsub("group", "", colnames(design))
-design
+## design <- model.matrix(~0+group)
+## colnames(design) <- gsub("group", "", colnames(design))
+## design
 
 
-contr.matrix <- makeContrasts(
-   EarlyvsMiddle = Early - Middle,
-   MiddlevsLate = Middle - Late,
-   levels = colnames(design))
-contr.matrix
+## contr.matrix <- makeContrasts(
+##    EarlyvsMiddle = Early - Middle,
+##    MiddlevsLate = Middle - Late,
+##    levels = colnames(design))
+## contr.matrix
 
-print(1)
 ## FIXME Doesn't work for IMR currently because the middle group only has 2 datapoints
-v <- voom(y, design, plot=TRUE)
-print(2)
-vfit <- lmFit(v, design)
-print(3)
-vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
-efit <- eBayes(vfit)
-plotSA(efit)
-summary(decideTests(efit))
+## v <- voom(y)
+## print(2)
+## vfit <- lmFit(v, design)
+## print(3)
+## vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
+## efit <- eBayes(vfit)
+## plotSA(efit)
+## summary(decideTests(efit))
 
-tfit <- treat(vfit, lfc=1)
-dt <- decideTests(tfit)
-summary(dt)
+## tfit <- treat(vfit, lfc=1)
+## dt <- decideTests(tfit)
+## summary(dt)
 
-de.common <- which(dt[,1]!=0 & dt[,2]!=0)
-length(de.common)
+## de.common <- which(dt[,1]!=0 & dt[,2]!=0)
+## length(de.common)
 
-head(tfit$genes$SYMBOL[de.common], n=20)
+## head(tfit$genes$SYMBOL[de.common], n=20)
 
-png(snakemake@output[[4]])
-vennDiagram(dt[,1:2], circle.col=c("turquoise", "salmon"))
-dev.off()
-write.fit(tfit, dt, file=snakemake@output[[5]])
+## png(snakemake@output[[4]])
+## vennDiagram(dt[,1:2], circle.col=c("turquoise", "salmon"))
+## dev.off()
+## write.fit(tfit, dt, file=snakemake@output[[5]])
