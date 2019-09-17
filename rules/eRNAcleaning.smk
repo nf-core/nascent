@@ -17,5 +17,9 @@ rule eRNA_saf:
         "results/2018-12-02/{sample}_eRNA.bed",
     output:
         "results/2019-06-07/{sample}_eRNA.saf",
+    conda:
+        "../envs/pandas.yaml"
+    log:
+        "logs/eRNA_saf_{sample}.log"
     script:
-        "../../scripts/bed2saf.py"
+        "../scripts/bed2saf.py"
