@@ -29,6 +29,18 @@ rule eRNA_limma:
     script:
         "../scripts/dge.R"
 
+rule genes_tpm:
+    input:
+        "results/2019-06-03/{cell}/counts/merged.txt"
+    output:
+        "results/2019-06-26/dge/tpm/{cell}_tpm.txt",
+    params:
+    conda:
+        "../envs/matplotlib.yaml"
+    threads: 4
+    script:
+        "../scripts/foldchange.py"
+
 rule genes_NOIseq:
     input:
         "results/2019-06-03/eRNA/counts/GM19_merged.txt"
