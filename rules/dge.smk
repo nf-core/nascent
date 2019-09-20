@@ -39,6 +39,19 @@ rule genes_tpm:
         "../envs/matplotlib.yaml"
     threads: 4
     script:
+        "../scripts/tpm.py"
+
+rule genes_foldchange:
+    input:
+        "results/2019-06-26/dge/tpm/{cell}_tpm.txt",
+    output:
+        "results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
+    params:
+        # cutoff=0.5
+    conda:
+        "../envs/matplotlib.yaml"
+    threads: 4
+    script:
         "../scripts/foldchange.py"
 
 rule genes_NOIseq:
