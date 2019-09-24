@@ -69,7 +69,7 @@ rule chrom_len:
 # RefSeq #
 ##########
 
-rule refSeq:
+rule refSeq_gtf:
     output:
         "data/2018-11-09/{unit}/genes.gtf",
     params:

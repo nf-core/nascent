@@ -54,6 +54,21 @@ rule genes_foldchange:
     script:
         "../scripts/foldchange.py"
 
+rule genes_fc_gtf:
+    input:
+        genes="results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
+        refseq="data/2018-11-09/hg19/genes.gtf",
+    output:
+        "results/2019-06-26/dge/DE/{cell}_de_genes.gtf",
+    params:
+        # cutoff=0.5
+    conda:
+        "../envs/gawk.yaml"
+    threads: 4
+    shell:
+        "awk -F \"\\t\" 'FNR==NR {{ a[$1]; next }} $9 ~ /a/ {{print}}' \
+        {input.genes} {input.refseq} > {output}"
+
 rule genes_NOIseq:
     input:
         "results/2019-06-03/eRNA/counts/GM19_merged.txt"
