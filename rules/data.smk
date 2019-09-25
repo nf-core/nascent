@@ -65,6 +65,12 @@ rule chrom_len:
     shell:
         "cut -f 1,2 {input} > {output}"
 
+rule hg19_UCSC_chrom_size:
+    output:
+        "data/2019-09-25/hg19.chrom.sizes"
+    shell:
+       "curl -fsSL https://genome.ucsc.edu/goldenpath/help/hg19.chrom.sizes > {output}"
+
 ##########
 # RefSeq #
 ##########
@@ -78,6 +84,22 @@ rule refSeq_gtf:
         source="UCSC",
         build="{unit}",
         typeOf="gtf",
+        outDir="data/2018-11-09/{unit}/",
+    conda:
+        "../envs/awscli.yaml"
+    shell:
+        "{params.script} -g {params.genome} -s {params.source} "
+        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
+
+rule refSeq_bed:
+    output:
+        "data/2018-11-09/{unit}/genes.bed",
+    params:
+        script="scripts/aws-igenomes.sh",
+        genome="Homo_sapiens",
+        source="UCSC",
+        build="{unit}",
+        typeOf="bed12",
         outDir="data/2018-11-09/{unit}/",
     conda:
         "../envs/awscli.yaml"
