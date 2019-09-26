@@ -1,0 +1,6 @@
+channels:
+  - anaconda
+  - conda-forge
+dependencies:
+  - gawk
+  - ripgrep

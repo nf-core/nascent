@@ -54,18 +54,17 @@ rule genes_foldchange:
     script:
         "../scripts/foldchange.py"
 
-rule genes_fc_gtf:
+rule ripgrep_de_genes:
     input:
         genes="results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
         refseq="data/2018-11-09/hg19/genes.gtf",
     output:
-        "results/2019-06-26/dge/DE/{cell}_de_genes.gtf",
+        "results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
     conda:
-        "../envs/gawk.yaml"
-    threads: 4
+        "../envs/ripgrep.yaml"
+    threads: 2
     shell:
-        "awk -F \"\\t\" 'FNR==NR {{ a[$1]; next }} {{for (i in a){{ if($9 ~ i)print $0}}}}' \
-        {input.genes} {input.refseq} > {output}"
+        """awk -F \"\\t\" '{{ print $1 }}' {input.genes} | rg - {input.refseq} > {output}"""
 
 rule genes_NOIseq:
     input:
