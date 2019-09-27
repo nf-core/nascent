@@ -1,0 +1,10 @@
+name: subread-featurecounts
+description: |
+  Quantify expression counts using featureCounts.
+authors:
+  - Julian de Ruiter
+input:
+  - bam file
+output:
+  - count file
+  - summary file (with statistics)

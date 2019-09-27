@@ -24,7 +24,10 @@ scripts/.snakemake*
 !rules/GM18/*
 !rules/GM19/*
 !rules/IMR/*
-!wrappers/subread/feature_counts
+!wrappers
+!wrappers/*
+!wrappers/subread/*
+!wrappers/subread/feature_counts/*
 !.gitignore
 !.gitattributes
 !.editorconfig
