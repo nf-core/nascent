@@ -54,17 +54,40 @@ rule genes_foldchange:
     script:
         "../scripts/foldchange.py"
 
-rule ripgrep_de_genes:
+rule genes_de_geneid:
     input:
         genes="results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
         refseq="data/2018-11-09/hg19/genes.gtf",
+    output:
+        "results/2019-06-26/dge/rg/{cell}_de_geneid.txt",
+    conda:
+        "../envs/gawk.yaml"
+    threads: 1
+    shell:
+        """awk -F \"\\t\" '{{ if (NR!=1){{ print $1 }}}}' {input.genes} > {output}"""
+
+rule genes_ripgrep_geneid:
+    input:
+        geneid="results/2019-06-26/dge/rg/{cell}_de_geneid.txt",
+        refseq="data/2018-11-09/hg19/genes.gtf",
+    output:
+        "results/2019-06-26/dge/rg/{cell}_de_ripgrep.gtf",
+    conda:
+        "../envs/ripgrep.yaml"
+    threads: 4
+    shell:
+        """rg --dfa-size-limit 2G -w -f {input.geneid} {input.refseq} > {output}"""
+
+rule genes_ripgrep_exon:
+    input:
+        rg="results/2019-06-26/dge/rg/{cell}_de_ripgrep.gtf",
     output:
         "results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
     conda:
         "../envs/ripgrep.yaml"
     threads: 2
     shell:
-        """awk -F \"\\t\" '{{ print $1 }}' {input.genes} | rg - {input.refseq} > {output}"""
+        """rg -w exon {input.rg} > {output}"""
 
 rule genes_NOIseq:
     input:

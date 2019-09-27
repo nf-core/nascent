@@ -21,8 +21,8 @@ dfFold = dflog.pct_change(axis="columns")
 dfFold.dropna(axis=1, inplace=True)
 
 # Drop anything that don't have a 1 fold change up or down(easy to change), might even make it a parameter in snakemake
-dfDGEup = dfFold[dfFold >= 0.5].dropna(thresh=1)
-dfDGEdown = dfFold[dfFold <= -0.5].dropna(thresh=1)
+dfDGEup = dfFold[dfFold >= 1].dropna(thresh=1)
+dfDGEdown = dfFold[dfFold <= -1].dropna(thresh=1)
 frames = [dfDGEup, dfDGEdown]
 dfDGE = pd.concat(frames)
 

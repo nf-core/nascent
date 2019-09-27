@@ -9,5 +9,6 @@ rule eRNA_link_genes:
         "../envs/bedtools.yaml"
     params:
         window="200000"
+    threads: 2
     shell:
         "bedtools window -u -w {params.window} -a {input.eRNA} -b {input.dges} > {output}"
