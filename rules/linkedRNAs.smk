@@ -13,15 +13,42 @@ rule eRNA_link_genes:
     shell:
         "bedtools window -u -w {params.window} -a {input.eRNA} -b {input.dges} > {output}"
 
+rule eRNA_link_merge:
+    input:
+        GM="results/2019-08-26/GM19_link_eRNA.bed",
+        IMR="results/2019-08-26/IMR_link_eRNA.bed",
+    output:
+        "results/2019-08-26/eRNA_merged.bed",
+    conda:
+        "../envs/bedtools.yaml"
+    params:
+        dis="-d 2000"
+    threads: 3
+    shell:
+        "cat {input} | sort -k1,1 -k2,2n | bedtools merge -i stdin {params.dis} > {output}"
+
 rule eRNA_link_overlap:
     input:
         GM="results/2019-08-26/GM19_link_eRNA.bed",
         IMR="results/2019-08-26/IMR_link_eRNA.bed",
     output:
-        "results/2019-08-26/overlap_link_eRNA.bed",
+        "results/2019-08-26/eRNA_overlap_viral.bed",
     conda:
         "../envs/bedtools.yaml"
     params:
     threads: 3
     shell:
         "bedtools intersect -wo -a {input.GM} -b {input.IMR} > {output}"
+
+rule eRNA_link_area:
+    input:
+        merge="results/2019-08-26/eRNA_merged.bed",
+        ov="results/2019-08-26/eRNA_overlap_viral.bed",
+    output:
+        "results/2019-08-26/eRNA_viral.bed",
+    conda:
+        "../envs/bedtools.yaml"
+    params:
+    threads: 3
+    shell:
+        "bedtools intersect -wa -a {input.merge} -b {input.ov} > {output}"
