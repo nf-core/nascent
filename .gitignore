@@ -7,6 +7,8 @@
 !scripts/analysis/*
 !scripts/notebooks
 !scripts/notebooks/*
+!scripts/figures
+!scripts/figures/*
 scripts/.snakemake*
 !Snakefile
 !config.yaml
@@ -24,6 +26,7 @@ scripts/.snakemake*
 !rules/GM18/*
 !rules/GM19/*
 !rules/IMR/*
+!rules/figures/*
 !wrappers
 !wrappers/*
 !wrappers/subread/*
