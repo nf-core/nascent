@@ -5,3 +5,4 @@ channels:
 dependencies:
   - snakemake-minimal
   - pandas
+  - jinja2

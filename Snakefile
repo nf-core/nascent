@@ -7,6 +7,8 @@ GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h",
 IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h",]
 HISTONES=["H3K4me1", "H3K27ac"]
 
+report: "report/workflow.rst"
+
 rule all:
     input:
         # fastqc
