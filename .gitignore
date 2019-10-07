@@ -15,6 +15,9 @@ scripts/.snakemake*
 !samples.tsv
 !resources
 !resources/*
+!data
+!data/*
+!data/2019-10-01/*
 !envs
 !envs/*
 !envs/docker/*
