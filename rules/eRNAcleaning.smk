@@ -12,7 +12,7 @@ rule GM19_merge_sample_peaks:
         "mergePeaks -d {params.maxDistance} {input} > {output}"
 
 # FIXME uses unmerged regions of eRNAs
-rule eRNA_saf:
+rule eRNA_saf_cell:
     input:
         "results/2018-12-02/{sample}_eRNA.bed",
     output:
@@ -21,5 +21,17 @@ rule eRNA_saf:
         "../envs/pandas.yaml"
     log:
         "logs/eRNA_saf_{sample}.log"
+    script:
+        "../scripts/bed2saf.py"
+
+rule eRNA_saf_viral:
+    input:
+        "results/2019-08-26/eRNA_viral.bed",
+    output:
+        "results/2019-09-27/eRNA_viral.saf",
+    conda:
+        "../envs/pandas.yaml"
+    log:
+        "logs/eRNA_saf_viral.log"
     script:
         "../scripts/bed2saf.py"
