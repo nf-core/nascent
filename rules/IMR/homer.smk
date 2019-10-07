@@ -29,7 +29,7 @@ rule IMR_meta_pos2bed:
     conda:
         "../../envs/homer.yaml"
     shell:
-        "pos2bed.pl {input} > {output}"
+        "pos2bed.pl {input} | sort -k1,1 -k2,2n - > {output}"
 
 rule IMR_sample_makeTagDirectory:
     input:
