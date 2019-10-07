@@ -22,10 +22,11 @@ rule eRNA_link_merge:
     conda:
         "../envs/bedtools.yaml"
     params:
-        dis="-d 2000"
+        # dis="-d 2000",
+        col="-c 4,5,6 -o distinct",
     threads: 3
     shell:
-        "cat {input} | sort -k1,1 -k2,2n | bedtools merge -i stdin {params.dis} > {output}"
+        "cat {input} | sort -k1,1 -k2,2n | bedtools merge -i stdin -s {params.col} > {output}"
 
 rule eRNA_link_overlap:
     input:
