@@ -35,11 +35,16 @@ rule all:
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
         # GM_annotation=expand("results/2019-02-05/GM/{unit}_outputannotation.txt", unit=GM_SAMPLES),
-        genes_limma=expand("results/2019-06-26/dge/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
-        erna_limma=expand("results/2019-06-26/eRNA/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
+        # genes_limma=expand("results/2019-06-26/dge/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
+        # erna_limma=expand("results/2019-06-26/eRNA/limma/{cell}_{fig}_limma.png", cell=["GM19", "IMR"], fig=["fig1", "fig2", "fig3", ]),
         genes_foldchange=expand("results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv", cell=["GM19", "IMR"]),
         linkedeRNAs=expand("results/2019-08-26/{cell}_link_eRNA.bed", cell = ["GM19", "IMR"]),
         merge="results/2019-08-26/eRNA_viral.bed",
+        eRNAcounts=expand("results/2019-06-03/eRNA/counts/{cell}_merged.txt", cell = ["GM19", "IMR"]),
+        eRNA_foldchange=expand("results/2019-09-27/de/foldchange/{cell}_foldchange.tsv", cell=["GM19", "IMR"]),
+        l2=expand("results/2019-08-26/{cell}_L2.bed", cell=["GM19","IMR"]),
+        genesl2=expand("results/2019-10-01/{cell}_genes_L2.bed", cell=["GM19","IMR"]),
+        baml2=expand("results/2019-10-06/l2/{sample}_bam_L2.bed", sample=IMR_SAMPLES),
 
 include: "rules/data.smk"
 
@@ -68,3 +73,6 @@ include: "rules/eRNAcleaning.smk"
 include: "rules/countReads.smk"
 include: "rules/dge.smk"
 include: "rules/linkedRNAs.smk"
+include: "rules/de_eRNA.smk"
+
+include: "rules/reports/eRNA.smk"

@@ -129,12 +129,12 @@ rule genes_normalize_counts:
 rule GM19_eRNA_feature_counts:
     input:
         bam="results/2018-10-04/GM19/{sample}.bam",
-        annotation="results/2019-06-07/GM19_eRNA.saf",
+        annotation="results/2019-09-27/eRNA_viral.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
         summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
     params:
-        annotation="results/2019-06-07/GM19_eRNA.saf",
+        annotation="results/2019-09-27/eRNA_viral.saf",
         extra='-F "SAF"' #feature_counts_extra
     threads:
         config["feature_counts"]["threads"]
@@ -165,12 +165,12 @@ rule GM19_eRNA_merge_counts:
 rule IMR_eRNA_feature_counts:
     input:
         bam="results/2018-10-04/IMR/{sample}.bam",
-        annotation="results/2019-06-07/IMR_eRNA.saf",
+        annotation="results/2019-09-27/eRNA_viral.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
         summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
     params:
-        annotation="results/2019-06-07/IMR_eRNA.saf",
+        annotation="results/2019-09-27/eRNA_viral.saf",
         extra='-F "SAF"' #feature_counts_extra
     threads:
         config["feature_counts"]["threads"]
