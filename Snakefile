@@ -45,6 +45,7 @@ rule all:
         l2=expand("results/2019-08-26/{cell}_L2.bed", cell=["GM19","IMR"]),
         genesl2=expand("results/2019-10-01/{cell}_genes_L2.bed", cell=["GM19","IMR"]),
         baml2=expand("results/2019-10-06/l2/{sample}_bam_L2.bed", sample=IMR_SAMPLES),
+        l2report="results/2019-10-01/L2.tsv",
 
 include: "rules/data.smk"
 
@@ -74,5 +75,6 @@ include: "rules/countReads.smk"
 include: "rules/dge.smk"
 include: "rules/linkedRNAs.smk"
 include: "rules/de_eRNA.smk"
+include: "rules/test_eRNA.smk"
 
 include: "rules/reports/eRNA.smk"

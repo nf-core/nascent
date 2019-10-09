@@ -1,0 +1,1 @@
+Whether L2 is present or not

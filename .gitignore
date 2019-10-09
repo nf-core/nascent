@@ -15,6 +15,8 @@ scripts/.snakemake*
 !samples.tsv
 !resources
 !resources/*
+!report
+!report/*
 !data
 !data/*
 !data/2019-10-01/*
