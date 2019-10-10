@@ -1,5 +1,15 @@
 samples: samples.tsv
 
+missing:
+  - cell: IMR
+    unit: 9h
+  - cell: IMR
+    unit: 18h
+  - cell: IMR
+    unit: 48h
+  - cell: IMR
+    unit: 72h
+
 ######################
 # Rule configuration #
 ######################
@@ -7,13 +17,3 @@ feature_counts:
   annotation: "data/2018-11-09/hg19/genes.gtf"
   extra: ""
   threads: 4
-
-missing:
-  - cell: IMR
-    time: 9h
-  - cell: IMR
-    time: 18h
-  - cell: IMR
-    time: 48h
-  - cell: IMR
-    time: 72h

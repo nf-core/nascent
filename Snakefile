@@ -7,7 +7,7 @@ configfile: "config.yaml"
 GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h", "GM18h", "GM24h", "GM48h", "GM72h",]
 IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h",]
 CELLS=["GM", "IMR",]
-TIMES=["0h", "30min", "1h", "2h", "4h", "6h", "9h", "12h", "18h", "24h", "48h", "72h",]
+UNITS=["0h", "30min", "1h", "2h", "4h", "6h", "9h", "12h", "18h", "24h", "48h", "72h",]
 SAMPLES=GM_SAMPLES+IMR_SAMPLES
 HISTONES=["H3K4me1", "H3K27ac"]
 
@@ -29,7 +29,7 @@ report: "report/workflow.rst"
 rule all:
     input:
         # fastqc
-        fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{time}.zip", filtered_product, cell=CELLS, time=TIMES,),
+        fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{unit}.zip", filtered_product, cell=CELLS, unit=UNITS,),
         # GM hg18
         # eRNAliftOverhg19="results/2018-11-25/hg19_eRNA_overlaps.bed",
         # GM18_test1="results/2018-11-10/hg18_eRNA_overlaps.bed",
