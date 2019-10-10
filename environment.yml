@@ -6,3 +6,4 @@ dependencies:
   - snakemake-minimal
   - pandas
   - jinja2
+  - pygments
