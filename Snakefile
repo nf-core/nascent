@@ -5,6 +5,7 @@ configfile: "config.yaml"
 
 GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h", "GM18h", "GM24h", "GM48h", "GM72h",]
 IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h",]
+SAMPLES=GM_SAMPLES+IMR_SAMPLES
 HISTONES=["H3K4me1", "H3K27ac"]
 
 report: "report/workflow.rst"
@@ -12,10 +13,7 @@ report: "report/workflow.rst"
 rule all:
     input:
         # fastqc
-        # GM_html=expand("results/2018-10-03/fastqc/{sample}.html",sample=GM_SAMPLES),
-        # GM_zip=expand("results/2018-10-03/fastqc/{sample}.zip",sample=GM_SAMPLES),
-        # IMR_html=expand("results/2018-12-01/fastqc/{sample}.html",sample=IMR_SAMPLES),
-        # IMR_zip=expand("results/2018-12-01/fastqc/{sample}.zip",sample=IMR_SAMPLES),
+        fastqc_zip=expand("results/2018-10-03/fastqc/{sample}.zip",sample=SAMPLES),
         # GM hg18
         # eRNAliftOverhg19="results/2018-11-25/hg19_eRNA_overlaps.bed",
         # GM18_test1="results/2018-11-10/hg18_eRNA_overlaps.bed",
@@ -69,6 +67,8 @@ include: "rules/IMR/homer.smk"
 include: "rules/IMR/removeGenes.smk"
 include: "rules/IMR/keepHistones.smk"
 include: "rules/IMR/test_eRNAs.smk"
+
+include: "rules/fastqc.smk"
 
 include: "rules/eRNAcleaning.smk"
 include: "rules/countReads.smk"
