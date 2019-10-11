@@ -1,5 +1,7 @@
 samples: samples.tsv
 
+HISTONES: ["H3K4me1", "H3K27ac"]
+
 missing:
   - cell: IMR
     unit: 9h

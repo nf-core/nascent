@@ -9,7 +9,6 @@ IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", 
 CELLS=["GM", "IMR",]
 UNITS=["0h", "30min", "1h", "2h", "4h", "6h", "9h", "12h", "18h", "24h", "48h", "72h",]
 SAMPLES=GM_SAMPLES+IMR_SAMPLES
-HISTONES=["H3K4me1", "H3K27ac"]
 
 def filter_combinator(combinator, blacklist):
     def filtered_combinator(*args, **kwargs):
