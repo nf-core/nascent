@@ -4,12 +4,14 @@ from itertools import product
 # singularity: "docker://continuumio/miniconda3:4.6.14"
 configfile: "config.yaml"
 
-samples = pd.read_table(config["samples"]).set_index("cell", drop=False)
+configfile: "config.yaml"
 
+samples = pd.read_table(config["samples"], dtype=str).set_index(["cell", "name"], drop=False)
+samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
 
-CELLS=list(set(samples.index.values))
-GM_SAMPLES=list(samples.loc["GM", "name"])
-IMR_SAMPLES=list(samples.loc["IMR", "name"])
+CELLS=list(set(samples["cell"]))
+GM_SAMPLES=samples.loc[("GM")].index.tolist()
+IMR_SAMPLES=samples.loc[("IMR")].index.tolist()
 UNITS=list(set(samples["time"]))
 SAMPLES=list(samples["name"])
 
