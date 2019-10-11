@@ -1,6 +1,6 @@
 rule GM19_meta_makeTagDirectory:
     input:
-        expand("results/2018-10-04/GM19/{unit}.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/{unit}.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/GM19_meta_tagDir")
     singularity:

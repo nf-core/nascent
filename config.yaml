@@ -16,7 +16,7 @@ missing:
 
 ref:
   # the bowtie2 index
-  index: "path/to/star/index"
+  index: "data/2018-06-24/hg19/genome"
   # gtf file with transcripts
   annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
 
