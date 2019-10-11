@@ -4,11 +4,14 @@ from itertools import product
 # singularity: "docker://continuumio/miniconda3:4.6.14"
 configfile: "config.yaml"
 
-GM_SAMPLES=["GM0h", "GM30min", "GM1h", "GM2h", "GM4h", "GM6h",  "GM9h", "GM12h", "GM18h", "GM24h", "GM48h", "GM72h",]
-IMR_SAMPLES=["IMR0h", "IMR30min", "IMR1h", "IMR2h", "IMR4h", "IMR6h", "IMR12h", "IMR24h",]
-CELLS=["GM", "IMR",]
-UNITS=["0h", "30min", "1h", "2h", "4h", "6h", "9h", "12h", "18h", "24h", "48h", "72h",]
-SAMPLES=GM_SAMPLES+IMR_SAMPLES
+samples = pd.read_table(config["samples"]).set_index("cell", drop=False)
+
+
+CELLS=list(set(samples.index.values))
+GM_SAMPLES=list(samples.loc["GM", "name"])
+IMR_SAMPLES=list(samples.loc["IMR", "name"])
+UNITS=list(set(samples["time"]))
+SAMPLES=list(samples["name"])
 
 def filter_combinator(combinator, blacklist):
     def filtered_combinator(*args, **kwargs):
