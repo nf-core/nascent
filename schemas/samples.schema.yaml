@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: an entry in the sample sheet
+properties:
+  name:
+    type: string
+    description: sample name/identifier
+  cell:
+    type: string
+    description: the cell line the sample is from
+  time:
+    type: string
+    description: the time the sample was taken at
+
+required:
+  - name
+  - cell
+  - time

@@ -1,6 +1,8 @@
 samples: samples.tsv
 
-HISTONES: ["H3K4me1", "H3K27ac"]
+histones:
+  - H3K4me1
+  - H3K27ac
 
 missing:
   - cell: IMR
@@ -12,10 +14,16 @@ missing:
   - cell: IMR
     unit: 72h
 
+ref:
+  # the bowtie2 index
+  index: "path/to/star/index"
+  # gtf file with transcripts
+  annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
+
 ######################
 # Rule configuration #
 ######################
 feature_counts:
-  annotation: "data/2018-11-09/hg19/genes.gtf"
+  annotation: *annotation
   extra: ""
   threads: 4

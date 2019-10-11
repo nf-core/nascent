@@ -1,0 +1,58 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+properties:
+  samples:
+    type: string
+
+  histones:
+    type: array
+    items:
+      type: string
+
+  missing:
+    type: array
+    items:
+      type: object
+      properties:
+        cell:
+          type: string
+        unit:
+          type: string
+      required:
+        - cell
+        - unit
+
+  ref:
+    type: object
+    properties:
+      index:
+        type: string
+      annotation:
+        type: string
+    required:
+      - index
+      - annotation
+
+  feature_counts:
+    type: object
+    properties:
+      annotation:
+        type: string
+      extra:
+        type: string
+      threads:
+        type: number
+    required:
+      - annotation
+      - extra
+      - threads
+
+required:
+  - samples
+  - histones
+  - ref
+  - feature_counts

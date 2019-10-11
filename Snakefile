@@ -1,13 +1,15 @@
 import pandas as pd
+from snakemake.utils import validate
 from itertools import product
 
 # singularity: "docker://continuumio/miniconda3:4.6.14"
-configfile: "config.yaml"
 
 configfile: "config.yaml"
+validate(config, schema="schemas/config.schema.yaml")
 
 samples = pd.read_table(config["samples"], dtype=str).set_index(["cell", "name"], drop=False)
 samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
+validate(samples, schema="schemas/samples.schema.yaml")
 
 CELLS=list(set(samples["cell"]))
 GM_SAMPLES=samples.loc[("GM")].index.tolist()
