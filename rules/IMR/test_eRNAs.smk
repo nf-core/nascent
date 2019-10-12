@@ -1,6 +1,6 @@
 rule test_IMR_vs_Peng:
     input:
-        IMR="results/2018-12-02/IMR_eRNA.bed",
+        IMR="results/2018-12-02/hg19/IMR_eRNA.bed",
         peng="data/2018-01-25/eRNA_GM_hg19.sorted.bed",
     output:
         "results/2018-11-10/test/IMR_eRNA_vs_Peng.bed"
@@ -14,8 +14,8 @@ rule test_IMR_vs_Peng:
 
 rule test_IMR_vs_GM19:
     input:
-        IMR="results/2018-12-02/IMR_eRNA.bed",
-        GM19="results/2018-12-02/GM19_eRNA.bed",
+        IMR="results/2018-12-02/hg19/IMR_eRNA.bed",
+        GM19="results/2018-12-02/hg19/GM_eRNA.bed",
     output:
         "results/2018-11-10/test/IMR_eRNA_vs_GM19.bed"
     log:
@@ -29,7 +29,7 @@ rule test_IMR_vs_GM19:
 rule test_IMR_vs_liftOver:
     input:
         GM_liftOver="results/2018-11-10/eRNA_GM_liftover_hg19.sorted.bed",
-        IMR="results/2018-12-02/IMR_eRNA.bed",
+        IMR="results/2018-12-02/hg19/IMR_eRNA.bed",
     output:
         "results/2018-11-10/test/IMR_eRNA_vs_liftOver.bed"
     log:

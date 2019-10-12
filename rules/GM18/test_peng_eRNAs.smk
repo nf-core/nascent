@@ -1,6 +1,6 @@
 rule test_GM18_vs_Peng:
     input:
-        edmund="results/2018-11-10/GM18_eRNA.bed",
+        edmund="results/2018-12-02/hg18/GM_eRNA.bed",
         peng="data/2018-01-25/eRNA_GM_hg19.sorted.bed",
     output:
         "results/2018-11-10/test/hg18_eRNA_overlaps.bed"

@@ -1,6 +1,6 @@
 rule test_GM19_vs_Peng:
     input:
-        edmund="results/2018-11-29/GM19_eRNA.bed",
+        edmund="results/2018-12-02/hg19/GM_eRNA.bed",
         peng="data/2018-01-25/eRNA_GM_hg19.sorted.bed",
     output:
         "results/2018-11-10/test/GM19_eRNA_vs_Peng.bed"
@@ -14,8 +14,8 @@ rule test_GM19_vs_Peng:
 
 rule test_GM19_vs_GM18:
     input:
-        GM19="results/2018-11-29/GM19_eRNA.bed",
-        GM18="results/2018-11-10/GM18_eRNA.bed",
+        GM19="results/2018-12-02/hg19/GM_eRNA.bed",
+        GM18="results/2018-12-02/hg18/GM_eRNA.bed",
     output:
         "results/2018-11-10/test/GM19_eRNA_vs_GM18.bed"
     log:
@@ -28,8 +28,8 @@ rule test_GM19_vs_GM18:
 
 rule test_GM19_vs_liftOver:
     input:
-        liftOver="results/2018-11-25/eRNA_GM_liftover_hg19.sorted.bed",
-        GM19="results/2018-11-29/GM19_eRNA.bed",
+        liftOver="results/2018-11-10/eRNA_GM_liftover_hg19.sorted.bed",
+        GM19="results/2018-12-02/hg19/GM_eRNA.bed",
     output:
         "results/2018-11-10/test/GM19_eRNA_vs_liftOver.bed"
     log:

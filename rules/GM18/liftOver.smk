@@ -1,6 +1,6 @@
 rule GM18_liftOver_eRNAs:
     input:
-        eRNAs="results/2018-11-10/GM18_eRNA.bed",
+        eRNAs="results/2018-12-02/hg18/GM_eRNA.bed",
         mapChain="data/2018-11-10/hg18ToHg19.over.chain"
     output:
         "results/2018-11-10/eRNA_GM_liftover_hg19.bed",
