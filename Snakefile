@@ -81,18 +81,17 @@ include: "rules/GM18/keepHistones.smk"
 include: "rules/GM18/liftOver.smk"
 include: "rules/GM18/test_peng_eRNAs.smk"
 
-include: "rules/GM19/homer.smk"
 include: "rules/GM19/removeGenes.smk"
 include: "rules/GM19/keepHistones.smk"
 include: "rules/GM19/test_eRNAs.smk"
 
-include: "rules/IMR/homer.smk"
 include: "rules/IMR/removeGenes.smk"
 include: "rules/IMR/keepHistones.smk"
 include: "rules/IMR/test_eRNAs.smk"
 
 include: "rules/fastqc.smk"
 include: "rules/bowtie2.smk"
+include: "rules/homer.smk"
 
 include: "rules/eRNAcleaning.smk"
 include: "rules/countReads.smk"
