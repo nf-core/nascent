@@ -41,20 +41,12 @@ rule all:
     input:
         # fastqc
         fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{unit}.zip", filtered_product, cell=CELLS, unit=UNITS,),
-        # GM hg18
-        GM18_test1="results/2018-11-10/test/hg18_eRNA_overlaps.bed",
-        GM18_test2="results/2018-11-10/test/hg19_eRNA_overlaps.bed",
-        # GM hg19
-        GM_counts=expand("results/2019-01-28/GM/{unit}_groseq_peak.bed", unit=GM_SAMPLES),
-        GM19_test1="results/2018-11-10/test/GM19_eRNA_vs_Peng.bed",
-        GM19_test2="results/2018-11-10/test/GM19_eRNA_vs_GM18.bed",
-        GM19_test3="results/2018-11-10/test/GM19_eRNA_vs_liftOver.bed",
-        # IMR hg19
-        IMR_counts=expand("results/2019-01-28/IMR/{unit}_groseq_peak.bed", unit=IMR_SAMPLES),
-        # IMR_eRNA="results/2018-12-02/eRNA_IMR_hg19.bed",
-        IMR_test1="results/2018-11-10/test/IMR_eRNA_vs_Peng.bed",
-        IMR_test2="results/2018-11-10/test/IMR_eRNA_vs_GM19.bed",
-        IMR_test3="results/2018-11-10/test/IMR_eRNA_vs_liftOver.bed",
+        # eRNA Prediction
+        eRNApeng=expand("results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed", genome=config["genomes"], cell=CELLS,),
+        liftoverPeng="results/2018-11-10/test/hg19_eRNA_overlaps.bed",
+        hg19vshg18=expand("results/2018-11-10/test/{cell}_hg19_vs_hg18_eRNA.bed", cell=CELLS,),
+        predictionVsLiftOver=expand("results/2018-11-10/test/{genome}/{cell}_eRNA_vs_liftOver.bed", genome=config["genomes"], cell=CELLS,),
+        IMRvsGM="results/2018-11-10/test/IMR_eRNA_vs_GM19.bed",
         # Differential Analysis
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
@@ -72,10 +64,16 @@ rule all:
 
 include: "rules/data.smk"
 
+###############
+# Reproducing #
+###############
 include: "rules/GM18/bowtie2.smk"
 include: "rules/GM18/homer.smk"
 include: "rules/GM18/liftOver.smk"
 
+###################
+# eRNA Prediction #
+###################
 include: "rules/fastqc.smk"
 include: "rules/bowtie2.smk"
 include: "rules/homer.smk"
@@ -83,6 +81,9 @@ include: "rules/removeGenes.smk"
 include: "rules/keepHistones.smk"
 include: "rules/test_eRNA_prediction.smk"
 
+###################
+# Inducible Pairs #
+###################
 include: "rules/eRNAcleaning.smk"
 include: "rules/countReads.smk"
 include: "rules/dge.smk"

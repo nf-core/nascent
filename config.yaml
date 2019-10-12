@@ -4,6 +4,10 @@ histones:
   - H3K4me1
   - H3K27ac
 
+genomes:
+  - hg18
+  - hg19
+
 missing:
   - cell: IMR
     unit: 9h
