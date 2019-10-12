@@ -14,9 +14,6 @@ rule AWS_iGenomes:
 #     output:
 #         expand("data/2018-06-23/IMR/{unit}.fastq",unit=IMR_SAMPLES),
 
-# rule GM_Original_eRNAs:
-#     output:
-#         "data/2018-01-25/eRNA_GM_hg19.sorted.bed"
 
 #############################
 # BowTie2 Reference Genomes #
