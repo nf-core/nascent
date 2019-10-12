@@ -67,3 +67,20 @@ rule test_IMR_vs_GM19:
     shell:
         "bedtools intersect -a {input.IMR} -b {input.GM19} \
         -sorted -u > {output} 2> {log}"
+
+rule fig_predicted_eRNA_peng:
+    input:
+        edmund="results/2018-12-02/{genome}/{cell}_eRNA.bed",
+        peng="data/2018-01-25/eRNA_GM_hg19.bed",
+        overlap="results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed",
+    output:
+        report("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", category="eRNA Prediction")
+    log:
+        "logs/{genome}/figure/{cell}_eRNAs_vs_peng.log"
+    conda:
+        "../envs/matplotlib.yaml"
+    params:
+        title="Predicted eRNAs vs Peng's GM19",
+    threads: 4
+    script:
+        "../scripts/venn-smk.py"
