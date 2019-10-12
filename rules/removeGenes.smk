@@ -9,7 +9,7 @@ rule slopRefSeq:
     output:
         "data/2018-11-09/{genome}/{genome}_slop_refseq.bed"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
          "slopBed -i {input.refSeq} \
          -g {input.chromLen} \
@@ -23,7 +23,7 @@ rule fixBEDcoordinates:
     log:
         "logs/{genome}/RemoveGenes.log"
     conda:
-        "../../envs/bedops.yaml"
+        "../envs/bedops.yaml"
     shell:
          "awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
          else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
@@ -38,7 +38,7 @@ rule removeGenes:
     log:
         "logs/{genome}/{cell}/RemoveGenes.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.transcripts} -b {input.refseq} -v \
         | sort -k1,1 -k2,2n - > {output} 2> {log}"

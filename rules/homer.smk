@@ -70,6 +70,6 @@ rule homer_sample_pos2bed:
     output:
         "results/2019-01-28/hg19/{unit}_groseq_peak.bed"
     conda:
-        "../../envs/homer.yaml"
+        "../envs/homer.yaml"
     shell:
         "pos2bed.pl {input} > {output}"

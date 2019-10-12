@@ -7,7 +7,7 @@ rule test_GM18_vs_Peng:
     log:
         "logs/GM18/test_GM18_eRNAs.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.peng} -b {input.edmund} \
         -sorted -u > {output} 2> {log}"
@@ -21,7 +21,7 @@ rule test_GM18_liftOver_vs_Peng:
     log:
         "logs/GM18/test_GM18_liftOver_eRNAs.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.peng} -b {input.liftOver} \
         -sorted -u > {output} 2> {log}"
@@ -35,7 +35,7 @@ rule test_GM19_vs_Peng:
     log:
         "logs/GM19/test_hg19_eRNAs.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.peng} -b {input.edmund} \
         -sorted -u > {output} 2> {log}"
@@ -49,7 +49,7 @@ rule test_GM19_vs_GM18:
     log:
         "logs/GM19/test_GM19_eRNAs_GM18.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.GM19} -b {input.GM18} \
         -sorted -u > {output} 2> {log}"
@@ -63,7 +63,7 @@ rule test_GM19_vs_liftOver:
     log:
         "logs/GM19/test_hg19_eRNAs.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.GM19} -b {input.liftOver} \
         -sorted -u > {output} 2> {log}"
@@ -77,7 +77,7 @@ rule test_IMR_vs_Peng:
     log:
         "logs/IMR/test_IMR_vs_Peng.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.IMR} -b {input.peng} \
         -sorted -u > {output} 2> {log}"
@@ -91,7 +91,7 @@ rule test_IMR_vs_GM19:
     log:
         "logs/IMR/test_IMR_vs_GM19.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.IMR} -b {input.GM19} \
         -sorted -u > {output} 2> {log}"
@@ -105,7 +105,7 @@ rule test_IMR_vs_liftOver:
     log:
         "logs/IMR/test_IMR_vs_liftOver.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.IMR} -b {input.GM_liftOver} \
         -sorted -u > {output} 2> {log}"

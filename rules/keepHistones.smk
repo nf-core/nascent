@@ -18,7 +18,7 @@ rule convert_Histones_to_Bed:
     output:
         "data/2018-11-13/{genome}/{cell}_{unit}.bed",
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     threads: 2
     shell:
         "bamToBed -i {input} | sortBed -i - > {output}"
@@ -33,7 +33,7 @@ rule histonesIntersect:
     log:
         "logs/{genome}/{cell}/HistonesIntersect.log"
     conda:
-        "../../envs/bedtools.yaml"
+        "../envs/bedtools.yaml"
     threads: 2
     shell:
         "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"
