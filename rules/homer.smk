@@ -57,7 +57,7 @@ rule homer_sample_findPeaks:
         tagdir="results/2019-01-28/{unit}_tagDir",
         uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
     output:
-        "results/2019-01-28/{unit}_groseq_peak.gtf"
+        "results/2019-01-28/hg19/{unit}_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
     threads: 2
@@ -66,9 +66,9 @@ rule homer_sample_findPeaks:
 
 rule homer_sample_pos2bed:
     input:
-        "results/2019-01-28/{unit}_groseq_peak.gtf"
+        "results/2019-01-28/hg19/{unit}_groseq_peak.gtf"
     output:
-        "results/2019-01-28/{unit}_groseq_peak.bed"
+        "results/2019-01-28/hg19/{unit}_groseq_peak.bed"
     conda:
         "../../envs/homer.yaml"
     shell:

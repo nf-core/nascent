@@ -9,7 +9,7 @@ def get_trimmed(wildcards):
 
 rule GM18_bowtie2:
     input:
-        sample=["data/2018-06-23/GM/{unit}.fastq"]
+        sample=["data/2018-06-23/{unit}.fastq"]
     output:
         "results/2018-10-04/GM18/{unit}.bam"
     log:

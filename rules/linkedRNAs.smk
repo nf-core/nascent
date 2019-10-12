@@ -1,9 +1,9 @@
 rule eRNA_link_genes:
     input:
         dges="results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
-        eRNA="results/2018-12-02/{cell}_eRNA.bed",
+        eRNA="results/2018-12-02/{genome}/{cell}_eRNA.bed",
     output:
-        "results/2019-08-26/{cell}_link_eRNA.bed",
+        "results/2019-08-26/{genome}/{cell}_link_eRNA.bed",
     conda:
         "../envs/bedtools.yaml"
     params:
@@ -14,8 +14,8 @@ rule eRNA_link_genes:
 
 rule eRNA_link_merge:
     input:
-        GM="results/2019-08-26/GM19_link_eRNA.bed",
-        IMR="results/2019-08-26/IMR_link_eRNA.bed",
+        GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
+        IMR="results/2019-08-26/hg19/IMR_link_eRNA.bed",
     output:
         "results/2019-08-26/eRNA_merged.bed",
     conda:
@@ -29,8 +29,8 @@ rule eRNA_link_merge:
 
 rule eRNA_link_overlap:
     input:
-        GM="results/2019-08-26/GM19_link_eRNA.bed",
-        IMR="results/2019-08-26/IMR_link_eRNA.bed",
+        GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
+        IMR="results/2019-08-26/hg19/IMR_link_eRNA.bed",
     output:
         "results/2019-08-26/eRNA_overlap_viral.bed",
     conda:

@@ -44,11 +44,11 @@ def feature_counts_extra(wildcards):
 
 rule GM19_genes_feature_counts:
     input:
-        bam="results/2018-10-04/GM19/{sample}.bam",
+        bam="results/2018-10-04/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
-        counts="results/2019-06-03/GM19/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/GM19/qc/feature_counts/{sample}.txt"
+        counts="results/2019-06-03/GM/counts/per_sample/{sample}.txt",
+        summary="results/2019-06-03/GM/qc/feature_counts/{sample}.txt"
     params:
         annotation=config["feature_counts"]["annotation"],
         extra='' #feature_counts_extra
@@ -62,9 +62,9 @@ rule GM19_genes_feature_counts:
 
 rule GM19_genes_merge_counts:
     input:
-        expand("results/2019-06-03/GM19/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
+        expand("results/2019-06-03/GM/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
-        "results/2019-06-03/GM19/counts/merged.txt"
+        "results/2019-06-03/GM/counts/merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -81,7 +81,7 @@ rule GM19_genes_merge_counts:
 
 rule IMR_genes_feature_counts:
     input:
-        bam="results/2018-10-04/IMR/{sample}.bam",
+        bam="results/2018-10-04/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
         counts="results/2019-06-03/IMR/counts/per_sample/{sample}.txt",
@@ -128,7 +128,7 @@ rule genes_normalize_counts:
 
 rule GM19_eRNA_feature_counts:
     input:
-        bam="results/2018-10-04/GM19/{sample}.bam",
+        bam="results/2018-10-04/{sample}.bam",
         annotation="results/2019-09-27/eRNA_viral.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
@@ -148,7 +148,7 @@ rule GM19_eRNA_merge_counts:
     input:
         expand("results/2019-06-03/eRNA/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
-        "results/2019-06-03/eRNA/counts/GM19_merged.txt"
+        "results/2019-06-03/eRNA/counts/GM_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
