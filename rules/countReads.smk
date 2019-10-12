@@ -57,7 +57,7 @@ rule GM19_genes_feature_counts:
     log:
         "logs/GM19/feature_counts/{sample}.txt"
     wrapper:
-        "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
+        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
 rule GM19_genes_merge_counts:
@@ -94,7 +94,7 @@ rule IMR_genes_feature_counts:
     log:
         "logs/IMR/feature_counts/{sample}.txt"
     wrapper:
-        "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
+        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
 rule IMR_genes_merge_counts:
@@ -141,7 +141,7 @@ rule GM19_eRNA_feature_counts:
     log:
         "logs/{sample}/feature_counts/{sample}.txt"
     wrapper:
-        "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
+        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
 rule GM19_eRNA_merge_counts:
@@ -177,7 +177,7 @@ rule IMR_eRNA_feature_counts:
     log:
         "logs/{sample}/feature_counts/{sample}.txt"
     wrapper:
-        "file://" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
+        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 
 rule IMR_eRNA_merge_counts:
