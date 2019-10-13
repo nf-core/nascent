@@ -11,7 +11,7 @@ rule IMR_meta_makeTagDirectory:
 
 rule GM19_meta_makeTagDirectory:
     input:
-        expand("results/2018-10-04/{unit}.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/GM_meta_tagDir")
     singularity:

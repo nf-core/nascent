@@ -1,8 +1,8 @@
 rule GM18_meta_makeTagDirectory:
     input:
-        expand("results/2018-10-04/GM18/{unit}.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg18/{unit}.bam",unit=GM_SAMPLES)
     output:
-        directory("results/2018-11-07/GM18_meta_tagDir")
+        directory("results/2018-11-07/hg18/GM18_meta_tagDir")
     singularity:
         "docker://emiller88/homer:latest"
     threads: 4
@@ -11,9 +11,9 @@ rule GM18_meta_makeTagDirectory:
 
 rule GM18_meta_findPeaks:
     input:
-        "results/2018-11-07/GM18_meta_tagDir"
+        "results/2018-11-07/hg18/GM18_meta_tagDir"
     output:
-        "results/2018-11-07/GM18_meta_groseq_peak.gtf"
+        "results/2018-11-07/hg18/GM18_meta_groseq_peak.gtf"
     singularity:
         "docker://emiller88/homer:latest"
     threads: 4
