@@ -12,7 +12,7 @@ singularity: "docker://continuumio/miniconda3"
 configfile: "config.yaml"
 validate(config, schema="schemas/config.schema.yaml")
 
-samples = pd.read_table(config["samples"], dtype=str).set_index(["cell", "name"], drop=False)
+samples = pd.read_csv(config["samples"], dtype=str, sep='\t').set_index(["cell", "name"], drop=False,)
 samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
 validate(samples, schema="schemas/samples.schema.yaml")
 
