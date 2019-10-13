@@ -1,6 +1,7 @@
 rule AWS_iGenomes:
     output:
         "scripts/aws-igenomes.sh"
+    priority: 50
     shell:
        "curl -fsSL https://ewels.github.io/AWS-iGenomes/aws-igenomes.sh > {output} && chmod +x {output}"
 
@@ -8,11 +9,11 @@ rule AWS_iGenomes:
 
 # rule GM_download:
 #     output:
-#         expand("data/2018-06-23/GM/{unit}.fastq",unit=GM_SAMPLES),
+#         expand("data/2018-06-23/{unit}.fastq",unit=GM_SAMPLES),
 
 # rule IMR_download:
 #     output:
-#         expand("data/2018-06-23/IMR/{unit}.fastq",unit=IMR_SAMPLES),
+#         expand("data/2018-06-23/{unit}.fastq",unit=IMR_SAMPLES),
 
 
 #############################
