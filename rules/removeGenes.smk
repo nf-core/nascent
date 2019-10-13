@@ -11,10 +11,10 @@ rule slopRefSeq:
     conda:
         "../envs/bedtools.yaml"
     shell:
-         "slopBed -i {input.refSeq} \
+         "sortBed -i {input.refSeq} |\
+         slopBed -i - \
          -g {input.chromLen} \
-         -l 1000 -r 10000 | sortBed -i -\
-         > {output}"
+         -l 1000 -r 10000 > {output}"
 
 rule fixBEDcoordinates:
     input:
