@@ -17,6 +17,11 @@ rule slopRefSeq:
          -l 1000 -r 10000 > {output}"
 
 rule fixBEDcoordinates:
+    """
+    Removes chrXYZ_random entries in hg18
+    Fixes alignments if start is after the end
+    Sorts the entries
+    """
     input:
         "data/2018-11-09/{genome}/{genome}_slop_refseq.bed"
     output:
@@ -26,9 +31,12 @@ rule fixBEDcoordinates:
     conda:
         "../envs/bedops.yaml"
     shell:
-         "awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
-         else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
-         {input} | sort-bed - > {output} 2> {log}"
+         """
+         awk -F '\\t' 'length($1) <= 5 {{ print }}' {input} |
+         awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
+         else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' - \
+         | sort-bed - > {output} 2> {log}
+         """
 
 rule removeGenes:
     input:
