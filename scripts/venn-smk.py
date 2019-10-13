@@ -4,7 +4,7 @@ Takes in 3 files
 1 - the right
 2 - the overlap
 """
-
+from matplotlib import pyplot as plt
 from matplotlib_venn import venn2
 
 with open(snakemake.input[0]) as f:
@@ -17,7 +17,7 @@ with open(snakemake.input[2]) as f:
     common = sum(1 for _ in f)
 
 
-venn2(
+v = venn2(
     subsets=((count1 - common), (count2 - common), common),
     set_labels=(snakemake.input[0], snakemake.input[1], snakemake.input[2]),
 )
