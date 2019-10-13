@@ -20,6 +20,8 @@ dfFold = dflog.pct_change(axis="columns")
 # Drop 0h since it won't have any fold change
 dfFold.dropna(axis=1, inplace=True)
 
+# Drop anything > 24h
+dfFold = dfFold.drop(columns=["GM48h", "GM72h"])
 # Drop anything that don't have a 1 fold change up or down(easy to change), might even make it a parameter in snakemake
 dfDGEup = dfFold[dfFold >= 1].dropna(thresh=1)
 dfDGEdown = dfFold[dfFold <= -1].dropna(thresh=1)
