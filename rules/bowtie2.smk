@@ -1,6 +1,7 @@
 rule bowtie2:
     input:
-        sample=["data/2018-06-23/{unit}.fastq"]
+        sample=["data/2018-06-23/{unit}.fastq"],
+        ref="data/2018-06-24/{genome}/genome.fa",
     output:
         "results/2018-10-04/{genome}/{unit}.bam"
     log:
