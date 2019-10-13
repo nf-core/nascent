@@ -78,7 +78,7 @@ rule fig_predicted_eRNA_peng:
     log:
         "logs/{genome}/figure/{cell}_eRNAs_vs_peng.log"
     conda:
-        "../envs/matplotlib.yaml"
+        "../envs/venn.yaml"
     params:
         title="Predicted eRNAs vs Peng's GM19",
     threads: 4
