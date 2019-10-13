@@ -1,0 +1,11 @@
+{
+    "__default__": {
+        "account": "my account",
+        "time": "00:15:00",
+        "n": 1,
+        "partition": "genomics"
+    },
+    "bowtie2": {
+        "time": "00:25:00"
+    }
+}
