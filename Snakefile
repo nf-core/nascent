@@ -39,6 +39,7 @@ report: "report/workflow.rst"
 
 rule all:
     input:
+        aws="scripts/aws-igenomes.sh",
         # fastqc
         fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{unit}.zip", filtered_product, cell=CELLS, unit=UNITS,),
         # eRNA Prediction
@@ -92,5 +93,3 @@ include: "rules/dge.smk"
 include: "rules/linkedRNAs.smk"
 include: "rules/de_eRNA.smk"
 include: "rules/test_eRNA.smk"
-
-include: "rules/reports/eRNA.smk"
