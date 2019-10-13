@@ -1,6 +1,6 @@
 rule IMR_meta_makeTagDirectory:
     input:
-        expand("results/2018-10-04/{unit}.bam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}.bam",unit=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/IMR_meta_tagDir"),
     singularity:

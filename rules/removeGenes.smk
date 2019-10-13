@@ -31,7 +31,7 @@ rule fixBEDcoordinates:
 
 rule removeGenes:
     input:
-        transcripts="results/2018-11-07/{cell}_meta_transcripts.bed",
+        transcripts="results/2018-11-07/{genome}/{cell}_meta_transcripts.bed",
         refseq="data/2018-11-09/{genome}/{genome}_slop_refseq.sorted.bed",
     output:
         "results/2018-11-09/{genome}/{cell}_meta_transcripts_noGenes.bed"

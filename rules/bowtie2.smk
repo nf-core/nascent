@@ -2,11 +2,12 @@ rule bowtie2:
     input:
         sample=["data/2018-06-23/{unit}.fastq"]
     output:
-        "results/2018-10-04/{unit}.bam"
+        "results/2018-10-04/{genome}/{unit}.bam"
     log:
-        "logs/bowtie2/{unit}.log"
+        "logs/{genome}/bowtie2/{unit}.log"
     params:
-        index=config["ref"]["index"],
+        # index=config["ref"]["index"],
+        index= lambda w: config["ref"]["{}".format(w.genome)]["index"],
         extra=""
     threads: 4
     wrapper:

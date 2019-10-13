@@ -19,10 +19,16 @@ missing:
     unit: 72h
 
 ref:
-  # the bowtie2 index
-  index: "data/2018-06-24/hg19/genome"
-  # gtf file with transcripts
-  annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
+  hg18:
+    # the bowtie2 index
+    index: "data/2018-06-24/hg18/genome"
+    # gtf file with transcripts
+    annotation: "data/2018-11-09/hg18/genes.gtf"
+  hg19:
+    # the bowtie2 index
+    index: "data/2018-06-24/hg19/genome"
+    # gtf file with transcripts
+    annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
 
 ######################
 # Rule configuration #
@@ -31,3 +37,10 @@ feature_counts:
   annotation: *annotation
   extra: ""
   threads: 4
+
+homer:
+  tagDir:
+  findPeaks:
+    style: "groseq"
+    uniqmap: "data/2019-07-26/hg19-50nt-uniqmap"
+    bodyFold: "1.5"
