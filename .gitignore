@@ -20,8 +20,8 @@ scripts/.snakemake*
 !report/*
 !data
 !data/*
+!data/2018-01-25/*
 !data/2019-10-01/*
-!data/2019-01-25/*
 !envs
 !envs/*
 !envs/docker/*
