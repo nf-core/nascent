@@ -24,12 +24,11 @@ rule fixBEDcoordinates:
     log:
         "logs/{genome}/RemoveGenes.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../envs/bedops.yaml"
     shell:
-        # FIXME
-        """awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
-        else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
-        {input} | sortBed -i - > {output} 2> {log}"""
+         "awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
+         else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
+         {input} | sort-bed - > {output} 2> {log}"
 
 rule removeGenes:
     input:

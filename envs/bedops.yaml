@@ -5,3 +5,4 @@ channels:
   - conda-forge
 dependencies:
   - bedops
+  - gawk
