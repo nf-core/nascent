@@ -5,7 +5,7 @@ rule slopRefSeq:
     """
     input:
         refSeq="data/2018-11-09/{genome}/genes.bed",
-        chromLen="data/2019-09-25/{genome}/chrom.sizes",
+        chromLen="data/2019-09-25/{genome}.chrom.sizes",
     output:
         "data/2018-11-09/{genome}/{genome}_slop_refseq.bed"
     conda:

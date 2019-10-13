@@ -63,6 +63,12 @@ rule chrom_len:
     shell:
         "cut -f 1,2 {input} > {output}"
 
+rule hg18_UCSC_chrom_size:
+    output:
+        "data/2019-09-25/hg18.chrom.sizes"
+    shell:
+       "curl -fsSL https://genome.ucsc.edu/goldenpath/help/hg19.chrom.sizes > {output}"
+
 rule hg19_UCSC_chrom_size:
     output:
         "data/2019-09-25/hg19.chrom.sizes"
