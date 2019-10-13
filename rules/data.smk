@@ -167,6 +167,8 @@ hg19uniqMap="http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
 rule download_hg19_uniqmap:
     output:
         "data/2019-07-26/hg19uniqmap.zip"
+    conda:
+        "../envs/basics.yaml"
     shell:
         "curl -fsSL {hg19uniqMap} > {output}"
 
@@ -175,5 +177,9 @@ rule unzip_hg19_uniqmap:
         "data/2019-07-26/hg19uniqmap.zip"
     output:
         directory("data/2019-07-26/hg19-50nt-uniqmap")
+    log:
+        "logs/data/hg19_uniqmap.log"
+    conda:
+        "../envs/basics.yaml"
     shell:
         "unzip {input} -d data/2019-07-26"

@@ -1,6 +1,6 @@
 channels:
-  - bioconda
+  - anaconda
   - conda-forge
 dependencies:
-  - bedtools
-  - gawk
+  - curl
+  - unzip

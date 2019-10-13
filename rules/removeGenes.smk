@@ -13,7 +13,8 @@ rule slopRefSeq:
     shell:
          "slopBed -i {input.refSeq} \
          -g {input.chromLen} \
-         -l 1000 -r 10000 > {output}"
+         -l 1000 -r 10000 | sortBed -i -\
+         > {output}"
 
 rule fixBEDcoordinates:
     input:
@@ -23,11 +24,12 @@ rule fixBEDcoordinates:
     log:
         "logs/{genome}/RemoveGenes.log"
     conda:
-        "../envs/bedops.yaml"
+        "../envs/bedtools.yaml"
     shell:
-         "awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
-         else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
-         {input} | sort-bed - > {output} 2> {log}"
+        # FIXME
+        """awk '{{ if ($2 > $3) {{ t = $2; $2 = $3; $3 = t; }} \
+        else if ($2 == $3) {{ $3 += 1; }} print $0; }}' OFS='\\t' \
+        {input} | sortBed -i - > {output} 2> {log}"""
 
 rule removeGenes:
     input:
