@@ -67,11 +67,6 @@ rule all:
 
 include: "rules/data.smk"
 
-###############
-# Reproducing #
-###############
-include: "rules/GM18/liftOver.smk"
-
 ###################
 # eRNA Prediction #
 ###################
@@ -80,6 +75,7 @@ include: "rules/bowtie2.smk"
 include: "rules/homer.smk"
 include: "rules/removeGenes.smk"
 include: "rules/keepHistones.smk"
+include: "rules/liftOver.smk"
 include: "rules/test_eRNA_prediction.smk"
 
 ###################
