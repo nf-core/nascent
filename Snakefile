@@ -70,8 +70,6 @@ include: "rules/data.smk"
 ###############
 # Reproducing #
 ###############
-include: "rules/GM18/bowtie2.smk"
-include: "rules/GM18/homer.smk"
 include: "rules/GM18/liftOver.smk"
 
 ###################
