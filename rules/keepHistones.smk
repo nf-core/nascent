@@ -23,7 +23,11 @@ rule convert_Histones_to_Bed:
     shell:
         "bamToBed -i {input} | sortBed -i - > {output}"
 
-rule histonesIntersect:
+rule eRNAs:
+    """
+    Takes in units with genes removed
+    Keeps anything that intersects with H3K27ac or H3K4me1
+    """
     input:
         no_genes="results/2018-11-09/{genome}/{cell}_meta_transcripts_noGenes.bed",
         H3K27ac="data/2018-11-13/{genome}/{cell}_H3K27ac.bed",
