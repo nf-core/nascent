@@ -84,10 +84,10 @@ rule genes_ripgrep_exon:
     output:
         "results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
     conda:
-        "../envs/ripgrep.yaml"
+        "../envs/gawk.yaml"
     threads: 2
     shell:
-        """rg -w exon {input.rg} > {output}"""
+        """awk '$3 ~ /^exon$/ ' {input} > {output}"""
 
 rule genes_NOIseq:
     input:
