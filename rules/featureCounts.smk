@@ -55,15 +55,15 @@ rule genes_feature_counts:
     threads:
         config["feature_counts"]["threads"]
     log:
-        "logs/GM19/feature_counts/{sample}.txt"
+        "logs/{genome}/feature_counts/{sample}.txt"
     wrapper:
         "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 rule GM19_genes_merge_counts:
     input:
-        expand("results/2019-06-03/GM/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
+        expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
-        "results/2019-06-03/GM/counts/merged.txt"
+        "results/2019-06-03/hg19/GM/counts/merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -79,9 +79,9 @@ rule GM19_genes_merge_counts:
 
 rule IMR_genes_merge_counts:
     input:
-        expand("results/2019-06-03/IMR/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
+        expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
     output:
-        "results/2019-06-03/IMR/counts/merged.txt"
+        "results/2019-06-03/hg19/IMR/counts/merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -107,7 +107,7 @@ rule genes_normalize_counts:
 
 rule GM19_eRNA_feature_counts:
     input:
-        bam="results/2018-10-04/{sample}.bam",
+        bam="results/2018-10-04/{genome}/{sample}.bam",
         annotation="results/2019-09-27/eRNA_viral.saf",
     output:
         counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
