@@ -47,9 +47,9 @@ rule all:
         liftoverPeng="results/2018-11-10/test/hg19_eRNA_overlaps.bed",
         hg19vshg18=expand("results/2018-11-10/test/{cell}_hg19_vs_hg18_eRNA.bed", cell=CELLS,),
         predictionVsLiftOver=expand("results/2018-11-10/test/{genome}/{cell}_eRNA_vs_liftOver.bed", genome=config["genomes"], cell=CELLS,),
-        IMRvsGM="results/2018-11-10/test/IMR_eRNA_vs_GM19.bed",
         # Figures
         VennvsPeng=expand("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", genome=config["genomes"], cell=CELLS,),
+        vennCrossCell="results/2018-10-12/hg19/eRNA_cross_cell.svg",
         # Differential Analysis
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",

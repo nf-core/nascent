@@ -54,14 +54,14 @@ rule test_eRNA_vs_liftOver:
         "bedtools intersect -a {input.eRNA} -b {input.liftOver} \
         -sorted -u > {output} 2> {log}"
 
-rule test_IMR_vs_GM19:
+rule test_IMR_vs_GM:
     input:
-        IMR="results/2018-12-02/hg19/IMR_eRNA.bed",
-        GM19="results/2018-12-02/hg19/GM_eRNA.bed",
+        IMR="results/2018-12-02/{genome}/IMR_eRNA.bed",
+        GM19="results/2018-12-02/{genome}/GM_eRNA.bed",
     output:
-        report("results/2018-11-10/test/IMR_eRNA_vs_GM19.bed", category="eRNA Prediction")
+        report("results/2018-11-10/test/{genome}/IMR_eRNA_vs_GM_{genome}.bed", category="eRNA Prediction")
     log:
-        "logs/hg19/test_IMR_vs_GM.log"
+        "logs/{genome}/test_IMR_vs_GM.log"
     conda:
         "../envs/bedtools.yaml"
     shell:
@@ -81,6 +81,23 @@ rule fig_predicted_eRNA_peng:
         "../envs/venn.yaml"
     params:
         title="Predicted eRNAs vs Peng's GM19",
+    threads: 4
+    script:
+        "../scripts/venn-smk.py"
+
+rule fig_predicted_eRNA_cross_cell:
+    input:
+        IMR="results/2018-12-02/{genome}/IMR_eRNA.bed",
+        GM19="results/2018-12-02/{genome}/GM_eRNA.bed",
+        overlap="results/2018-11-10/test/{genome}/IMR_eRNA_vs_GM_{genome}.bed",
+    output:
+        report("results/2018-10-12/{genome}/eRNA_cross_cell.svg", category="Figures")
+    log:
+        "logs/{genome}/figure/eRNA_cross_cell.log"
+    conda:
+        "../envs/venn.yaml"
+    params:
+        title="IMR vs GM",
     threads: 4
     script:
         "../scripts/venn-smk.py"
