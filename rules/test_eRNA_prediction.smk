@@ -74,7 +74,7 @@ rule fig_predicted_eRNA_peng:
         peng="data/2018-01-25/eRNA_GM_hg19.bed",
         overlap="results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed",
     output:
-        report("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", category="eRNA Prediction")
+        report("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", category="Figures")
     log:
         "logs/{genome}/figure/{cell}_eRNAs_vs_peng.log"
     conda:

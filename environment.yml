@@ -7,3 +7,6 @@ dependencies:
   - pandas
   - jinja2
   - pygments
+  - git-lfs
+  - networkx
+  - pygraphviz
