@@ -67,16 +67,16 @@ rule all:
 
 include: "rules/data.smk"
 
-###################
-# eRNA Prediction #
-###################
-include: "rules/fastqc.smk"
-include: "rules/bowtie2.smk"
-include: "rules/homer.smk"
-include: "rules/removeGenes.smk"
-include: "rules/keepHistones.smk"
-include: "rules/liftOver.smk"
-include: "rules/test_eRNA_prediction.smk"
+#######################################
+# Enhancer Transcripts Identification #
+#######################################
+include: "rules/enhancer-transcripts/fastqc.smk"
+include: "rules/enhancer-transcripts/bowtie2.smk"
+include: "rules/enhancer-transcripts/homer.smk"
+include: "rules/enhancer-transcripts/removeGenes.smk"
+include: "rules/enhancer-transcripts/keepHistones.smk"
+include: "rules/enhancer-transcripts/liftOver.smk"
+include: "rules/enhancer-transcripts/test_eRNA_prediction.smk"
 
 ###################
 # Inducible Pairs #

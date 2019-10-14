@@ -1,3 +1,4 @@
+# TODO Generalize these
 rule IMR18_meta_makeTagDirectory:
     input:
         expand("results/2018-10-04/hg18/{unit}.bam",unit=IMR_SAMPLES)

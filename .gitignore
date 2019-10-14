@@ -30,10 +30,7 @@ scripts/.snakemake*
 !README.md
 !rules
 !rules/*
-!rules/GM18/*
-!rules/GM19/*
-!rules/IMR/*
-!rules/figures/*
+!rules/enhancer-transcripts/*
 !wrappers
 !wrappers/*
 !wrappers/subread/*

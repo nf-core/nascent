@@ -7,7 +7,7 @@ rule test_eRNA_vs_Peng:
     log:
         "logs/{genome}/test_{cell}_eRNAs.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.peng} -b {input.edmund} \
         -sorted -u > {output} 2> {log}"
@@ -21,7 +21,7 @@ rule test_GM18_liftOver_vs_Peng:
     log:
         "logs/hg18/test_GM18_liftOver_eRNAs.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.peng} -b {input.liftOver} \
         -sorted -u > {output} 2> {log}"
@@ -35,7 +35,7 @@ rule test_hg19_vs_hg18:
     log:
         "logs/hg19/test_{cell}_eRNAs_hg19_vs_hg18.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.hg19} -b {input.hg18} \
         -sorted -u > {output} 2> {log}"
@@ -49,7 +49,7 @@ rule test_eRNA_vs_liftOver:
     log:
         "logs/{genome}/test_{cell}_eRNAs_liftover.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.eRNA} -b {input.liftOver} \
         -sorted -u > {output} 2> {log}"
@@ -63,7 +63,7 @@ rule test_IMR_vs_GM:
     log:
         "logs/{genome}/test_IMR_vs_GM.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     shell:
         "bedtools intersect -a {input.IMR} -b {input.GM19} \
         -sorted -u > {output} 2> {log}"
@@ -78,12 +78,12 @@ rule fig_predicted_eRNA_peng:
     log:
         "logs/{genome}/figure/{cell}_eRNAs_vs_peng.log"
     conda:
-        "../envs/venn.yaml"
+        "../../envs/venn.yaml"
     params:
         title="Predicted eRNAs vs Peng's GM19",
     threads: 4
     script:
-        "../scripts/venn-smk.py"
+        "../../scripts/venn-smk.py"
 
 rule fig_predicted_eRNA_cross_cell:
     input:
@@ -95,9 +95,9 @@ rule fig_predicted_eRNA_cross_cell:
     log:
         "logs/{genome}/figure/eRNA_cross_cell.log"
     conda:
-        "../envs/venn.yaml"
+        "../../envs/venn.yaml"
     params:
         title="IMR vs GM",
     threads: 4
     script:
-        "../scripts/venn-smk.py"
+        "../../scripts/venn-smk.py"
