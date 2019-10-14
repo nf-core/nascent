@@ -72,7 +72,7 @@ rule homer_meta_pos2bed:
     output:
         "results/2018-11-07/{genome}/{cell}_meta_transcripts.bed"
     conda:
-        "../envs/homer.yaml"
+        "../../envs/homer.yaml"
     threads: 2
     shell:
         "pos2bed.pl {input} | sort -k1,1 -k2,2n - > {output}"
