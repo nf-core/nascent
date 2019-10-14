@@ -12,6 +12,20 @@ rule eRNA_link_genes:
     shell:
         "bedtools window -u -w {params.window} -a {input.eRNA} -b {input.dges} > {output}"
 
+rule eRNA_gene_groups:
+    input:
+        dges="results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
+        eRNA="results/2018-12-02/{genome}/{cell}_eRNA.bed",
+    output:
+        report("results/2019-08-26/{genome}/{cell}_eRNA_gene_group.bed", category="Inducible Pairs")
+    conda:
+        "../envs/bedtools.yaml"
+    params:
+        window="200000"
+    threads: 2
+    shell:
+        "bedtools window -w {params.window} -a {input.dges}  -b {input.eRNA} > {output}"
+
 rule eRNA_link_merge:
     input:
         GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
