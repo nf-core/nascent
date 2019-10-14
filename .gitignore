@@ -37,6 +37,9 @@ scripts/.snakemake*
 !wrappers/subread/feature_counts/*
 !schemas
 !schemas/*
+!.github
+!.github/*
+!.github/workflows/*
 !.gitignore
 !.gitattributes
 !.editorconfig
