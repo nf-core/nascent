@@ -31,7 +31,7 @@ rule eRNA_limma:
 
 rule genes_tpm:
     input:
-        "results/2019-06-03/{cell}/counts/merged.txt"
+        "results/2019-06-03/hg19/{cell}/counts/merged.txt"
     output:
         "results/2019-06-26/dge/tpm/{cell}_tpm.txt",
     params:
