@@ -42,13 +42,13 @@ def feature_counts_extra(wildcards):
     return extra
 
 
-rule GM19_genes_feature_counts:
+rule genes_feature_counts:
     input:
         bam="results/2018-10-04/{genome}/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
-        counts="results/2019-06-03/GM/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/GM/qc/feature_counts/{sample}.txt"
+        counts="results/2019-06-03/{genome}/counts/per_sample/{sample}.txt",
+        summary="results/2019-06-03/{genome}/qc/feature_counts/{sample}.txt"
     params:
         annotation=config["feature_counts"]["annotation"],
         extra='' #feature_counts_extra
@@ -58,7 +58,6 @@ rule GM19_genes_feature_counts:
         "logs/GM19/feature_counts/{sample}.txt"
     wrapper:
         "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
-
 
 rule GM19_genes_merge_counts:
     input:
@@ -78,25 +77,6 @@ rule GM19_genes_merge_counts:
 
         merged.to_csv(output[0], sep="\t", index=True)
 
-
-rule IMR_genes_feature_counts:
-    input:
-        bam="results/2018-10-04/{sample}.bam",
-        # bai="bam/final/{sample}.bam.bai",
-    output:
-        counts="results/2019-06-03/IMR/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/IMR/qc/feature_counts/{sample}.txt"
-    params:
-        annotation=config["feature_counts"]["annotation"],
-        extra='' #feature_counts_extra
-    threads:
-        config["feature_counts"]["threads"]
-    log:
-        "logs/IMR/feature_counts/{sample}.txt"
-    wrapper:
-        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
-
-
 rule IMR_genes_merge_counts:
     input:
         expand("results/2019-06-03/IMR/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
@@ -114,7 +94,6 @@ rule IMR_genes_merge_counts:
             columns=lambda c: path.splitext(path.basename(c))[0])
 
         merged.to_csv(output[0], sep="\t", index=True)
-
 
 rule genes_normalize_counts:
     input:
