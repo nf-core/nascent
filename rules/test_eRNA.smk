@@ -22,10 +22,10 @@ rule test_homer_check_L2:
     chr9 21096515 21098279
     """
     input:
-        homer="results/2018-11-07/{cell}_meta_transcripts.bed",
+        homer="results/2018-11-07/{genome}/{cell}_meta_transcripts.bed",
         l2="data/2019-10-01/L2.bed",
     output:
-        "results/2019-10-01/{cell}_genes_L2.bed",
+        "results/2019-10-01/{genome}/{cell}_genes_L2.bed",
     conda:
         "../envs/bedtools.yaml"
     log:
@@ -37,11 +37,11 @@ rule test_homer_check_L2:
 rule test_report_L2:
     input:
         expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
-        expand("results/2019-10-01/{cell}_genes_L2.bed", cell=["GM","IMR"]),
+        expand("results/2019-10-01/hg19/{cell}_genes_L2.bed", cell=["GM","IMR"]),
     output:
         report("results/2019-10-01/L2.tsv", caption="../report/L2.rst", category="Inducible Pairs")
     log:
-        "logs/hg19/{cell}/L2.log"
+        "logs/hg19/test/L2.log"
     threads: 4
     shell:
         "cat {input} > {output}"
