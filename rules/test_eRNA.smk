@@ -29,7 +29,7 @@ rule test_homer_check_L2:
     conda:
         "../envs/bedtools.yaml"
     log:
-        "logs/genes/{cell}_check_L2.log"
+        "logs/{genome}/genes/{cell}_check_L2.log"
     threads: 2
     shell:
         "bedtools closest -a {input.l2} -b {input.homer} > {output}"
