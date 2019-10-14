@@ -44,7 +44,7 @@ def feature_counts_extra(wildcards):
 
 rule GM19_genes_feature_counts:
     input:
-        bam="results/2018-10-04/{sample}.bam",
+        bam="results/2018-10-04/{genome}/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
     output:
         counts="results/2019-06-03/GM/counts/per_sample/{sample}.txt",
