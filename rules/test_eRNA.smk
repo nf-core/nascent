@@ -39,9 +39,26 @@ rule test_report_L2:
         expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
         expand("results/2019-10-01/{cell}_genes_L2.bed", cell=["GM","IMR"]),
     output:
-        report("results/2019-10-01/L2.tsv", caption="../report/L2.rst", category="eRNA")
+        report("results/2019-10-01/L2.tsv", caption="../report/L2.rst", category="Inducible Pairs")
     log:
-        "logs/report/L2.log"
+        "logs/hg19/{cell}/L2.log"
     threads: 4
     shell:
         "cat {input} > {output}"
+
+rule fig_linked_eRNA_cross_cell:
+    input:
+        GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
+        IMR="results/2019-08-26/hg19/IMR_link_eRNA.bed",
+        overlap="results/2019-08-26/eRNA_overlap_viral.bed",
+    output:
+        report("results/2018-10-01/{genome}/eRNA_cross_cell_viral.svg", category="Figures")
+    log:
+        "logs/{genome}/figure/eRNA_cross_cell.log"
+    conda:
+        "../envs/venn.yaml"
+    params:
+        title="IMR vs GM Linked eRNAs",
+    threads: 4
+    script:
+        "../scripts/venn-smk.py"

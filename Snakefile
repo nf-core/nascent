@@ -59,11 +59,8 @@ rule all:
         genes_foldchange=expand("results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv", cell=["GM", "IMR"]),
         linkedeRNAs=expand("results/2019-08-26/hg19/{cell}_link_eRNA.bed", cell = ["GM", "IMR"]),
         merge="results/2019-08-26/eRNA_viral.bed",
-        eRNAcounts=expand("results/2019-06-03/eRNA/counts/{cell}_merged.txt", cell = ["GM", "IMR"]),
-        eRNA_foldchange=expand("results/2019-09-27/de/foldchange/{cell}_foldchange.tsv", cell=["GM", "IMR"]),
-        l2=expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
-        genesl2=expand("results/2019-10-01/{cell}_genes_L2.bed", cell=["GM","IMR"]),
         l2report="results/2019-10-01/L2.tsv",
+        vennCross="results/2018-10-01/hg19/eRNA_cross_cell_viral.svg",
 
 include: "rules/data.smk"
 
