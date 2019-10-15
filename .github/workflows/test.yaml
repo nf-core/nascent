@@ -1,21 +1,19 @@
-name: CI
+name: Tests
 
 on:
-  push:
-    branches:
-      - master
-      - develop
+  - push
+  - pull_request
 
 jobs:
-  build:
+  run-workflow:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@2.0.0
       - name: snakemake
-        uses: snakemake/snakemake-github-action@v1.2
+        uses: snakemake/snakemake-github-action@v1.2.0
         with:
-          directory: ".test"
+          directory: .test
           snakefile: workflow/Snakefile
-          args: "--use-conda --use-singularity"
+          args: "--use-conda"
