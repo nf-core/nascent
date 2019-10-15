@@ -12,7 +12,7 @@ jobs:
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@2.0.0
       - name: Copy data
-        run: "cp -r data .test/data"
+        run: "cp -r /github/workspace/data /github/workspace/.test/data"
       - name: snakemake
         uses: snakemake/snakemake-github-action@v1.2.0
         with:
