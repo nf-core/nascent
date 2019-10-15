@@ -11,8 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: snakemake/snakemake-github-action@v1.2
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@2.0.0
+      - name: snakemake
+        uses: snakemake/snakemake-github-action@v1.2
         with:
           directory: ".test"
-          snakefile: workflow/Snakefile
+          snakefile: Snakefile
           args: "--use-conda --use-singularity"
