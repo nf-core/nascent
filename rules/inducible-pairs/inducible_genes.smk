@@ -87,27 +87,3 @@ rule genes_ripgrep_exon:
     threads: 2
     shell:
         """awk '$3 ~ /^exon$/ ' {input} > {output}"""
-
-rule genes_NOIseq:
-    input:
-        "results/2019-06-03/eRNA/counts/GM19_merged.txt"
-    output:
-        directory("results/2019-06-13/DEGS/GM19"),
-    # singularity:
-    #     "docker://emiller88/noiseq:0.0.2"
-    conda:
-        "../../envs/NOISeq.yaml"
-    threads: 4
-    script:
-        "../../scripts/NOISeq_biomart.R"
-
-rule groHMM:
-    input:
-        "results/2019-06-03/eRNA/counts/{sample}_merged.txt"
-    output:
-        "results/2019-06-26/dge/grohmm/{sample}_grohmm.txt"
-    conda:
-        "../../envs/grohmm.yaml"
-    threads: 4
-    script:
-        "../../scripts/grohmm.R"
