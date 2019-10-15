@@ -57,7 +57,6 @@ rule genes_foldchange:
 rule genes_de_geneid:
     input:
         genes="results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
-        refseq="data/2018-11-09/hg19/genes.gtf",
     output:
         "results/2019-06-26/dge/rg/{cell}_de_geneid.txt",
     conda:
