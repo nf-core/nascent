@@ -63,7 +63,7 @@ rule GM19_genes_merge_counts:
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
-        "results/2019-06-03/hg19/GM/counts/merged.txt"
+        "results/2019-06-03/hg19/counts/GM_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -81,7 +81,7 @@ rule IMR_genes_merge_counts:
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
     output:
-        "results/2019-06-03/hg19/IMR/counts/merged.txt"
+        "results/2019-06-03/hg19/counts/IMR_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -97,9 +97,9 @@ rule IMR_genes_merge_counts:
 
 rule genes_normalize_counts:
     input:
-        "results/2019-06-03/{cell}/counts/merged.txt"
+        "results/2019-06-03/hg19/counts/{cell}_merged.txt"
     output:
-        "results/2019-06-03/{cell}/counts/merged.log2.txt"
+        "results/2019-06-03/hg19/counts/{cell}_merged.log2.txt"
     run:
         counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
         norm_counts = np.log2(normalize_counts(counts) + 1)
