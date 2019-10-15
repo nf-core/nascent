@@ -64,7 +64,7 @@ rule hg19_meta_findPeaks:
         "docker://emiller88/homer:latest"
     threads: 2
     shell:
-        "findPeaks {input.tagdir} -style groseq -o {output} -uniqmap {input.uniqmap} -bodyFold 1.5"
+        "findPeaks {input.tagdir} -style groseq -o {output} -uniqmap {input.uniqmap}"
 
 rule homer_meta_pos2bed:
     input:
