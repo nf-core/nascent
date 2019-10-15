@@ -7,13 +7,13 @@ rule AWS_iGenomes:
 
 # Datasets TODO
 
-# rule GM_download:
-#     output:
-#         expand("data/2018-06-23/{unit}.fastq",unit=GM_SAMPLES),
+rule GM_download:
+    output:
+        expand("data/2018-06-23/{unit}.fastq",unit=GM_SAMPLES),
 
-# rule IMR_download:
-#     output:
-#         expand("data/2018-06-23/{unit}.fastq",unit=IMR_SAMPLES),
+rule IMR_download:
+    output:
+        expand("data/2018-06-23/{unit}.fastq",unit=IMR_SAMPLES),
 
 
 #############################

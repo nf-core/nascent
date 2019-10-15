@@ -1,3 +1,6 @@
 *.smk linguist-language=Python
 Snakefile linguist-language=Python
+.test/* linguist-vendored=false
+.test/report.html linguist-generated=true
+
 *.bed filter=lfs diff=lfs merge=lfs -text
