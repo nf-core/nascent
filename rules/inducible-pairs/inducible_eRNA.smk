@@ -1,8 +1,8 @@
 rule eRNA_viral_tpm:
     input:
-        "results/2019-06-03/eRNA/counts/{cell}_merged.txt"
+        "results/2019-06-03/hg19/counts/{cell}_eRNA_merged.txt"
     output:
-        "results/2019-09-27/de/tpm/{cell}_tpm.txt",
+        "results/2019-09-27/de/tpm/{cell}_eRNA_tpm.txt",
     params:
     conda:
         "../envs/matplotlib.yaml"
@@ -12,9 +12,9 @@ rule eRNA_viral_tpm:
 
 rule eRNA_viral_foldchange:
     input:
-        "results/2019-09-27/de/tpm/{cell}_tpm.txt",
+        "results/2019-09-27/de/tpm/{cell}_eRNA_tpm.txt",
     output:
-        "results/2019-09-27/de/foldchange/{cell}_foldchange.tsv",
+        "results/2019-09-27/de/foldchange/{cell}_eRNA_foldchange.tsv",
     params:
         # cutoff=0.5
     conda:
@@ -25,7 +25,7 @@ rule eRNA_viral_foldchange:
 
 rule eRNA_Inducible_id:
     input:
-        inducible="results/2019-09-27/de/foldchange/{cell}_foldchange.tsv",
+        inducible="results/2019-09-27/de/foldchange/{cell}_eRNA_foldchange.tsv",
     output:
         "results/2019-08-26/dge/rg/{cell}_de_eRNA_id.txt",
     conda:
@@ -44,4 +44,4 @@ rule eRNA_ripgrep_id:
         "../envs/ripgrep.yaml"
     threads: 4
     shell:
-        """rg --dfa-size-limit 2G -w -f {input.geneid} {input.refseq} > {output}"""
+        """rg --dfa-size-limit 2G -w -f {input.inducibleId} {input.linkedeRNAs} > {output}"""

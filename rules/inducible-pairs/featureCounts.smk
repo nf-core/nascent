@@ -105,13 +105,13 @@ rule genes_normalize_counts:
         norm_counts = np.log2(normalize_counts(counts) + 1)
         norm_counts.to_csv(output[0], sep="\t", index=True)
 
-rule GM19_eRNA_feature_counts:
+rule eRNA_feature_counts:
     input:
         bam="results/2018-10-04/hg19/{sample}.bam",
         annotation="results/2019-09-27/eRNA_viral.saf",
     output:
-        counts="results/2019-06-03/hg19/eRNA/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/hg19/eRNA/qc/feature_counts/{sample}.txt"
+        counts="results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt",
+        summary="results/2019-06-03/hg19/qc/feature_counts/{sample}_eRNA.txt"
     params:
         annotation="results/2019-09-27/eRNA_viral.saf",
         extra='-F "SAF"' #feature_counts_extra
@@ -122,12 +122,11 @@ rule GM19_eRNA_feature_counts:
     wrapper:
         "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
-
 rule GM19_eRNA_merge_counts:
     input:
-        expand("results/2019-06-03/eRNA/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
+        expand("results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt", sample=GM_SAMPLES)
     output:
-        "results/2019-06-03/eRNA/counts/GM_merged.txt"
+        "results/2019-06-03/hg19/counts/GM_eRNA_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -141,29 +140,11 @@ rule GM19_eRNA_merge_counts:
 
         merged.to_csv(output[0], sep="\t", index=True)
 
-rule IMR_eRNA_feature_counts:
-    input:
-        bam="results/2018-10-04/IMR/{sample}.bam",
-        annotation="results/2019-09-27/eRNA_viral.saf",
-    output:
-        counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
-    params:
-        annotation="results/2019-09-27/eRNA_viral.saf",
-        extra='-F "SAF"' #feature_counts_extra
-    threads:
-        config["feature_counts"]["threads"]
-    log:
-        "logs/{sample}/feature_counts/{sample}.txt"
-    wrapper:
-        "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
-
-
 rule IMR_eRNA_merge_counts:
     input:
-        expand("results/2019-06-03/eRNA/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
+        expand("results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt", sample=IMR_SAMPLES)
     output:
-        "results/2019-06-03/eRNA/counts/IMR_merged.txt"
+        "results/2019-06-03/hg19/counts/IMR_eRNA_merged.txt"
     run:
         # Merge count files.
         frames = (pd.read_csv(fp, sep="\t", skiprows=1,
@@ -179,9 +160,9 @@ rule IMR_eRNA_merge_counts:
 
 rule eRNA_normalize_counts:
     input:
-        "results/2019-06-03/eRNA/counts/{cell}_merged.txt"
+        "results/2019-06-03/hg19/counts/{cell}_eRNA_merged.txt"
     output:
-        "results/2019-06-03/eRNA/counts/{cell}_merged.log2.txt"
+        "results/2019-06-03/hg19/counts/{cell}_eRNA_merged.log2.txt"
     run:
         counts = pd.read_csv(input[0], sep="\t", index_col=list(range(6)))
         norm_counts = np.log2(normalize_counts(counts) + 1)
