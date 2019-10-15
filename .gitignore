@@ -31,6 +31,7 @@ scripts/.snakemake*
 !rules
 !rules/*
 !rules/enhancer-transcripts/*
+!rules/inducible-pairs/*
 !wrappers
 !wrappers/*
 !wrappers/subread/*

@@ -15,9 +15,9 @@ rule eRNA_link_genes:
 rule eRNA_gene_groups:
     input:
         dges="results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
-        eRNA="results/2019-06-26/dge/rg/{cell}_de_ripgrep.bed",
+        eRNA="results/2019-06-26/dge/rg/{genome}/{cell}_de_ripgrep.bed",
     output:
-        report("results/2019-08-26/{cell}_eRNA_gene_group.bed", category="Inducible Pairs")
+        report("results/2019-08-26/{genome}/{cell}_eRNA_gene_group.bed", category="Inducible Pairs")
     conda:
         "../envs/bedtools.yaml"
     params:

@@ -107,11 +107,11 @@ rule genes_normalize_counts:
 
 rule GM19_eRNA_feature_counts:
     input:
-        bam="results/2018-10-04/{genome}/{sample}.bam",
+        bam="results/2018-10-04/hg19/{sample}.bam",
         annotation="results/2019-09-27/eRNA_viral.saf",
     output:
-        counts="results/2019-06-03/eRNA/counts/per_sample/{sample}.txt",
-        summary="results/2019-06-03/eRNA/qc/feature_counts/{sample}.txt"
+        counts="results/2019-06-03/hg19/eRNA/counts/per_sample/{sample}.txt",
+        summary="results/2019-06-03/hg19/eRNA/qc/feature_counts/{sample}.txt"
     params:
         annotation="results/2019-09-27/eRNA_viral.saf",
         extra='-F "SAF"' #feature_counts_extra

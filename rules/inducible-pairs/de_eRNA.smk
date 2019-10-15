@@ -39,7 +39,7 @@ rule eRNA_ripgrep_id:
         inducibleId="results/2019-08-26/dge/rg/{cell}_de_eRNA_id.txt",
         linkedeRNAs="results/2019-08-26/{genome}/{cell}_link_eRNA.bed",
     output:
-        "results/2019-06-26/dge/rg/{cell}_de_ripgrep.bed",
+        "results/2019-06-26/dge/rg/{genome}/{cell}_de_ripgrep.bed",
     conda:
         "../envs/ripgrep.yaml"
     threads: 4

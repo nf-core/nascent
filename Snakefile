@@ -79,9 +79,9 @@ include: "rules/enhancer-transcripts/test_eRNA_prediction.smk"
 ###################
 # Inducible Pairs #
 ###################
-include: "rules/eRNAcleaning.smk"
-include: "rules/dge.smk"
-include: "rules/linkedRNAs.smk"
-include: "rules/featureCounts.smk"
-include: "rules/de_eRNA.smk"
-include: "rules/test_eRNA.smk"
+include: "rules/inducible-pairs/eRNAcleaning.smk"
+include: "rules/inducible-pairs/dge.smk"
+include: "rules/inducible-pairs/linkedRNAs.smk"
+include: "rules/inducible-pairs/featureCounts.smk"
+include: "rules/inducible-pairs/de_eRNA.smk"
+include: "rules/inducible-pairs/test_eRNA.smk"
