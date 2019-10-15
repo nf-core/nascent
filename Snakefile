@@ -61,7 +61,7 @@ rule all:
         merge="results/2019-08-26/eRNA_viral.bed",
         l2report="results/2019-10-01/L2.tsv",
         vennCross="results/2018-10-01/hg19/eRNA_cross_cell_viral.svg",
-        groups=expand("results/2019-08-26/{cell}_eRNA_gene_group.bed", cell = ["GM", "IMR"]),
+        groups=expand("results/2019-08-26/hg19/{cell}_eRNA_gene_group.bed", cell = ["GM", "IMR"]),
 
 include: "rules/data.smk"
 

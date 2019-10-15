@@ -5,10 +5,10 @@ rule eRNA_viral_tpm:
         "results/2019-09-27/de/tpm/{cell}_eRNA_tpm.txt",
     params:
     conda:
-        "../envs/matplotlib.yaml"
+        "../../envs/matplotlib.yaml"
     threads: 4
     script:
-        "../scripts/tpm.py"
+        "../../scripts/tpm.py"
 
 rule eRNA_viral_foldchange:
     input:
@@ -18,10 +18,10 @@ rule eRNA_viral_foldchange:
     params:
         # cutoff=0.5
     conda:
-        "../envs/matplotlib.yaml"
+        "../../envs/matplotlib.yaml"
     threads: 4
     script:
-        "../scripts/foldchange.py"
+        "../../scripts/foldchange.py"
 
 rule eRNA_Inducible_id:
     input:
@@ -29,7 +29,7 @@ rule eRNA_Inducible_id:
     output:
         "results/2019-08-26/dge/rg/{cell}_de_eRNA_id.txt",
     conda:
-        "../envs/gawk.yaml"
+        "../../envs/gawk.yaml"
     threads: 1
     shell:
         """awk -F \"\\t\" '{{ if (NR!=1){{ print $1 }}}}' {input} > {output}"""
@@ -41,7 +41,7 @@ rule eRNA_ripgrep_id:
     output:
         "results/2019-06-26/dge/rg/{genome}/{cell}_de_ripgrep.bed",
     conda:
-        "../envs/ripgrep.yaml"
+        "../../envs/ripgrep.yaml"
     threads: 4
     shell:
         """rg --dfa-size-limit 2G -w -f {input.inducibleId} {input.linkedeRNAs} > {output}"""

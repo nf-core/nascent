@@ -10,10 +10,10 @@ rule genes_limma:
         # "results/2019-06-26/genes/limma/{cell}_results.txt",
     params:
     conda:
-        "../envs/edgeR.yaml"
+        "../../envs/edgeR.yaml"
     threads: 4
     script:
-        "../scripts/dge.R"
+        "../../scripts/dge.R"
 
 rule eRNA_limma:
     input:
@@ -24,7 +24,7 @@ rule eRNA_limma:
         "results/2019-06-26/eRNA/limma/{cell}_fig3_limma.png",
     params:
     conda:
-        "../envs/edgeR.yaml"
+        "../../envs/edgeR.yaml"
     threads: 4
     script:
-        "../scripts/dge.R"
+        "../../scripts/dge.R"

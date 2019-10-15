@@ -5,10 +5,10 @@ rule genes_tpm:
         "results/2019-06-26/dge/tpm/{cell}_tpm.txt",
     params:
     conda:
-        "../envs/matplotlib.yaml"
+        "../../envs/matplotlib.yaml"
     threads: 4
     script:
-        "../scripts/tpm.py"
+        "../../scripts/tpm.py"
 
 rule genes_foldchange:
     input:
@@ -18,10 +18,10 @@ rule genes_foldchange:
     params:
         # cutoff=0.5
     conda:
-        "../envs/matplotlib.yaml"
+        "../../envs/matplotlib.yaml"
     threads: 4
     script:
-        "../scripts/foldchange.py"
+        "../../scripts/foldchange.py"
 
 rule genes_de_geneid:
     input:
@@ -29,7 +29,7 @@ rule genes_de_geneid:
     output:
         "results/2019-06-26/dge/rg/{cell}_de_geneid.txt",
     conda:
-        "../envs/gawk.yaml"
+        "../../envs/gawk.yaml"
     threads: 1
     shell:
         """awk -F \"\\t\" '{{ if (NR!=1){{ print $1 }}}}' {input.genes} > {output}"""
@@ -41,7 +41,7 @@ rule genes_ripgrep_geneid:
     output:
         "results/2019-06-26/dge/rg/{cell}_de_ripgrep.gtf",
     conda:
-        "../envs/ripgrep.yaml"
+        "../../envs/ripgrep.yaml"
     threads: 4
     shell:
         """rg --dfa-size-limit 2G -w -f {input.geneid} {input.refseq} > {output}"""
@@ -52,7 +52,7 @@ rule genes_ripgrep_exon:
     output:
         "results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
     conda:
-        "../envs/gawk.yaml"
+        "../../envs/gawk.yaml"
     threads: 2
     shell:
         """awk '$3 ~ /^exon$/ ' {input} > {output}"""

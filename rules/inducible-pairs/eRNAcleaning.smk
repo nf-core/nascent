@@ -5,11 +5,11 @@ rule eRNA_saf_cell:
     output:
         "results/2019-06-07/{genome}/{cell}_eRNA.saf",
     conda:
-        "../envs/pandas.yaml"
+        "../../envs/pandas.yaml"
     log:
         "logs/{genome}/{cell}/eRNA_saf.log"
     script:
-        "../scripts/bed2saf.py"
+        "../../scripts/bed2saf.py"
 
 rule eRNA_saf_viral:
     input:
@@ -17,8 +17,8 @@ rule eRNA_saf_viral:
     output:
         "results/2019-09-27/eRNA_viral.saf",
     conda:
-        "../envs/pandas.yaml"
+        "../../envs/pandas.yaml"
     log:
         "logs/eRNA_saf_viral.log"
     script:
-        "../scripts/bed2saf.py"
+        "../../scripts/bed2saf.py"

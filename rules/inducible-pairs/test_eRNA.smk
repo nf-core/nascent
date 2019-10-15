@@ -9,7 +9,7 @@ rule test_eRNA_check_L2:
     output:
         "results/2019-08-26/{cell}_L2.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     log:
         "logs/eRNA/{cell}_check_L2.log"
     threads: 2
@@ -27,7 +27,7 @@ rule test_homer_check_L2:
     output:
         "results/2019-10-01/{genome}/{cell}_genes_L2.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     log:
         "logs/{genome}/genes/{cell}_check_L2.log"
     threads: 2
@@ -39,7 +39,7 @@ rule test_report_L2:
         expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
         expand("results/2019-10-01/hg19/{cell}_genes_L2.bed", cell=["GM","IMR"]),
     output:
-        report("results/2019-10-01/L2.tsv", caption="../report/L2.rst", category="Inducible Pairs")
+        report("results/2019-10-01/L2.tsv", caption="../../report/L2.rst", category="Inducible Pairs")
     log:
         "logs/hg19/test/L2.log"
     threads: 4
@@ -56,9 +56,9 @@ rule fig_linked_eRNA_cross_cell:
     log:
         "logs/{genome}/figure/eRNA_cross_cell.log"
     conda:
-        "../envs/venn.yaml"
+        "../../envs/venn.yaml"
     params:
         title="IMR vs GM Linked eRNAs",
     threads: 4
     script:
-        "../scripts/venn-smk.py"
+        "../../scripts/venn-smk.py"

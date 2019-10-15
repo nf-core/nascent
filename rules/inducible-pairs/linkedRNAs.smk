@@ -5,7 +5,7 @@ rule eRNA_link_genes:
     output:
         "results/2019-08-26/{genome}/{cell}_link_eRNA.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     params:
         window="200000"
     threads: 2
@@ -19,7 +19,7 @@ rule eRNA_gene_groups:
     output:
         report("results/2019-08-26/{genome}/{cell}_eRNA_gene_group.bed", category="Inducible Pairs")
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     params:
         window="200000"
     threads: 2
@@ -33,7 +33,7 @@ rule eRNA_link_merge:
     output:
         "results/2019-08-26/eRNA_merged.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     params:
         # dis="-d 2000",
         col="-c 4,5,6 -o distinct",
@@ -48,7 +48,7 @@ rule eRNA_link_overlap:
     output:
         "results/2019-08-26/eRNA_overlap_viral.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     params:
     threads: 3
     shell:
@@ -61,7 +61,7 @@ rule eRNA_link_area:
     output:
         "results/2019-08-26/eRNA_viral.bed",
     conda:
-        "../envs/bedtools.yaml"
+        "../../envs/bedtools.yaml"
     params:
     threads: 3
     shell:
