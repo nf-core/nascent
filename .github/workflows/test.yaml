@@ -17,5 +17,5 @@ jobs:
         uses: snakemake/snakemake-github-action@v1.2
         with:
           directory: ".test"
-          snakefile: Snakefile
+          snakefile: workflow/Snakefile
           args: "--use-conda --use-singularity"

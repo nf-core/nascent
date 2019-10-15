@@ -19,5 +19,9 @@ workflow/scripts/.snakemake*
 !.gitignore
 !.editorconfig
 !.gitattributes
+!.gitmodules
 !.test
 !.test/data
+!.test/config
+!.test/config/config.yaml
+!.test/config/samples.tsv
