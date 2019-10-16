@@ -29,12 +29,10 @@ rule eRNA_gene_groups:
     conda:
         "../../envs/bedtools.yaml"
     params:
-        window="200000",
-        col="-c 4,5,6 -o distinct",
+        window="200000"
     threads: 2
     shell:
-        "bedtools window -w {params.window} -a {input.dges}  -b {input.eRNA} \
-        | bedtools merge -i - -s {params.col} > {output}"
+        "bedtools window -w {params.window} -a {input.dges}  -b {input.eRNA} > {output}"
 
 rule eRNA_link_merge:
     """
