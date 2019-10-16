@@ -41,6 +41,23 @@ rule reference_Genome:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {params.outDir}"
 
+rule star_reference_Genome:
+    output:
+        "data/2019-10-16/{unit}/SAindex",
+    params:
+        script="scripts/aws-igenomes.sh",
+        genome="Homo_sapiens",
+        source="UCSC",
+        build="{unit}",
+        typeOf="star",
+        outDir="data/2018-06-24/{unit}",
+    conda:
+        "../envs/awscli.yaml"
+    priority: 50
+    shell:
+        "{params.script} -g {params.genome} -s {params.source} "
+        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
+
 # TODO move path to config
 rule fai:
     input:
