@@ -47,7 +47,7 @@ rule genes_feature_counts:
     Runs featureCounts with refseq individually
     """
     input:
-        bam="results/2018-10-04/{genome}/{sample}.sam",
+        bam="results/2018-10-04/{genome}/{sample}/Aligned.out.sam",
         # bai="bam/final/{sample}.bam.bai",
     output:
         counts="results/2019-06-03/{genome}/counts/per_sample/{sample}.txt",
@@ -124,7 +124,7 @@ rule eRNA_feature_counts:
     Runs featureCounts on  counts, individually
     """
     input:
-        bam="results/2018-10-04/hg19/{sample}.sam",
+        bam="results/2018-10-04/hg19/{sample}/Aligned.out.sam",
         annotation="results/2019-09-27/eRNA_viral.saf",
     output:
         counts="results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt",

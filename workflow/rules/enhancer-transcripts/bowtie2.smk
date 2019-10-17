@@ -20,10 +20,10 @@ rule bowtie2:
 
 rule star_se:
     input:
-        fq1 = "data/2018-06-23/{sample}.fastq",
-        ref = "data/2019-10-16/{genome}/SAindex",
+        fq1="data/2018-06-23/{sample}.fastq",
+        ref="data/2018-06-24/{genome}/star/SAindex",
     output:
-        "results/2018-10-04/{genome}/{sample}.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
     log:
         "logs/{genome}/star/{sample}.log"
     params:
@@ -33,4 +33,4 @@ rule star_se:
         extra=""
     threads: 16
     wrapper:
-        "0.39.0/bio/star/align"
+        "0.27.1/bio/star/align"

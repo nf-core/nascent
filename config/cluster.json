@@ -3,9 +3,12 @@
         "account": "eam150030",
         "time": "00:20:00",
         "n": 1,
-        "partition": "genomics"
+        "partition": "normal"
     },
     "bowtie2": {
         "time": "00:25:00"
+    },
+    "star_se": {
+        "time": "01:00:00"
     }
 }
