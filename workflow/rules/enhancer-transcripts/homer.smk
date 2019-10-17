@@ -43,6 +43,17 @@ rule GM_meta_makeTagDirectory:
     shell:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
+rule meta_makeUCSCfile:
+    input:
+        "results/2018-11-07/{genome}/{cell}_meta_tagDir"
+    output:
+        report("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.zip", category="homer")
+    singularity:
+        "docker://emiller88/homer:latest"
+    threads: 2
+    shell:
+        "makeUCSCfile {input} -o {output} -strand separate"
+
 rule hg18_meta_findPeaks:
     input:
         "results/2018-11-07/hg18/{cell}_meta_tagDir"
