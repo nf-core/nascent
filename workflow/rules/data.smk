@@ -43,14 +43,14 @@ rule reference_Genome:
 
 rule star_reference_Genome:
     output:
-        "data/2019-10-16/{unit}/SAindex",
+        "data/2019-10-16/{unit}/star/SAindex",
     params:
         script="scripts/aws-igenomes.sh",
         genome="Homo_sapiens",
         source="UCSC",
         build="{unit}",
         typeOf="star",
-        outDir="data/2018-06-24/{unit}",
+        outDir="data/2018-06-24/{unit}/star",
     conda:
         "../envs/awscli.yaml"
     priority: 50
