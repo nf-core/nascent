@@ -8,15 +8,15 @@ genomes:
   - hg18
   - hg19
 
-missing:
-  - cell: IMR
-    unit: 9h
-  - cell: IMR
-    unit: 18h
-  - cell: IMR
-    unit: 48h
-  - cell: IMR
-    unit: 72h
+# missing:
+#   - cell: IMR
+#     unit: 9h
+#   - cell: IMR
+#     unit: 18h
+#   - cell: IMR
+#     unit: 48h
+#   - cell: IMR
+#     unit: 72h
 
 ref:
   hg18:
