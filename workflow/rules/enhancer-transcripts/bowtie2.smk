@@ -23,7 +23,7 @@ rule star_se:
         fq1="data/2018-06-23/{sample}.fastq",
         ref="data/2018-06-24/{genome}/star/SAindex",
     output:
-        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
     log:
         "logs/{genome}/star/{sample}.log"
     params:
