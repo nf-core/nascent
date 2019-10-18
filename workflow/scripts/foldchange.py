@@ -22,7 +22,7 @@ dfFold.dropna(axis=1, inplace=True)
 
 # Drop anything > 24h
 try:
-    dfFold = dfFold.drop(columns=["GM48h", "GM72h"])
+    dfFold = dfFold.drop(columns=["IMR48h", "IMR72h", "GM48h", "GM72h"])
 except KeyError:
     pass  # do nothing!
 # Drop anything that don't have a 1 fold change up or down(easy to change), might even make it a parameter in snakemake
