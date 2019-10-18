@@ -21,6 +21,7 @@ rule bowtie2:
 rule star_index:
     input:
         fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
+        gtf = "data/2018-11-09/{genome}/genes.gtf"
     output:
         directory("data/2018-10-16/{genome}/star")
     message:
@@ -37,7 +38,6 @@ rule star_index:
 rule star_se:
     input:
         fq1="data/2018-06-23/{sample}.fastq",
-        starthing="data/2018-10-16/{genome}/star",
     output:
         "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
     log:
