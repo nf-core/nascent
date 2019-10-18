@@ -57,7 +57,7 @@ include: "rules/data.smk"
 # Enhancer Transcripts Identification #
 #######################################
 include: "rules/enhancer-transcripts/fastqc.smk"
-include: "rules/enhancer-transcripts/bowtie2.smk"
+include: "rules/enhancer-transcripts/align.smk"
 include: "rules/enhancer-transcripts/homer.smk"
 include: "rules/enhancer-transcripts/removeGenes.smk"
 include: "rules/enhancer-transcripts/keepHistones.smk"
