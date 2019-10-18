@@ -50,7 +50,7 @@ rule star_reference_Genome:
         source="UCSC",
         build="{unit}",
         typeOf="star",
-        outDir="data/2018-10-16/{unit}/star",
+        outDir=lambda w: config["ref"]["{}".format(w.unit)]["starIndex"],
     conda:
         "../envs/awscli.yaml"
     priority: 50
