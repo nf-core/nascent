@@ -18,10 +18,26 @@ rule bowtie2:
     wrapper:
         "0.38.0/bio/bowtie2/align"
 
+rule star_index:
+    input:
+        fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
+    output:
+        directory("data/2018-10-16/{genome}/star")
+    message:
+        "Testing STAR index"
+    threads:
+        16
+    params:
+        extra = ""
+    log:
+        "logs/star_index_{genome}.log"
+    wrapper:
+        "0.39.0/bio/star/index"
+
 rule star_se:
     input:
         fq1="data/2018-06-23/{sample}.fastq",
-        ref="data/2018-10-16/{genome}/star/SAindex",
+        starthing="data/2018-10-16/{genome}/star",
     output:
         "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
     log:
@@ -33,4 +49,4 @@ rule star_se:
         extra=""
     threads: 16
     wrapper:
-        "0.27.1/bio/star/align"
+        "0.39.0/bio/star/align"
