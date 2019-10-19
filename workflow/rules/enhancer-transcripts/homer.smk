@@ -1,5 +1,9 @@
 # TODO Generalize these
 rule IMR18_meta_makeTagDirectory:
+    """
+    Creates a tag directory using homer and checkes GC content
+    HACK Generalize
+    """
     input:
         expand("results/2018-10-04/hg18/{unit}.bam",unit=IMR_SAMPLES)
     output:
@@ -11,6 +15,10 @@ rule IMR18_meta_makeTagDirectory:
         "makeTagDirectory {output} -genome hg18 -checkGC {input}"
 
 rule GM18_meta_makeTagDirectory:
+    """
+    Creates a tag directory using homer and checkes GC content
+    HACK Generalize
+    """
     input:
         expand("results/2018-10-04/hg18/{unit}.bam",unit=GM_SAMPLES)
     output:
@@ -22,6 +30,10 @@ rule GM18_meta_makeTagDirectory:
         "makeTagDirectory {output} -genome hg18 -checkGC {input}"
 
 rule IMR_meta_makeTagDirectory:
+    """
+    Creates a tag directory using homer and checkes GC content
+    HACK Generalize
+    """
     input:
         expand("results/2018-10-04/hg19/{unit}.bam",unit=IMR_SAMPLES)
     output:
@@ -33,6 +45,10 @@ rule IMR_meta_makeTagDirectory:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
 rule GM_meta_makeTagDirectory:
+    """
+    Creates a tag directory using homer and checkes GC content
+    HACK Generalize
+    """
     input:
         expand("results/2018-10-04/hg19/{unit}.bam",unit=GM_SAMPLES)
     output:
@@ -44,6 +60,10 @@ rule GM_meta_makeTagDirectory:
         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
 
 rule meta_makeUCSCfile:
+    """
+    Creates a UCSC genome browser file using homer from a tag directory
+    FIXME Broken
+    """
     input:
         "results/2018-11-07/{genome}/{cell}_meta_tagDir"
     output:
@@ -55,6 +75,10 @@ rule meta_makeUCSCfile:
         "makeUCSCfile {input} -o {output} -strand separate"
 
 rule hg18_meta_findPeaks:
+    """
+    Uses homer findPeaks to indentify GRO-Seq transcripts
+    HACK Generalize
+    """
     input:
         "results/2018-11-07/hg18/{cell}_meta_tagDir"
     output:
@@ -66,6 +90,10 @@ rule hg18_meta_findPeaks:
         "findPeaks {input} -o {output} -style groseq"
 
 rule hg19_meta_findPeaks:
+    """
+    Uses homer findPeaks to indentify GRO-Seq transcripts
+    HACK Generalize
+    """
     input:
         tagdir="results/2018-11-07/hg19/{cell}_meta_tagDir",
         uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
@@ -78,6 +106,9 @@ rule hg19_meta_findPeaks:
         "findPeaks {input.tagdir} -style groseq -o {output} -uniqmap {input.uniqmap}"
 
 rule homer_meta_pos2bed:
+    """
+    Coverts transcripts from homer format to bed
+    """
     input:
         "results/2018-11-07/{genome}/{cell}_meta_transcripts.txt"
     output:

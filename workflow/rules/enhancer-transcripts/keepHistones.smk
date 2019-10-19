@@ -1,4 +1,9 @@
 rule alignHistones:
+    """
+    Aligns the histones for a cell line using bowtie2
+    TODO Use star
+    TODO Use an Input function
+    """
     input:
         sample=["data/2018-11-13/{cell}_{unit}.fastq"]
     output:
@@ -13,6 +18,9 @@ rule alignHistones:
         "0.35.1/bio/bowtie2/align"
 
 rule convert_Histones_to_Bed:
+    """
+    Coverts Histone Bam files to BED format
+    """
     input:
         "data/2018-11-13/{genome}/{cell}_{unit}.bam",
     output:
