@@ -43,6 +43,9 @@ def feature_counts_extra(wildcards):
 
 
 rule genes_feature_counts:
+    """
+    Runs featureCounts with refseq individually
+    """
     input:
         bam="results/2018-10-04/{genome}/{sample}.bam",
         # bai="bam/final/{sample}.bam.bai",
@@ -60,6 +63,10 @@ rule genes_feature_counts:
         "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 rule GM19_genes_merge_counts:
+    """
+    Merges individual gene counts for GM hg19
+    HACK Generalize
+    """
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=GM_SAMPLES)
     output:
@@ -78,6 +85,10 @@ rule GM19_genes_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 rule IMR_genes_merge_counts:
+    """
+    Merges individual gene counts for IMR hg19
+    HACK Generalize
+    """
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}.txt", sample=IMR_SAMPLES)
     output:
@@ -96,6 +107,9 @@ rule IMR_genes_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 rule genes_normalize_counts:
+    """
+    Take the log2 of gene counts
+    """
     input:
         "results/2019-06-03/hg19/counts/{cell}_merged.txt"
     output:
@@ -106,6 +120,9 @@ rule genes_normalize_counts:
         norm_counts.to_csv(output[0], sep="\t", index=True)
 
 rule eRNA_feature_counts:
+    """
+    Runs featureCounts on  counts, individually
+    """
     input:
         bam="results/2018-10-04/hg19/{sample}.bam",
         annotation="results/2019-09-27/eRNA_viral.saf",
@@ -123,6 +140,10 @@ rule eRNA_feature_counts:
         "file:" + path.join(workflow.basedir, "wrappers/subread/feature_counts")
 
 rule GM19_eRNA_merge_counts:
+    """
+    Merges individual eRNA counts for GM hg19
+    HACK Generalize
+    """
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt", sample=GM_SAMPLES)
     output:
@@ -141,6 +162,10 @@ rule GM19_eRNA_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 rule IMR_eRNA_merge_counts:
+    """
+    Merges individual eRNA counts for IMR hg19
+    HACK Generalize
+    """
     input:
         expand("results/2019-06-03/hg19/counts/per_sample/{sample}_eRNA.txt", sample=IMR_SAMPLES)
     output:
@@ -159,6 +184,9 @@ rule IMR_eRNA_merge_counts:
         merged.to_csv(output[0], sep="\t", index=True)
 
 rule eRNA_normalize_counts:
+    """
+    Take the log2 of eRNA counts
+    """
     input:
         "results/2019-06-03/hg19/counts/{cell}_eRNA_merged.txt"
     output:

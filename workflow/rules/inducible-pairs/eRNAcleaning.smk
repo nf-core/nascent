@@ -1,5 +1,8 @@
 # FIXME uses unmerged regions of eRNAs
 rule eRNA_saf_cell:
+    """
+    Creates a saf formatted file from bed of identified eRNAs
+    """
     input:
         "results/2018-12-02/{genome}/{cell}_eRNA.bed"
     output:
@@ -12,6 +15,9 @@ rule eRNA_saf_cell:
         "../../scripts/bed2saf.py"
 
 rule eRNA_saf_viral:
+    """
+    Creates a saf formatted file from bed of viral eRNAs
+    """
     input:
         "results/2019-08-26/eRNA_viral.bed",
     output:

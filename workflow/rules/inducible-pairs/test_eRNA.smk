@@ -1,6 +1,6 @@
 rule test_eRNA_check_L2:
     """
-    Check for the presence of L2
+    Check for the presence of L2 in eRNAs
     chr9 21096515 21098279
     """
     input:
@@ -18,7 +18,7 @@ rule test_eRNA_check_L2:
 
 rule test_homer_check_L2:
     """
-    Check for the presence of L2
+    Check for the presence of L2 in GRO-Seq transcripts from homer
     chr9 21096515 21098279
     """
     input:
@@ -35,21 +35,28 @@ rule test_homer_check_L2:
         "bedtools closest -a {input.l2} -b {input.homer} > {output}"
 
 rule test_report_L2:
+    """
+    Reports the nearest transcripts to Legacy L2
+    FIXME Possibly add L2 over Histones
+    """
     input:
-        expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
-        expand("results/2019-10-01/hg19/{cell}_genes_L2.bed", cell=["GM","IMR"]),
+        eRNA=expand("results/2019-08-26/{cell}_L2.bed", cell=["GM","IMR"]),
+        genes=expand("results/2019-10-01/hg19/{cell}_genes_L2.bed", cell=["GM","IMR"]),
     output:
         report("results/2019-10-01/L2.tsv", caption="../../report/L2.rst", category="Inducible Pairs")
     log:
         "logs/hg19/test/L2.log"
     threads: 4
     shell:
-        "cat {input} > {output}"
+        "cat {input.eRNA} {input.genes} > {output}"
 
 rule fig_linked_eRNA_cross_cell:
+    """
+    Creates a venn diagram of viral linked eRNAs across cell lines
+    """
     input:
-        GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
         IMR="results/2019-08-26/hg19/IMR_link_eRNA.bed",
+        GM="results/2019-08-26/hg19/GM_link_eRNA.bed",
         overlap="results/2019-08-26/eRNA_overlap_viral.bed",
     output:
         report("results/2018-10-01/{genome}/eRNA_cross_cell_viral.svg", category="Figures")

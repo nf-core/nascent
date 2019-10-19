@@ -1,4 +1,8 @@
 rule eRNA_viral_tpm:
+    """
+    Creates tpm values
+    HACK Generalize with genes
+    """
     input:
         "results/2019-06-03/hg19/counts/{cell}_eRNA_merged.txt"
     output:
@@ -10,7 +14,12 @@ rule eRNA_viral_tpm:
     script:
         "../../scripts/tpm.py"
 
-rule eRNA_viral_foldchange:
+rule inducible_eRNA_viral:
+    """
+    Determines inducible genes with a -1 < foldchange > 1 & under < 24h
+    TODO Add one-step autocorrelation
+    TODO Bring in settings from config
+    """
     input:
         "results/2019-09-27/de/tpm/{cell}_eRNA_tpm.txt",
     output:
@@ -24,6 +33,9 @@ rule eRNA_viral_foldchange:
         "../../scripts/foldchange.py"
 
 rule eRNA_Inducible_id:
+    """
+    Creates a list of eRNA ids
+    """
     input:
         inducible="results/2019-09-27/de/foldchange/{cell}_eRNA_foldchange.tsv",
     output:
@@ -35,6 +47,9 @@ rule eRNA_Inducible_id:
         """awk -F \"\\t\" '{{ if (NR!=1){{ print $1 }}}}' {input} > {output}"""
 
 rule eRNA_ripgrep_id:
+    """
+    Finds eRNAs BED entries that are inducible
+    """
     input:
         inducibleId="results/2019-08-26/dge/rg/{cell}_de_eRNA_id.txt",
         linkedeRNAs="results/2019-08-26/{genome}/{cell}_link_eRNA.bed",

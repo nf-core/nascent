@@ -1,4 +1,7 @@
 rule genes_limma:
+    """
+    Runes the gene counts through limma script
+    """
     input:
         "results/2019-06-03/{cell}/counts/merged.txt"
     output:
