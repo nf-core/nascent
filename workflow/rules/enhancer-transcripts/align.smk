@@ -14,11 +14,15 @@ rule bowtie2:
         # index=config["ref"]["index"],
         index= lambda w: config["ref"]["{}".format(w.genome)]["index"],
         extra=""
-    threads: 4
+    threads: 32
     wrapper:
         "0.38.0/bio/bowtie2/align"
 
 rule star_index:
+    """
+    Creates a star index
+    FIXME
+    """
     input:
         fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
         gtf = "data/2018-11-09/{genome}/genes.gtf"
@@ -26,8 +30,7 @@ rule star_index:
         directory("data/2018-10-16/{genome}/star")
     message:
         "Testing STAR index"
-    threads:
-        16
+    threads: 32
     params:
         extra = ""
     log:
@@ -36,6 +39,10 @@ rule star_index:
         "0.39.0/bio/star/index"
 
 rule star_se:
+    """
+    Aligns fastq files with star
+    FIXME
+    """
     input:
         fq1="data/2018-06-23/{sample}.fastq",
     output:
@@ -47,6 +54,6 @@ rule star_se:
         index= lambda w: config["ref"]["{}".format(w.genome)]["starIndex"],
         # optional parameters
         extra=""
-    threads: 16
+    threads: 32
     wrapper:
         "0.39.0/bio/star/align"
