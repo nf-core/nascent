@@ -25,7 +25,7 @@ rule star_index:
     """
     input:
         fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
-        gtf = "data/2018-11-09/{genome}/genes.gtf"
+        # gtf = "data/2018-11-09/{genome}/genes.gtf"
     output:
         directory("data/2018-10-16/{genome}/star")
     message:
