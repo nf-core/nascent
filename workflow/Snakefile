@@ -28,7 +28,7 @@ rule all:
     input:
         aws="scripts/aws-igenomes.sh",
         # fastqc
-        fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{unit}.zip", cell=CELLS, unit=UNITS,),
+        # fastqc_zip=expand("results/2018-10-03/fastqc/{cell}{unit}.zip", cell=CELLS, unit=UNITS,),
         # eRNA Prediction
         eRNApeng=expand("results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed", genome=config["genomes"], cell=CELLS,),
         liftoverPeng="results/2018-11-10/test/hg19_eRNA_overlaps.bed",
@@ -57,7 +57,7 @@ include: "rules/data.smk"
 # Enhancer Transcripts Identification #
 #######################################
 include: "rules/enhancer-transcripts/fastqc.smk"
-include: "rules/enhancer-transcripts/bowtie2.smk"
+include: "rules/enhancer-transcripts/align.smk"
 include: "rules/enhancer-transcripts/homer.smk"
 include: "rules/enhancer-transcripts/removeGenes.smk"
 include: "rules/enhancer-transcripts/keepHistones.smk"

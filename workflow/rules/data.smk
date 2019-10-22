@@ -41,6 +41,25 @@ rule reference_Genome:
         "{params.script} -g {params.genome} -s {params.source} "
         "-b {params.build} -t {params.typeOf} -o {params.outDir}"
 
+rule genome_fasta:
+    output:
+        "data/2018-10-16/fasta/{unit}/genome.fa",
+    params:
+        script="scripts/aws-igenomes.sh",
+        genome="Homo_sapiens",
+        source="UCSC",
+        build="{unit}",
+        typeOf="fasta",
+        outDir="data/2018-10-16/fasta/{unit}",
+    conda:
+        "../envs/awscli.yaml"
+    priority: 50
+    log:
+        "logs/{unit}/genome.log"
+    shell:
+        "{params.script} -g {params.genome} -s {params.source} "
+        "-b {params.build} -t {params.typeOf} -o {params.outDir}"
+
 # TODO move path to config
 rule fai:
     input:
