@@ -25,7 +25,7 @@ rule star_index:
     """
     input:
         fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
-        # gtf = "data/2018-11-09/{genome}/genes.gtf"
+        gtf = "data/2018-11-09/{genome}/genes.gtf"
     output:
         directory("data/2018-10-16/{genome}/star")
     message:
@@ -36,7 +36,7 @@ rule star_index:
     log:
         "logs/star_index_{genome}.log"
     wrapper:
-        "0.39.0/bio/star/index"
+        "0.40.0/bio/star/index"
 
 rule star_se:
     """
@@ -44,9 +44,10 @@ rule star_se:
     FIXME
     """
     input:
-        fq1="data/2018-06-23/{sample}.fastq",
+        fq1=["data/2018-06-23/{sample}.fastq"],
+        starIndex = "data/2018-10-16/{genome}/star"
     output:
-        "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
     log:
         "logs/{genome}/star/{sample}.log"
     params:
@@ -56,4 +57,4 @@ rule star_se:
         extra=""
     threads: 32
     wrapper:
-        "0.39.0/bio/star/align"
+        "0.40.0/bio/star/align"
