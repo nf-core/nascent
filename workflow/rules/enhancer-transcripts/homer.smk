@@ -8,11 +8,14 @@ rule IMR18_meta_makeTagDirectory:
         expand("results/2018-10-04/hg18/{unit}.bam",unit=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
-    singularity:
-        "docker://emiller88/homer:latest"
-    threads: 2
+    singularity: config["homer"]["makeTagDir"]["singularity"]
+    threads: 1
+    group: "homer"
+    params:
+        genome = "hg18",
+        extra = config["homer"]["makeTagDir"]["extra"],
     shell:
-        "makeTagDirectory {output} -genome hg18 -checkGC {input}"
+        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
 rule GM18_meta_makeTagDirectory:
     """
@@ -23,11 +26,14 @@ rule GM18_meta_makeTagDirectory:
         expand("results/2018-10-04/hg18/{unit}.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/GM_meta_tagDir")
-    singularity:
-        "docker://emiller88/homer:latest"
-    threads: 4
+    singularity: config["homer"]["makeTagDir"]["singularity"]
+    threads: 1
+    group: "homer"
+    params:
+        genome = "hg18",
+        extra = config["homer"]["makeTagDir"]["extra"],
     shell:
-        "makeTagDirectory {output} -genome hg18 -checkGC {input}"
+        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
 rule IMR_meta_makeTagDirectory:
     """
@@ -35,14 +41,17 @@ rule IMR_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}/Aligned.out.bam",unit=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/IMR_meta_tagDir"),
-    singularity:
-        "docker://emiller88/homer:latest"
-    threads: 2
+    singularity: config["homer"]["makeTagDir"]["singularity"]
+    threads: 1
+    group: "homer"
+    params:
+        genome = "hg19",
+        extra = config["homer"]["makeTagDir"]["extra"],
     shell:
-        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
+        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
 rule GM_meta_makeTagDirectory:
     """
@@ -50,14 +59,17 @@ rule GM_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}/Aligned.out.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/GM_meta_tagDir")
-    singularity:
-        "docker://emiller88/homer:latest"
-    threads: 2
+    singularity: config["homer"]["makeTagDir"]["singularity"]
+    threads: 1
+    group: "homer"
+    params:
+        genome = "hg19",
+        extra = config["homer"]["makeTagDir"]["extra"],
     shell:
-        "makeTagDirectory {output} -genome hg19 -checkGC {input}"
+        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
 rule meta_makeUCSCfile:
     """
@@ -68,8 +80,7 @@ rule meta_makeUCSCfile:
         "results/2018-11-07/{genome}/{cell}_meta_tagDir"
     output:
         report("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.zip", category="homer")
-    singularity:
-        "docker://emiller88/homer:latest"
+    singularity: config["homer"]["makeTagDir"]["singularity"]
     threads: 2
     shell:
         "makeUCSCfile {input} -o {output} -strand separate"
@@ -83,11 +94,13 @@ rule hg18_meta_findPeaks:
         "results/2018-11-07/hg18/{cell}_meta_tagDir"
     output:
         "results/2018-11-07/hg18/{cell}_meta_transcripts.txt"
-    singularity:
-        "docker://emiller88/homer:latest"
+    singularity: config["homer"]["findPeaks"]["singularity"]
     threads: 2
+    params:
+        style = config["homer"]["findPeaks"]["style"],
+        bodyFold = config["homer"]["findPeaks"]["bodyFold"],
     shell:
-        "findPeaks {input} -o {output} -style groseq"
+        "findPeaks {input} -o {output} -style {params.style}"
 
 rule hg19_meta_findPeaks:
     """
@@ -96,14 +109,16 @@ rule hg19_meta_findPeaks:
     """
     input:
         tagdir="results/2018-11-07/hg19/{cell}_meta_tagDir",
-        uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
+        uniqmap=config["homer"]["findPeaks"]["uniqmap"],
     output:
         "results/2018-11-07/hg19/{cell}_meta_transcripts.txt"
-    singularity:
-        "docker://emiller88/homer:latest"
+    singularity: config["homer"]["findPeaks"]["singularity"]
     threads: 2
+    params:
+        style = config["homer"]["findPeaks"]["style"],
+        bodyFold = config["homer"]["findPeaks"]["bodyFold"],
     shell:
-        "findPeaks {input.tagdir} -style groseq -o {output} -uniqmap {input.uniqmap}"
+        "findPeaks {input.tagdir} -style {params.style} -o {output} -uniqmap {input.uniqmap}"
 
 rule homer_meta_pos2bed:
     """

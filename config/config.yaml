@@ -41,8 +41,11 @@ feature_counts:
   threads: 4
 
 homer:
-  tagDir:
+  makeTagDir:
+    singularity: "docker://emiller88/homer:latest"
+    extra: "-checkGC"
   findPeaks:
+    singularity: "docker://emiller88/homer:latest"
     style: "groseq"
     uniqmap: "data/2019-07-26/hg19-50nt-uniqmap"
     bodyFold: "1.5"
