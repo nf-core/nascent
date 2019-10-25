@@ -31,6 +31,7 @@ ref:
     starIndex: "data/2019-10-16/hg19/star"
     # gtf file with transcripts
     annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
+    uniqmapLink: "http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
 
 ######################
 # Rule configuration #

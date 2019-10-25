@@ -24,7 +24,7 @@ rule IMR_download:
 #############################
 
 # TODO move path to config
-rule reference_Genome:
+rule bowtie2_reference_Genome:
     output:
         "data/2018-06-24/{unit}/genome.fa",
     params:
@@ -193,18 +193,17 @@ rule download_mapChain:
 #########
 # Homer #
 #########
-# TODO move path to config
-hg19uniqMap="http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
 
 rule download_hg19_uniqmap:
     output:
         "data/2019-07-26/hg19uniqmap.zip"
     conda:
         "../envs/basics.yaml"
+    params:
+        link=config["ref"]["hg19"]["uniqmapLink"]
     shell:
-        "curl -fsSL {hg19uniqMap} > {output}"
+        "curl -fsSL {params.link} > {output}"
 
-# TODO move path to config
 rule unzip_hg19_uniqmap:
     input:
         "data/2019-07-26/hg19uniqmap.zip"
