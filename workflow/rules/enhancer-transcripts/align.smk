@@ -7,7 +7,7 @@ rule bowtie2:
         sample=["data/2018-06-23/{unit}.fastq"],
         ref="data/2018-06-24/{genome}/genome.fa",
     output:
-        "results/2018-10-04/{genome}/{unit}.bam"
+        "results/2018-10-04/{genome}/{unit}/Aligned.out.bam"
     log:
         "logs/{genome}/bowtie2/{unit}.log"
     params:
@@ -44,10 +44,10 @@ rule star_se:
     FIXME
     """
     input:
-        fq1=["data/2018-06-23/{sample}.fastq"],
+        fq1="data/2018-06-23/{sample}.fastq",
         starIndex = "data/2018-10-16/{genome}/star"
     output:
-        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
     log:
         "logs/{genome}/star/{sample}.log"
     params:
