@@ -5,7 +5,7 @@ rule IMR18_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg18/{unit}.bam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -23,7 +23,7 @@ rule GM18_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg18/{unit}.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
