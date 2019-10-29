@@ -79,11 +79,15 @@ rule meta_makeUCSCfile:
     input:
         "results/2018-11-07/{genome}/{cell}_meta_tagDir"
     output:
-        report("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.zip", category="homer")
+        report("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.gz", category="homer")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 2
+    threads: 3
+    params:
+        fixedOutput="results/2018-11-07/{genome}/{cell}_{genome}_ucsc",
+        skips="chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr2\
+        chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chrM chrY chrX",
     shell:
-        "makeUCSCfile {input} -o {output} -strand separate"
+        "makeUCSCfile {input} -o {params.fixedOutput} -strand separate -skipChr {params.skips}"
 
 rule hg18_meta_findPeaks:
     """
