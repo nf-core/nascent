@@ -34,6 +34,18 @@ rule eRNA_gene_groups:
     shell:
         "bedtools window -w {params.window} -a {input.dges}  -b {input.eRNA} > {output}"
 
+rule group_names:
+    input:
+        "results/2019-08-26/{genome}/{cell}_eRNA_gene_group.bed",
+    output:
+        "results/2019-10-29/{genome}/{cell}_group_names.tsv",
+    conda:
+        "../../envs/gawk.yaml"
+    threads: 16
+    shell:
+        """awk -F '\\t' '{{print $9, $13}}' {input} > {output}"""
+
+
 rule eRNA_link_merge:
     """
     Creates a meta of eRNAs, incase transcripts differ sligtly across cell lines
