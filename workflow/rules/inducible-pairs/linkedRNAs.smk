@@ -38,7 +38,7 @@ rule group_names:
     input:
         "results/2019-08-26/{genome}/{cell}_eRNA_gene_group.bed",
     output:
-        "results/2019-10-29/{genome}/{cell}_group_names.tsv",
+        report("results/2019-10-29/{genome}/{cell}_group_names.tsv", category="Inducible Pairs")
     conda:
         "../../envs/gawk.yaml"
     threads: 16
