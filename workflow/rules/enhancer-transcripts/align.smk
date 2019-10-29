@@ -21,7 +21,6 @@ rule bowtie2:
 rule star_index:
     """
     Creates a star index
-    FIXME
     """
     input:
         fasta = "data/2018-10-16/fasta/{genome}/genome.fa",
@@ -41,13 +40,13 @@ rule star_index:
 rule star_se:
     """
     Aligns fastq files with star
-    FIXME
+    Requires more than 31G of memory
     """
     input:
         fq1="data/2018-06-23/{sample}.fastq",
         starIndex = "data/2018-10-16/{genome}/star"
     output:
-        "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
     log:
         "logs/{genome}/star/{sample}.log"
     params:
@@ -56,5 +55,7 @@ rule star_se:
         # optional parameters
         extra=""
     threads: 32
+    resources:
+        mem_mb=32000
     wrapper:
         "0.40.0/bio/star/align"
