@@ -9,7 +9,6 @@ rule IMR18_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 1
     group: "homer"
     params:
         genome = "hg18",
@@ -27,7 +26,6 @@ rule GM18_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg18/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 1
     group: "homer"
     params:
         genome = "hg18",
@@ -45,7 +43,6 @@ rule IMR_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg19/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 1
     group: "homer"
     params:
         genome = "hg19",
@@ -63,7 +60,6 @@ rule GM_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg19/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 1
     group: "homer"
     params:
         genome = "hg19",
@@ -99,7 +95,7 @@ rule hg18_meta_findPeaks:
     output:
         "results/2018-11-07/hg18/{cell}_meta_transcripts.txt"
     singularity: config["homer"]["findPeaks"]["singularity"]
-    threads: 2
+    threads: 3
     params:
         style = config["homer"]["findPeaks"]["style"],
         bodyFold = config["homer"]["findPeaks"]["bodyFold"],
