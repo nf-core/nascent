@@ -1,7 +1,7 @@
 rule test_eRNA_check_L2:
     """
     Check for the presence of L2 in eRNAs
-    chr9 21096515 21098279
+    chr9:21096515-21098279
     """
     input:
         eRNA="results/2019-08-26/hg19/{cell}_link_eRNA.bed",
@@ -19,7 +19,7 @@ rule test_eRNA_check_L2:
 rule test_homer_check_L2:
     """
     Check for the presence of L2 in GRO-Seq transcripts from homer
-    chr9 21096515 21098279
+    chr9:21096515-21098279
     """
     input:
         homer="results/2018-11-07/{genome}/{cell}_meta_transcripts.bed",
