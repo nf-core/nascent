@@ -55,6 +55,15 @@ rule group_names:
         | awk -F " " '{{OFS="\\t";}} {{print $2, $NF}}' - \
         | uniq - >> {output}"""
 
+rule common_gene_group:
+    input:
+        groups=expand("results/2019-10-29/{genome}/{cell}_group_names.tsv", genome=["hg19"],cell=CELLS),
+    output:
+        "results/2019-10-29/{genome}/common_group_names.tsv",
+    conda:
+        "../../envs/gawk.yaml"
+    shell:
+        """awk 'NR==FNR{{a[$1]=1;next}}a[$1]' {input.groups} > {output}"""
 
 rule eRNA_link_merge:
     """
