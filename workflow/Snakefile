@@ -35,7 +35,7 @@ rule all:
         hg19vshg18=expand("results/2018-11-10/test/{cell}_hg19_vs_hg18_eRNA.bed", cell=CELLS,),
         predictionVsLiftOver=expand("results/2018-11-10/test/{genome}/{cell}_eRNA_vs_liftOver.bed", genome=config["genomes"], cell=CELLS,),
         # Figures
-        ucsc=expand("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.gz", genome=config["genomes"], cell=CELLS,),
+        ucsc=expand("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.gz", genome=["hg19"], cell=CELLS,),
         VennvsPeng=expand("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", genome=config["genomes"], cell=CELLS,),
         vennCrossCell="results/2018-10-12/hg19/eRNA_cross_cell.svg",
         # Differential Analysis
