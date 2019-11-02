@@ -1,29 +1,3 @@
-import pandas as pd
-from snakemake.utils import validate, min_version
-from itertools import product
-##### set minimum snakemake version #####
-min_version("5.5.0")
-
-# this container defines the underlying OS for each job when using the workflow
-# with --use-conda --use-singularity
-singularity: "docker://continuumio/miniconda3:4.6.14"
-
-##### load config and sample sheets #####
-configfile: "config/config.yaml"
-# validate(config, schema="schemas/config.schema.yaml")
-
-samples = pd.read_csv(config["samples"], dtype=str, sep='\t').set_index(["cell", "name"], drop=False,)
-samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
-validate(samples, schema="schemas/samples.schema.yaml")
-
-CELLS=list(set(samples["cell"]))
-GM_SAMPLES=samples.loc[("GM")].index.tolist()
-IMR_SAMPLES=samples.loc[("IMR")].index.tolist()
-UNITS=list(set(samples["time"]))
-SAMPLES=list(samples["name"])
-
-report: "report/workflow.rst"
-
 rule all:
     input:
         aws="scripts/aws-igenomes.sh",
@@ -52,6 +26,7 @@ rule all:
         groups=expand("results/2019-08-26/hg19/{cell}_eRNA_gene_group.bed", cell = ["GM", "IMR"]),
         commongroupnames="results/2019-10-29/hg19/common_group_names.tsv",
 
+include: "rules/common.smk"
 include: "rules/data.smk"
 
 #######################################
