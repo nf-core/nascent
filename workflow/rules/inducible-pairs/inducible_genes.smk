@@ -25,7 +25,7 @@ rule inducible_genes:
     output:
         "results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
     params:
-        # cutoff=0.5
+        cutoff=config["inducible"]["foldchange"]
     conda:
         "../../envs/matplotlib.yaml"
     threads: 4
@@ -57,7 +57,6 @@ rule genes_ripgrep_geneid:
         "results/2019-06-26/dge/rg/{cell}_de_ripgrep.gtf",
     conda:
         "../../envs/ripgrep.yaml"
-    threads: 4
     shell:
         """rg --dfa-size-limit 2G -w -f {input.geneid} {input.refseq} > {output}"""
 

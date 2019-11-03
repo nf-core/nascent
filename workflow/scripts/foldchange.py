@@ -26,8 +26,8 @@ try:
 except KeyError:
     pass  # do nothing!
 # Drop anything that don't have a 1 fold change up or down(easy to change), might even make it a parameter in snakemake
-dfDGEup = dfFold[dfFold >= 1].dropna(thresh=1)
-dfDGEdown = dfFold[dfFold <= -1].dropna(thresh=1)
+dfDGEup = dfFold[dfFold >= snakemake.params["cutoff"]].dropna(thresh=1)
+dfDGEdown = dfFold[dfFold <= -(snakemake.params["cutoff"])].dropna(thresh=1)
 frames = [dfDGEup, dfDGEdown]
 dfDGE = pd.concat(frames)
 

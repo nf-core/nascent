@@ -25,7 +25,7 @@ rule inducible_eRNA_viral:
     output:
         "results/2019-09-27/de/foldchange/{cell}_eRNA_foldchange.tsv",
     params:
-        # cutoff=0.5
+        cutoff=config["inducible"]["foldchange"]
     conda:
         "../../envs/matplotlib.yaml"
     threads: 4
