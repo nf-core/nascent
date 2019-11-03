@@ -49,3 +49,41 @@ rule eRNAs:
     threads: 2
     shell:
         "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"
+
+rule eRNAs_0h_GM:
+    """
+    Takes in units with genes removed
+    Keeps anything that intersects with H3K27ac or H3K4me1
+    """
+    input:
+        no_genes="results/2018-11-09/{genome}/0h/GM0h_transcripts_noGenes.bed",
+        H3K27ac="data/2018-11-13/{genome}/GM_H3K27ac.bed",
+        H3K4me1="data/2018-11-13/{genome}/GM_H3K4me1.bed",
+    output:
+        "results/2018-12-02/{genome}/GM_eRNA_0h.bed"
+    log:
+        "logs/{genome}/GM/HistonesIntersect.log"
+    conda:
+        "../../envs/bedtools.yaml"
+    threads: 2
+    shell:
+        "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"
+
+rule eRNAs_0h_IMR:
+    """
+    Takes in units with genes removed
+    Keeps anything that intersects with H3K27ac or H3K4me1
+    """
+    input:
+        no_genes="results/2018-11-09/{genome}/0h/IMR0h_transcripts_noGenes.bed",
+        H3K27ac="data/2018-11-13/{genome}/IMR_H3K27ac.bed",
+        H3K4me1="data/2018-11-13/{genome}/IMR_H3K4me1.bed",
+    output:
+        "results/2018-12-02/{genome}/IMR_eRNA_0h.bed"
+    log:
+        "logs/{genome}/IMR/HistonesIntersect.log"
+    conda:
+        "../../envs/bedtools.yaml"
+    threads: 2
+    shell:
+        "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"

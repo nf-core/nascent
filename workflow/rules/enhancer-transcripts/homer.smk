@@ -133,33 +133,48 @@ rule homer_meta_pos2bed:
     shell:
         "pos2bed.pl {input} | sort -k1,1 -k2,2n - > {output}"
 
-# rule homer_sample_makeTagDirectory:
-#     input:
-#         sample=["results/2018-10-04/{unit}.bam"],
-#     output:
-#         directory("results/2019-01-28/{unit}_tagDir"),
-#     threads: 2
-#     shell:
-#         "makeTagDirectory {output} -genome hg19 -checkGC {input}"
+rule makeTagDirectory_0h:
+    """
+    Creates a tag directory using homer for 0h
+    """
+    input:
+        "results/2018-10-04/hg19/{unit}/Aligned.out.sam"
+    output:
+        directory("results/2018-11-07/hg19/0h/{unit}_tagDir"),
+    singularity: config["homer"]["makeTagDir"]["singularity"]
+    group: "homer"
+    params:
+        genome = "hg19",
+        extra = config["homer"]["makeTagDir"]["extra"],
+    shell:
+        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
-# rule homer_sample_findPeaks:
-#     input:
-#         tagdir="results/2019-01-28/{unit}_tagDir",
-#         uniqmap="data/2019-07-26/hg19-50nt-uniqmap",
-#     output:
-#         "results/2019-01-28/hg19/{unit}_groseq_peak.gtf"
-#     singularity:
-#         "docker://emiller88/homer:latest"
-#     threads: 2
-#     shell:
-#         "findPeaks {input.tagdir} -o {output} -style groseq -uniqmap {input.uniqmap}"
+rule findPeaks_0h:
+    """
+    Uses homer findPeaks to indentify GRO-Seq transcripts
+    HACK Generalize
+    """
+    input:
+        tagdir="results/2018-11-07/hg19/0h/{cell}_tagDir",
+        uniqmap=config["homer"]["findPeaks"]["uniqmap"],
+    output:
+        "results/2018-11-07/hg19/0h/{cell}_transcripts.txt"
+    singularity: config["homer"]["findPeaks"]["singularity"]
+    params:
+        style = config["homer"]["findPeaks"]["style"],
+        bodyFold = config["homer"]["findPeaks"]["bodyFold"],
+    shell:
+        "findPeaks {input.tagdir} -style {params.style} -o {output} -uniqmap {input.uniqmap}"
 
-# rule homer_sample_pos2bed:
-#     input:
-#         "results/2019-01-28/hg19/{unit}_groseq_peak.gtf"
-#     output:
-#         "results/2019-01-28/hg19/{unit}_groseq_peak.bed"
-#     conda:
-#         "../envs/homer.yaml"
-#     shell:
-#         "pos2bed.pl {input} > {output}"
+rule homer_0h_pos2bed:
+    """
+    Coverts transcripts from homer format to bed
+    """
+    input:
+        "results/2018-11-07/{genome}/0h/{cell}_transcripts.txt"
+    output:
+        "results/2018-11-07/{genome}/0h/{cell}_transcripts.bed"
+    conda:
+        "../../envs/homer.yaml"
+    shell:
+        "pos2bed.pl {input} | sort -k1,1 -k2,2n - > {output}"

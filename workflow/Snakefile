@@ -12,6 +12,7 @@ rule all:
         ucsc=expand("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.gz", genome=["hg19"], cell=CELLS,),
         VennvsPeng=expand("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", genome=config["genomes"], cell=CELLS,),
         vennCrossCell="results/2018-10-12/hg19/eRNA_cross_cell.svg",
+        vennCrossCell_0h="results/2018-10-12/hg19/eRNA_cross_cell_0h.svg",
         # Differential Analysis
         # GM_diff="results/2018-01-30/GM19_eRNA_diffPeaks.txt",
         # IMR_diff="results/2018-01-30/IMR_eRNA_diffPeaks.txt",
