@@ -1,3 +1,28 @@
+include: "rules/common.smk"
+include: "rules/data.smk"
+
+#######################################
+# Enhancer Transcripts Identification #
+#######################################
+include: "rules/enhancer-transcripts/fastqc.smk"
+include: "rules/enhancer-transcripts/align.smk"
+include: "rules/enhancer-transcripts/homer.smk"
+include: "rules/enhancer-transcripts/removeGenes.smk"
+include: "rules/enhancer-transcripts/keepHistones.smk"
+include: "rules/enhancer-transcripts/liftOver.smk"
+include: "rules/enhancer-transcripts/test_eRNA_prediction.smk"
+
+###################
+# Inducible Pairs #
+###################
+include: "rules/inducible-pairs/limma.smk"
+include: "rules/inducible-pairs/eRNAcleaning.smk"
+include: "rules/inducible-pairs/featureCounts.smk"
+include: "rules/inducible-pairs/inducible_genes.smk"
+include: "rules/inducible-pairs/linkedRNAs.smk"
+include: "rules/inducible-pairs/inducible_eRNA.smk"
+include: "rules/inducible-pairs/test_eRNA.smk"
+
 rule all:
     input:
         aws="scripts/aws-igenomes.sh",
@@ -27,27 +52,3 @@ rule all:
         groups=expand("results/2019-08-26/hg19/{cell}_eRNA_gene_group.bed", cell = ["GM", "IMR"]),
         commongroupnames="results/2019-10-29/hg19/common_group_names.tsv",
 
-include: "rules/common.smk"
-include: "rules/data.smk"
-
-#######################################
-# Enhancer Transcripts Identification #
-#######################################
-include: "rules/enhancer-transcripts/fastqc.smk"
-include: "rules/enhancer-transcripts/align.smk"
-include: "rules/enhancer-transcripts/homer.smk"
-include: "rules/enhancer-transcripts/removeGenes.smk"
-include: "rules/enhancer-transcripts/keepHistones.smk"
-include: "rules/enhancer-transcripts/liftOver.smk"
-include: "rules/enhancer-transcripts/test_eRNA_prediction.smk"
-
-###################
-# Inducible Pairs #
-###################
-include: "rules/inducible-pairs/limma.smk"
-include: "rules/inducible-pairs/eRNAcleaning.smk"
-include: "rules/inducible-pairs/featureCounts.smk"
-include: "rules/inducible-pairs/inducible_genes.smk"
-include: "rules/inducible-pairs/linkedRNAs.smk"
-include: "rules/inducible-pairs/inducible_eRNA.smk"
-include: "rules/inducible-pairs/test_eRNA.smk"

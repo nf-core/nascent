@@ -14,7 +14,7 @@ configfile: "config/config.yaml"
 
 samples = pd.read_csv(config["samples"], dtype=str, sep='\t').set_index(["cell", "name"], drop=False,)
 samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
-validate(samples, schema="schemas/samples.schema.yaml")
+# validate(samples, schema="schemas/samples.schema.yaml")
 
 CELLS=list(set(samples["cell"]))
 GM_SAMPLES=samples.loc[("GM")].index.tolist()
@@ -24,10 +24,10 @@ SAMPLES=list(samples["name"])
 
 report: "report/workflow.rst"
 
-##### wildcard constraints #####
-wildcard_constraints:
-    sample="|".join(samples.index),
-    unit="|".join(units["unit"])
+# ##### wildcard constraints #####
+# wildcard_constraints:
+#     sample="|".join(samples.index),
+#     unit="|".join(units["unit"])
 
 ####### helpers ###########
 
