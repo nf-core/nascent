@@ -36,6 +36,15 @@ ref:
 ######################
 # Rule configuration #
 ######################
+bowtie2:
+  extra: ""
+
+STAR:
+  index:
+    extra: ""
+  align:
+    extra: ""
+
 feature_counts:
   annotation: *annotation
   extra: ""

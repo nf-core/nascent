@@ -13,7 +13,7 @@ rule bowtie2:
     params:
         # index=config["ref"]["index"],
         index= lambda w: config["ref"]["{}".format(w.genome)]["index"],
-        extra=""
+        extra=config["bowtie2"]["extra"]
     threads: 32
     wrapper:
         "0.38.0/bio/bowtie2/align"
@@ -31,7 +31,7 @@ rule star_index:
         "Testing STAR index"
     threads: 32
     params:
-        extra = ""
+        extra = config["STAR"]["index"]["extra"]
     log:
         "logs/star_index_{genome}.log"
     wrapper:
@@ -53,7 +53,7 @@ rule star_se:
         # path to STAR reference genome index
         index= lambda w: config["ref"]["{}".format(w.genome)]["starIndex"],
         # optional parameters
-        extra=""
+        extra = config["STAR"]["align"]["extra"]
     threads: 32
     resources:
         mem_mb=32000
