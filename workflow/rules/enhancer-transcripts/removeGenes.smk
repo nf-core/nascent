@@ -10,11 +10,14 @@ rule slopRefSeq:
         "data/2018-11-09/{genome}/{genome}_slop_refseq.bed"
     conda:
         "../../envs/bedtools.yaml"
+    params:
+        upstream=config["slopRefSeq"]["upstream"],
+        downstream=config["slopRefSeq"]["downstream"],
     shell:
          "sortBed -i {input.refSeq} |\
          slopBed -i - \
          -g {input.chromLen} \
-         -l 1000 -r 10000 > {output}"
+         -l {params.upstream} -r {params.downstream} > {output}"
 
 rule fixBEDcoordinates:
     """

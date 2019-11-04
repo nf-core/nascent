@@ -45,6 +45,11 @@ STAR:
   align:
     extra: ""
 
+# Amount to remove upstream and downstream of genes
+slopRefSeq:
+  upstream: 1000
+  downstream: 10000
+
 feature_counts:
   annotation: *annotation
   extra: ""
