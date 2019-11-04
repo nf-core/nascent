@@ -22,7 +22,7 @@ IMR_SAMPLES=samples.loc[("IMR")].index.tolist()
 UNITS=list(set(samples["time"]))
 SAMPLES=list(samples["name"])
 
-report: "report/workflow.rst"
+report: "../report/workflow.rst"
 
 # ##### wildcard constraints #####
 # wildcard_constraints:
