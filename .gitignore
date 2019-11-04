@@ -2,6 +2,7 @@
 !config
 !config/config.yaml
 !config/samples.tsv
+!config/units.tsv
 !config/cluster.json
 !data
 !data/*
