@@ -1,4 +1,5 @@
 samples: config/samples.tsv
+units: config/units.tsv
 
 histones:
   - H3K4me1

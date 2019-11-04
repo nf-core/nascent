@@ -12,22 +12,30 @@ singularity: "docker://continuumio/miniconda3:4.6.14"
 configfile: "config/config.yaml"
 # validate(config, schema="schemas/config.schema.yaml")
 
-samples = pd.read_csv(config["samples"], dtype=str, sep='\t').set_index(["cell", "name"], drop=False,)
-samples.index = samples.index.set_levels([i.astype(str) for i in samples.index.levels])  # enforce str in index
+samples = pd.read_csv(config["samples"], sep="\t", dtype=str).set_index("sample", drop=False)
+samples.index.names = ["sample_id"]
 # validate(samples, schema="schemas/samples.schema.yaml")
 
 CELLS=list(set(samples["cell"]))
-GM_SAMPLES=samples.loc[("GM")].index.tolist()
-IMR_SAMPLES=samples.loc[("IMR")].index.tolist()
+GM_SAMPLES=samples[samples["cell"]=="GM"].index.tolist()
+IMR_SAMPLES=samples[samples["cell"]=="IMR"].index.tolist()
 UNITS=list(set(samples["time"]))
-SAMPLES=list(samples["name"])
+SAMPLES=list(samples["sample"])
+
+units = pd.read_csv(
+    config["units"], dtype=str, sep="\t").set_index(["sample", "unit"], drop=False)
+units.index.names = ["sample_id", "unit_id"]
+units.index = units.index.set_levels(
+    [i.astype(str) for i in units.index.levels])  # enforce str in index
+# validate(units, schema="../schemas/units.schema.yaml")
+
 
 report: "../report/workflow.rst"
 
 # ##### wildcard constraints #####
-# wildcard_constraints:
-#     sample="|".join(samples.index),
-#     unit="|".join(units["unit"])
+wildcard_constraints:
+    sample="|".join(samples.index),
+    unit="|".join(units["unit"])
 
 ####### helpers ###########
 
