@@ -10,7 +10,6 @@ rule genes_tpm:
     params:
     conda:
         "../../envs/matplotlib.yaml"
-    threads: 4
     script:
         "../../scripts/tpm.py"
 
@@ -28,7 +27,6 @@ rule inducible_genes:
         cutoff=config["inducible"]["foldchange"]
     conda:
         "../../envs/matplotlib.yaml"
-    threads: 4
     script:
         "../../scripts/foldchange.py"
 
@@ -42,7 +40,6 @@ rule inducible_genes_geneid:
         "results/2019-06-26/dge/rg/{cell}_de_geneid.txt",
     conda:
         "../../envs/gawk.yaml"
-    threads: 1
     shell:
         """awk -F \"\\t\" '{{ if (NR!=1){{ print $1 }}}}' {input.genes} > {output}"""
 
@@ -70,6 +67,5 @@ rule genes_ripgrep_exon:
         "results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
     conda:
         "../../envs/gawk.yaml"
-    threads: 2
     shell:
         """awk '$3 ~ /^exon$/ ' {input} > {output}"""

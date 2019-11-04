@@ -103,7 +103,6 @@ rule fig_predicted_eRNA_peng:
         "../../envs/venn.yaml"
     params:
         title="Predicted eRNAs vs Peng's GM19",
-    threads: 4
     script:
         "../../scripts/venn-smk.py"
 
@@ -123,7 +122,6 @@ rule fig_predicted_eRNA_cross_cell:
         "../../envs/venn.yaml"
     params:
         title="IMR vs GM",
-    threads: 4
     script:
         "../../scripts/venn-smk.py"
 
@@ -160,6 +158,5 @@ rule fig_predicted_eRNA_cross_cell_0h:
         "../../envs/venn.yaml"
     params:
         title="IMR vs GM",
-    threads: 4
     script:
         "../../scripts/venn-smk.py"

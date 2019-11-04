@@ -30,7 +30,6 @@ rule test_homer_check_L2:
         "../../envs/bedtools.yaml"
     log:
         "logs/{genome}/genes/{cell}_check_L2.log"
-    threads: 2
     shell:
         "bedtools closest -a {input.l2} -b {input.homer} > {output}"
 
@@ -46,7 +45,6 @@ rule test_report_L2:
         report("results/2019-10-01/L2.tsv", caption="../../report/L2.rst", category="Inducible Pairs")
     log:
         "logs/hg19/test/L2.log"
-    threads: 4
     shell:
         "cat {input.eRNA} {input.genes} > {output}"
 
@@ -66,6 +64,5 @@ rule fig_linked_eRNA_cross_cell:
         "../../envs/venn.yaml"
     params:
         title="IMR vs GM Linked eRNAs",
-    threads: 4
     script:
         "../../scripts/venn-smk.py"

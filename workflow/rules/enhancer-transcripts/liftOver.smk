@@ -24,6 +24,5 @@ rule GM18_sort_liftOver_Bed:
         "results/2018-11-10/eRNA_GM_liftover_hg19.sorted.bed",
     conda:
         "../../envs/bedtools.yaml"
-    threads: 2
     shell:
         "sortBed -i {input} > {output}"

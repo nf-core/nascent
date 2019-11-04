@@ -13,7 +13,6 @@ rule alignHistones:
     params:
         index="data/2018-06-24/{genome}/genome",
         extra=""
-    threads: 4
     wrapper:
         "0.35.1/bio/bowtie2/align"
 
@@ -27,7 +26,6 @@ rule convert_Histones_to_Bed:
         "data/2018-11-13/{genome}/{cell}_{unit}.bed",
     conda:
         "../../envs/bedtools.yaml"
-    threads: 2
     shell:
         "bamToBed -i {input} | sortBed -i - > {output}"
 
@@ -46,7 +44,6 @@ rule eRNAs:
         "logs/{genome}/{cell}/HistonesIntersect.log"
     conda:
         "../../envs/bedtools.yaml"
-    threads: 2
     shell:
         "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"
 
@@ -65,7 +62,6 @@ rule eRNAs_0h_GM:
         "logs/{genome}/GM/HistonesIntersect.log"
     conda:
         "../../envs/bedtools.yaml"
-    threads: 2
     shell:
         "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"
 
@@ -84,6 +80,5 @@ rule eRNAs_0h_IMR:
         "logs/{genome}/IMR/HistonesIntersect.log"
     conda:
         "../../envs/bedtools.yaml"
-    threads: 2
     shell:
         "bedtools intersect -a {input.no_genes} -b {input.H3K27ac} {input.H3K4me1} -sorted -u -bed > {output} 2> {log}"

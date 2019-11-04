@@ -79,7 +79,6 @@ rule eRNA_link_merge:
     params:
         # dis="-d 2000",
         col="-c 4,5,6 -o distinct",
-    threads: 3
     shell:
         "cat {input} | sort -k1,1 -k2,2n | bedtools merge -i stdin -s {params.col} > {output}"
 
@@ -95,7 +94,6 @@ rule eRNA_link_overlap:
     conda:
         "../../envs/bedtools.yaml"
     params:
-    threads: 3
     shell:
         "bedtools intersect -wo -a {input.GM} -b {input.IMR} > {output}"
 
@@ -111,6 +109,5 @@ rule eRNA_link_area:
     conda:
         "../../envs/bedtools.yaml"
     params:
-    threads: 3
     shell:
         "bedtools intersect -wa -a {input.merge} -b {input.ov} > {output}"

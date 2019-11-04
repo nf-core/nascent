@@ -14,7 +14,6 @@ rule genes_limma:
     params:
     conda:
         "../../envs/edgeR.yaml"
-    threads: 4
     script:
         "../../scripts/dge.R"
 
@@ -28,6 +27,5 @@ rule eRNA_limma:
     params:
     conda:
         "../../envs/edgeR.yaml"
-    threads: 4
     script:
         "../../scripts/dge.R"
