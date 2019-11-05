@@ -23,10 +23,8 @@ UNITS=list(set(samples["time"]))
 SAMPLES=list(samples["sample"])
 
 units = pd.read_csv(
-    config["units"], dtype=str, sep="\t").set_index(["sample", "unit"], drop=False)
-units.index.names = ["sample_id", "unit_id"]
-units.index = units.index.set_levels(
-    [i.astype(str) for i in units.index.levels])  # enforce str in index
+    config["units"], dtype=str, sep="\t").set_index("sample", drop=False)
+units.index.names = ["sample_id"]
 # validate(units, schema="../schemas/units.schema.yaml")
 
 
@@ -35,14 +33,10 @@ report: "../report/workflow.rst"
 # ##### wildcard constraints #####
 wildcard_constraints:
     sample="|".join(samples.index),
-    unit="|".join(units["unit"])
+    # unit="|".join(units["unit"])
 
 ####### helpers ###########
 
 def get_fastqs(wildcards):
     """Get raw FASTQ files from unit sheet."""
-    if is_single_end(wildcards.sample, wildcards.unit):
-        return units.loc[ (wildcards.sample, wildcards.unit), "fq1" ]
-    else:
-        u = units.loc[ (wildcards.sample, wildcards.unit), ["fq1", "fq2"] ].dropna()
-        return [ f"{u.fq1}", f"{u.fq2}" ]
+    return units.loc[wildcards.sample, "fq1" ]
