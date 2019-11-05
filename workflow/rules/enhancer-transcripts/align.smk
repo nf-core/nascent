@@ -4,12 +4,12 @@ rule bowtie2:
     TODO use an input function to get the location of fastq files
     """
     input:
-        sample=get_fastqs,
+        sample=["data/2018-06-23/{unit}.fastq"],
         ref="data/2018-06-24/{genome}/genome.fa",
     output:
-        "results/2018-10-04/{genome}/{sample}-{unit}/Aligned.out.bam"
+        "results/2018-10-04/{genome}/{unit}/Aligned.out.bam"
     log:
-        "logs/{genome}/bowtie2/{sample}-{unit}.log"
+        "logs/{genome}/bowtie2/{unit}.log"
     params:
         # index=config["ref"]["index"],
         index= lambda w: config["ref"]["{}".format(w.genome)]["index"],
@@ -43,12 +43,12 @@ rule star_se:
     Requires more than 31G of memory
     """
     input:
-        fq1=get_fastqs,
+        fq1="data/2018-06-23/{sample}.fastq",
         starIndex = "data/2018-10-16/{genome}/star"
     output:
-        "results/2018-10-04/{genome}/{sample}-{unit}/Aligned.out.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
     log:
-        "logs/{genome}/star/{sample}-{unit}.log"
+        "logs/{genome}/star/{sample}.log"
     params:
         # path to STAR reference genome index
         index= lambda w: config["ref"]["{}".format(w.genome)]["starIndex"],
