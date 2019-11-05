@@ -16,12 +16,6 @@ samples = pd.read_csv(config["samples"], sep="\t", dtype=str).set_index("sample"
 samples.index.names = ["sample_id"]
 # validate(samples, schema="schemas/samples.schema.yaml")
 
-CELLS=list(set(samples["cell"]))
-GM_SAMPLES=samples[samples["cell"]=="GM"].index.tolist()
-IMR_SAMPLES=samples[samples["cell"]=="IMR"].index.tolist()
-UNITS=list(set(samples["time"]))
-SAMPLES=list(samples["sample"])
-
 units = pd.read_csv(
     config["units"], dtype=str, sep="\t").set_index(["sample", "unit"], drop=False)
 units.index.names = ["sample_id", "unit_id"]
@@ -29,6 +23,11 @@ units.index = units.index.set_levels(
     [i.astype(str) for i in units.index.levels])  # enforce str in index
 # validate(units, schema="../schemas/units.schema.yaml")
 
+CELLS=list(set(samples["cell"]))
+GM_SAMPLES=samples[samples["cell"]=="GM"].index.tolist()
+IMR_SAMPLES=samples[samples["cell"]=="IMR"].index.tolist()
+TIMES=list(set(samples["time"]))
+SAMPLES=list(samples["sample"])
 
 report: "../report/workflow.rst"
 
@@ -39,9 +38,13 @@ wildcard_constraints:
 
 ####### helpers ###########
 
+def is_single_end(sample, unit):
+    """Determine whether unit is single-end."""
+    return pd.isnull(units.loc[(sample, unit), "fq2"])
+
 def get_fastqs(wildcards):
     """Get raw FASTQ files from unit sheet."""
-    if is_single_end(wildcards.sample, wildcards.unit):
+    if is_single_end(wildcards.sample):
         return units.loc[ (wildcards.sample, wildcards.unit), "fq1" ]
     else:
         u = units.loc[ (wildcards.sample, wildcards.unit), ["fq1", "fq2"] ].dropna()

@@ -9,14 +9,9 @@ rule AWS_iGenomes:
 # Datasets TODO
 
 # TODO move path to config
-rule GM_download:
+rule GRO_Seq_download:
     output:
-        expand("data/2018-06-23/{unit}.fastq",unit=GM_SAMPLES),
-
-# TODO move path to config
-rule IMR_download:
-    output:
-        expand("data/2018-06-23/{unit}.fastq",unit=IMR_SAMPLES),
+        "data/2018-06-23/{sample}-{unit}.fastq",
 
 
 #############################

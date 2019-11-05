@@ -63,12 +63,12 @@ rule removeGenes_0h:
     Removes the intergenic regions from GRO-Seq Transcripts
     """
     input:
-        transcripts="results/2018-11-07/{genome}/0h/{cell}_transcripts.bed",
+        transcripts="results/2018-11-07/{genome}/{sample}-{unit}_transcripts.bed",
         refseq="data/2018-11-09/{genome}/{genome}_slop_refseq.sorted.bed",
     output:
-        "results/2018-11-09/{genome}/0h/{cell}_transcripts_noGenes.bed"
+        "results/2018-11-09/{genome}/{sample}-{unit}_transcripts_noGenes.bed"
     log:
-        "logs/{genome}/{cell}/RemoveGenes.log"
+        "logs/{genome}/{sample}-{unit}/RemoveGenes.log"
     conda:
         "../../envs/bedtools.yaml"
     shell:

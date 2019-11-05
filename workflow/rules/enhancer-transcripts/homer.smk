@@ -5,7 +5,7 @@ rule IMR18_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg18/{sample}/Aligned.out.bam",sample=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -22,7 +22,7 @@ rule GM18_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg18/{sample}/Aligned.out.bam",sample=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg18/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -39,7 +39,7 @@ rule IMR_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg19/{sample}/Aligned.out.sam",sample=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -56,7 +56,7 @@ rule GM_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg19/{sample}/Aligned.out.sam",sample=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -138,9 +138,9 @@ rule makeTagDirectory_0h:
     Creates a tag directory using homer for 0h
     """
     input:
-        "results/2018-10-04/hg19/{unit}/Aligned.out.sam"
+        "results/2018-10-04/hg19/{sample}-{unit}/Aligned.out.sam"
     output:
-        directory("results/2018-11-07/hg19/0h/{unit}_tagDir"),
+        directory("results/2018-11-07/hg19/{sample}-{unit}_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
     group: "homer"
     params:
@@ -155,10 +155,10 @@ rule findPeaks_0h:
     HACK Generalize
     """
     input:
-        tagdir="results/2018-11-07/hg19/0h/{cell}_tagDir",
+        tagdir="results/2018-11-07/hg19/{sample}-{unit}_tagDir",
         uniqmap=config["homer"]["findPeaks"]["uniqmap"],
     output:
-        "results/2018-11-07/hg19/0h/{cell}_transcripts.txt"
+        "results/2018-11-07/hg19/{sample}-{unit}_transcripts.txt"
     singularity: config["homer"]["findPeaks"]["singularity"]
     params:
         style = config["homer"]["findPeaks"]["style"],
@@ -171,9 +171,9 @@ rule homer_0h_pos2bed:
     Coverts transcripts from homer format to bed
     """
     input:
-        "results/2018-11-07/{genome}/0h/{cell}_transcripts.txt"
+        "results/2018-11-07/{genome}/{sample}-{unit}_transcripts.txt"
     output:
-        "results/2018-11-07/{genome}/0h/{cell}_transcripts.bed"
+        "results/2018-11-07/{genome}/{sample}-{unit}_transcripts.bed"
     conda:
         "../../envs/homer.yaml"
     shell:

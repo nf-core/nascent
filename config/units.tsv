@@ -1,4 +1,4 @@
-sample	unit	fq
+sample	unit	fq1
 GM0h	rep1	data/2018-06-23/GM0h.fastq
 GM30min	rep1	data/2018-06-23/GM30min.fastq
 GM1h	rep1	data/2018-06-23/GM1h.fastq
