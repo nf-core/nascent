@@ -24,7 +24,7 @@ rule inducible_genes:
     output:
         "results/2019-06-26/dge/foldchange/{cell}_foldchange.tsv",
     params:
-        cutoff=config["inducible"]["foldchange"]
+        cutoff=config["inducible"]["genes"]["foldchange"]
     conda:
         "../../envs/matplotlib.yaml"
     script:

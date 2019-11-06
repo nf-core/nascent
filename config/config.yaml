@@ -71,4 +71,7 @@ homer:
       chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr8 chrM chrY chrX"
 
 inducible:
-  foldchange: 0.5
+  genes:
+    foldchange: 0.5
+  eRNA:
+    foldchange: 0.01
