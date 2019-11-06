@@ -59,7 +59,7 @@ rule common_gene_group:
     input:
         groups=expand("results/2019-10-29/{genome}/{cell}_group_names.tsv", genome=["hg19"],cell=CELLS),
     output:
-        "results/2019-10-29/{genome}/common_group_names.tsv",
+        report("results/2019-10-29/{genome}/common_group_names.tsv", category="Inducible Pairs")
     conda:
         "../../envs/gawk.yaml"
     shell:
