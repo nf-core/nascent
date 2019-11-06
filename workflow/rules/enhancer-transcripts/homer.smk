@@ -133,14 +133,14 @@ rule homer_meta_pos2bed:
     shell:
         "pos2bed.pl {input} | sort -k1,1 -k2,2n - > {output}"
 
-rule makeTagDirectory_0h:
+rule sample_makeTagDirectory:
     """
     Creates a tag directory using homer for 0h
     """
     input:
-        "results/2018-10-04/hg19/{unit}/Aligned.out.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
     output:
-        directory("results/2018-11-07/hg19/0h/{unit}_tagDir"),
+        directory("results/2018-11-07/{genome}/{sample}_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
     group: "homer"
     params:
@@ -149,16 +149,16 @@ rule makeTagDirectory_0h:
     shell:
         "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
 
-rule findPeaks_0h:
+rule sample_findPeaks:
     """
     Uses homer findPeaks to indentify GRO-Seq transcripts
     HACK Generalize
     """
     input:
-        tagdir="results/2018-11-07/hg19/0h/{cell}_tagDir",
+        tagdir="results/2018-11-07/{genome}/{sample}_tagDir",
         uniqmap=config["homer"]["findPeaks"]["uniqmap"],
     output:
-        "results/2018-11-07/hg19/0h/{cell}_transcripts.txt"
+        "results/2018-11-07/{genome}/{sample}_transcripts.txt"
     singularity: config["homer"]["findPeaks"]["singularity"]
     params:
         style = config["homer"]["findPeaks"]["style"],
@@ -166,14 +166,14 @@ rule findPeaks_0h:
     shell:
         "findPeaks {input.tagdir} -style {params.style} -o {output} -uniqmap {input.uniqmap}"
 
-rule homer_0h_pos2bed:
+rule sample_pos2bed:
     """
     Coverts transcripts from homer format to bed
     """
     input:
-        "results/2018-11-07/{genome}/0h/{cell}_transcripts.txt"
+        "results/2018-11-07/{genome}/{sample}_transcripts.txt"
     output:
-        "results/2018-11-07/{genome}/0h/{cell}_transcripts.bed"
+        "results/2018-11-07/{genome}/{sample}_transcripts.bed"
     conda:
         "../../envs/homer.yaml"
     shell:

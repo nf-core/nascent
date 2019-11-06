@@ -130,16 +130,16 @@ rule test_IMR_vs_GM_0h:
     Compares identified eRNAs across cell lines
     """
     input:
-        IMR="results/2018-12-02/{genome}/IMR_eRNA_0h.bed",
-        GM19="results/2018-12-02/{genome}/GM_eRNA_0h.bed",
+        IMR="results/2018-12-02/{genome}/sample_IMR0h_IMR_eRNA.bed",
+        GM="results/2018-12-02/{genome}/sample_GM0h_GM_eRNA.bed",
     output:
         report("results/2018-11-10/test/{genome}/IMR_eRNA_vs_GM_0h_{genome}.bed", category="eRNA Prediction")
     log:
-        "logs/{genome}/test_IMR_vs_GM.log"
+        "logs/{genome}/test_IMR_vs_GM_0h.log"
     conda:
         "../../envs/bedtools.yaml"
     shell:
-        "bedtools intersect -a {input.IMR} -b {input.GM19} \
+        "bedtools intersect -a {input.IMR} -b {input.GM} \
         -sorted -u > {output} 2> {log}"
 
 rule fig_predicted_eRNA_cross_cell_0h:
@@ -147,8 +147,8 @@ rule fig_predicted_eRNA_cross_cell_0h:
     Creates a venn diagram of eRNA transcripts across cell lines from rule test_IMR_vs_GM
     """
     input:
-        IMR="results/2018-12-02/{genome}/IMR_eRNA_0h.bed",
-        GM19="results/2018-12-02/{genome}/GM_eRNA_0h.bed",
+        IMR="results/2018-12-02/{genome}/sample_IMR0h_IMR_eRNA.bed",
+        GM="results/2018-12-02/{genome}/sample_GM0h_GM_eRNA.bed",
         overlap="results/2018-11-10/test/{genome}/IMR_eRNA_vs_GM_0h_{genome}.bed",
     output:
         report("results/2018-10-12/{genome}/eRNA_cross_cell_0h.svg", category="Figures")
@@ -157,6 +157,6 @@ rule fig_predicted_eRNA_cross_cell_0h:
     conda:
         "../../envs/venn.yaml"
     params:
-        title="IMR vs GM",
+        title="IMR 0h vs GM 0h",
     script:
         "../../scripts/venn-smk.py"

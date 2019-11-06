@@ -58,17 +58,17 @@ rule removeGenes:
         "bedtools intersect -a {input.transcripts} -b {input.refseq} -v \
         | sort -k1,1 -k2,2n - > {output} 2> {log}"
 
-rule removeGenes_0h:
+rule sample_removeGenes:
     """
     Removes the intergenic regions from GRO-Seq Transcripts
     """
     input:
-        transcripts="results/2018-11-07/{genome}/0h/{cell}_transcripts.bed",
+        transcripts="results/2018-11-07/{genome}/{sample}_transcripts.bed",
         refseq="data/2018-11-09/{genome}/{genome}_slop_refseq.sorted.bed",
     output:
-        "results/2018-11-09/{genome}/0h/{cell}_transcripts_noGenes.bed"
+        "results/2018-11-09/{genome}/{sample}_transcripts_noGenes.bed"
     log:
-        "logs/{genome}/{cell}/RemoveGenes.log"
+        "logs/{genome}/{sample}/RemoveGenes.log"
     conda:
         "../../envs/bedtools.yaml"
     shell:
