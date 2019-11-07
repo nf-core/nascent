@@ -114,18 +114,19 @@ rule hg19_meta_findPeaks:
     params:
         style = config["homer"]["findPeaks"]["style"],
         tssSize = config["homer"]["findPeaks"]["tssSize"],
-        minBodySize = config["homer"]["findPeaks"]["mindBodySize"],
+        minBodySize = config["homer"]["findPeaks"]["minBodySize"],
         tssFold = config["homer"]["findPeaks"]["tssFold"],
         bodyFold = config["homer"]["findPeaks"]["bodyFold"],
         endFold = config["homer"]["findPeaks"]["endFold"],
         fragLength = config["homer"]["findPeaks"]["fragLength"],
         confPvalue = config["homer"]["findPeaks"]["confPvalue"],
         pseudoCount = config["homer"]["findPeaks"]["pseudoCount"],
+    log: "logs/hg19/homer/{cell}_findPeaks"
     shell:
         "findPeaks {input.tagdir} -style {params.style} -uniqmap {input.uniqmap}\
-        -tssSize {params.tssSize} -mindBodySize {params.minBodySize} -tssFold {params.tssFold}\
+        -tssSize {params.tssSize} -minBodySize {params.minBodySize} -tssFold {params.tssFold}\
         -bodyFold {params.bodyFold} -endFold {params.endFold} -confPvalue {params.confPvalue} -pseudoCount {params.pseudoCount}\
-        -minBodySize -o {output}"
+        -o {output}"
 
 rule homer_meta_pos2bed:
     """
@@ -170,7 +171,7 @@ rule sample_findPeaks:
     params:
         style = config["homer"]["findPeaks"]["style"],
         tssSize = config["homer"]["findPeaks"]["tssSize"],
-        minBodySize = config["homer"]["findPeaks"]["mindBodySize"],
+        minBodySize = config["homer"]["findPeaks"]["minBodySize"],
         tssFold = config["homer"]["findPeaks"]["tssFold"],
         bodyFold = config["homer"]["findPeaks"]["bodyFold"],
         endFold = config["homer"]["findPeaks"]["endFold"],
@@ -179,9 +180,9 @@ rule sample_findPeaks:
         pseudoCount = config["homer"]["findPeaks"]["pseudoCount"],
     shell:
         "findPeaks {input.tagdir} -style {params.style} -uniqmap {input.uniqmap}\
-        -tssSize {params.tssSize} -mindBodySize {params.minBodySize} -tssFold {params.tssFold}\
+        -tssSize {params.tssSize} -minBodySize {params.minBodySize} -tssFold {params.tssFold}\
         -bodyFold {params.bodyFold} -endFold {params.endFold} -confPvalue {params.confPvalue} -pseudoCount {params.pseudoCount}\
-        -minBodySize -o {output}"
+        -o {output}"
 
 rule sample_pos2bed:
     """
