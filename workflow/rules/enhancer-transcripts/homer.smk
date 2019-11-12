@@ -9,7 +9,6 @@ rule IMR18_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    group: "homer"
     params:
         genome = "hg18",
         extra = config["homer"]["makeTagDir"]["extra"],
@@ -26,7 +25,6 @@ rule GM18_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg18/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    group: "homer"
     params:
         genome = "hg18",
         extra = config["homer"]["makeTagDir"]["extra"],
@@ -43,7 +41,6 @@ rule IMR_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg19/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    group: "homer"
     params:
         genome = "hg19",
         extra = config["homer"]["makeTagDir"]["extra"],
@@ -60,7 +57,6 @@ rule GM_meta_makeTagDirectory:
     output:
         directory("results/2018-11-07/hg19/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    group: "homer"
     params:
         genome = "hg19",
         extra = config["homer"]["makeTagDir"]["extra"],
@@ -77,7 +73,6 @@ rule meta_makeUCSCfile:
     output:
         report("results/2018-11-07/{genome}/{cell}_{genome}_ucsc.gz", category="homer")
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    threads: 3
     params:
         fixedOutput="results/2018-11-07/{genome}/{cell}_{genome}_ucsc",
         skips=config["homer"]["UCSC"]["skipChr"],
@@ -150,7 +145,6 @@ rule sample_makeTagDirectory:
     output:
         directory("results/2018-11-07/{genome}/{sample}_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
-    group: "homer"
     params:
         genome = "hg19",
         extra = config["homer"]["makeTagDir"]["extra"],
