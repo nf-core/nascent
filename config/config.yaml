@@ -54,7 +54,7 @@ slopRefSeq:
 feature_counts:
   annotation: *annotation
   extra: ""
-  threads: 4
+  threads: 16
 
 homer:
   makeTagDir:
@@ -65,9 +65,9 @@ homer:
     style: "groseq"
     uniqmap: "data/2019-07-26/hg19-50nt-uniqmap" # Download from http://biowhat.ucsd.edu/homer/groseq/
     tssSize: "250" # (size of region for initiation detection/artifact size, default: 250)
-    minBodySize: "1000" # (size of regoin for transcript body detection, default: 1000)
+    minBodySize: "600" # (size of regoin for transcript body detection, default: 1000)
     tssFold: "4.0" # (fold enrichment for new initiation dectection, default: 4.0)
-    bodyFold: "4.0" # (fold enrichment for new transcript dectection, default: 4.0)
+    bodyFold: "2.0" # (fold enrichment for new transcript dectection, default: 4.0)
     endFold: "10.0" # (end transcript when levels are this much less than the start, default: 10.0)
     fragLength: "150" # (Approximate fragment length, default: 150)
     confPvalue: "1.00e-05" # (confidence p-value: 1.00e-05)
