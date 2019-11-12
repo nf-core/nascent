@@ -21,6 +21,7 @@ include: "rules/inducible-pairs/featureCounts.smk"
 include: "rules/inducible-pairs/inducible_genes.smk"
 include: "rules/inducible-pairs/linkedRNAs.smk"
 include: "rules/inducible-pairs/inducible_eRNA.smk"
+include: "rules/inducible-pairs/inducible_groups.smk"
 include: "rules/inducible-pairs/test_eRNA.smk"
 
 rule all:
