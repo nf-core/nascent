@@ -11,7 +11,7 @@ rule eRNA_link_genes:
     conda:
         "../../envs/bedtools.yaml"
     params:
-        window="200000"
+        window=config["E-P-distance"]
     threads: 2
     shell:
         "bedtools window -u -w {params.window} -a {input.eRNA} -b {input.dges} > {output}"

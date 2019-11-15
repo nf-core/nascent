@@ -82,3 +82,5 @@ inducible:
     foldchange: 0.5
   eRNA:
     foldchange: 0.01
+
+E-P-distance: 200000
