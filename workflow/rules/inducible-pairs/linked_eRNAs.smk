@@ -62,3 +62,26 @@ rule eRNA_link_area:
     params:
     shell:
         "bedtools intersect -wa -a {input.merge} -b {input.ov} > {output}"
+
+rule gene_nearest_eRNA:
+    input:
+        dges="results/2019-06-26/dge/rg/{cell}_de_genes.gtf",
+        eRNA="results/2019-06-26/dge/rg/{genome}/{cell}_de_ripgrep.bed",
+    output:
+        report("results/2019-11-14/{genome}/{cell}_nearest_eRNA.bed", category="Inducible Pairs")
+    conda:
+        "../../envs/bedtools.yaml"
+    params:
+    shell:
+        "bedtools closest -d -a {input.dges}  -b {input.eRNA} > {output}"
+
+rule average_e_p_distance:
+    input:
+        e_p="results/2019-11-14/{genome}/{cell}_nearest_eRNA.bed",
+    output:
+        report("results/2019-11-14/{genome}/{cell}_avg_ep.tsv", category="Inducible Pairs")
+    conda:
+        "../../envs/matplotlib.yaml"
+    params:
+    script:
+        "../../scripts/nearest-avg.py"
