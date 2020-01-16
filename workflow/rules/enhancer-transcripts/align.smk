@@ -1,7 +1,6 @@
 rule bowtie2:
     """
     Aligns fastq samples with bowtie2 using reference genome
-    TODO use an input function to get the location of fastq files
     """
     input:
         sample=get_fastqs,
