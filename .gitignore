@@ -19,6 +19,7 @@ workflow/scripts/.snakemake*
 !.gitignore
 !.editorconfig
 !.gitattributes
+!.gitlab-ci.yml
 !.gitmodules
 !.test
 !.test/data
