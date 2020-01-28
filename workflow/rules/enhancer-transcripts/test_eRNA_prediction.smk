@@ -7,7 +7,7 @@ rule test_eRNA_vs_Peng:
     """
     input:
         edmund="results/2018-12-02/{genome}/{cell}_eRNA.bed",
-        peng="data/2018-01-25/eRNA_GM_hg19.bed",
+        peng="reference/2018-01-25/eRNA_GM_hg19.bed",
     output:
         report("results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed", category="eRNA Prediction")
     log:
@@ -24,7 +24,7 @@ rule test_GM18_liftOver_vs_Peng:
     """
     input:
         liftOver="results/2018-11-10/eRNA_GM_liftover_hg19.sorted.bed",
-        peng="data/2018-01-25/eRNA_GM_hg19.bed",
+        peng="reference/2018-01-25/eRNA_GM_hg19.bed",
     output:
         report("results/2018-11-10/test/hg19_eRNA_overlaps.bed", category="eRNA Prediction")
     log:
@@ -93,7 +93,7 @@ rule fig_predicted_eRNA_peng:
     """
     input:
         edmund="results/2018-12-02/{genome}/{cell}_eRNA.bed",
-        peng="data/2018-01-25/eRNA_GM_hg19.bed",
+        peng="reference/2018-01-25/eRNA_GM_hg19.bed",
         overlap="results/2018-11-10/test/{genome}/{cell}_eRNA_overlaps.bed",
     output:
         report("results/2018-10-12/{genome}/{cell}_eRNA_overlaps.svg", category="Figures")

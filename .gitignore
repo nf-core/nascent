@@ -4,10 +4,8 @@
 !config/samples.tsv
 !config/units.tsv
 !config/cluster.json
-!data
-!data/*
-!data/2018-01-25/
-!data/2019-10-01/
+!reference
+!reference/**
 !LICENSE
 !README.md
 resources

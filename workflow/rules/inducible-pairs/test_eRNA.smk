@@ -5,7 +5,7 @@ rule test_eRNA_check_L2:
     """
     input:
         eRNA="results/2019-08-26/hg19/{cell}_link_eRNA.bed",
-        l2="data/2019-10-01/L2.bed",
+        l2="reference/2019-10-01/L2.bed",
     output:
         "results/2019-08-26/{cell}_L2.bed",
     conda:
@@ -23,7 +23,7 @@ rule test_homer_check_L2:
     """
     input:
         homer="results/2018-11-07/{genome}/{cell}_meta_transcripts.bed",
-        l2="data/2019-10-01/L2.bed",
+        l2="reference/2019-10-01/L2.bed",
     output:
         "results/2019-10-01/{genome}/{cell}_genes_L2.bed",
     conda:
