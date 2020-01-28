@@ -1,36 +1,3 @@
-# TODO Generalize these
-rule IMR18_meta_makeTagDirectory:
-    """
-    Creates a tag directory using homer and checkes GC content
-    HACK Generalize
-    """
-    input:
-        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=IMR_SAMPLES)
-    output:
-        directory("results/2018-11-07/hg18/IMR_meta_tagDir"),
-    singularity: config["homer"]["makeTagDir"]["singularity"]
-    params:
-        genome = "hg18",
-        extra = config["homer"]["makeTagDir"]["extra"],
-    shell:
-        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
-
-rule GM18_meta_makeTagDirectory:
-    """
-    Creates a tag directory using homer and checkes GC content
-    HACK Generalize
-    """
-    input:
-        expand("results/2018-10-04/hg18/{unit}/Aligned.out.bam",unit=GM_SAMPLES)
-    output:
-        directory("results/2018-11-07/hg18/GM_meta_tagDir")
-    singularity: config["homer"]["makeTagDir"]["singularity"]
-    params:
-        genome = "hg18",
-        extra = config["homer"]["makeTagDir"]["extra"],
-    shell:
-        "makeTagDirectory {output} -genome {params.genome} {params.extra} {input}"
-
 rule IMR_meta_makeTagDirectory:
     """
     Creates a tag directory using homer and checkes GC content
@@ -78,22 +45,6 @@ rule meta_makeUCSCfile:
         skips=config["homer"]["UCSC"]["skipChr"],
     shell:
         "makeUCSCfile {input} -o {params.fixedOutput} -strand separate -skipChr {params.skips}"
-
-rule hg18_meta_findPeaks:
-    """
-    Uses homer findPeaks to indentify GRO-Seq transcripts
-    HACK Generalize
-    """
-    input:
-        "results/2018-11-07/hg18/{cell}_meta_tagDir"
-    output:
-        "results/2018-11-07/hg18/{cell}_meta_transcripts.txt"
-    singularity: config["homer"]["findPeaks"]["singularity"]
-    params:
-        style = config["homer"]["findPeaks"]["style"],
-        bodyFold = config["homer"]["findPeaks"]["bodyFold"],
-    shell:
-        "findPeaks {input} -o {output} -style {params.style}"
 
 rule hg19_meta_findPeaks:
     """

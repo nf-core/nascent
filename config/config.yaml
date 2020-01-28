@@ -6,7 +6,6 @@ histones:
   - H3K27ac
 
 genomes:
-  - hg18
   - hg19
 
 # missing:
@@ -20,12 +19,6 @@ genomes:
 #     unit: 72h
 
 ref:
-  hg18:
-    # the bowtie2 index
-    index: "data/2018-06-24/hg18/genome"
-    starIndex: "data/2019-10-16/hg18/star"
-    # gtf file with transcripts
-    annotation: "data/2018-11-09/hg18/genes.gtf"
   hg19:
     # the bowtie2 index
     index: "data/2018-06-24/hg19/genome"
