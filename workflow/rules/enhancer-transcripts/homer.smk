@@ -4,7 +4,7 @@ rule IMR_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=IMR_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}/Aligned.out.bam",unit=IMR_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/IMR_meta_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -20,7 +20,7 @@ rule GM_meta_makeTagDirectory:
     HACK Generalize
     """
     input:
-        expand("results/2018-10-04/hg19/{unit}/Aligned.out.sam",unit=GM_SAMPLES)
+        expand("results/2018-10-04/hg19/{unit}/Aligned.out.bam",unit=GM_SAMPLES)
     output:
         directory("results/2018-11-07/hg19/GM_meta_tagDir")
     singularity: config["homer"]["makeTagDir"]["singularity"]
@@ -92,7 +92,7 @@ rule sample_makeTagDirectory:
     Creates a tag directory using homer for 0h
     """
     input:
-        "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
+        "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
     output:
         directory("results/2018-11-07/{genome}/{sample}_tagDir"),
     singularity: config["homer"]["makeTagDir"]["singularity"]

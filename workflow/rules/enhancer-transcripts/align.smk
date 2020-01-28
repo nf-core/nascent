@@ -46,7 +46,7 @@ rule bowtie2:
 #         fq1=get_fastqs,
 #         starIndex = "data/2018-10-16/{genome}/star"
 #     output:
-#         "results/2018-10-04/{genome}/{sample}/Aligned.out.sam"
+#         "results/2018-10-04/{genome}/{sample}/Aligned.out.bam"
 #     log:
 #         "logs/{genome}/star/{sample}.log"
 #     params:
