@@ -1,46 +1,83 @@
 samples: config/samples.tsv
+units: config/units.tsv
 
 histones:
   - H3K4me1
   - H3K27ac
 
 genomes:
-  - hg18
   - hg19
 
-missing:
-  - cell: IMR
-    unit: 9h
-  - cell: IMR
-    unit: 18h
-  - cell: IMR
-    unit: 48h
-  - cell: IMR
-    unit: 72h
+# missing:
+#   - cell: IMR
+#     unit: 9h
+#   - cell: IMR
+#     unit: 18h
+#   - cell: IMR
+#     unit: 48h
+#   - cell: IMR
+#     unit: 72h
 
 ref:
-  hg18:
-    # the bowtie2 index
-    index: "data/2018-06-24/hg18/genome"
-    # gtf file with transcripts
-    annotation: "data/2018-11-09/hg18/genes.gtf"
   hg19:
     # the bowtie2 index
     index: "data/2018-06-24/hg19/genome"
+    starIndex: "data/2019-10-16/hg19/star"
     # gtf file with transcripts
     annotation: &annotation "data/2018-11-09/hg19/genes.gtf"
+    # NOTE Available homer uniqmaps
+    # Human: hg19 hg38
+    # Mouse: mm9 mm10
+    # Fly: dm3 dm6
+    uniqmapLink: "http://homer.ucsd.edu/homer/data/uniqmap/uniqmap.hg19.50nt.zip"
 
 ######################
 # Rule configuration #
 ######################
+bowtie2:
+  extra: ""
+
+STAR:
+  index:
+    extra: ""
+  align:
+    extra: ""
+
+# Amount to remove upstream and downstream of genes
+slopRefSeq:
+  upstream: 1000
+  downstream: 10000
+
 feature_counts:
   annotation: *annotation
   extra: ""
-  threads: 4
+  threads: 16
 
 homer:
-  tagDir:
+  makeTagDir:
+    singularity: "docker://emiller88/homer:latest"
+    extra: "-checkGC"
   findPeaks:
+    singularity: "docker://emiller88/homer:latest"
     style: "groseq"
-    uniqmap: "data/2019-07-26/hg19-50nt-uniqmap"
-    bodyFold: "1.5"
+    uniqmap: "data/2019-07-26/hg19-50nt-uniqmap" # Download from http://biowhat.ucsd.edu/homer/groseq/
+    tssSize: "250" # (size of region for initiation detection/artifact size, default: 250)
+    minBodySize: "600" # (size of regoin for transcript body detection, default: 1000)
+    tssFold: "4.0" # (fold enrichment for new initiation dectection, default: 4.0)
+    bodyFold: "2.0" # (fold enrichment for new transcript dectection, default: 4.0)
+    endFold: "10.0" # (end transcript when levels are this much less than the start, default: 10.0)
+    fragLength: "150" # (Approximate fragment length, default: 150)
+    confPvalue: "1.00e-05" # (confidence p-value: 1.00e-05)
+    pseudoCount: "2.0" # (Pseudo tag count, default: 2.0)
+  UCSC:
+    skipChr:
+      "chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr2\
+      chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr8 chrM chrY chrX"
+
+inducible:
+  genes:
+    foldchange: 0.5
+  eRNA:
+    foldchange: 0.01
+
+E-P-distance: 200000

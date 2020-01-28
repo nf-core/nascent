@@ -1,4 +1,4 @@
-name	cell	time
+sample	cell	time
 GM0h	GM	0h
 GM30min	GM	30min
 GM1h	GM	1h
@@ -17,5 +17,9 @@ IMR1h	IMR	1h
 IMR2h	IMR	2h
 IMR4h	IMR	4h
 IMR6h	IMR	6h
+IMR9h	IMR	9h
 IMR12h	IMR	12h
+IMR18h	IMR	18h
 IMR24h	IMR	24h
+IMR48h	IMR	48h
+IMR72h	IMR	72h

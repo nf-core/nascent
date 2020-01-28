@@ -24,5 +24,4 @@ workflow/scripts/.snakemake*
 !.test
 !.test/data
 !.test/config
-!.test/config/config.yaml
-!.test/config/samples.tsv
+!.test/config/*
