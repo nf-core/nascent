@@ -9,7 +9,6 @@ include: "rules/enhancer-transcripts/align.smk"
 include: "rules/enhancer-transcripts/homer.smk"
 include: "rules/enhancer-transcripts/removeGenes.smk"
 include: "rules/enhancer-transcripts/keepHistones.smk"
-include: "rules/enhancer-transcripts/liftOver.smk"
 include: "rules/enhancer-transcripts/test_eRNA_prediction.smk"
 
 ###################
