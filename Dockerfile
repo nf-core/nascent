@@ -1,7 +1,13 @@
-FROM nfcore/base
-LABEL authors="Ignacio Tripodi" \
-      description="Docker image containing all requirements for nf-core/nascent pipeline"
+FROM nfcore/base:1.9
+LABEL authors="Ignacio Tripodi, Margaret Gruca" \
+      description="Docker image containing all software requirements for the nf-core/nascent pipeline"
 
+# Install the conda environment
 COPY environment.yml /
 RUN conda env create -f /environment.yml && conda clean -a
-ENV PATH /opt/conda/envs/nf-core-nascent-1.0dev/bin:$PATH
+
+# Add conda installation dir to PATH (instead of doing 'conda activate')
+ENV PATH /opt/conda/envs/nf-core-nascent-1.0/bin:$PATH
+
+# Dump the details of the installed packages to a file for posterity
+RUN conda env export --name nf-core-nascent-1.0 > nf-core-nascent-1.0.yml
