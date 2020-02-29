@@ -317,53 +317,6 @@ process get_software_versions {
     """
 }
 
-/*
- * Step 1a -- get fastq files from downloaded sras
- */
-
-process sra_dump {
-    tag "$prefix"
-
-    input:
-    set val(prefix), file(reads) from read_files_sra
-
-    output:
-    set val(prefix), file("*.fastq") into fastq_reads_qc_sra, fastq_reads_trim_sra, fastq_reads_gzip_sra
-
-    script:
-    prefix = reads.baseName
-    if (!params.threadfqdump) {
-        """
-        echo ${prefix}
-
-        fastq-dump ${reads}
-        """
-    } else if (!params.single_end) {
-         """
-        export PATH=~/.local/bin:$PATH
-
-        parallel-fastq-dump \
-            --threads ${task.cpus} \
-            --split-3 \
-            --sra-id ${reads}
-        """
-    } else if (!params.threadfqdump && !params.single_end) {
-        """
-        echo ${prefix}
-
-        fastq-dump --split-3 ${reads}
-        """
-    } else {
-        """
-        export PATH=~/.local/bin:$PATH
-
-        parallel-fastq-dump \
-            --threads ${task.cpus} \
-            --sra-id ${reads}
-        """
-    }
-}
-
 
 /*
  * PREPROCESSING - Build HISAT2 index (borrowed from nf-core/rnaseq)
@@ -405,7 +358,7 @@ process fastqc {
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
 
     input:
-    set val(prefix), file(reads) from fastq_reads_qc.mix(fastq_reads_qc_sra)
+    set val(prefix), file(reads) from fastq_reads_qc
 
     output:
     file "*.{zip,html,txt}" into fastqc_results
@@ -430,7 +383,7 @@ process gzip_fastq {
     params.savefq || params.saveAllfq
 
     input:
-    set val(name), file(fastq_reads) from fastq_reads_gzip.mix(fastq_reads_gzip_sra)
+    set val(name), file(fastq_reads) from fastq_reads_gzip
 
     output:
     set val(name), file("*.gz") into compressed_fastq
@@ -452,7 +405,7 @@ process bbduk {
     publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.txt"
 
     input:
-    set val(name), file(reads) from fastq_reads_trim.mix(fastq_reads_trim_sra)
+    set val(name), file(reads) from fastq_reads_trim
 
     output:
     set val(name), file ("*.trim.fastq") into trimmed_reads_fastqc, trimmed_reads_hisat2, trimmed_reads_gzip
