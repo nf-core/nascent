@@ -46,6 +46,7 @@ The nf-core/nascent pipeline comes with documentation about the pipeline, found 
 If you have used this pipeline in your research, please cite it using the DOI mentioned above.
 
 The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
+
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration
     * [Local installation](https://nf-co.re/usage/local_installation)
@@ -61,7 +62,7 @@ This pipeline is designed to process the sequencing output of nascent transcript
 
 Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the proper paths are set for genome reference files and other executables (look for all mentions of `COMPLETE_*`). Variable names should hopefully be self-explanatory. You can specify the Nextflow working directory and output directory with flags. Note you must also now specify the email to which the report will be sent for the run.
 
-```
+```console
 nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
 ```
 
@@ -133,4 +134,3 @@ You can cite the `nf-core` publication as follows:
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).  
 > ReadCube: [Full Access Link](https://rdcu.be/b1GjZ)
-

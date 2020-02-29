@@ -168,4 +168,3 @@ If the necessary indices for mapping are not provided/present, a separate proces
 
 * `sample.trim.rpkm.tdf`
   * Sample coverage file in TDF format
-

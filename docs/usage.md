@@ -327,13 +327,17 @@ Set to disable colourful command line output and live life in monochrome.
 Specify a path to a custom MultiQC configuration file.
 
 ### `--chrom_sizes`
+
 Specify a path to a file listing the number of nucleotides on each chromosome, for the reference quenome in question.
 
 ### `--hisat_indices`
+
 Specify a path to the Hisat2 index directory. If not provided, hese indices will be generated the first time this pipeline is executed.
 
 ### `--genome_refseq`
+
 Specify a path to the RefSeq genome annotation file. Optional, but useful to collect stats via RseQC.
 
 ### `--sras`
+
 Specify a path to a directory (can use regular expressions) containing SRR files obtained from the Gene Expression Omnibus (GEO) platform. This is an alternative to providing fastq files if re-analizing existing public datasets.
