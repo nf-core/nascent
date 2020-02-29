@@ -74,7 +74,7 @@ def helpMessage() {
                                     Available: conda, docker, singularity, test, awsbatch, <institute> and more
 
     Input File options:
-        --singleEnd                    Specifies that the input files are not paired reads (default is paired-end).
+        --single_end                    Specifies that the input files are not paired reads (default is paired-end).
         --flip                         Reverse complements each strand. Necessary for some library preps.
 
     Save options:
@@ -91,7 +91,7 @@ def helpMessage() {
 
     Options:
       --genome [str]                  Name of iGenomes reference
-      --singleEnd [bool]             Specifies that the input is single-end reads
+      --single_end [bool]             Specifies that the input is single-end reads
 
     References                        If not specified in the configuration file or you wish to overwrite any of the references
       --fasta [file]                  Path to fasta reference
@@ -208,7 +208,7 @@ ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
  * Create a channel for input read files
  */
 if (params.readPaths) {
-    if (params.singleEnd) {
+    if (params.single_end) {
         Channel
             .from(params.readPaths)
             .map { row -> [ row[0], [ file(row[1][0], checkIfExists: true) ] ] }
@@ -223,8 +223,8 @@ if (params.readPaths) {
     }
 } else {
     Channel
-        .fromFilePairs(params.reads, size: params.singleEnd ? 1 : 2)
-        .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line." }
+        .fromFilePairs(params.reads, size: params.single_end ? 1 : 2)
+        .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single_end on the command line." }
         .into { ch_read_files_fastqc; ch_read_files_trimming }
 }
 
@@ -244,7 +244,7 @@ summary['Script dir']       = workflow.projectDir
 summary['User']             = workflow.userName
 summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
-summary['Data Type']        = params.singleEnd ? 'Single-End' : 'Paired-End'
+summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
 summary['Save All fastq']   = params.saveAllfq ? 'YES' : 'NO'
 summary['Save fastq']       = params.savefq ? 'YES' : 'NO'
 summary['Save Trimmed']     = params.saveTrim ? 'YES' : 'NO'
@@ -352,7 +352,7 @@ process sra_dump {
 
         fastq-dump ${reads}
         """
-    } else if (!params.singleEnd) {
+    } else if (!params.single_end) {
          """
         export PATH=~/.local/bin:$PATH
 
@@ -361,7 +361,7 @@ process sra_dump {
             --split-3 \
             --sra-id ${reads}
         """
-    } else if (!params.threadfqdump && !params.singleEnd) {
+    } else if (!params.threadfqdump && !params.single_end) {
         """
         echo ${prefix}
 
@@ -474,7 +474,7 @@ process bbduk {
 
     script:
     bbduk_mem = task.memory.toGiga()
-    if (!params.singleEnd && params.flip) {
+    if (!params.single_end && params.flip) {
         """
         echo ${name}
 
@@ -526,7 +526,7 @@ process bbduk {
                   refstats=${name}.refstats.txt \
                   ehist=${name}.ehist.txt
         """
-    }else if (!params.singleEnd) {
+    }else if (!params.single_end) {
         """
         echo ${name}      
 
@@ -638,7 +638,7 @@ process hisat2 {
 
     script:
     index_base = indices[0].toString() - ~/.\d.ht2/
-    if (!params.singleEnd) {
+    if (!params.single_end) {
         """
         echo ${name}
     
@@ -693,7 +693,7 @@ process samtools {
     prefix = mapped_sam.baseName
     // Note that the millionsmapped arugments below are only good for SE data. When PE is added, it will need to be changed to:
     // -F 0x40 rootname.sorted.bam | cut -f1 | sort | uniq | wc -l  > rootname.bam.millionsmapped
-    if (!params.singleEnd) {
+    if (!params.single_end) {
     """
 
     samtools view -@ ${task.cpus} -bS -o ${prefix}.bam ${mapped_sam}

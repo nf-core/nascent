@@ -93,7 +93,7 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 
 | Arguments    | Usage       | Description                                                                  |
 |--------------|-------------|------------------------------------------------------------------------------|
-| --singleEnd  |             | Specifies that the input files are not paired reads (default is paired-end). |
+| --single_end  |             | Specifies that the input files are not paired reads (default is paired-end). |
 | --flip       |             | Reverse complements each strand. Necessary for some library preps.           |
 
 ### Performance Options
