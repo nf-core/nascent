@@ -128,16 +128,16 @@ if (params.genomes && params.genome && !params.genomes.containsKey(params.genome
 params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
 if (params.fasta) { ch_fasta = file(params.fasta, checkIfExists: true) }
 
-// if ( params.fasta ){
-//    // genome_fasta = file(params.fasta)
-//    // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
-//     Channel.fromPath(params.fasta)
-//            .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
-//            .into { genome_fasta; ch_fasta_for_hisat_index}
-// }
-// else {
-//     params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
-// }
+if ( params.fasta ){
+   // genome_fasta = file(params.fasta)
+   // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
+    Channel.fromPath(params.fasta)
+           .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
+           .into { genome_fasta; ch_fasta_for_hisat_index}
+}
+else {
+    params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
+}
 
 if( params.chrom_sizes ){
     Channel
@@ -199,19 +199,19 @@ if (params.readPaths) {
             .from(params.readPaths)
             .map { row -> [ row[0], [ file(row[1][0], checkIfExists: true) ] ] }
             .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { ch_read_files_fastqc; ch_read_files_trimming }
+            .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
     } else {
         Channel
             .from(params.readPaths)
             .map { row -> [ row[0], [ file(row[1][0], checkIfExists: true), file(row[1][1], checkIfExists: true) ] ] }
             .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { ch_read_files_fastqc; ch_read_files_trimming }
+            .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
     }
 } else {
     Channel
         .fromFilePairs(params.reads, size: params.single_end ? 1 : 2)
         .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single_end on the command line." }
-        .into { ch_read_files_fastqc; ch_read_files_trimming }
+        .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
 }
 
 // Header log info
@@ -358,7 +358,7 @@ process fastqc {
         saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
 
     input:
-    set val(prefix), file(reads) from fastq_reads_qc
+    set val(prefix), file(reads) from ch_read_files_fastqc
 
     output:
     file "*.{zip,html,txt}" into fastqc_results
@@ -383,7 +383,7 @@ process gzip_fastq {
     params.savefq || params.saveAllfq
 
     input:
-    set val(name), file(fastq_reads) from fastq_reads_gzip
+    set val(name), file(fastq_reads) from ch_read_files_fastqc_uncompressed
 
     output:
     set val(name), file("*.gz") into compressed_fastq
@@ -405,7 +405,7 @@ process bbduk {
     publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.txt"
 
     input:
-    set val(name), file(reads) from fastq_reads_trim
+    set val(name), file(reads) from ch_read_files_trimming
 
     output:
     set val(name), file ("*.trim.fastq") into trimmed_reads_fastqc, trimmed_reads_hisat2, trimmed_reads_gzip
