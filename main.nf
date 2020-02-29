@@ -55,33 +55,23 @@ def helpMessage() {
 
     The typical command for running the pipeline is as follows:
 
-    nextflow run nf-core/nascent -profile slurm --reads '/project/*_{R1,R2}*.fastq' --outdir '/project/'
-    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
+    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile singularity
 
-    Required arguments:
-         -profile                      Configuration profile to use. <base, fiji>
-         --reads                      Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
-         --sras                        Directory pattern for SRA files: /project/*.sras (Required if --reads not specified)
-         --workdir                     Nextflow working directory where all intermediate files are saved.
-         --email                       Where to send workflow report email.
-
-    Performance options:
-        --threadfqdump                 Runs multi-threading for fastq-dump for sra processing.
 
     Mandatory arguments:
       --reads [file]                Path to input data (must be surrounded with quotes)
       -profile [str]                Configuration profile to use. Can use multiple (comma separated)
                                     Available: conda, docker, singularity, test, awsbatch, <institute> and more
 
+    Performance options:
+        --threadfqdump                 Runs multi-threading for fastq-dump for sra processing.
+
     Input File options:
-        --single_end                    Specifies that the input files are not paired reads (default is paired-end).
         --flip                         Reverse complements each strand. Necessary for some library preps.
 
     Save options:
-        --outdir                       Specifies where to save the output from the nextflow run.
         --savefq                       Compresses and saves raw fastq reads.
         --saveTrim                     Compresses and saves trimmed fastq reads.
-        --saveAll                      Compresses and saves all fastq reads.
 
     References                      If not specified in the configuration file or you wish to overwrite any of the references.
       --saveReference               Save the generated reference files the the Results directory.
@@ -116,7 +106,9 @@ if (params.help) {
     exit 0
 }
 
-// Configurable variables
+/*
+ * SET UP CONFIGURATION VARIABLES
+ */
 params.name = false
 params.multiqc_config = "$baseDir/conf/multiqc_config.yaml"
 params.email = false
@@ -125,11 +117,6 @@ params.bbmap_adapters = "$baseDir/assets/adapters.fa"
 params.bedGraphToBigWig = "$baseDir/bin/bedGraphToBigWig"
 params.rcc = "$baseDir/bin/rcc.py"
 params.workdir = "./nextflowTemp"
-
-
-// Stage config files
-ch_multiqc_config = Channel.fromPath(params.multiqc_config)
-ch_output_docs = Channel.fromPath("$baseDir/docs/output.md")
 
 // Validate inputs
 
@@ -201,7 +188,6 @@ if (workflow.profile.contains('awsbatch')) {
 
 // Stage config files
 ch_multiqc_config = file("$baseDir/assets/multiqc_config.yaml", checkIfExists: true)
-ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
 ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
 
 /*
@@ -235,6 +221,7 @@ if (workflow.revision) summary['Pipeline Release'] = workflow.revision
 summary['Run Name']         = custom_runName ?: workflow.runName
 summary['Reads']            = params.reads
 summary['Fasta Ref']        = params.fasta
+summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
 summary['Max Resources']    = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
 if (workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
 summary['Output dir']       = params.outdir
@@ -244,7 +231,6 @@ summary['Script dir']       = workflow.projectDir
 summary['User']             = workflow.userName
 summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
-summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
 summary['Save All fastq']   = params.saveAllfq ? 'YES' : 'NO'
 summary['Save fastq']       = params.savefq ? 'YES' : 'NO'
 summary['Save Trimmed']     = params.saveTrim ? 'YES' : 'NO'
@@ -294,7 +280,7 @@ process get_software_versions {
     publishDir "${params.outdir}/software_versions/", mode: 'copy', pattern: '*.txt'
 
     output:
-    file 'software_versions_mqc.yaml' into software_versions_yaml
+    file 'software_versions_mqc.yaml' into ch_software_versions_yaml
 
 //    publishDir "${params.outdir}/pipeline_info", mode: 'copy',
 //        saveAs: { filename ->
@@ -303,7 +289,7 @@ process get_software_versions {
 //                }
 //
 //    output:
-//    file 'software_versions_mqc.yaml' into ch_software_versions_yaml
+//    file 'software_versions_mqc.yaml' into ch_ch_software_versions_yaml
 //    file "software_versions.csv"
 
     script:
@@ -1042,7 +1028,7 @@ process multiqc {
     file ('qc/mapstats/*') from bam_flagstat.collect()
     file ('qc/rseqc/*') from rseqc_results.collect()
     file ('qc/preseq/*') from preseq_results.collect()
-    file ('software_versions/*') from software_versions_yaml
+    file ('software_versions/*') from ch_software_versions_yaml
 
     output:
     file "*multiqc_report.html" into multiqc_report
