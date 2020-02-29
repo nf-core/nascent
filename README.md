@@ -45,7 +45,6 @@ The nf-core/nascent pipeline comes with documentation about the pipeline, found 
 
 If you have used this pipeline in your research, please cite it using the DOI mentioned above.
 
-### Documentation
 The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration
@@ -62,11 +61,14 @@ This pipeline is designed to process the sequencing output of nascent transcript
 
 Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the proper paths are set for genome reference files and other executables (look for all mentions of `COMPLETE_*`). Variable names should hopefully be self-explanatory. You can specify the Nextflow working directory and output directory with flags. Note you must also now specify the email to which the report will be sent for the run.
 
-    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
+```
+nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
+```
 
 ## Arguments
 
 ### Required Arguments
+
 | Argument  | Usage                            | Description                                                          |
 |-----------|----------------------------------|----------------------------------------------------------------------|
 | -profile  | \<base,slurm\>                    | Configuration profile to use.                                       |
@@ -77,6 +79,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --email   | \<EMAIL\>                        | Where to send workflow report email.                                 |
 
 ### Save Options
+
 | Arguments  | Usage         | Description                                               |
 |------------|---------------|-----------------------------------------------------------|
 | --outdir   | \</project/\> | Specifies where to save the output from the nextflow run. |
@@ -86,6 +89,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --skipBAM  |               | Skips saving BAM files (only save CRAM). Default=False    |
 
 ### Input File Options
+
 | Arguments    | Usage       | Description                                                                  |
 |--------------|-------------|------------------------------------------------------------------------------|
 | --singleEnd  |             | Specifies that the input files are not paired reads (default is paired-end). |
@@ -105,6 +109,7 @@ Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the
 | --skipRSeQC     |             | Skip running RSeQC.                                     |
 
 ## Credits
+
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
 
 Many thanks to the nf-core team and all who provided invaluable feedback and assistance along the way, particularly to [@apeltzer](https://github.com/apeltzer), [@ewels](https://github.com/ewels), [@drpatelh](https://github.com/drpatelh), and [@pditommaso](https://github.com/pditommaso).
@@ -128,3 +133,4 @@ You can cite the `nf-core` publication as follows:
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).  
 > ReadCube: [Full Access Link](https://rdcu.be/b1GjZ)
+

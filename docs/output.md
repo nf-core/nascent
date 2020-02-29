@@ -19,8 +19,8 @@ and processes data using the following steps:
 * [bedtools](#bedtools) - create both normalized and non-normalized coverage files in bedGraph format
 * [igvtools](#igvtools) - create compressed files to visualize the sample in the Integrative Genomics Viewer ([IGV](http://software.broadinstitute.org/software/igv/home))
 
-
 ## fastqdump
+
 [fastq-dump](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc&f=fastq-dump) decompresses an SRR file obtained from the Gene Expression Omnibus ([GEO](https://www.ncbi.nlm.nih.gov/geo/)) database. This will produce one or two fastq files (in the case of paired-end reads).
 
 **Output directory: `results/fastq-dump`**
@@ -28,8 +28,8 @@ and processes data using the following steps:
 * `sample.fastq`
   * FastQ file to process, from the corresponding sample.
 
-
 ## seqkit & bbduk
+
 [SeqKit](https://bioinf.shenwei.me/seqkit/) is a toolkit for fasta and fastq file manipulation, used in the pipeline if the positive/negative strands need to be flipped (dependent on library prep protocol). [BBDuk](https://www.geneious.com/plugins/bbduk/) is trimming tool used to filter reads for adapters, read quality, and overall length after adapter removal.
 
 **Output directory: `results/bbduk, qc/trimstats`**
@@ -38,7 +38,6 @@ and processes data using the following steps:
   * Trimmed FastQ file for each sample.
 * `{refstats,trimstats,ehist}.txt`
   * Trimming details including adapters removed, percentages of reads removed that did not meet minimum quality/length
-
 
 ## FastQC
 
@@ -56,6 +55,7 @@ For further reading and documentation see the [FastQC help](http://www.bioinform
   * zip file containing the FastQC report, tab-delimited data file and plot images
 
 ## MultiQC
+
 [MultiQC](https://multiqc.info) is a visualisation tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in within the report data directory.
 
 The pipeline has special steps which allow the software versions used to be reported in the MultiQC output for future traceability.
@@ -69,13 +69,14 @@ The pipeline has special steps which allow the software versions used to be repo
 
 For more information about how to use MultiQC reports, see [https://multiqc.info](https://multiqc.info)
 
-
 ## hisat2
+
 [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) is a sequence alignment tool to map the trimmed sequenced reads to the corresponding reference genome. Due to their size, the resulting sam files are not conserved after the pipeline has completed execution.
 
 If the necessary indices for mapping are not provided/present, a separate process will build them first. This step can take a few minutes, however it should only be executed once.
 
 ## samtools
+
 [Samtools](http://www.htslib.org/) is a suite of tools to handle format conversions, among other things, for high-throughput sequencing data. We also use Samtools to generate the list of chromosome sizes, if not provided for the desired reference genome.
 
 **Output directory: `results/mapped/bams`**
@@ -92,8 +93,8 @@ If the necessary indices for mapping are not provided/present, a separate proces
 * `sample.trim.sorted.bam.millionsmapped`
   * File that contains number of uniquely mapped reads (not total multi-mapped). Used in normalization
 
-
 ## preseq
+
 [Preseq](http://smithlabresearch.org/software/preseq/) plots the estimated complexity of a sample, and estimates future yields for complexity if the sample is sequenced at higher read depths.
 
 **Output directory: `results/qc/preseq`**
@@ -103,8 +104,8 @@ If the necessary indices for mapping are not provided/present, a separate proces
 * `sample.trim.lc_extrap.txt`
   * Extrapolation of the c_curve that attempts to model the predicted number of unique reads if the sample was seqeunced to a greater depth
 
-
 ## rseqc
+
 [RSeQC](http://dldcc-web.brc.bcm.edu/lilab/liguow/CGI/rseqc/_build/html/) provides a number of useful modules that can comprehensively evaluate high throughput sequence data. We use it on this pipeline to analyze read distributions.
 
 **Output directory: `results/qc/rseqc`**
@@ -112,8 +113,8 @@ If the necessary indices for mapping are not provided/present, a separate proces
 * `sample.trim.read_dist.txt`
   * Relative distribution of reads relative to a gene reference file
 
-
 ## pileup
+
 [BBMap](https://github.com/BioInfoTools/BBMap/blob/master/sh/pileup.sh) includes a tool called `pileup`, which analyzes the sequencing coverage for each sample.
 
 **Output directory: `results/qc/pileup`**
@@ -123,8 +124,8 @@ If the necessary indices for mapping are not provided/present, a separate proces
 * `sample.trim.coverage.stats.txt`
   * Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
 
-
 ## bedtools
+
 [bedtools](https://bedtools.readthedocs.io/en/latest/) is an extensive toolkit for BED and bedGraph format manipulation, like sorting, intersecting and joining these files. The files produced here are useful to be processed later using [Tfit](https://github.com/Dowell-Lab/Tfit) or [dReg](https://github.com/Danko-Lab/dREG) to find regions of active transcription, and transcription regulatory elements.
 
 **Output directory: `results/mapped/bedgraphs`**
@@ -159,8 +160,8 @@ If the necessary indices for mapping are not provided/present, a separate proces
 * `sample.trim.neg.rcc.bw`
   * Normalized sample coverage file (negative strand only) in BigWig format
 
-
 ## igvtools
+
 [igvtools](https://software.broadinstitute.org/software/igv/igvtools) is a commandline tool we use to produce a compressed version of the sample coverage file in order to visualize it on IGV more efficiently (with a significantly smaller memory footprint).
 
 **Output directory: `results/mapped/tdfs`**
