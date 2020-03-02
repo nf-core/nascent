@@ -149,7 +149,8 @@ if( params.chrom_sizes ){
         .ifEmpty { exit 1, "Chrom sizes file not found: ${params.chrom_sizes}" }
         .into { chrom_sizes_for_bed;
                 chrom_sizes_for_bigwig;
-                chrom_sizes_for_igv }
+                chrom_sizes_for_igv;
+                chrom_sizes_for_nqc }
 }
 else {
     params.chrom_sizes = null
@@ -178,7 +179,7 @@ if(!params.chrom_sizes) {
   }
 }
 
-chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_dreg; chrom_sizes_for_bigwig; chrom_sizes_for_igv}
+chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_dreg; chrom_sizes_for_bigwig; chrom_sizes_for_igv; chrom_sizes_for_nqc}
 
 
 if ( params.bbmap_adapters){
@@ -1392,6 +1393,7 @@ process nqc {
     file (bedgraphs:'mapped/bedgraphs/*') from nqc_bg.collect()
     file (duplication_files:'qc/picard/dups/*') from picard_stats_nqc.collect()
     file (fastqc_files:'qc/fastqc_stats/*') from fastqc_stats.collect()
+    file chrom_sizes from chrom_sizes_for_nqc
        
     output:
     file ("*.{txt,html,png}") into nqc_out
