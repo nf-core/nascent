@@ -359,7 +359,6 @@ process get_software_versions {
     file '*.txt' into software_versions_text
 
     script:
-    markdup_java_options = (task.memory.toGiga() > 8) ? params.markdup_java_options : "\"-Xms" +  (task.memory.toGiga() / 2 )+"g "+ "-Xmx" + (task.memory.toGiga() - 1)+ "g\""
     """
 
     echo $workflow.manifest.version > v_pipeline.txt
@@ -371,8 +370,8 @@ process get_software_versions {
     fastq-dump --version > v_fastq-dump.txt
     preseq 2> v_preseq.txt
     bedtools --version > v_bedtools.txt
-    picard ${markdup_java_options} MarkDuplicates --version > v_markduplicates.txt
-    picard ${markdup_java_options} CollectGcBiasMetrics --version > v_collectgcbiasmetrics.txt
+    picard MarkDuplicates --version &> v_markduplicates.txt  || true
+    picard CollectGcBiasMetrics --version &> v_collectgcbiasmetrics.txt  || true
     export LC_ALL=C
     igvtools version > v_igv-tools.txt
     infer_experiment.py --version > v_rseqc.txt
