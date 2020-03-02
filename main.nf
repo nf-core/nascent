@@ -15,37 +15,27 @@
 Pipeline steps:
 
     1. Pre-processing sra/fastq
-        1a. SRA tools -- fastq-dump sra to generate fastq file
-        1b. FastQC (pre-trim) -- perform pre-trim FastQC on fastq files
-        1c. Gzip fastq -- compress fastq files for storage
-
-    2. Trimming
-        2a. BBDuk -- trim fastq files for quality and adapters
-        2b. FastQC (post-trim) -- perform post-trim FastQC on fastq files (ensure trimming performs as expected)
-
-    3. Mapping w/ HISAT2 -- map to genome reference file
-
-    4. SAMtools -- convert SAM file to BAM, index BAM, flagstat BAM
-
-    5. Quality control
-        5a. preseq -- estimate library complexity
-        5b. RSeQC -- calculate genomic coverage relative to a reference file, infer experiement (single- v. paired-end), read duplication
-        5c. Pileup.sh : BBMap Suite -- genomic coverage by chromosome, GC content, pos/neg reads, intron/exon ratio
-
-    6. Coverage files
-        6a. deepTools : normalized bigwigs
-        6b. BEDTools and kentUtils : 5' bigwigs for dREG
-        6c. deepTools : normalized bedgraphs
-        6d. BEDTools : non-normalized bedgraphs
-
-    7. IGV Tools : bedGraph --> tdf
-
-    8. MultiQC : generate QC report for pipeline
-
-    9. Pipeline report
-
-=======
+        SRA tools -- fasterq-dump sra to generate fastq file
+        FastQC (pre-trim) -- perform pre-trim FastQC on fastq files
+    2. Trimming & Mapping
+        BBDuk -- trim fastq files for quality and adapters
+        FastQC (post-trim) -- perform post-trim FastQC on fastq files (ensure trimming performs as expected)
+        HISAT2 -- Map reads to a reference genome
+    3. SAMtools -- convert SAM file to BAM, index BAM, flagstat BAM, BAM --> CRAM, index CRAM
+    4. Quality control
+        preseq -- estimate library complexity
+        RSeQC -- calculate genomic coverage relative to a reference file, infer experiement (single- v. paired-end), read duplication
+        Pileup.sh : BBMap Suite -- genomic coverage by chromosome, GC content, pos/neg reads, intron/exon ratio
+        Picard -- Mark duplicates, GC content
+        NQC -- Perform nascent-specific quality control analysis
+    5. Mapping Visualization
+        BEDTools : non-normalized & nornmalized bedgraphs
+        BEDTools and kentUtils : 5' bigwigs for dREG & normalized bigwigs for genome browser     
+        IGV Tools : bedGraph --> tdf
+    6. MultiQC : generate QC report for pipeline
+    7. Read Counting : BEDTools multicov to count reads over genes
 */
+
 
 def helpMessage() {
     log.info nfcoreHeader()
@@ -55,53 +45,64 @@ def helpMessage() {
 
     The typical command for running the pipeline is as follows:
 
-    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile singularity
+    nextflow run nf-core/nascent -profile singularity --reads '/project/*_{R1,R2}*.fastq' --outdir '/project/'
+    or:
+    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
 
-
-    Mandatory arguments:
-      --reads [file]                Path to input data (must be surrounded with quotes)
-      -profile [str]                Configuration profile to use. Can use multiple (comma separated)
-                                    Available: conda, docker, singularity, test, awsbatch, <institute> and more
+    Required arguments:
+         -profile                      Configuration profile to use. <base, singularity>
+         --genomeid                    Genome ID (e.g. hg38, mm10, rn6, etc.).
+         --fastqs                      Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
+         --sras                        Directory pattern for SRA files: /project/*.sras (Required if --fastqs not specified)
+         --workdir                     Nextflow working directory where all intermediate files are saved.
+         --email                       Where to send workflow report email.
 
     Performance options:
         --threadfqdump                 Runs multi-threading for fastq-dump for sra processing.
 
     Input File options:
+        --single_end                    Specifies that the input files are not paired reads (default is paired-end).
         --flip                         Reverse complements each strand. Necessary for some library preps.
-
+        --flipR2                       Reverse complements R2 only.        
+        
+    Strandedness:
+        --forwardStranded              The library is forward stranded
+        --reverseStranded              The library is reverse stranded
+        --unStranded                   The default behaviour        
+        
     Save options:
-        --savefq                       Compresses and saves raw fastq reads.
-        --saveTrim                     Compresses and saves trimmed fastq reads.
+        --outdir                       Specifies where to save the output from the nextflow run.
+        --savefq                       Saves compressed raw fastq reads.
+        --saveTrim                     Saves compressed trimmed fastq reads.
+        --saveBAM                      Save BAM files. Only CRAM files will be saved with this option.
+        --saveAll                      Saves all compressed fastq reads.
 
     References                      If not specified in the configuration file or you wish to overwrite any of the references.
       --saveReference               Save the generated reference files the the Results directory.
 
     QC Options:
-        --skipMultiQC                  Skip running MultiQC report.
-
-    Options:
-      --genome [str]                  Name of iGenomes reference
-      --single_end [bool]             Specifies that the input is single-end reads
-
-    References                        If not specified in the configuration file or you wish to overwrite any of the references
-      --fasta [file]                  Path to fasta reference
-
-    Other options:
-      --outdir [file]                 The output directory where the results will be saved
-      --email [email]                 Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits
-      --email_on_fail [email]         Same as --email, except only send mail if the workflow is not successful
-      --max_multiqc_email_size [str]  Theshold size for MultiQC report to be attached in notification email. If file generated by pipeline exceeds the threshold, it will not be attached (Default: 25MB)
-      -name [str]                     Name for the pipeline run. If not specified, Nextflow will automatically generate a random mnemonic
-
-    AWSBatch options:
-      --awsqueue [str]                The AWSBatch JobQueue that needs to be set when running on AWSBatch
-      --awsregion [str]               The AWS Region for your AWS Batch job to run on
-      --awscli [str]                  Path to the AWS CLI tool
+        --skipMultiQC                  Skip running MultiQC.
+        --skipFastQC                   Skip running FastQC.
+        --skipRSeQC                    Skip running RSeQC.
+        --skippicard                   Skip running picard.        
+        --skippreseq                   Skip running preseq.
+        --skippileup                   Skip running pileup.sh.
+        --skipAllQC                    Skip running all QC.
+        --nqc                          Run Nascent QC.
+        
+    Analysis Options:
+        --noTrim                       Skip trimming and map only. Will also skip flip/flipR2 (any BBMap) steps.
+        --counts                       Run BEDTools mutlicov for each sample to obtain gene counts over the RefSeq annotation.
+        --dreg                         Produce bigwigs formatted for input to dREG.
     """.stripIndent()
 }
 
+/*
+ * SET UP CONFIGURATION VARIABLES
+ */
+
 // Show help message
-if (params.help) {
+if (params.help){
     helpMessage()
     exit 0
 }
@@ -110,13 +111,17 @@ if (params.help) {
  * SET UP CONFIGURATION VARIABLES
  */
 params.name = false
-params.multiqc_config = "$baseDir/conf/multiqc_config.yaml"
+params.multiqc_config = file("$baseDir/assets/multiqc_config.yaml")
 params.email = false
 params.plaintext_email = false
 params.bbmap_adapters = "$baseDir/assets/adapters.fa"
 params.bedGraphToBigWig = "$baseDir/bin/bedGraphToBigWig"
 params.rcc = "$baseDir/bin/rcc.py"
+params.nqc_py = "$baseDir/bin/nqc.py"
+params.merge_counts = "$baseDir/bin/merge_counts.py"
 params.workdir = "./nextflowTemp"
+output_docs = file("$baseDir/docs/output.md")
+params.extract_fastqc_stats = "$baseDir/bin/extract_fastqc_stats.sh"
 
 // Validate inputs
 
@@ -133,7 +138,7 @@ if ( params.fasta ){
    // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
     Channel.fromPath(params.fasta)
            .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
-           .into { genome_fasta; ch_fasta_for_hisat_index}
+           .into { genome_fasta; ch_fasta_for_hisat_index; ch_fasta_for_samtools; ch_fasta_for_picard}
 }
 else {
     params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
@@ -151,9 +156,39 @@ else {
     params.chrom_sizes = null
 }
 
-if ( params.bbmap_adapters ){
+/* Idea borrowed from the nf-core/atacseq workflow:
+ * Just generate the chromosome sizes file using samtools, if not provided.
+  */
+if(!params.chrom_sizes) {
+  process make_chromosome_sizes {
+      tag "$fasta"
+      publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
+              saveAs: { params.saveReference ? it : null }, mode: 'copy'
+
+      input:
+      file fasta from genome_fasta
+
+      output:
+      file("${fasta}.sizes") into chrom_sizes_ch
+
+      script:
+      """
+      samtools faidx $fasta
+      cut -f 1,2 ${fasta}.fai > ${fasta}.sizes
+      """
+  }
+}
+
+chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_dreg; chrom_sizes_for_bigwig; chrom_sizes_for_igv}
+
+
+if ( params.bbmap_adapters){
     bbmap_adapters = file("${params.bbmap_adapters}")
 }
+
+//if ( params.picard_path ){
+//    picard_path = file(params.picard_path)
+//}
 
 if ( params.hisat2_indices ){
     hisat2_indices = file("${params.hisat2_indices}")
@@ -169,11 +204,12 @@ else {
     genome_refseq = null
 }
 
+
 // Has the run name been specified by the user?
 //  this has the bonus effect of catching both -name and --name
 custom_runName = params.name
-if (!(workflow.runName ==~ /[a-z]+_[a-z]+/)) {
-    custom_runName = workflow.runName
+if( !(workflow.runName ==~ /[a-z]+_[a-z]+/) ){
+  custom_runName = workflow.runName
 }
 
 if (workflow.profile.contains('awsbatch')) {
@@ -193,73 +229,122 @@ ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
 /*
  * Create a channel for input read files
  */
-if (params.readPaths) {
+if (params.reads) {
     if (params.single_end) {
-        Channel
-            .from(params.readPaths)
-            .map { row -> [ row[0], [ file(row[1][0], checkIfExists: true) ] ] }
-            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
+        fastq_reads_qc = Channel
+                            .fromPath(params.reads)
+                            .map { file -> tuple(file.simpleName, file) }
+        fastq_reads_trim = Channel
+                            .fromPath(params.reads)
+                            .map { file -> tuple(file.simpleName, file) }
+        fastq_reads_hisat2_notrim = Channel
+                            .fromPath(params.reads)
+                            .map { file -> tuple(file.simpleName, file) }        
     } else {
         Channel
-            .from(params.readPaths)
-            .map { row -> [ row[0], [ file(row[1][0], checkIfExists: true), file(row[1][1], checkIfExists: true) ] ] }
-            .ifEmpty { exit 1, "params.readPaths was empty - no input files supplied" }
-            .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
+            .fromFilePairs( params.reads, size: params.single_end ? 1 : 2 )
+            .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single_end on the command line." }
+            .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_hisat2_notrim }
     }
-} else {
-    Channel
-        .fromFilePairs(params.reads, size: params.single_end ? 1 : 2)
-        .ifEmpty { exit 1, "Cannot find any reads matching: ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single_end on the command line." }
-        .into { ch_read_files_fastqc; ch_read_files_trimming; ch_read_files_fastqc_uncompressed }
 }
+
+else {
+    Channel
+        .empty()
+        .into { fastq_reads_qc; fastq_reads_trim; fastq_reads_hisat2_notrim }
+}
+
+if (params.sras) {
+    println("pattern for SRAs provided")
+    read_files_sra = Channel
+                        .fromPath(params.sras)
+                        .map { file -> tuple(file.baseName, file) }
+}
+
+else {
+    read_files_sra = Channel.empty()
+}
+
 
 // Header log info
 log.info nfcoreHeader()
 def summary = [:]
-if (workflow.revision) summary['Pipeline Release'] = workflow.revision
+if(workflow.revision) summary['Pipeline Release'] = workflow.revision
 summary['Run Name']         = custom_runName ?: workflow.runName
-summary['Reads']            = params.reads
-summary['Fasta Ref']        = params.fasta
-summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
-summary['Max Resources']    = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
-if (workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
-summary['Output dir']       = params.outdir
-summary['Launch dir']       = workflow.launchDir
-summary['Working dir']      = workflow.workDir
-summary['Script dir']       = workflow.projectDir
-summary['User']             = workflow.userName
 summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
+if(params.reads) summary['Reads']            = params.reads
+if(params.sras) summary['SRAs']             = params.sras
+summary['Genome Ref']       = params.genome
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
+summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
+summary['Strandedness']     = (params.unStranded ? 'None' : params.forwardStranded ? 'Forward' : params.reverseStranded ? 'Reverse' : 'None')
 summary['Save All fastq']   = params.saveAllfq ? 'YES' : 'NO'
+summary['Save BAM']         = params.saveBAM ? 'YES' : 'NO'
 summary['Save fastq']       = params.savefq ? 'YES' : 'NO'
 summary['Save Trimmed']     = params.saveTrim ? 'YES' : 'NO'
 summary['Reverse Comp']     = params.flip ? 'YES' : 'NO'
+summary['Reverse Comp R2']  = params.flipR2 ? 'YES' : 'NO'
+summary['Run Multicov']     = params.counts ? 'YES' : 'NO'
+summary['Skip Trimming']    = params.noTrim ? 'NO' : 'YES'
+summary['Nascent QC']       = params.nqc ? 'YES' : 'NO'
+summary['Run FastQC']       = params.skipFastQC ? 'NO' : 'YES'
+summary['Run preseq']       = params.skippreseq ? 'NO' : 'YES'
+summary['Run pileup']       = params.skippileup ? 'NO' : 'YES'
+summary['Run RSeQC']        = params.skipRSeQC ? 'NO' : 'YES'
 summary['Run MultiQC']      = params.skipMultiQC ? 'NO' : 'YES'
-if (workflow.profile.contains('awsbatch')) {
-    summary['AWS Region']   = params.awsregion
-    summary['AWS Queue']    = params.awsqueue
-    summary['AWS CLI']      = params.awscli
+summary['Skip All QC']      = params.skipAllQC ? 'YES' : 'NO'
+summary['Max Memory']       = params.max_memory
+summary['Max CPUs']         = params.max_cpus
+summary['Max Time']         = params.max_time
+summary['Max Resources']    = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
+if(workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
+summary['Output dir']       = params.outdir
+summary['Launch dir']       = workflow.launchDir
+summary['dREG']             = params.dreg ? 'YES' : 'NO'
+summary['Working dir']      = workflow.workDir
+summary['Container Engine'] = workflow.containerEngine
+if(workflow.containerEngine) summary['Container'] = workflow.container
+summary['Current home']     = "$HOME"
+summary['Current user']     = "$USER"
+summary['Current path']     = "$PWD"
+summary['Output dir']       = params.outdir
+summary['Script dir']       = workflow.projectDir
+summary['User']             = workflow.userName
+if(workflow.profile == 'awsbatch'){
+   summary['AWS Region']    = params.awsregion
+   summary['AWS Queue']     = params.awsqueue
 }
-summary['Config Profile'] = workflow.profile
-if (params.config_profile_description) summary['Config Description'] = params.config_profile_description
-if (params.config_profile_contact)     summary['Config Contact']     = params.config_profile_contact
-if (params.config_profile_url)         summary['Config URL']         = params.config_profile_url
-if (params.email || params.email_on_fail) {
-    summary['E-mail Address']    = params.email
-    summary['E-mail on failure'] = params.email_on_fail
-    summary['MultiQC maxsize']   = params.max_multiqc_email_size
+summary['Config Profile']   = workflow.profile
+
+// Check that Nextflow version is up to date enough
+// try / throw / catch works for NF versions < 0.25 when this was implemented
+try {
+    if( ! nextflow.version.matches(">= $params.nf_required_version") ){
+        throw GroovyException('Nextflow version too old')
+    }
+} catch (all) {
+    log.error "====================================================\n" +
+              "  Nextflow version $params.nf_required_version required! You are running v$workflow.nextflow.version.\n" +
+              "  Pipeline execution will continue, but things may break.\n" +
+              "  Please run `nextflow self-update` to update Nextflow.\n" +
+              "============================================================"
+}
+if(params.config_profile_description) summary['Config Description'] = params.config_profile_description
+if(params.config_profile_contact)     summary['Config Contact']     = params.config_profile_contact
+if(params.config_profile_url)         summary['Config URL']         = params.config_profile_url
+if(params.email) {
+  summary['E-mail Address']  = params.email
+  summary['MultiQC maxsize'] = params.maxMultiqcEmailFileSize
 }
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
-log.info "-\033[2m--------------------------------------------------\033[0m-"
+log.info "\033[2m----------------------------------------------------\033[0m"
 
 // Check the hostnames against configured profiles
 checkHostname()
 
-Channel.from(summary.collect{ [it.key, it.value] })
-    .map { k,v -> "<dt>$k</dt><dd><samp>${v ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>" }
-    .reduce { a, b -> return [a, b].join("\n            ") }
-    .map { x -> """
+def create_workflow_summary(summary) {
+    def yaml_file = workDir.resolve('workflow_summary_mqc.yaml')
+    yaml_file.text  = """
     id: 'nf-core-nascent-summary'
     description: " - this information is collected when the pipeline is started."
     section_name: 'nf-core/nascent Workflow Summary'
@@ -267,10 +352,13 @@ Channel.from(summary.collect{ [it.key, it.value] })
     plot_type: 'html'
     data: |
         <dl class=\"dl-horizontal\">
-            $x
+${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>" }.join("\n")}
         </dl>
-    """.stripIndent() }
-    .set { ch_workflow_summary }
+    """.stripIndent()
+
+   return yaml_file
+}
+
 
 /*
  * Parse software version numbers
@@ -281,19 +369,12 @@ process get_software_versions {
 
     output:
     file 'software_versions_mqc.yaml' into ch_software_versions_yaml
-
-//    publishDir "${params.outdir}/pipeline_info", mode: 'copy',
-//        saveAs: { filename ->
-//                      if (filename.indexOf(".csv") > 0) filename
-//                      else null
-//                }
-//
-//    output:
-//    file 'software_versions_mqc.yaml' into ch_ch_software_versions_yaml
-//    file "software_versions.csv"
+    file '*.txt' into software_versions_text
 
     script:
+    markdup_java_options = (task.memory.toGiga() > 8) ? params.markdup_java_options : "\"-Xms" +  (task.memory.toGiga() / 2 )+"g "+ "-Xmx" + (task.memory.toGiga() - 1)+ "g\""
     """
+
     echo $workflow.manifest.version > v_pipeline.txt
     echo $workflow.nextflow.version > v_nextflow.txt
     fastqc --version > v_fastqc.txt
@@ -301,15 +382,14 @@ process get_software_versions {
     hisat2 --version > v_hisat2.txt
     samtools --version > v_samtools.txt
     fastq-dump --version > v_fastq-dump.txt
-    preseq > v_preseq.txt
-    seqkit version > v_seqkit.txt
+    preseq 2> v_preseq.txt
     bedtools --version > v_bedtools.txt
+    picard ${markdup_java_options} MarkDuplicates --version > v_markduplicates.txt
+    picard ${markdup_java_options} CollectGcBiasMetrics --version > v_collectgcbiasmetrics.txt
     export LC_ALL=C
     igvtools version > v_igv-tools.txt
-
-    # Can't call this before running MultiQC or it breaks it
-    read_distribution.py --version > v_rseqc.txt
-
+    infer_experiment.py --version > v_rseqc.txt
+    multiqc --version > v_multiqc.txt
     for X in `ls *.txt`; do
         cat \$X >> all_versions.txt;
     done
@@ -317,6 +397,59 @@ process get_software_versions {
     """
 }
 
+/*
+ * Step 1 -- get fastq files from downloaded sras
+ */
+
+process sra_dump {
+    tag "$prefix"
+    if (params.threadfqdump) {
+        cpus ${task.cpus} }
+    else {
+        cpus 1
+    }
+    if (params.savefq || params.saveAllfq) {
+        publishDir "${params.outdir}/fastq", mode: 'copy'
+    }
+    
+    input:
+    set val(prefix), file(reads) from read_files_sra
+
+    output:
+    set val(prefix), file("*.fastq.gz") into fastq_reads_qc_sra, fastq_reads_trim_sra, fastq_reads_hisat2_notrim_sra
+   
+
+    script:
+    prefix = reads.baseName
+    if (!params.threadfqdump) {
+        """
+        echo ${prefix}
+        fastq-dump ${reads} --gzip
+        """
+    } else if (!params.single_end) {
+         """
+        export PATH=~/.local/bin:$PATH
+        parallel-fastq-dump \
+            --threads ${task.cpus} \
+            --gzip \
+            --split-3 \
+            --sra-id ${reads}
+        """
+    } else if (!params.threadfqdump && !params.single_end) {
+        """
+        echo ${prefix}
+        fastq-dump --split-3 ${reads} --gzip
+        """
+    } else {
+        """
+        export PATH=~/.local/bin:$PATH
+        parallel-fastq-dump \
+            --threads ${task.cpus} \
+            --gzip \
+            --sra-id ${reads}
+        """
+    }
+}
 
 /*
  * PREPROCESSING - Build HISAT2 index (borrowed from nf-core/rnaseq)
@@ -352,315 +485,450 @@ if(!params.hisat2_indices && params.fasta){
  * STEP 1b - FastQC
  */
 
-process fastqc {
-    tag "$prefix"
-    publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
-        saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
-
-    input:
-    set val(prefix), file(reads) from ch_read_files_fastqc
-
-    output:
-    file "*.{zip,html,txt}" into fastqc_results
-
-    script:
-    prefix = reads.baseName
-    """
-    fastqc $reads
-    """
-}
-
-
-/*
- *STEP 1c - Compress fastq files for storage
- */
-
-process gzip_fastq {
-    tag "$name"
-    publishDir "${params.outdir}/fastq", mode: 'copy'
-
-    when:
-    params.savefq || params.saveAllfq
-
-    input:
-    set val(name), file(fastq_reads) from ch_read_files_fastqc_uncompressed
-
-    output:
-    set val(name), file("*.gz") into compressed_fastq
-
-    script:
-    """
-    gzip -c ${name}.fastq > ${name}.fastq.gz
-    """
- }
-
-
-/*
- * STEP 2a - Trimming
- */
-
-process bbduk {
+process fastQC {
     validExitStatus 0,1
-    tag "$name"
-    publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.txt"
-
-    input:
-    set val(name), file(reads) from ch_read_files_trimming
-
-    output:
-    set val(name), file ("*.trim.fastq") into trimmed_reads_fastqc, trimmed_reads_hisat2, trimmed_reads_gzip
-    file "*.txt" into trim_stats
-
-    script:
-    bbduk_mem = task.memory.toGiga()
-    if (!params.single_end && params.flip) {
-        """
-        echo ${name}
-
-        seqkit seq -j 16 -r -p \
-                  ${name}_R1.flip.fastq \
-                  -o ${name}.flip.fastq
-                  
-        seqkit seq -j 16 -r -p \
-                 ${name}_R2.flip.fastq \
-                 -o ${name}.flip.fastq
-
-        
-
-        bbduk.sh -Xmx${bbduk_mem}g \
-                  t=${task.cpus} \
-                  in=${name}_R1.flip.fastq \
-                  in2=${name}_R2.flip.fastq \
-                  out=${name}_R1.flip.trim.fastq \
-                  out2=${name}_R2.flip.trim.fastq \
-                  ref=${bbmap_adapters} \
-                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
-                  maq=10 minlen=25 \
-                  tpe tbo \
-                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
-                  stats=${name}.trimstats.txt \
-                  refstats=${name}.refstats.txt \
-                  ehist=${name}.ehist.txt
-        """
-    } else if (params.flip) {
-        """
-        echo ${name}
-
-
-        seqkit seq -j 16 -r -p \
-                  ${name}.fastq \
-                  -o ${name}.flip.fastq
-
-        
-        bbduk.sh -Xmx${bbduk_mem}g \
-                  t=${task.cpus} \
-                  in=${name}.flip.fastq \
-                  out=${name}.flip.trim.fastq \
-                  ref=${bbmap_adapters} \
-                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
-                  maq=10 minlen=25 \
-                  tpe tbo \
-                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
-                  stats=${name}.trimstats.txt \
-                  refstats=${name}.refstats.txt \
-                  ehist=${name}.ehist.txt
-        """
-    }else if (!params.single_end) {
-        """
-        echo ${name}      
-
-        bbduk.sh -Xmx${bbduk_mem}g \
-                  t=${task.cpus} \
-                  in=${name}_R1.fastq \
-                  in2=${name}_R2.fastq \
-                  out=${name}_R1.trim.fastq \
-                  out2=${name}_R2.trim.fastq \
-                  ref=${bbmap_adapters} \
-                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
-                  maq=10 minlen=25 \
-                  tpe tbo \
-                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
-                  stats=${name}.trimstats.txt \
-                  refstats=${name}.refstats.txt \
-                  ehist=${name}.ehist.txt
-        """
-    } else {
-        """
-        echo ${name}
-        echo ${bbduk_mem}
-        
-        bbduk.sh -Xmx${bbduk_mem}g \
-                  t=${task.cpus} \
-                  in=${name}.fastq \
-                  out=${name}.trim.fastq \
-                  ref=${bbmap_adapters} \
-                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
-                  maq=10 minlen=25 \
-                  tpe tbo \
-                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
-                  stats=${name}.trimstats.txt \
-                  refstats=${name}.refstats.txt \
-                  ehist=${name}.ehist.txt
-        """
+    tag "$prefix"
+    publishDir "${params.outdir}" , mode: 'copy',
+    saveAs: {filename ->
+             if (filename.indexOf("zip") > 0)     "qc/fastqc/zips/$filename"
+        else if (filename.indexOf("html") > 0)    "qc/fastqc/$filename"
+        else if (filename.indexOf("txt") > 0)     "qc/fastqc_stats/$filename"
+        else null            
     }
-}
-
-
-/*
- * STEP 2b - Trimmed FastQC
- */
-
-process fastqc_trimmed {
-    validExitStatus 0,1
-    tag "$prefix"
-    publishDir "${params.outdir}/qc/fastqc/", mode: 'copy',
-        saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
+    
+    when:
+    !params.skipFastQC && !params.skipAllQC
 
     input:
-    set val(prefix), file(trimmed_reads) from trimmed_reads_fastqc
+    set val(prefix), file(reads) from fastq_reads_qc.mix(fastq_reads_qc_sra)
 
     output:
-    file "*_fastqc.{zip,html,txt}" into trimmed_fastqc_results
+    file "*.{zip,html}" into fastqc_results
+    file "*.fastqc_stats.txt" into fastqc_stats
 
     script:
-    prefix = trimmed_reads.baseName
     """
     echo ${prefix}
-
-    fastqc --quiet $trimmed_reads
-		extract_fastqc_stats.sh --srr=${prefix} > ${prefix}_stats_fastqc.txt
+    fastqc $reads
+    
+    ${params.extract_fastqc_stats} \
+        --srr=${prefix} \
+        > ${prefix}.fastqc_stats.txt    
     """
 }
 
-/*
- *STEP 2c - Compress trimmed fastq files for storage
- */
-
-process gzip_trimmed {
-    tag "$prefix"
-    publishDir "${params.outdir}/trimmed", mode: 'copy'
-
-    when:
-    params.saveTrim || params.saveAllfq
-
-    input:
-    file(trimmed_reads) from trimmed_reads_gzip
-
-    output:
-    set val(prefix), file("*.gz") into trimmed_gzip
-
-    script:
-    prefix = trimmed_reads.baseName
-    """
-    gzip -c $trimmed_reads > ${prefix}.fastq.gz
-    """
- }
 
 
 /*
- * STEP 3 - Map reads to reference genome
+ * STEP 2 - Trimming & Mapping
  */
 
-process hisat2 {
-    // NOTE: this tool sends output there even in successful (exit code 0) 
-    // termination, so we have to ignore errors for now, and the next 
-    // process will blow up from missing a SAM file instead.
+process bbduk_hisat2 {
+    validExitStatus 0
     tag "$name"
-    validExitStatus 0,143
+    publishDir "${params.outdir}/qc/trimstats", mode: 'copy', pattern: "*.{refstats,trimstats}.txt"
+    publishDir "${params.outdir}/qc/hisat2_mapstats", mode: 'copy', pattern: "*hisat2_mapstats.txt"    
+    if (params.saveTrim || params.saveAllfq) {
+        publishDir "${params.outdir}/fastq_trimmed", mode: 'copy', pattern: "*.fastq.gz"
+    }
+    
+    when:
+    !params.noTrim
 
     input:
     val(indices) from hisat2_indices.first()
-    set val(name), file(trimmed_reads) from trimmed_reads_hisat2
+    set val(name), file(reads) from fastq_reads_trim.mix(fastq_reads_trim_sra)
 
     output:
+    set val(name), file("*.trim.fastq.gz") into trimmed_reads_fastqc
+    file "*.{refstats,trimstats}.txt" into trim_stats
     set val(name), file("*.sam") into hisat2_sam
+    file("*hisat2_mapstats.txt") into hisat2_mapstats       
 
     script:
     index_base = indices[0].toString() - ~/.\d.ht2/
-    if (!params.single_end) {
-        """
-        echo ${name}
+    bbduk_mem = task.memory.toGiga()
+    prefix_pe = reads[0].toString() - ~/(_1\.)?(_R1)?(\.fq)?(fq)?(\.fastq)?(fastq)?(\.gz)?$/
+    prefix_se = reads[0].toString() - ~/(\.fq)?(\.fastq)?(\.gz)?$/
     
-        hisat2  -p ${task.cpus} \
-                --very-sensitive \
-                --no-spliced-alignment \
-                -x ${index_base} \
-                -1 ${name}_R1.trim.fastq \
-                -2 ${name}_R2.trim.fastq
-                > ${name}.sam
-        """
-    } else {
-        """
-        echo ${name}
+    def rnastrandness = ''
+    if (params.forwardStranded && !params.unStranded){
+        rnastrandness = params.single_end ? '--rna-strandness F' : '--rna-strandness FR'
+    } else if (params.reverseStranded && !params.unStranded){
+        rnastrandness = params.single_end ? '--rna-strandness R' : '--rna-strandness RF'
+    }
     
+    if (!params.single_end && params.flip) {
+        """
+        echo ${name}         
+        reformat.sh -Xmx${bbduk_mem}g \
+                t=${task.cpus} \
+                in=${reads[0]} \
+                in2=${reads[1]} \
+                out=${prefix_pe}_1.flip.fastq.gz \
+                out2=${prefix_pe}_2.flip.fastq.gz \
+                rcomp=t
+                
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
+                  in=${prefix_pe}_1.flip.fastq.gz \
+                  in2=${prefix_pe}_2.flip.fastq.gz \
+                  out=${prefix_pe}_1.flip.trim.fastq.gz \
+                  out2=${prefix_pe}_2.flip.trim.fastq.gz \
+                  ref=${bbmap_adapters} \
+                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
+                  maq=10 minlen=25 \
+                  tpe tbo \
+                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
+                  stats=${prefix_pe}.trimstats.txt \
+                  refstats=${prefix_pe}.refstats.txt
+                  
+        hisat2 -p ${task.cpus} \
+               --very-sensitive \
+               --no-spliced-alignment \
+               -x ${index_base} \
+               -1 ${prefix_pe}_1.flip.trim.fastq.gz \
+               -2 ${prefix_pe}_2.flip.trim.fastq.gz \
+               $rnastrandness \
+               --new-summary \
+               > ${prefix_pe}.sam \
+               2> ${prefix_pe}.hisat2_mapstats.txt                  
+        """
+    } else if (params.single_end && params.flip) {
+        """
+        echo ${name}        
+        reformat.sh -Xmx${bbduk_mem}g \
+                t=${task.cpus} \
+                in=${reads} \
+                out=${prefix_se}.flip.fastq.gz \
+                rcomp=t
+        
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
+                  in=${prefix_se}.flip.fastq.gz \
+                  out=${prefix_se}.flip.trim.fastq.gz \
+                  ref=${bbmap_adapters} \
+                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
+                  maq=10 minlen=25 \
+                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
+                  stats=${prefix_se}.trimstats.txt \
+                  refstats=${prefix_se}.refstats.txt
+                  
         hisat2  -p ${task.cpus} \
                 --very-sensitive \
                 --no-spliced-alignment \
                 -x ${index_base}\
-                -U ${trimmed_reads} \
-                > ${name}.sam
+                -U ${prefix_se}.flip.trim.fastq.gz  \
+                $rnastrandness \
+                --new-summary \
+                > ${prefix_se}.sam \
+                2> ${prefix_se}.hisat2_mapstats.txt                  
         """
-    }
+    } else if (!params.single_end && params.flipR2) {
+                """
+        echo ${prefix_pe}
+
+        reformat.sh -Xmx${bbduk_mem}g \
+                t=${task.cpus} \
+                in=${reads[0]} \
+                in2=${reads[1]} \
+                out=${prefix_pe}.flip.fastq.gz \
+                out2=${prefix_pe}.flip.fastq.gz \
+                rcompmate=t
+
+        bbduk.sh -Xmx${bbduk_mem}g \
+                t=${task.cpus} \
+                in=${prefix_pe}.flip.fastq.gz \
+                in2=${prefix_pe}.flip.fastq.gz \
+                out=${prefix_pe}.flip.trim.fastq.gz \
+                out2=${prefix_pe}.flip.trim.fastq.gz \
+                ref=${bbmap_adapters} \
+                ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
+                nullifybrokenquality=t \
+                maq=10 minlen=25 \
+                tpe tbo \
+                literal=AAAAAAAAAAAAAAAAAAAAAAA \
+                stats=${prefix_pe}.trimstats.txt \
+                refstats=${prefix_pe}.refstats.txt
+                
+        hisat2 -p ${task.cpus} \
+               --very-sensitive \
+               --no-spliced-alignment \
+               -x ${index_base} \
+               -1 ${prefix_pe}_1.flip.trim.fastq.gz \
+               -2 ${prefix_pe}_2.flip.trim.fastq.gz \
+               $rnastrandness \
+               --new-summary \
+               > ${prefix_pe}.sam \
+               2> ${prefix_pe}.hisat2_mapstats.txt                   
+        """
+    } else if (!params.single_end) {
+        """
+        echo ${prefix_pe}
+
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
+                  in=${reads[0]} \
+                  in2=${reads[1]} \
+                  out=${prefix_pe}_1.trim.fastq.gz \
+                  out2=${prefix_pe}_2.trim.fastq.gz \
+                  ref=${bbmap_adapters} \
+                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
+                  maq=10 minlen=25 \
+                  tpe tbo \
+                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
+                  stats=${prefix_pe}.trimstats.txt \
+                  refstats=${prefix_pe}.refstats.txt
+                  
+        hisat2 -p ${task.cpus} \
+               --very-sensitive \
+               --no-spliced-alignment \
+               -x ${index_base} \
+               -1 ${prefix_pe}_1.trim.fastq.gz \
+               -2 ${prefix_pe}_2.trim.fastq.gz \
+               $rnastrandness \
+               --new-summary \
+               > ${prefix_pe}.sam \
+               2> ${prefix_pe}.hisat2_mapstats.txt                          
+        """
+    } else {
+        """
+        echo ${prefix_se}
+
+        bbduk.sh -Xmx${bbduk_mem}g \
+                  t=${task.cpus} \
+                  in=${reads} \
+                  out=${prefix_se}.trim.fastq.gz \
+                  ref=${bbmap_adapters} \
+                  ktrim=r qtrim=10 k=23 mink=11 hdist=1 \
+                  maq=10 minlen=25 \
+                  literal=AAAAAAAAAAAAAAAAAAAAAAA \
+                  stats=${prefix_se}.trimstats.txt \
+                  refstats=${prefix_se}.refstats.txt
+                  
+        hisat2  -p ${task.cpus} \
+                --very-sensitive \
+                --no-spliced-alignment \
+                -x ${index_base}\
+                -U ${prefix_se}.trim.fastq.gz \
+                $rnastrandness \
+                --new-summary \
+                > ${prefix_se}.sam \
+                2> ${prefix_se}.hisat2_mapstats.txt                  
+        """
+    } 
 }
 
 
 /*
- * STEP 4 - Convert to BAM format and sort
+ * STEP 2+ - Trimmed FastQC
  */
 
+process fastQC_trim {
+    validExitStatus 0,1
+    tag "$name"
+    publishDir "${params.outdir}" , mode: 'copy',
+    saveAs: {filename ->
+             if (filename.indexOf("zip") > 0)   "qc/fastqc/zips/$filename"
+        else if (filename.indexOf("html") > 0)  "qc/fastqc/$filename"
+        else null            
+    }
+    
+    when:
+    !params.skipFastQC && !params.skipAllQC && !noTrim
+
+    input:
+    set val(name), file(trimmed_reads) from trimmed_reads_fastqc
+
+    output:
+    file "*_fastqc.{zip,html}" into trimmed_fastqc_results
+
+    script:
+    """
+    echo ${name}
+    
+    fastqc --quiet ${trimmed_reads}
+    """
+}
+
+
 /*
- * STEP 4 - Convert to BAM format and sort
+ * STEP 2+ - Map reads to reference genome w/o trimming
+ */
+
+if (params.noTrim) {
+    process hisat2 {
+        tag "$name"
+        validExitStatus 0
+        publishDir "${params.outdir}/qc/hisat2_mapstats", mode: 'copy', pattern: "*.txt"
+    
+        input:
+        val(indices) from hisat2_indices.first()
+        set val(name), file(reads) from fastq_reads_hisat2_notrim_sra.mix(fastq_reads_hisat2_notrim)
+    
+        output:
+        set val(name), file("*.sam") into hisat2_sam
+        file("*.txt") into hisat2_mapstats
+    
+        script:
+        index_base = indices[0].toString() - ~/.\d.ht2/
+        prefix_pe = trimmed_reads[0].toString() - ~/(_1\.)?(_R1)?(flip)?(trim)?(\.flip)?(\.fq)?(fq)?(\.fastq)?(fastq)?(\.gz)?$/
+        prefix_se = trimmed_reads[0].toString() - ~/(\.flip)?(\.fq)?(\.fastq)?(\.gz)?$/
+        
+        def rnastrandness = ''
+        if (params.forwardStranded && !params.unStranded){
+            rnastrandness = params.single_end ? '--rna-strandness F' : '--rna-strandness FR'
+        } else if (params.reverseStranded && !params.unStranded){
+            rnastrandness = params.single_end ? '--rna-strandness R' : '--rna-strandness RF'
+        }
+        
+        if (!params.single_end) {
+            """
+            echo ${prefix_pe}
+        
+            hisat2 -p ${task.cpus} \
+                   --very-sensitive \
+                   --no-spliced-alignment \
+                    $rnastrandness \
+                   -x ${index_base} \
+                   -1 ${reads[0]} \
+                   -2 ${reads[1]} \
+                   --new-summary \
+                   > ${prefix_pe}.sam \
+                   2> ${prefix_pe}.hisat2_mapstats.txt                
+            """
+        }
+        else {
+            """
+            echo ${prefix_se}
+        
+            hisat2  -p ${task.cpus} \
+                    --very-sensitive \
+                    --no-spliced-alignment \
+                    $rnastrandness \
+                    -x ${index_base} \
+                    -U ${reads} \
+                    --new-summary \
+                    > ${prefix_se}.sam \
+                    2> ${prefix_se}.hisat2_mapstats.txt                
+            """
+        }
+    }
+}
+
+/*
+ * STEP 3 - Convert to BAM/CRAM format and sort
  */
 
 process samtools {
-    tag "$prefix"
-    publishDir "${params.outdir}/mapped/bams", mode: 'copy', pattern: "${prefix}.sorted.bam"
-    publishDir "${params.outdir}/mapped/bams", mode: 'copy', pattern: "${prefix}.sorted.bam.bai"
-    publishDir "${params.outdir}/qc/mapstats", mode: 'copy', pattern: "${prefix}.sorted.bam.flagstat"
-    publishDir "${params.outdir}/qc/mapstats", mode: 'copy', pattern: "${prefix}.sorted.bam.millionsmapped"
+    tag "$name"
+    publishDir "${params.outdir}" , mode: 'copy',
+    saveAs: {filename ->
+             if ((filename.indexOf("sorted.bam") > 0) & params.saveBAM)     "mapped/bams/$filename"
+        else if ((filename.indexOf("sorted.bam.bai") > 0) & params.saveBAM) "mapped/bams/$filename"
+        else if (filename.indexOf("flagstat") > 0)                          "qc/mapstats/$filename"
+        else if (filename.indexOf("millionsmapped") > 0)                    "qc/mapstats/$filename"
+        else if (filename.indexOf("sorted.cram") > 0)                       "mapped/crams/$filename"
+        else if (filename.indexOf("sorted.cram.crai") > 0)                  "mapped/crams/$filename"
+        else null            
+    }
 
     input:
     set val(name), file(mapped_sam) from hisat2_sam
+    file fasta from ch_fasta_for_samtools
 
     output:
-    set val(name), file("${prefix}.sorted.bam") into sorted_bam_ch
-    set val(name), file("${prefix}.sorted.bam.bai") into sorted_bam_indices_ch
-    set val(name), file("${prefix}.sorted.bam.flagstat") into bam_flagstat
-    set val(name), file("${prefix}.sorted.bam.millionsmapped") into bam_milmapped_bedgraph
+    set val(name), file("${name}.sorted.bam") into sorted_bam_ch
+    set val(name), file("${name}.sorted.bam.bai") into sorted_bam_indices_ch
+    set val(name), file("${name}.flagstat") into bam_flagstat
+    set val(name), file("${name}.millionsmapped") into bam_milmapped_bedgraph
+    set val(name), file("${name}.sorted.cram") into cram_ch
+    set val(name), file("${name}.sorted.cram.crai") into cram_index_ch
 
     script:
-    prefix = mapped_sam.baseName
-    // Note that the millionsmapped arugments below are only good for SE data. When PE is added, it will need to be changed to:
-    // -F 0x40 rootname.sorted.bam | cut -f1 | sort | uniq | wc -l  > rootname.bam.millionsmapped
     if (!params.single_end) {
     """
-
-    samtools view -@ ${task.cpus} -bS -o ${prefix}.bam ${mapped_sam}
-    samtools sort -@ ${task.cpus} ${prefix}.bam > ${prefix}.sorted.bam
-    samtools flagstat ${prefix}.sorted.bam > ${prefix}.sorted.bam.flagstat
-    samtools view -@ ${task.cpus} -F 0x40 ${prefix}.sorted.bam | cut -f1 | sort | uniq | wc -l > ${prefix}.sorted.bam.millionsmapped
-    samtools index ${prefix}.sorted.bam ${prefix}.sorted.bam.bai
+    samtools view -@ ${task.cpus} -bS -o ${name}.bam ${mapped_sam}
+    samtools sort -@ ${task.cpus} ${name}.bam > ${name}.sorted.bam
+    samtools flagstat ${name}.sorted.bam > ${name}.flagstat
+    samtools view -@ ${task.cpus} -F 0x40 ${name}.sorted.bam | cut -f1 | sort | uniq | wc -l > ${name}.millionsmapped
+    samtools index ${name}.sorted.bam ${name}.sorted.bam.bai
+    samtools view -@ ${task.cpus} -C -T ${fasta} -o ${name}.cram ${name}.sorted.bam
+    samtools sort -@ ${task.cpus} -O cram ${name}.cram > ${name}.sorted.cram
+    samtools index -c ${name}.sorted.cram ${name}.sorted.cram.crai
     """
     } else {
     """
-
-    samtools view -@ ${task.cpus} -bS -o ${prefix}.bam ${mapped_sam}
-    samtools sort -@ ${task.cpus} ${prefix}.bam > ${prefix}.sorted.bam
-    samtools flagstat ${prefix}.sorted.bam > ${prefix}.sorted.bam.flagstat
-    samtools view -@ ${task.cpus} -F 0x904 -c ${prefix}.sorted.bam > ${prefix}.sorted.bam.millionsmapped
-    samtools index ${prefix}.sorted.bam ${prefix}.sorted.bam.bai
+    samtools view -@ ${task.cpus} -bS -o ${name}.bam ${mapped_sam}
+    samtools sort -@ ${task.cpus} ${name}.bam > ${name}.sorted.bam
+    samtools flagstat ${name}.sorted.bam > ${name}.flagstat
+    samtools view -@ ${task.cpus} -F 0x904 -c ${name}.sorted.bam > ${name}.millionsmapped
+    samtools index ${name}.sorted.bam ${name}.sorted.bam.bai
+    samtools view -@ ${task.cpus} -C -T ${fasta} -o ${name}.cram ${name}.sorted.bam
+    samtools sort -@ ${task.cpus} -O cram ${name}.cram > ${name}.sorted.cram
+    samtools index -c ${name}.sorted.cram ${name}.sorted.cram.crai
     """
     }
 }
 
 sorted_bam_ch
-   .into {sorted_bams_for_bedtools_bedgraph; sorted_bams_for_preseq; sorted_bams_for_rseqc; sorted_bams_for_dreg_prep; sorted_bams_for_pileup}
+   .into { sorted_bams_for_preseq; sorted_bams_for_rseqc; sorted_bams_for_dreg_prep; sorted_bams_for_pileup; sorted_bams_for_picard; sorted_bam_for_bedgraph }
 
 sorted_bam_indices_ch
-    .into {sorted_bam_indices_for_bedtools_bedgraph; sorted_bam_indices_for_bedtools_normalized_bedgraph; sorted_bam_indicies_for_pileup; sorted_bam_indices_for_preseq; sorted_bam_indices_for_rseqc}
+    .into { sorted_bam_indicies_for_pileup; sorted_bam_indices_for_preseq; sorted_bam_indices_for_rseqc; sorted_bam_indices_for_picard; sorted_bam_index_for_bedgraph }
+
+cram_ch
+    .into { cram_for_counts; cram_dreg_prep }
+
+cram_index_ch
+    .into { cram_index_for_counts; cram_index_dreg_prep} 
 
 /*
- *STEP 5a - Plot the estimated complexity of a sample, and estimate future yields
+ *STEP 4+ - Picard tools
+ */
+
+process picard {
+    tag "$name"
+    errorStrategy 'ignore'
+    publishDir "${params.outdir}" , mode: 'copy',
+    saveAs: {filename ->
+             if (filename.indexOf("marked_dup_metrics.txt") > 0)            "qc/picard/dups/$filename"
+        else if (filename.indexOf("gc_bias_metrics.pdf") > 0)               "qc/picard/gc_bias/$filename"
+        else if (filename.indexOf("gc_bias_metrics.txt") > 0)               "qc/picard/gc_bias/$filename"
+        else if (filename.indexOf("summary_metrics.txt") > 0)               "qc/picard/gc_bias/$filename"
+        else null            
+    }
+    
+    when:
+    !params.skippicard && !params.skipAllQC    
+
+    input:
+    set val(name), file(bam_file) from sorted_bams_for_picard
+    file(bam_indices) from sorted_bam_indices_for_picard
+    file fasta from ch_fasta_for_picard
+
+    output:
+    file "*.{txt,pdf}" into picard_stats_multiqc, picard_stats_nqc
+    
+    script:
+    markdup_java_options = (task.memory.toGiga() > 8) ? params.markdup_java_options : "\"-Xms" +  (task.memory.toGiga() / 2 )+"g "+ "-Xmx" + (task.memory.toGiga() - 1)+ "g\""
+    """
+    picard ${markdup_java_options} MarkDuplicates \
+         I=${bam_file} \
+         O=${name}.marked_duplicates.bam \
+         M=${name}.marked_dup_metrics.txt             
+         
+    picard ${markdup_java_options} CollectGcBiasMetrics \
+          I=${bam_file} \
+          O=${name}.gc_bias_metrics.txt \
+          CHART=${name}.gc_bias_metrics.pdf \
+          S=${name}.summary_metrics.txt \
+          R=${fasta}    
+    """
+}
+
+/*
+ *STEP 4+ - Plot the estimated complexity of a sample, and estimate future yields
  *         for complexity if the sample is sequenced at higher read depths.
  */
 
@@ -668,6 +936,9 @@ process preseq {
     tag "$name"
     errorStrategy 'ignore'
     publishDir "${params.outdir}/qc/preseq/", mode: 'copy', pattern: "*.txt"
+    
+    when:
+    !params.skippreseq && !params.skipAllQC    
 
     input:
     set val(name), file(bam_file) from sorted_bams_for_preseq
@@ -678,10 +949,8 @@ process preseq {
 
     script:
     """
-
     preseq c_curve -B -o ${name}.c_curve.txt \
            ${bam_file}
-
     preseq lc_extrap -B -o ${name}.lc_extrap.txt \
            ${bam_file}
     """
@@ -689,12 +958,12 @@ process preseq {
 
 
 /*
- *STEP 5b - Analyze read distributions using RSeQC
+ *STEP 4+ - Analyze read distributions using RSeQC
  */
 
 process rseqc {
     tag "$name"
-    validExitStatus 0,143
+    validExitStatus 0,1,143
     publishDir "${params.outdir}/qc/rseqc" , mode: 'copy',
         saveAs: {filename ->
                  if (filename.indexOf("infer_experiment.txt") > 0)              "infer_experiment/$filename"
@@ -707,8 +976,11 @@ process rseqc {
             else if (filename.indexOf("RPKM_saturation.rawCount.xls") > 0)      "RPKM_saturation/counts/$filename"
             else if (filename.indexOf("RPKM_saturation.saturation.pdf") > 0)    "RPKM_saturation/$filename"
             else if (filename.indexOf("RPKM_saturation.saturation.r") > 0)      "RPKM_saturation/rscripts/$filename"
-            else filename
+            else null
         }
+    
+    when:
+    !params.skipRSeQC && !params.skipAllQC
 
     input:
     set val(name), file(bam_file) from sorted_bams_for_rseqc
@@ -719,14 +991,11 @@ process rseqc {
 
     script:
     """
-
     read_distribution.py -i ${bam_file} \
                          -r ${genome_refseq} \
                          > ${name}.read_dist.txt
-
     read_duplication.py -i ${bam_file} \
                         -o ${name}.read_duplication
-
     infer_experiment.py -i ${bam_file} \
                         -r ${genome_refseq} \
                         > ${name}.infer_experiment.txt
@@ -736,12 +1005,15 @@ process rseqc {
 
 
 /*
- *STEP 5c - Analyze coverage using pileup.sh
+ *STEP 4+ - Analyze coverage using pileup.sh
  */
 
 process pileup {
     tag "$name"
     publishDir "${params.outdir}/qc/pileup", mode: 'copy', pattern: "*.txt"
+    
+    when:
+    !params.skippileup && !params.skipAllQC    
 
     input:
     set val(name), file(bam_file) from sorted_bams_for_pileup
@@ -753,7 +1025,6 @@ process pileup {
     script:
     pileup_mem = task.memory.toGiga()
     """
-
     pileup.sh -Xmx${pileup_mem}g \
               in=${bam_file} \
               out=${name}.coverage.stats.txt \
@@ -762,111 +1033,159 @@ process pileup {
  }
 
 /*
- *STEP 6a - Create non-normalzied bedGraphs for analysis using FStitch/Tfit
+ *STEP 5 - Create non-normalzied bedGraphs for analysis using FStitch/Tfit
  */
 
 process bedgraphs {
     validExitStatus 0,143
     tag "$name"
-    publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "*{neg,pos}.bedGraph"
-    publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "${name}.bedGraph"
-    publishDir "${params.outdir}/mapped/rcc_bedgraphs", mode: 'copy', pattern: "${name}.rcc.bedGraph"
+    publishDir "${params.outdir}/mapped/bedgraphs", mode: 'copy', pattern: "${name}.bedGraph"      
 
     input:
-    set val(name), file(bam_file) from sorted_bams_for_bedtools_bedgraph
-    set val(name), file(bam_indices) from sorted_bam_indices_for_bedtools_bedgraph
+    set val(name), file(bam_file) from sorted_bam_for_bedgraph
+    set val(name), file(bam_indices) from sorted_bam_index_for_bedgraph
     set val(name), file(millions_mapped) from bam_milmapped_bedgraph
+    file chrom_sizes from chrom_sizes_for_bed
 
     output:
-    set val(name), file("*.bedGraph") into non_normalized_bedgraphs
+    set val(name), file("${name}.pos.bedGraph") into pos_non_normalized_bedgraphs
+    set val(name), file("${name}.neg.bedGraph") into neg_non_normalized_bedgraphs
+    set val(name), file("${name}.bedGraph") into non_normalized_bedgraphs, nqc_bg
     set val(name), file("${name}.rcc.bedGraph") into bedgraph_tdf
     set val(name), file("${name}.pos.rcc.bedGraph") into bedgraph_bigwig_pos
     set val(name), file("${name}.neg.rcc.bedGraph") into bedgraph_bigwig_neg
 
     script:
-    """
-
+    if (params.single_end) {
+    """    
     genomeCoverageBed \
-                     -bg \
-                     -strand + \
-                     -g hg38 \
-                     -ibam ${bam_file} \
-                     > ${name}.pos.bedGraph
-
+        -bg \
+        -strand + \
+        -g ${chrom_sizes} \
+        -ibam ${bam_file} \
+        > ${name}.pos.bedGraph
     genomeCoverageBed \
-                     -bg \
-                     -strand - \
-                     -g hg38 \
-                     -ibam ${bam_file} \
-                     > ${name}.tmp.neg.bedGraph
-
-     awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' ${name}.tmp.neg.bedGraph \
+        -bg \
+        -strand - \
+        -g ${chrom_sizes} \
+        -ibam ${bam_file} \
+        | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' \
         > ${name}.neg.bedGraph
-        rm ${name}.tmp.neg.bedGraph
 
     cat ${name}.pos.bedGraph \
         ${name}.neg.bedGraph \
         > ${name}.unsorted.bedGraph
-
+        
     sortBed \
-             -i ${name}.unsorted.bedGraph \
-             > ${name}.bedGraph
-
-    rm ${name}.unsorted.bedGraph
+        -i ${name}.unsorted.bedGraph \
+        > ${name}.bedGraph
 
     python ${params.rcc} \
         ${name}.bedGraph \
         ${millions_mapped} \
-        ${name}.rcc.bedGraph \
-
+        ${name}.rcc.bedGraph
+        
     python ${params.rcc} \
         ${name}.pos.bedGraph \
         ${millions_mapped} \
         ${name}.unsorted.pos.rcc.bedGraph
-
     sortBed -i ${name}.unsorted.pos.rcc.bedGraph > ${name}.pos.rcc.bedGraph
-    rm ${name}.unsorted.pos.rcc.bedGraph
 
     python ${params.rcc} \
         ${name}.neg.bedGraph \
         ${millions_mapped} \
         ${name}.unsorted.neg.rcc.bedGraph
-
     sortBed -i ${name}.unsorted.neg.rcc.bedGraph > ${name}.neg.rcc.bedGraph
-    rm ${name}.unsorted.neg.rcc.bedGraph
-
     """
+    } else {
+    """   
+    samtools view \
+        -h -b -f 0x0040 \
+        ${bam_file} \
+        > ${name}.first_pair.bam
+        
+    samtools view \
+        -h -b -f 0x0080 \
+        ${bam_file} \
+        > ${name}.second_pair.bam
+        
+    genomeCoverageBed \
+        -bg \
+        -split \
+        -strand - \
+        -g ${chrom_sizes} \
+        -ibam ${name}.first_pair.bam \
+        | sortBed \
+        > ${name}.first_pair.pos.bedGraph
+    genomeCoverageBed \
+        -bg \
+        -split \
+        -strand + \
+        -g ${chrom_sizes} \
+        -ibam ${name}.first_pair.bam \
+        | sortBed \
+        | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' \
+        > ${name}.first_pair.neg.bedGraph
+                     
+    genomeCoverageBed \
+        -bg \
+        -split \
+        -strand + \
+        -g ${chrom_sizes} \
+        -ibam ${name}.second_pair.bam \
+        | sortBed \
+        > ${name}.second_pair.pos.bedGraph
+    genomeCoverageBed \
+        -bg \
+        -split \
+        -strand - \
+        -g ${chrom_sizes} \
+        -ibam ${name}.second_pair.bam \
+        | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' \
+        | sortBed \
+        > ${name}.second_pair.neg.bedGraph
+                     
+    unionBedGraphs \
+        -i ${name}.first_pair.pos.bedGraph ${name}.second_pair.pos.bedGraph \
+        | awk -F '\t' {'print \$1"\t"\$2"\t"\$3"\t"(\$4+\$5)'} \
+        > ${name}.pos.bedGraph 
+        
+    unionBedGraphs \
+        -i ${name}.first_pair.neg.bedGraph ${name}.second_pair.neg.bedGraph \
+        | awk -F '\t' {'print \$1"\t"\$2"\t"\$3"\t"(\$4+\$5)'} \
+        > ${name}.neg.bedGraph 
+    
+    cat ${name}.pos.bedGraph \
+        ${name}.neg.bedGraph \
+        > ${name}.unsorted.bedGraph
+        
+    sortBed \
+        -i ${name}.unsorted.bedGraph \
+        > ${name}.bedGraph
+
+    python ${params.rcc} \
+        ${name}.bedGraph \
+        ${millions_mapped} \
+        ${name}.rcc.bedGraph
+        
+    python ${params.rcc} \
+        ${name}.pos.bedGraph \
+        ${millions_mapped} \
+        ${name}.unsorted.pos.rcc.bedGraph
+    sortBed -i ${name}.unsorted.pos.rcc.bedGraph > ${name}.pos.rcc.bedGraph
+
+    python ${params.rcc} \
+        ${name}.neg.bedGraph \
+        ${millions_mapped} \
+        ${name}.unsorted.neg.rcc.bedGraph
+    sortBed -i ${name}.unsorted.neg.rcc.bedGraph > ${name}.neg.rcc.bedGraph     
+    """
+    }
  }
 
 
-/* Idea borrowed from the nf-core/atacseq workflow:
- * Just generate the chromosome sizes file using samtools, if not provided.
-  */
-if(!params.chrom_sizes) {
-  process make_chromosome_sizes {
-      tag "$fasta"
-      publishDir path: { params.saveReference ? "${params.outdir}/reference_genome" : params.outdir },
-              saveAs: { params.saveReference ? it : null }, mode: 'copy'
-
-      input:
-      file fasta from genome_fasta
-
-      output:
-      file("${fasta}.sizes") into chrom_sizes_ch
-
-      script:
-      """
-      samtools faidx $fasta
-      cut -f 1,2 ${fasta}.fai > ${fasta}.sizes
-      """
-  }
-}
-
-chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_bigwig; chrom_sizes_for_igv}
-
-
 /*
- *STEP 6b - Create bedGraphs and bigwigs for dREG
+ *STEP 5+ - Create bedGraphs and bigwigs for dREG
  */
 
 process dreg_prep {
@@ -874,43 +1193,62 @@ process dreg_prep {
     errorStrategy 'ignore'
     tag "$name"
     publishDir "${params.outdir}/mapped/dreg_input", mode: 'copy', pattern: "*.bw"
+    
+    when:
+    params.dreg
 
     input:
-    set val(name), file(bam_file) from sorted_bams_for_dreg_prep
-    file(chr_sizes) from chrom_sizes_for_bed
+    set val(name), file(cram_file) from cram_dreg_prep
+    set val(name), file(cram_index) from cram_index_dreg_prep
+    file(chrom_sizes) from chrom_sizes_for_dreg
 
     output:
-        set val(name), file("*.bw") into dreg_bigwig
+    set val(name), file("*.bw") into dreg_bigwig
 
     script:
     """
-
     echo "Creating BigWigs suitable as inputs to dREG"
-
-    bedtools bamtobed -i ${bam_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
+    
+    export CRAM_REFERENCE=${genome}    
+    
+    bamToBed -i ${cram_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
     awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \
     > ${name}.dreg.bed
     sortBed -i ${name}.dreg.bed > ${name}.dreg.sort.bed
-
+    
     echo positive strand processed to bedGraph
-
-    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chr_sizes} -strand + > ${name}.pos.bedGraph
-    sortBed -i ${name}.pos.bedGraph > ${name}.pos.sort.bedGraph
-    bedtools genomecov -bg -i ${name}.dreg.sort.bed -g ${chr_sizes} -strand - \
-    | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' > ${name}.neg.bedGraph
-    sortBed -i ${name}.neg.bedGraph > ${name}.neg.sort.bedGraph
-
+    
+    bedtools genomecov \
+            -bg \
+            -i ${name}.dreg.sort.bed \
+            -g ${chrom_sizes} \
+            -strand + \
+            > ${name}.pos.bedGraph
+    sortBed \
+            -i ${name}.pos.bedGraph \
+            > ${name}.pos.sort.bedGraph
+            
+    bedtools genomecov \
+            -bg \
+            -i ${name}.dreg.sort.bed \
+            -g ${chrom_sizes} \
+            -strand - \
+            | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' > ${name}.neg.bedGraph
+    sortBed \
+            -i ${name}.neg.bedGraph \
+            > ${name}.neg.sort.bedGraph
+            
     echo negative strand processed to bedGraph
-
-    ${params.bedGraphToBigWig} ${name}.pos.sort.bedGraph ${chr_sizes} ${name}.pos.bw
-    ${params.bedGraphToBigWig} ${name}.neg.sort.bedGraph ${chr_sizes} ${name}.neg.bw
-
+    
+    ${params.bedGraphToBigWig} ${name}.pos.sort.bedGraph ${chrom_sizes} ${name}.pos.bw
+    ${params.bedGraphToBigWig} ${name}.neg.sort.bedGraph ${chrom_sizes} ${name}.neg.bw
+    
     echo bedGraph to bigwig done
     """
  }
 
 /*
- *STEP 7 - Normalize bigWigs by millions of reads mapped for visualization on nascent2.0
+ *STEP 5+ - Normalize bigWigs by millions of reads mapped for visualization
  */
 
 process normalized_bigwigs {
@@ -930,12 +1268,11 @@ process normalized_bigwigs {
     """
     ${params.bedGraphToBigWig} ${pos_bedgraph} ${chrom_sizes} ${name}.pos.rcc.bw
     ${params.bedGraphToBigWig} ${neg_bedgraph} ${chrom_sizes} ${name}.neg.rcc.bw
-
     """
 }
 
 /*
- *STEP 8 - IGV Tools : generate tdfs for optimal visualization in Integrative Genomics Viewer (IGV)
+ *STEP 5+ - IGV Tools : generate tdfs for optimal visualization in Integrative Genomics Viewer (IGV)
  */
 
 process igvtools {
@@ -962,16 +1299,17 @@ process igvtools {
 
 
 /*
- * STEP 9 - MultiQC
+ * STEP 6 - MultiQC
  */
-process multiqc {
+
+process multiQC {
     validExitStatus 0,1,143
     errorStrategy 'ignore'
     publishDir "${params.outdir}/multiqc/", mode: 'copy', pattern: "multiqc_report.html"
     publishDir "${params.outdir}/multiqc/", mode: 'copy', pattern: "*_data"
 
     when:
-    !params.skipMultiQC
+    !params.skipMultiQC && !params.skipAllQC
 
     input:
     file multiqc_config from ch_multiqc_config.collect()
@@ -982,6 +1320,8 @@ process multiqc {
     file ('qc/rseqc/*') from rseqc_results.collect()
     file ('qc/preseq/*') from preseq_results.collect()
     file ('software_versions/*') from ch_software_versions_yaml
+    file ('qc/hisat2_mapstats/*') from hisat2_mapstats.collect()
+    file ('qc/picard/*') from picard_stats_multiqc.collect()    
 
     output:
     file "*multiqc_report.html" into multiqc_report
@@ -991,12 +1331,95 @@ process multiqc {
     rtitle = custom_runName ? "--title \"$custom_runName\"" : ''
     rfilename = custom_runName ? "--filename " + custom_runName.replaceAll('\\W','_').replaceAll('_+','_') + "_multiqc_report" : ''
 
-
     """
-    export PATH=~/.local/bin:$PATH
-
     multiqc . -f $rtitle $rfilename --config $multiqc_config
     """
+}
+
+/*
+ * STEP 10 - Counts -- BEDTools multicov
+ */
+
+process multicov {
+    tag "$name"
+    validExitStatus 0
+    publishDir "${params.outdir}/counts", mode: 'copy', pattern: "*.bed"
+    
+    when:
+    params.counts
+    
+    input:
+    set val(name), file (cram_count) from cram_for_counts
+    set val(name), file (cram_index) from cram_index_for_counts
+       
+    output:
+    file ("*.bed") into counts_bed_out
+        
+    script:
+        """
+        export CRAM_REFERENCE=${genome}
+        
+        bedtools multicov \\
+            -bams ${cram_count} \\
+            -s \\
+            -bed ${genome_refseq} \\
+            > ${name}_counts.bed
+        """
+}
+
+/*
+ * STEP 10+ - Merge Counts
+ */
+
+process merge_multicov {
+    validExitStatus 0
+    publishDir "${params.outdir}/counts", mode: 'copy', pattern: "merged_gene_counts.bed"
+    
+    when:
+    params.counts
+    
+    input:
+    file (multicov:'counts/*') from counts_bed_out.collect()
+       
+    output:
+    file ("merged_gene_counts.bed") into merged_counts_bed_out
+        
+    script:
+        """
+        python3 ${params.merge_counts} \\
+            -b './counts/' \\
+            -o merged_gene_counts.bed
+        """
+}
+
+/*
+ * STEP 4+ - Nascent QC
+ */
+
+process nqc {
+    validExitStatus 0
+    publishDir "${params.outdir}/qc/nqc", mode: 'copy', pattern: "*.{txt,html,png}"
+    
+    when:
+    params.nqc
+    
+    input:
+    file (bedgraphs:'mapped/bedgraphs/*') from nqc_bg.collect()
+    file (duplication_files:'qc/picard/dups/*') from picard_stats_nqc.collect()
+    file (fastqc_files:'qc/fastqc_stats/*') from fastqc_stats.collect()
+       
+    output:
+    file ("*.{txt,html,png}") into nqc_out
+        
+    script:
+        """
+        python3 ${params.nqc_py} \\
+            -b './mapped/bedgraphs/' \\
+            -d './qc/picard/dups/' \\
+            -r './qc/fastqc_stats/' \\
+            -g ${chrom_sizes} \\
+            -t ${task.cpus}
+        """
 }
 
 /*
@@ -1006,8 +1429,8 @@ workflow.onComplete {
 
     // Set up the e-mail variables
     def subject = "[nf-core/nascent] Successful: $workflow.runName"
-    if (!workflow.success) {
-        subject = "[nf-core/nascent] FAILED: $workflow.runName"
+    if(!workflow.success){
+      subject = "[nf-core/nascent] FAILED: $workflow.runName"
     }
     def email_fields = [:]
     email_fields['version'] = workflow.manifest.version
@@ -1025,9 +1448,10 @@ workflow.onComplete {
     email_fields['summary']['Date Completed'] = workflow.complete
     email_fields['summary']['Pipeline script file path'] = workflow.scriptFile
     email_fields['summary']['Pipeline script hash ID'] = workflow.scriptId
-    if (workflow.repository) email_fields['summary']['Pipeline repository Git URL'] = workflow.repository
-    if (workflow.commitId) email_fields['summary']['Pipeline repository Git Commit'] = workflow.commitId
-    if (workflow.revision) email_fields['summary']['Pipeline Git branch/tag'] = workflow.revision
+    if(workflow.repository) email_fields['summary']['Pipeline repository Git URL'] = workflow.repository
+    if(workflow.commitId) email_fields['summary']['Pipeline repository Git Commit'] = workflow.commitId
+    if(workflow.revision) email_fields['summary']['Pipeline Git branch/tag'] = workflow.revision
+    if(workflow.container) email_fields['summary']['Docker image'] = workflow.container
     email_fields['summary']['Nextflow Version'] = workflow.nextflow.version
     email_fields['summary']['Nextflow Build'] = workflow.nextflow.build
     email_fields['summary']['Nextflow Compile Timestamp'] = workflow.nextflow.timestamp
@@ -1036,8 +1460,8 @@ workflow.onComplete {
     def mqc_report = null
     try {
         if (workflow.success) {
-            mqc_report = ch_multiqc_report.getVal()
-            if (mqc_report.getClass() == ArrayList) {
+            mqc_report = multiqc_report.getVal()
+            if (mqc_report.getClass() == ArrayList){
                 log.warn "[nf-core/nascent] Found multiple reports from process 'multiqc', will use only one"
                 mqc_report = mqc_report[0]
             }
