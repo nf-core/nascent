@@ -111,7 +111,6 @@ if (params.help){
  * SET UP CONFIGURATION VARIABLES
  */
 params.name = false
-params.multiqc_config = file("$baseDir/assets/multiqc_config.yaml")
 params.email = false
 params.plaintext_email = false
 params.bbmap_adapters = "$baseDir/assets/adapters.fa"
