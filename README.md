@@ -73,9 +73,9 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 | Argument  | Usage                            | Description                                                          |
 |-----------|----------------------------------|----------------------------------------------------------------------|
 | -profile  | \<base,slurm\>                    | Configuration profile to use.                                       |
-| --fastqs  | \</project/\*\_{R1,R2}\*.fastq\> | Directory pattern for fastq files.                                   |
+| --reads   | \</project/\*\_{R1,R2}\*.fastq\> | Directory pattern for fastq files.                                   |
 | --sras    | \</project/\*.sra\>              | Directory pattern for sra files.                                     |
-| --genome_id | \<'hg38'>                      | Genome ID to which the samples will be mapped (e.g. hg38, mm10, rn6).|
+| --genome  | \<'hg38'>                      | Genome ID to which the samples will be mapped (e.g. hg38, mm10, rn6).|
 | --workdir | \</project/tmp/\>                | Nextflow working directory where all intermediate files are saved.   |
 | --email   | \<EMAIL\>                        | Where to send workflow report email.                                 |
 
@@ -87,7 +87,7 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 | --savefq   |               | Compresses and saves raw fastq reads.                     |
 | --saveTrim |               | Compresses and saves trimmed fastq reads.                 |
 | --saveAll  |               | Compresses and saves all fastq reads.                     |
-| --skipBAM  |               | Skips saving BAM files (only save CRAM). Default=False    |
+| --saveBAM  |               | Saves BAM files. By default, only CRAM will be saved.     |
 
 ### Input File Options
 
@@ -95,8 +95,17 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 |--------------|-------------|------------------------------------------------------------------------------|
 | --single_end  |             | Specifies that the input files are not paired reads (default is paired-end). |
 | --flip       |             | Reverse complements each strand. Necessary for some library preps.           |
+| --flipR2     |             | Reverse complements R2. Necessary for some library preps.                    |
 
-### Performance Options
+**Strandness Options**
+
+| Arguments             | Usage       | Description                                                                  |
+|-----------------------|-------------|------------------------------------------------------------------------------|
+| --unStranded          |             | Input data will be procssed in HISAT2 as unstranded (default).               |
+| --forwardStranded     |             | Indicates data is forward first-stranded.                                    |
+| --reverseStranded     |             | Indicates data is reverse first-stranded.                                    |
+
+**Performance Options**
 
 | Arguments       | Usage       | Description                                             |
 |-----------------|-------------|---------------------------------------------------------|
@@ -108,6 +117,19 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 |-----------------|-------------|---------------------------------------------------------|
 | --skipMultiQC   |             | Skip running MultiQC.                                   |
 | --skipRSeQC     |             | Skip running RSeQC.                                     |
+| --skippreseq    |             | Skip running preseq.                                    |
+| --skippicard    |             | Skip running picard.                                    |
+| --skipFastQC    |             | Skip running FastQC                                     |
+| --skippileup    |             | Skip running pileup.                                    |
+| --skipAllQC     |             | Skip running all QC (does not include mapstats).        |
+
+### Analysis Options
+
+| Arguments       | Usage       | Description                                                                                                        |
+|-----------------|-------------|--------------------------------------------------------------------------------------------------------------------|
+| --counts        |             | Run BEDTools mutlicov for each sample to obtain gene counts over the RefSeq annotation (requires --genome_refseq). |
+| --genome_refseq |             | Path to the RefSeq file in GTF format (can be obtained [here](http://genome.ucsc.edu/cgi-bin/hgTables?hgsid=805630809_QCaISCqlsreejh9eab4llKs4cCGV&clade=mammal&org=Human&db=hg38&hgta_group=genes&hgta_track=refSeqComposite&hgta_table=refGene&hgta_regionType=genome&position=chr1%3A11%2C102%2C837-11%2C267%2C747&hgta_outputType=primaryTable&hgta_outFileName=) for your organism).         |
+| --dreg          |             | Produce bigwigs formatted for input to dREG.                                                                       |
 
 ## Credits
 
