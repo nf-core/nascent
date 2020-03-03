@@ -88,7 +88,6 @@ def helpMessage() {
         --skippreseq                   Skip running preseq.
         --skippileup                   Skip running pileup.sh.
         --skipAllQC                    Skip running all QC.
-        --nqc                          Run Nascent QC.
         
     Analysis Options:
         --noTrim                       Skip trimming and map only. Will also skip flip/flipR2 (any BBMap) steps.
@@ -116,7 +115,6 @@ params.plaintext_email = false
 params.bbmap_adapters = "$baseDir/assets/adapters.fa"
 params.bedGraphToBigWig = "$baseDir/bin/bedGraphToBigWig"
 params.rcc = "$baseDir/bin/rcc.py"
-params.nqc_py = "$baseDir/bin/nqc.py"
 params.merge_counts = "$baseDir/bin/merge_counts.py"
 params.workdir = "./nextflowTemp"
 output_docs = file("$baseDir/docs/output.md")
@@ -149,8 +147,7 @@ if( params.chrom_sizes ){
         .ifEmpty { exit 1, "Chrom sizes file not found: ${params.chrom_sizes}" }
         .into { chrom_sizes_for_bed;
                 chrom_sizes_for_bigwig;
-                chrom_sizes_for_igv;
-                chrom_sizes_for_nqc }
+                chrom_sizes_for_igv }
 }
 else {
     params.chrom_sizes = null
@@ -179,7 +176,7 @@ if(!params.chrom_sizes) {
   }
 }
 
-chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_dreg; chrom_sizes_for_bigwig; chrom_sizes_for_igv; chrom_sizes_for_nqc}
+chrom_sizes_ch.into{chrom_sizes_for_bed; chrom_sizes_for_dreg; chrom_sizes_for_bigwig; chrom_sizes_for_igv }
 
 
 if ( params.bbmap_adapters){
@@ -286,7 +283,6 @@ summary['Reverse Comp']     = params.flip ? 'YES' : 'NO'
 summary['Reverse Comp R2']  = params.flipR2 ? 'YES' : 'NO'
 summary['Run Multicov']     = params.counts ? 'YES' : 'NO'
 summary['Skip Trimming']    = params.noTrim ? 'NO' : 'YES'
-summary['Nascent QC']       = params.nqc ? 'YES' : 'NO'
 summary['Run FastQC']       = params.skipFastQC ? 'NO' : 'YES'
 summary['Run preseq']       = params.skippreseq ? 'NO' : 'YES'
 summary['Run pileup']       = params.skippileup ? 'NO' : 'YES'
@@ -894,7 +890,7 @@ process picard {
     file fasta from ch_fasta_for_picard
 
     output:
-    file "*.{txt,pdf}" into picard_stats_multiqc, picard_stats_nqc
+    file "*.{txt,pdf}" into picard_stats_multiqc
     
     script:
     markdup_java_options = (task.memory.toGiga() > 8) ? params.markdup_java_options : "\"-Xms" +  (task.memory.toGiga() / 2 )+"g "+ "-Xmx" + (task.memory.toGiga() - 1)+ "g\""
@@ -1036,7 +1032,7 @@ process bedgraphs {
     output:
     set val(name), file("${name}.pos.bedGraph") into pos_non_normalized_bedgraphs
     set val(name), file("${name}.neg.bedGraph") into neg_non_normalized_bedgraphs
-    set val(name), file("${name}.bedGraph") into non_normalized_bedgraphs, nqc_bg
+    set val(name), file("${name}.bedGraph") into non_normalized_bedgraphs
     set val(name), file("${name}.rcc.bedGraph") into bedgraph_tdf
     set val(name), file("${name}.pos.rcc.bedGraph") into bedgraph_bigwig_pos
     set val(name), file("${name}.neg.rcc.bedGraph") into bedgraph_bigwig_neg
@@ -1378,36 +1374,6 @@ process merge_multicov {
         """
 }
 
-/*
- * STEP 4+ - Nascent QC
- */
-
-process nqc {
-    validExitStatus 0
-    publishDir "${params.outdir}/qc/nqc", mode: 'copy', pattern: "*.{txt,html,png}"
-    
-    when:
-    params.nqc
-    
-    input:
-    file (bedgraphs:'mapped/bedgraphs/*') from nqc_bg.collect()
-    file (duplication_files:'qc/picard/dups/*') from picard_stats_nqc.collect()
-    file (fastqc_files:'qc/fastqc_stats/*') from fastqc_stats.collect()
-    file chrom_sizes from chrom_sizes_for_nqc
-       
-    output:
-    file ("*.{txt,html,png}") into nqc_out
-        
-    script:
-        """
-        python3 ${params.nqc_py} \\
-            -b './mapped/bedgraphs/' \\
-            -d './qc/picard/dups/' \\
-            -r './qc/fastqc_stats/' \\
-            -g ${chrom_sizes} \\
-            -t ${task.cpus}
-        """
-}
 
 /*
  * Completion e-mail notification
