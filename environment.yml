@@ -1,9 +1,14 @@
-name: nf-core-nascent-1.0
+name: nf-core-nascent-1.1
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
+  - r-base=3.6.1
+  - conda-forge::python=3.7.3
+  - conda-forge::markdown=3.1.1
+  - conda-forge::pymdown-extensions=6.0
+  - conda-forge::pygments=2.5.2
   - fastqc=0.11.8
   - multiqc=1.7
   - hisat2=2.1.0
@@ -16,3 +21,4 @@ dependencies:
   - fastx_toolkit=0.0.14
   - sra-tools=2.9.1
   - rseqc=3.0.0
+  - picard=2.22.0
