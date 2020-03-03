@@ -51,9 +51,10 @@ def helpMessage() {
 
     Required arguments:
          -profile                      Configuration profile to use. <base, singularity>
-         --genomeid                    Genome ID (e.g. hg38, mm10, rn6, etc.).
-         --fastqs                      Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
+         --genome                      Genome ID (e.g. hg38, mm10, rn6, etc.).
+         --reads                       Directory pattern for fastq files: /project/*{R1,R2}*.fastq (Required if --sras not specified)
          --sras                        Directory pattern for SRA files: /project/*.sras (Required if --fastqs not specified)
+         --fasta                       Path to reference genome FASTA file.
          --workdir                     Nextflow working directory where all intermediate files are saved.
          --email                       Where to send workflow report email.
 
@@ -127,19 +128,17 @@ if (params.genomes && params.genome && !params.genomes.containsKey(params.genome
     exit 1, "The provided genome '${params.genome}' is not available in the iGenomes file. Currently the available genomes are ${params.genomes.keySet().join(", ")}"
 }
 
-params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
-if (params.fasta) { ch_fasta = file(params.fasta, checkIfExists: true) }
-
 if ( params.fasta ){
-   // genome_fasta = file(params.fasta)
-   // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
-    Channel.fromPath(params.fasta)
-           .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
-           .into { genome_fasta; ch_fasta_for_hisat_index; ch_fasta_for_samtools; ch_fasta_for_picard}
+  // genome_fasta = file(params.fasta)
+  // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
 }
 else {
     params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
+    if (params.fasta) { ch_fasta = file(params.fasta, checkIfExists: true) }
 }
+Channel.fromPath(params.fasta)
+      .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
+      .into { genome_fasta; ch_fasta_for_hisat_index; ch_fasta_for_samtools; ch_fasta_for_picard}
 
 if( params.chrom_sizes ){
     Channel
@@ -221,6 +220,7 @@ if (workflow.profile.contains('awsbatch')) {
 
 // Stage config files
 ch_multiqc_config = file("$baseDir/assets/multiqc_config.yaml", checkIfExists: true)
+ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
 ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
 
 /*
@@ -272,6 +272,7 @@ summary['Save Reference'] = params.saveReference ? 'Yes' : 'No'
 if(params.reads) summary['Reads']            = params.reads
 if(params.sras) summary['SRAs']             = params.sras
 summary['Genome Ref']       = params.genome
+summary['Genome FASTA']     = params.fasta
 summary['Thread fqdump']    = params.threadfqdump ? 'YES' : 'NO'
 summary['Data Type']        = params.single_end ? 'Single-End' : 'Paired-End'
 summary['Strandedness']     = (params.unStranded ? 'None' : params.forwardStranded ? 'Forward' : params.reverseStranded ? 'Reverse' : 'None')
@@ -1191,7 +1192,7 @@ process dreg_prep {
     """
     echo "Creating BigWigs suitable as inputs to dREG"
     
-    export CRAM_REFERENCE=${genome}    
+    export CRAM_REFERENCE=${params.fasta}    
     
     bamToBed -i ${cram_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
     awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \
@@ -1294,16 +1295,15 @@ process multiQC {
     !params.skipMultiQC && !params.skipAllQC
 
     input:
-    file multiqc_config from ch_multiqc_config.collect()
     file (fastqc:'qc/fastqc/*') from fastqc_results.collect()
     file ('qc/fastqc/*') from trimmed_fastqc_results.collect()
     file ('qc/trimstats/*') from trim_stats.collect()
-    file ('qc/mapstats/*') from bam_flagstat.collect()
-    file ('qc/rseqc/*') from rseqc_results.collect()
-    file ('qc/preseq/*') from preseq_results.collect()
+    file ('qc/mapstats/*') from bam_flagstat.collect().ifEmpty([])
+    file ('qc/rseqc/*') from rseqc_results.collect().ifEmpty([])
+    file ('qc/preseq/*') from preseq_results.collect().ifEmpty([])
+    file ('qc/hisat2_mapstats/*') from hisat2_mapstats.collect().ifEmpty([])
+    file ('qc/picard/*') from picard_stats_multiqc.collect().ifEmpty([])
     file ('software_versions/*') from ch_software_versions_yaml
-    file ('qc/hisat2_mapstats/*') from hisat2_mapstats.collect()
-    file ('qc/picard/*') from picard_stats_multiqc.collect()    
 
     output:
     file "*multiqc_report.html" into multiqc_report
@@ -1314,7 +1314,7 @@ process multiQC {
     rfilename = custom_runName ? "--filename " + custom_runName.replaceAll('\\W','_').replaceAll('_+','_') + "_multiqc_report" : ''
 
     """
-    multiqc . -f $rtitle $rfilename --config $multiqc_config
+    multiqc . -f $rtitle $rfilename --config ${params.multiqc_config} .
     """
 }
 
@@ -1339,7 +1339,7 @@ process multicov {
         
     script:
         """
-        export CRAM_REFERENCE=${genome}
+        export CRAM_REFERENCE=${params.fasta}
         
         bedtools multicov \\
             -bams ${cram_count} \\
