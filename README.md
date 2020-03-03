@@ -97,7 +97,7 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 | --flip       |             | Reverse complements each strand. Necessary for some library preps.           |
 | --flipR2     |             | Reverse complements R2. Necessary for some library preps.                    |
 
-**Strandness Options**
+### Strandness Options
 
 | Arguments             | Usage       | Description                                                                  |
 |-----------------------|-------------|------------------------------------------------------------------------------|
@@ -105,7 +105,7 @@ nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docke
 | --forwardStranded     |             | Indicates data is forward first-stranded.                                    |
 | --reverseStranded     |             | Indicates data is reverse first-stranded.                                    |
 
-**Performance Options**
+### Performance Options
 
 | Arguments       | Usage       | Description                                             |
 |-----------------|-------------|---------------------------------------------------------|
