@@ -370,7 +370,6 @@ process get_software_versions {
     bedtools --version > v_bedtools.txt
     picard MarkDuplicates --version &> v_markduplicates.txt  || true
     picard CollectGcBiasMetrics --version &> v_collectgcbiasmetrics.txt  || true
-    export LC_ALL=C
     igvtools version > v_igv-tools.txt
     infer_experiment.py --version > v_rseqc.txt
     multiqc --version > v_multiqc.txt
@@ -1275,7 +1274,6 @@ process igvtools {
 
     script:
     """
-    export LC_ALL=C
     igvtools toTDF ${normalized_bg} ${name}.rcc.tdf ${chrom_sizes}
     """
  }
