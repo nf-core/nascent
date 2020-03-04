@@ -128,17 +128,18 @@ if (params.genomes && params.genome && !params.genomes.containsKey(params.genome
     exit 1, "The provided genome '${params.genome}' is not available in the iGenomes file. Currently the available genomes are ${params.genomes.keySet().join(", ")}"
 }
 
-if ( params.fasta ){
-  // genome_fasta = file(params.fasta)
-  // if( !genome_fasta.exists() ) exit 1, "Genome directory not found: ${params.fasta}"
+if ( params.genome_fasta ){
+    params.fasta = params.genome_fasta
 }
 else {
-    params.fasta = params.genome ? params.genomes[ params.genome ].fasta ?: false : false
+    if ( params.genome && params.genomes[ params.genome ].fasta ) {
+        params.fasta = params.genomes[ params.genome ].fasta
+    }
     if (params.fasta) { ch_fasta = file(params.fasta, checkIfExists: true) }
 }
 Channel.fromPath(params.fasta)
       .ifEmpty { exit 1, "Fasta file not found: ${params.fasta}" }
-      .into { genome_fasta; ch_fasta_for_hisat_index; ch_fasta_for_samtools; ch_fasta_for_picard}
+      .into { ch_genome_fasta; ch_fasta_for_hisat_index; ch_fasta_for_samtools; ch_fasta_for_picard}
 
 if( params.chrom_sizes ){
     Channel
@@ -162,7 +163,7 @@ if(!params.chrom_sizes) {
               saveAs: { params.saveReference ? it : null }, mode: 'copy'
 
       input:
-      file fasta from genome_fasta
+      file fasta from ch_genome_fasta
 
       output:
       file("${fasta}.sizes") into chrom_sizes_ch
