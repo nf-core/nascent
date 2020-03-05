@@ -21,8 +21,10 @@ jobs:
           sudo mv nextflow /usr/local/bin/
       - name: Pull docker image
         run: |
-          docker pull ignaciot/nascent:dev
-          docker tag ignaciot/nascent:dev ignaciot/nascent:dev
+          #docker pull ignaciot/nascent:dev
+          #docker tag ignaciot/nascent:dev ignaciot/nascent:dev
+          docker pull nfcore/nascent:dev
+          docker tag nfcore/nascent:dev nfcore/nascent:dev
       - name: Run pipeline with test data
         run: |
           # TODO nf-core: You can customise CI pipeline run tests as required
