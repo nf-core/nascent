@@ -29,6 +29,11 @@ if (params.help) {
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
 
+def cat_fastq_options          = modules['cat_fastq']
+if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
+
+include { CAT_FASTQ } from './modules/local/process/cat_fastq'                   addParams( options: cat_fastq_options                                               ) 
+
 include { INPUT_CHECK     } from './modules/local/subworkflow/input_check'     addParams( options: [:] )
 include { PREPARE_GENOME  } from './modules/local/subworkflow/prepare_genome'  addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
 
@@ -66,4 +71,11 @@ workflow {
     .groupTuple(by: [0])
     .map { it ->  [ it[0], it[1].flatten() ] }
     .set { ch_cat_fastq }
+
+    /*
+     * MODULE: Concatenate FastQ files from same sample if required
+     */
+    CAT_FASTQ (
+        ch_cat_fastq
+    )
 }
