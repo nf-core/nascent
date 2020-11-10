@@ -20,4 +20,50 @@ if (params.help) {
     log.info Schema.params_help("$baseDir/nextflow_schema.json", command)
     exit 0
 }
-log.info "Hello"
+
+
+////////////////////////////////////////////////////
+/* --    IMPORT LOCAL MODULES/SUBWORKFLOWS     -- */
+////////////////////////////////////////////////////
+
+// Don't overwrite global params.modules, create a copy instead and use that within the main script.
+def modules = params.modules.clone()
+
+include { INPUT_CHECK     } from './modules/local/subworkflow/input_check'     addParams( options: [:] )
+include { PREPARE_GENOME  } from './modules/local/subworkflow/prepare_genome'  addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
+
+
+////////////////////////////////////////////////////
+/* --          VALIDATE INPUTS                 -- */
+////////////////////////////////////////////////////
+
+// Check mandatory parameters
+if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+
+
+workflow {
+
+    /*
+     * SUBWORKFLOW: Uncompress and prepare reference genome files
+     */
+    PREPARE_GENOME (
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.gene_bed,
+        params.additional_fasta
+    )
+    ch_software_versions = Channel.empty()
+    ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
+
+    INPUT_CHECK (
+        ch_input
+    )
+    .map {
+        meta, bam ->
+            meta.id = meta.id.split('_')[0..-2].join('_')
+            [ meta, bam ] }
+    .groupTuple(by: [0])
+    .map { it ->  [ it[0], it[1].flatten() ] }
+    .set { ch_cat_fastq }
+}
