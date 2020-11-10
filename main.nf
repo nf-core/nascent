@@ -34,9 +34,34 @@ if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
 
 include { CAT_FASTQ } from './modules/local/process/cat_fastq'                   addParams( options: cat_fastq_options                                               ) 
 
+
+/*
+ * SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+ */
+def gffread_options         = modules['gffread']
+if (!params.save_reference) { gffread_options['publish_files'] = false }
+
 include { INPUT_CHECK     } from './modules/local/subworkflow/input_check'     addParams( options: [:] )
 include { PREPARE_GENOME  } from './modules/local/subworkflow/prepare_genome'  addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
 
+
+////////////////////////////////////////////////////
+/* --    IMPORT NF-CORE MODULES/SUBWORKFLOWS   -- */
+////////////////////////////////////////////////////
+
+/*
+ * SUBWORKFLOW: Consisting entirely of nf-core/modules
+ */
+def umitools_extract_options    = modules['umitools_extract']
+umitools_extract_options.args  += params.umitools_extract_method ? " --extract-method=${params.umitools_extract_method}" : ''
+umitools_extract_options.args  += params.umitools_bc_pattern     ? " --bc-pattern='${params.umitools_bc_pattern}'"       : ''
+if (params.save_umi_intermeds)  { umitools_extract_options.publish_files.put('fastq.gz','') }
+
+def trimgalore_options    = modules['trimgalore']
+trimgalore_options.args  += params.trim_nextseq > 0 ? " --nextseq ${params.trim_nextseq}" : ''
+if (params.save_trimmed)  { trimgalore_options.publish_files.put('fq.gz','') }
+
+include { FASTQC_UMITOOLS_TRIMGALORE } from './modules/nf-core/subworkflow/fastqc_umitools_trimgalore' addParams( fastqc_options: modules['fastqc'], umitools_options: umitools_extract_options, trimgalore_options: trimgalore_options               )
 
 ////////////////////////////////////////////////////
 /* --          VALIDATE INPUTS                 -- */
@@ -78,4 +103,17 @@ workflow {
     CAT_FASTQ (
         ch_cat_fastq
     )
+
+    /*
+     * SUBWORKFLOW: Read QC, extract UMI and trim adapters
+     */
+    FASTQC_UMITOOLS_TRIMGALORE (
+        CAT_FASTQ.out.reads,
+        params.skip_fastqc || params.skip_qc,
+        params.with_umi,
+        params.skip_trimming
+    )
+    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.umitools_version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.trimgalore_version.first().ifEmpty(null))
 }
