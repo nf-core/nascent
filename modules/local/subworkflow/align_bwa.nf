@@ -40,7 +40,7 @@ workflow ALIGN_BWA {
     /*
      * Sort, index BAM file and run samtools stats, flagstat and idxstats
      */
-    BAM_SORT_SAMTOOLS ( BWA_ALIGN.out.bam )
+    BAM_SORT_SAMTOOLS ( BWA_MEM.out.bam )
 
     emit:
     orig_bam         = BWA_MEM.out.bam                // channel: [ val(meta), bam ]
