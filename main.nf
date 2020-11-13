@@ -44,9 +44,29 @@ include { CAT_FASTQ } from './modules/local/process/cat_fastq'                  
 def gffread_options         = modules['gffread']
 if (!params.save_reference) { gffread_options['publish_files'] = false }
 
-include { INPUT_CHECK     } from './modules/local/subworkflow/input_check'     addParams( options: [:] )
-include { PREPARE_GENOME  } from './modules/local/subworkflow/prepare_genome'  addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
+def bwa_index_options = modules['bwa_index']
+if (!params.save_reference)     { bwa_index_options['publish_files'] = false }
 
+def bwa_mem_options            = modules['bwa_mem']
+if (params.save_align_intermeds)  { bwa_mem_options.publish_files.put('bam','') }
+if (params.save_unaligned)        { bwa_mem_options.publish_files.put('fastq.gz','unmapped') }
+
+def samtools_sort_options = modules['samtools_sort']
+if (['star','hisat2'].contains(params.aligner)) {
+    if (params.save_align_intermeds || (!params.with_umi && params.skip_markduplicates)) {
+        samtools_sort_options.publish_files.put('bam','')
+        samtools_sort_options.publish_files.put('bai','')
+    }
+} else {
+    if (params.save_align_intermeds || params.skip_markduplicates) {
+        samtools_sort_options.publish_files.put('bam','')
+        samtools_sort_options.publish_files.put('bai','')
+    }
+}
+
+include { INPUT_CHECK    } from './modules/local/subworkflow/input_check'    addParams( options: [:] )
+include { PREPARE_GENOME } from './modules/local/subworkflow/prepare_genome' addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
+include { ALIGN_BWA      } from './modules/local/subworkflow/align_bwa'      addParams( index_options: bwa_index_options, align_options: bwa_mem_options, samtools_options: samtools_sort_options )
 
 ////////////////////////////////////////////////////
 /* --    IMPORT NF-CORE MODULES/SUBWORKFLOWS   -- */
@@ -119,4 +139,31 @@ workflow {
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_version.first().ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.umitools_version.first().ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.trimgalore_version.first().ifEmpty(null))
+
+    ch_trimmed_reads = FASTQC_UMITOOLS_TRIMGALORE.out.reads
+
+    /*
+     * SUBWORKFLOW: Alignment with bwa
+     */
+    ch_genome_bam        = Channel.empty()
+    ch_genome_bai        = Channel.empty()
+    ch_samtools_stats    = Channel.empty()
+    ch_samtools_flagstat = Channel.empty()
+    ch_samtools_idxstats = Channel.empty()
+    ch_star_multiqc      = Channel.empty()
+    if (!params.skip_alignment && params.aligner == 'bwa') {
+        ALIGN_BWA (
+            ch_trimmed_reads,
+            params.star_index,
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.gtf
+        )
+        ch_genome_bam        = ALIGN_BWA.out.bam
+        ch_genome_bai        = ALIGN_BWA.out.bai
+        ch_samtools_stats    = ALIGN_BWA.out.stats
+        ch_samtools_flagstat = ALIGN_BWA.out.flagstat
+        ch_samtools_idxstats = ALIGN_BWA.out.idxstats
+        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.bwa_version.first().ifEmpty(null))
+        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.samtools_version.first().ifEmpty(null))
+    }
 }
