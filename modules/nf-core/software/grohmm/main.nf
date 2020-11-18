@@ -13,8 +13,10 @@ process GROHMM_MAKEUCSCFILE {
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:meta.id) }
 
-    conda     (params.enable_conda ? "bioconda::grohmm =1.24.0" : null)
-    container "quay.io/biocontainers/bedtools:2.29.2--hc088bd4_0"
+    conda     (params.enable_conda ? "conda-forge::r-base=4.0.3 conda-forge::r-optparse=1.6.6 bioconda::bioconductor-genomic-features=1.32.3 bioconda::bioconductor-txdb.hsapiens.ucsc.hg19.knowngene=3.2.2 bioconda::bioconductor-edgeR=3.32.0 bioconda::bioconductor-org.hs.eg.db=3.6.0 bioconda::bioconductor-grohmm=1.24.0" : null)
+    // TODO build container using mulled toolkit
+    container "quay.io/biocontainers/mulled-v2-8849acf39a43cdd6c839a369a74c0adc823e2f91:ab110436faf952a33575c64dd74615a84011450b-0"
+
 
     input:
     tuple val(meta), path(bam)
@@ -38,12 +40,7 @@ process GROHMM_MAKEUCSCFILE {
         --cores $task.cpus \\
         $options.args
 
-    if [ -f "R_sessionInfo.log" ]; then
-    # commands based on r file
-    fi
-
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
-    """
 
     """
 }

@@ -10,7 +10,6 @@ library(GenomicFeatures)
 library(org.Hs.eg.db)
 library(edgeR)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
-library(tigerstats)
 
 option_list <- list(
     make_option(c("-i", "--bam_files"    ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
@@ -48,7 +47,6 @@ citation("GenomicFeatures")
 citation("org.Hs.eg.db")
 citation("edgeR")
 citation("TxDb.Hsapiens.UCSC.hg19.knownGene")
-citation("tigerstats")
 
 ## R SESSION INFO                             ##
 ################################################
