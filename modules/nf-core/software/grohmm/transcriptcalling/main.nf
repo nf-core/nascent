@@ -6,7 +6,7 @@ def options    = initOptions(params.options)
 
 def VERSION = '1.24'
 
-process GROHMM_MAKEUCSCFILE {
+process GROHMM_TRANSCRIPTCALLING{
     tag "$meta.id"
     label 'process_medium'
     publishDir "${params.outdir}",
@@ -18,12 +18,11 @@ process GROHMM_MAKEUCSCFILE {
 
     input:
     tuple val(meta), path(bam)
+    path  reftranscript
 
     output:
-    path "*fwd.wig"                  , optional:true    , emit: fwdwig
-    path "*rev.wig"                  , optional:true    , emit: revwig
-    path "*fwd.normalized.wig"       , optional:true    , emit: fwdwig_normalized
-    path "*rev.normalized.wig"       , optional:true    , emit: revwig_normalized
+    path "*.transcripts.txt"          , optional:true    , emit: transcripttxt
+    path "*.eval.txt"                 , optional:true    , emit: eval
     path "*.RData"                   , optional:true    , emit: rdata
     path "*.version.txt"             , emit: version
 
@@ -31,9 +30,10 @@ process GROHMM_MAKEUCSCFILE {
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    makeucscfile_grohmm.R \\
+    transcriptcalling_grohmm.R \\
 
         --bam_files $bam \\
+        --ref_transcript $reftranscript
         --outdir ./ \\
         --cores $task.cpus \\
         $options.args
