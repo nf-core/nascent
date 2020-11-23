@@ -13,10 +13,10 @@ process GROHMM_MAKEUCSCFILE {
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:meta.id) }
 
-    conda     (params.enable_conda ? "conda-forge::r-base=4.0.3 conda-forge::r-optparse=1.6.6 bioconda::bioconductor-genomic-features=1.32.3 bioconda::bioconductor-txdb.hsapiens.ucsc.hg19.knowngene=3.2.2 bioconda::bioconductor-edgeR=3.32.0 bioconda::bioconductor-org.hs.eg.db=3.6.0 bioconda::bioconductor-grohmm=1.24.0" : null)
+    conda     (params.enable_conda ?  '../../../../environment.yml': null)
     // TODO build container using mulled toolkit
-    container "quay.io/biocontainers/mulled-v2-8849acf39a43cdd6c839a369a74c0adc823e2f91:ab110436faf952a33575c64dd74615a84011450b-0"
-
+    container "quay.io_biocontainers_mulled-v2-cffd4141a9ee91f54423bdc9a76bacde08560320_8a7573829a127d73ea5594f15776f31957af4298"
+//"conda-forge::r-base=4.0.3 conda-forge::r-optparse=1.6.6 bioconda::bioconductor-genomicfeatures=1.42.0 bioconda::bioconductor-txdb.hsapiens.ucsc.hg19.knowngene=3.2.2 bioconda::bioconductor-edgeR=3.32.0 bioconda::bioconductor-org.hs.eg.db=3.12.0 bioconda::bioconductor-grohmm=1.24.0"
 
     input:
     tuple val(meta), path(bam)
@@ -33,7 +33,7 @@ process GROHMM_MAKEUCSCFILE {
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    makeucscfile_grohmm.R \\
+    Rscript /home/sruthis/nf-core-modules/software/grohmm/makeucscfile/makeucscfile_grohmm.r \\
 
         --bam_files $bam \\
         --outdir ./ \\

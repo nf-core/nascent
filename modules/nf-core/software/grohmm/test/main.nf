@@ -11,7 +11,7 @@ workflow test_grohmm {
               [ file("${baseDir}/input/test.paired_end.name.sorted.bam", checkIfExists: true),] ]
 
     GROHMM_MAKEUCSCFILE         ( input )
-    GROHMM_TRANSCRIPTCALLING    ( input )
+   // GROHMM_TRANSCRIPTCALLING    ( input )
 
 
 }
