@@ -35,8 +35,7 @@ process GROHMM_MAKEUCSCFILE {
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    Rscript /home/sruthis/nf-core-modules/software/grohmm/makeucscfile/makeucscfile_grohmm.r \\
-
+    makeucscfile_grohmm.r \\
         --bam_files $bam \\
         --outdir ./ \\
         --cores $task.cpus \\
