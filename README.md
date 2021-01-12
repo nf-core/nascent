@@ -1,80 +1,93 @@
-# Snakemake workflow: IMR90&GM_eRNAs
+# ![nf-core/groseq](docs/images/nf-core-groseq_logo.png)
 
-[![Snakemake](https://img.shields.io/badge/snakemake-≥3.12.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-![Tests](https://github.com/Emiller88/eRNA-GRO-Seq/workflows/Tests/badge.svg)
-[![pipeline status](https://gitlab.com/functional-genomics/analysis/eRNA-GRO-Seq/badges/develop/pipeline.svg)](https://gitlab.com/functional-genomics/analysis/eRNA-GRO-Seq/commits/develop)
+[![GitHub Actions CI Status](https://github.com/nf-core/groseq/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/groseq/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions Linting Status](https://github.com/nf-core/groseq/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/groseq/actions?query=workflow%3A%22nf-core+linting%22)
+[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/groseq/results)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
-This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
-Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A520.11.0--edge-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
+[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 
-## Authors
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23groseq-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/groseq)
+[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)
+[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
--   Edmund Miller (@emiller88)
+## Introduction
 
-## Usage
+<!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
+**nf-core/groseq** is a bioinformatics best-practise analysis pipeline for
 
-### Step 1: Install workflow
+The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It comes with docker containers making installation trivial and results highly reproducible.
 
-If you simply want to use this workflow, download and extract the [latest release](https://github.com/emiller88/eRNA-GRO-Seq/releases).
-If you intend to modify and further develop this workflow, fork this repository. Please consider providing any generally applicable modifications via a pull request.
+<!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
+On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/groseq/results).
 
-In any case, if you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this repository and, if available, its DOI (see above).
+## Pipeline summary
 
-#### Install homer(Optional)
+<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-Using `--use-singularity` will download the docker container with the genomes
-installed, it's a huge containter however.
+1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
-[Instructions](http://homer.ucsd.edu/homer/introduction/install.html)
+## Quick Start
 
-Make sure to run the following to install the necessary genomes
+1. Install [`nextflow`](https://nf-co.re/usage/installation)
 
-```shell
-perl /path-to-homer/configureHomer.pl -install hg18
-perl /path-to-homer/configureHomer.pl -install hg19
-```
+2. Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/) or [`Podman`](https://podman.io/) for full pipeline reproducibility _(please only use [`Conda`](https://conda.io/miniconda.html) as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_
 
-In the future maybe the conda homer install will pick up on the genomes
+3. Download the pipeline and test it on a minimal dataset with a single command:
 
-#### Install Conda environment
+    ```bash
+    nextflow run nf-core/groseq -profile test,<docker/singularity/podman/conda/institute>
+    ```
 
-With [conda](https://conda.io/en/latest/miniconda.html) installed move to the
-workflow directory and execute the following.
+    > * Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
+    > * If you are using `singularity` then the pipeline will auto-detect this and attempt to download the Singularity images directly as opposed to performing a conversion from Docker images. If you are persistently observing issues downloading Singularity images directly due to timeout or network issues then please use the `--singularity_pull_docker_container` parameter to pull and convert the Docker image instead. It is also highly recommended to use the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) settings to store the images in a central location for future pipeline runs.
+    > * If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
-```shell
-conda env create -f environment.yml
-```
+4. Start running your own analysis!
 
-### Step 2: Configure workflow
+    <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
 
-Configure the workflow according to your needs via editing the file `config/config.yaml`.
+    ```bash
+    nextflow run nf-core/groseq -profile <docker/singularity/podman/conda/institute> --input samplesheet.csv --genome GRCh37
+    ```
 
-### Step 3: Execute workflow
+See [usage docs](https://nf-co.re/groseq/usage) for all of the available options when running the pipeline.
 
-Test your configuration by performing a dry-run via
+## Documentation
 
-    snakemake -n
+The nf-core/groseq pipeline comes with documentation about the pipeline: [usage](https://nf-co.re/groseq/usage) and [output](https://nf-co.re/groseq/output).
 
-Execute the workflow locally via
+## Credits
 
-    snakemake --cores $N
+nf-core/groseq was originally written by Edmund Miller.
 
-using `$N` cores or run it in a cluster environment via
+We thank the following people for their extensive assistance in the development
+of this pipeline:
 
-    snakemake -j 999 --use-conda --cluster-config config/cluster.json \
-        --cluster "sbatch -A {cluster.account} -p {cluster.partition}\
-        -n {cluster.n}  -t {cluster.time}"
+<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
 
-or
+## Contributions and Support
 
-    snakemake --cluster qsub --jobs 100
+If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-or
+For further information or help, don't hesitate to get in touch on the [Slack `#groseq` channel](https://nfcore.slack.com/channels/groseq) (you can join with [this invite](https://nf-co.re/join/slack)).
 
-    snakemake --drmaa --jobs 100
+## Citations
 
-See the [Snakemake documentation](https://snakemake.readthedocs.io) for further details.
+<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below, update Zenodo doi and badge at the top of this file. -->
+<!-- If you use  nf-core/groseq for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
-## Testing
+<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
-Tests cases are in the subfolder `.test`. They should be executed via continuous integration with Travis CI.
+You can cite the `nf-core` publication as follows:
+
+> **The nf-core framework for community-curated bioinformatics pipelines.**
+>
+> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
+>
+> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).

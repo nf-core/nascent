@@ -11,159 +11,154 @@
 
 nextflow.enable.dsl = 2
 
-/*
- * Print help message if required
- */
+////////////////////////////////////////////////////
+/* --               PRINT HELP                 -- */
+////////////////////////////////////////////////////
+
+def json_schema = "$projectDir/nextflow_schema.json"
 if (params.help) {
-    def command = "nextflow run nf-core/groseq --input samplesheet.csv --genome GRCh37 -profile docker"
-    log.info Headers.nf_core(workflow, params.monochrome_logs)
-    log.info Schema.params_help("$baseDir/nextflow_schema.json", command)
+    // TODO nf-core: Update typical command used to run pipeline
+    def command = "nextflow run nf-core/groseq --input samplesheet.csv -profile docker"
+    log.info Schema.params_help(workflow, params, json_schema, command)
     exit 0
 }
 
+////////////////////////////////////////////////////
+/* --        GENOME PARAMETER VALUES           -- */
+////////////////////////////////////////////////////
+
+params.fasta = Checks.get_genome_attribute(params, 'fasta')
 
 ////////////////////////////////////////////////////
-/* --    IMPORT LOCAL MODULES/SUBWORKFLOWS     -- */
+/* --         PRINT PARAMETER SUMMARY          -- */
 ////////////////////////////////////////////////////
 
-// Don't overwrite global params.modules, create a copy instead and use that within the main script.
-def modules = params.modules.clone()
+def summary_params = Schema.params_summary_map(workflow, params, json_schema)
+log.info Schema.params_summary_log(workflow, params, json_schema)
 
-def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
-def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
+////////////////////////////////////////////////////
+/* --          PARAMETER CHECKS                -- */
+////////////////////////////////////////////////////
 
-def cat_fastq_options          = modules['cat_fastq']
-if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
-
-include { CAT_FASTQ } from './modules/local/process/cat_fastq'                   addParams( options: cat_fastq_options                                               ) 
-
-
-/*
- * SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
- */
-def gffread_options         = modules['gffread']
-if (!params.save_reference) { gffread_options['publish_files'] = false }
-
-def bwa_index_options = modules['bwa_index']
-if (!params.save_reference)     { bwa_index_options['publish_files'] = false }
-
-def bwa_mem_options            = modules['bwa_mem']
-if (params.save_align_intermeds)  { bwa_mem_options.publish_files.put('bam','') }
-if (params.save_unaligned)        { bwa_mem_options.publish_files.put('fastq.gz','unmapped') }
-
-def samtools_sort_options = modules['samtools_sort']
-if (['star','hisat2'].contains(params.aligner)) {
-    if (params.save_align_intermeds || (!params.with_umi && params.skip_markduplicates)) {
-        samtools_sort_options.publish_files.put('bam','')
-        samtools_sort_options.publish_files.put('bai','')
-    }
-} else {
-    if (params.save_align_intermeds || params.skip_markduplicates) {
-        samtools_sort_options.publish_files.put('bam','')
-        samtools_sort_options.publish_files.put('bai','')
-    }
+// Check that conda channels are set-up correctly
+if (params.enable_conda) {
+    Checks.check_conda_channels(log)
 }
 
-include { INPUT_CHECK    } from './modules/local/subworkflow/input_check'    addParams( options: [:] )
-include { PREPARE_GENOME } from './modules/local/subworkflow/prepare_genome' addParams( gffread_options: gffread_options, genome_options: publish_genome_options )
-include { ALIGN_BWA      } from './modules/local/subworkflow/align_bwa'      addParams( index_options: bwa_index_options, align_options: bwa_mem_options, samtools_options: samtools_sort_options )
+// Check AWS batch settings
+Checks.aws_batch(workflow, params)
 
-////////////////////////////////////////////////////
-/* --    IMPORT NF-CORE MODULES/SUBWORKFLOWS   -- */
-////////////////////////////////////////////////////
+// Check the hostnames against configured profiles
+Checks.hostname(workflow, params, log)
 
-/*
- * SUBWORKFLOW: Consisting entirely of nf-core/modules
- */
-def umitools_extract_options    = modules['umitools_extract']
-umitools_extract_options.args  += params.umitools_extract_method ? " --extract-method=${params.umitools_extract_method}" : ''
-umitools_extract_options.args  += params.umitools_bc_pattern     ? " --bc-pattern='${params.umitools_bc_pattern}'"       : ''
-if (params.save_umi_intermeds)  { umitools_extract_options.publish_files.put('fastq.gz','') }
-
-def trimgalore_options    = modules['trimgalore']
-trimgalore_options.args  += params.trim_nextseq > 0 ? " --nextseq ${params.trim_nextseq}" : ''
-if (params.save_trimmed)  { trimgalore_options.publish_files.put('fq.gz','') }
-
-include { FASTQC_UMITOOLS_TRIMGALORE } from './modules/nf-core/subworkflow/fastqc_umitools_trimgalore' addParams( fastqc_options: modules['fastqc'], umitools_options: umitools_extract_options, trimgalore_options: trimgalore_options               )
+// Check genome key exists if provided
+Checks.genome_exists(params, log)
 
 ////////////////////////////////////////////////////
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
+// TODO nf-core: Add all file path parameters for the pipeline to the list below
+// Check input path parameters to see if they exist
+checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.fasta) { ch_fasta = file(params.fasta) } else { exit 1, 'Genome fasta file not specified!' }
 
+////////////////////////////////////////////////////
+/* --          CONFIG FILES                    -- */
+////////////////////////////////////////////////////
+
+ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
+ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
+
+////////////////////////////////////////////////////
+/* --       IMPORT MODULES / SUBWORKFLOWS      -- */
+////////////////////////////////////////////////////
+
+// Don't overwrite global params.modules, create a copy instead and use that within the main script.
+def modules = params.modules.clone()
+
+def multiqc_options   = modules['multiqc']
+multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
+
+// Local: Modules
+include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
+
+// Local: Sub-workflows
+include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
+
+// nf-core/modules: Modules
+include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
+include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
+
+////////////////////////////////////////////////////
+/* --           RUN MAIN WORKFLOW              -- */
+////////////////////////////////////////////////////
+
+// Info required for completion email and summary
+def multiqc_report = []
 
 workflow {
 
-    /*
-     * SUBWORKFLOW: Uncompress and prepare reference genome files
-     */
-    PREPARE_GENOME (
-        params.fasta,
-        params.gtf,
-        params.gff,
-        params.gene_bed,
-        params.additional_fasta
-    )
     ch_software_versions = Channel.empty()
-    ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
 
-    INPUT_CHECK (
+    /*
+     * SUBWORKFLOW: Read in samplesheet, validate and stage input files
+     */
+    INPUT_CHECK ( 
         ch_input
     )
-    .map {
-        meta, bam ->
-            meta.id = meta.id.split('_')[0..-2].join('_')
-            [ meta, bam ] }
-    .groupTuple(by: [0])
-    .map { it ->  [ it[0], it[1].flatten() ] }
-    .set { ch_cat_fastq }
 
     /*
-     * MODULE: Concatenate FastQ files from same sample if required
+     * MODULE: Run FastQC
      */
-    CAT_FASTQ (
-        ch_cat_fastq
+    FASTQC (
+        INPUT_CHECK.out.reads
+    )
+    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    
+
+    /*
+     * MODULE: Pipeline reporting
+     */
+    GET_SOFTWARE_VERSIONS ( 
+        ch_software_versions.map { it }.collect()
     )
 
     /*
-     * SUBWORKFLOW: Read QC, extract UMI and trim adapters
-     */
-    FASTQC_UMITOOLS_TRIMGALORE (
-        CAT_FASTQ.out.reads,
-        params.skip_fastqc || params.skip_qc,
-        params.with_umi,
-        params.skip_trimming
-    )
-    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_version.first().ifEmpty(null))
-    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.umitools_version.first().ifEmpty(null))
-    ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.trimgalore_version.first().ifEmpty(null))
+     * MultiQC
+     */  
+    if (!params.skip_multiqc) {
+        workflow_summary    = Schema.params_summary_multiqc(workflow, summary_params)
+        ch_workflow_summary = Channel.value(workflow_summary)
 
-    ch_trimmed_reads = FASTQC_UMITOOLS_TRIMGALORE.out.reads
-
-    /*
-     * SUBWORKFLOW: Alignment with bwa
-     */
-    ch_genome_bam        = Channel.empty()
-    ch_genome_bai        = Channel.empty()
-    ch_samtools_stats    = Channel.empty()
-    ch_samtools_flagstat = Channel.empty()
-    ch_samtools_idxstats = Channel.empty()
-    ch_star_multiqc      = Channel.empty()
-    if (!params.skip_alignment && params.aligner == 'bwa') {
-        ALIGN_BWA (
-            ch_trimmed_reads,
-            params.star_index,
-            PREPARE_GENOME.out.fasta,
-            PREPARE_GENOME.out.gtf
+        ch_multiqc_files = Channel.empty()
+        ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+        
+        MULTIQC (
+            ch_multiqc_files.collect()
         )
-        ch_genome_bam        = ALIGN_BWA.out.bam
-        ch_genome_bai        = ALIGN_BWA.out.bai
-        ch_samtools_stats    = ALIGN_BWA.out.stats
-        ch_samtools_flagstat = ALIGN_BWA.out.flagstat
-        ch_samtools_idxstats = ALIGN_BWA.out.idxstats
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.bwa_version.first().ifEmpty(null))
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.samtools_version.first().ifEmpty(null))
+        multiqc_report       = MULTIQC.out.report.toList()
+        ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
     }
 }
+
+////////////////////////////////////////////////////
+/* --              COMPLETION EMAIL            -- */
+////////////////////////////////////////////////////
+
+workflow.onComplete {
+    Completion.email(workflow, params, summary_params, projectDir, log, multiqc_report)
+    Completion.summary(workflow, params, log)
+}
+
+////////////////////////////////////////////////////
+/* --                  THE END                 -- */
+////////////////////////////////////////////////////
