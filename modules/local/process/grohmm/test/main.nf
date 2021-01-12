@@ -7,16 +7,7 @@ include { GROHMM_TRANSCRIPTCALLING } from '../transcriptcalling/main.nf' addPara
 // Run the workflow
 workflow test_grohmm {
     def input = []
-    input = [ [ id:'test'], 
-              [ file("${baseDir}/input/test.paired_end.name.sorted.bam", checkIfExists: true),] ]
-
-    GROHMM_MAKEUCSCFILE         ( input )
-   // GROHMM_TRANSCRIPTCALLING    ( input )
-
-
+    input = [ [ id:'test'],
+              [ file("${baseDir}/input/test.paired_end.name.sorted.bam", checkIfExists: true) ] ]
+    GROHMM_MAKEUCSCFILE ( input )
 }
-
-workflow {
-    test_grohmm()
-}
-

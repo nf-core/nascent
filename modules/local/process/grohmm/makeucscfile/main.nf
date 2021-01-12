@@ -44,6 +44,4 @@ process GROHMM_MAKEUCSCFILE {
 
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
-
-    """
 }
