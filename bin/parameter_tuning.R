@@ -15,7 +15,7 @@ library(AnnotationDbi)
 
 option_list <- list(
     make_option(c("-i", "--bam_files"     ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
-  #  make_option(c("-i", "--ref_transcript"), type="character", default=NULL    , metavar="path"   , help= "Reference transcript annotations."),
+ #   make_option(c("-i", "--ref_transcript"), type="character", default=NULL    , metavar="path"   , help= "Reference transcript annotations."),
     make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
@@ -40,8 +40,6 @@ readsfile <- as(readGAlignments(file = opt$count_file, "GRanges"))
 # Call annotations > DEFAULT VALUES ASSIGNED
 hmmResult <- detectTranscripts(readsfile, LtProbB=-200, UTS=5, threshold=1)
 txHMM <- hmmResult$transcripts
-write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
-# TODO make reproducible, ask for sample file
 # Input transcript annotations > CURRENTLY JUST USES R LIBRARY > can be changed to generate from UCSC
 kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 kgChr7 <- transcripts(kgdb, filter=list(tx_chrom = "chr7"),
@@ -53,35 +51,19 @@ map <-select(org.Hs.eg.db, keys=unlist(mcols(kgConsensus)$gene_id), columns=c("S
 mcols(kgConsensus)$symbol <- map$SYMBOL
 mcols(kgConsensus)$type <- "gene"
 
-
-# Evaluate HMM Annotations
-e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
-# Save as txt file
-capture.output(e$eval, file = paste(opt$outprefix, ".eval.txt", header = TRUE))
-
-# TUNING IN A DIFFERENT SCRIPT
-
-#repairing with annotations
-getExpressedAnnotations <- function(features, reads) {
-fLimit <- limitToXkb(features)
-count <- countOverlaps(fLimit, reads)
-features <- features[count!=0,]
-return(features[(quantile(width(features), .05) < width(features))
-& (width(features) < quantile(width(features), .95)),])}
-conExpressed <- getExpressedAnnotations(features=kgConsensus,reads=readsfile)
-bPlus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand="+")
-bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand="-")
-txBroken <- c(bPlus, bMinus)
-txFinal <- combineTranscripts(txBroken, kgConsensus)
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=getOption("mc.cores"))
-write.table(txFinal, file = paste(opt$outprefix,"final.transcripts.txt", sep=""))
-capture.output(tdFinal, file = paste(opt$outprefix, ".tdFinal.txt", header = TRUE))
-#Output plot
-jpeg(file = paste(opt$outprefix, ".tdplot.jpg", header = TRUE))
-# 2. Create the plot
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=getOption("mc.cores"))
-# 3. Close the file
-dev.off()
+# TUNING
+tune <- data.frame(LtProbB=c(rep(-100,3), rep(-200,3), rep(-300,3)),
+UTS=rep(c(5,10,15), 3))
+Fp <- windowAnalysis(readsfile, strand="+", windowSize=50)
+Fm <- windowAnalysis(readsfile, strand="-", windowSize=50)
+evals <- mclapply(seq_len(9), function(x) {
+hmm <- detectTranscripts(Fp=Fp, Fm=Fm, LtProbB=tune$LtProbB[x],
+UTS=tune$UTS[x])
+e <- evaluateHMMInAnnotations(hmm$transcripts, kgConsensus)
+e$eval
+}, mc.cores=getOption("mc.cores"), mc.silent=TRUE)
+tune <- cbind(tune, do.call(rbind, evals))
+write.table(tune, file = paste(opt$outprefix,"tuning.parameters.txt", sep=""))
 
 
 # CITE PACKAGES USED

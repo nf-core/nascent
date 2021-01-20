@@ -6,7 +6,7 @@ def options    = initOptions(params.options)
 
 def VERSION = '1.24'
 
-process GROHMM_TRANSCRIPTCALLING{
+process GROHMM_PARAMETERTUNING{
     tag "$meta.id"
     label 'process_medium'
     publishDir "${params.outdir}",
@@ -21,11 +21,7 @@ process GROHMM_TRANSCRIPTCALLING{
     tuple val(meta), path(bam)
 
     output:
-    path "*.transcripts.txt"          , optional:true    , emit: transcripts
-    path "*.eval.txt"                 , optional:true    , emit: eval
-    path "*.final.transcripts.txt"    , optional:true    , emit: finaltranscripts
-    path "*.tdfinal.txt"              , optional:true    , emit: td
-    path "*.tdplot.jpg"               , optional:true    , emit: tdplot
+    path "*.tuning.parameters.txt"    , optional:true    , emit: tuning
     path "*.RData"                    , optional:true    , emit: rdata
     path "*.version.txt"              , emit: version
 
@@ -33,7 +29,7 @@ process GROHMM_TRANSCRIPTCALLING{
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    transcriptcalling_grohmm.R \\
+    parameter_tuning.R \\
 
         --bam_files $bam \\
         --outdir ./ \\
