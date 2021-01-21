@@ -1,4 +1,4 @@
-#!usr/bin/env Rscript
+#!/usr/bin/env Rscript
 # TODO
 # Allow for user directed normalization and allow for biological replicate cases to be considered.
 # REQUIREMENTS
