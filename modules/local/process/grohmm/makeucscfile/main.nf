@@ -31,7 +31,7 @@ process GROHMM_MAKEUCSCFILE {
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    makeucscfile_grohmm.R \\
+    makeucscfile.R \\
 
         --bam_files $bam \\
         --outdir ./ \\
