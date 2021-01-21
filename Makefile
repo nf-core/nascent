@@ -1,5 +1,5 @@
 SHELL:=/usr/bin/env bash
-NXF_VER:=20.10.0
+NXF_VER:=20.11.0-edge
 
 resume: install
 	./nextflow -d run main.nf -profile test,docker -resume
