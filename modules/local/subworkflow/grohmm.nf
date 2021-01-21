@@ -8,7 +8,6 @@ include { GROHMM_PARAMETERTUNING } from '../process/grohmm/parametertuning/main.
 // Run the workflow
 workflow GROHMM {
     def input = []
-    input = [ [ id:'test'],
-              [ file("${baseDir}/modules/local/process/grohmm/test/input/GroHMM_tutorial_input.bam", checkIfExists: true) ] ]
+    input = [ file("${baseDir}/modules/local/process/grohmm/test/input/test.paired_end.name.sorted.bam", checkIfExists: true) ]
     GROHMM_MAKEUCSCFILE ( input )
 }

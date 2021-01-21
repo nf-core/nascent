@@ -14,7 +14,7 @@ library(optparse)
 library(GenomicAlignments)
 
 option_list <- list(
-    make_option(c("-i", "--bam_files"    ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
+    make_option(c("-i", "--bam_file"    ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
     make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
@@ -22,14 +22,17 @@ option_list <- list(
 
 opt_parser <- OptionParser(option_list=option_list)
 opt        <- parse_args(opt_parser)
-print(opt$bam_files)
-if (is.null(opt$bam_files)){
+
+print(opt$bam_file)
+
+if (is.null(opt$bam_file)){
     print_help(opt_parser)
-    stop("Please provide bam files", call.=FALSE)
+    stop("Please provide a bam file", call.=FALSE)
 
 }
 
 # Read in bam file.
+
 
 if (file.exists(opt$outdir) == FALSE) {
     dir.create(opt$outdir,recursive=TRUE)
@@ -37,13 +40,16 @@ if (file.exists(opt$outdir) == FALSE) {
 setwd(opt$outdir)
 
 # Begin use of groHMM -> CURRENTLY ONLY TAKES ONE FILE
-readsfile <- as(GenomicAlignments::readGAlignments(file = opt$bam_files, use.names = TRUE))
+#readsfile <- as(GenomicAlignments::readGAlignments(file = opt$bam_file, use.names = TRUE))
+galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
+readsfile <- GRanges(galigned)
+
 # Generate wig files
 writeWiggle(reads= readsfile, file = paste(opt$outprefix, ".fwd.wig"), strand = "+", reverse = FALSE)
 writeWiggle(reads= readsfile, file = paste(opt$outprefix, ".fwd.wig"), strand = "-", reverse = TRUE)
 # Generate normalized wig files with the number of reads normalizing -> ALLOW FOR USER INPUT
-writeWiggle(reads= readsfile, file = paste(opt$outprefix,".fwd.normalized.wig"), strand = "+", reverse = FALSE, norm = NROWS(readsfile))
-writeWiggle(reads= readsfile, file = paste(opt$outprefix,".rev.normalized.wig"), strand = "-", reverse = TRUE,  norm = NROWS(readsfile))
+writeWiggle(reads= readsfile, file = paste(opt$outprefix,".fwd.normalized.wig"), strand = "+", reverse = FALSE, norm = 2)
+writeWiggle(reads= readsfile, file = paste(opt$outprefix,".rev.normalized.wig"), strand = "-", reverse = TRUE,  norm = 2)
 
 ## CITE PACKAGES USED
 citation("groHMM")

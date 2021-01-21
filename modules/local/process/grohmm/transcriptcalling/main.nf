@@ -7,7 +7,6 @@ def options    = initOptions(params.options)
 def VERSION = '1.24'
 
 process GROHMM_TRANSCRIPTCALLING{
-    tag "$meta.id"
     label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
@@ -21,7 +20,7 @@ process GROHMM_TRANSCRIPTCALLING{
     }
 
     input:
-    tuple val(meta), path(bam)
+    path bam
 
     output:
     path "*.transcripts.txt"          , optional:true    , emit: transcripts
@@ -34,15 +33,8 @@ process GROHMM_TRANSCRIPTCALLING{
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    transcriptcalling_grohmm.R \\
-
-        --bam_files $bam \\
-        --outdir ./ \\
-        --cores $task.cpus \\
-        $options.args
-
+    transcriptcalling_grohmm.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
 }

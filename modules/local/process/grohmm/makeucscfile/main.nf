@@ -7,11 +7,10 @@ def options    = initOptions(params.options)
 def VERSION = '1.24'
 
 process GROHMM_MAKEUCSCFILE {
-    tag "$meta.id"
     label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:meta.id) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     conda     (params.enable_conda ? "conda-forge::r-base=4.0 conda-forge::r-optparse=1.6.6 conda-forge::r-ggplot2=3.3.2 bioconda::bioconductor-txdb.hsapiens.ucsc.hg19.knowngene bioconda::bioconductor-edger bioconda::bioconductor-grohmm=1.24.0 bioconda::bioconductor-org.hs.eg.db"  : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
@@ -20,8 +19,9 @@ process GROHMM_MAKEUCSCFILE {
     container "quay.io/biocontainers/mulled-v2-23844d1c70fe2a9a1394628f89f59b8eb6ce99ef:e59b53a885d99af36e5b0f1cf8e5bdeac2f30c22-0"
     }
 
+
     input:
-    tuple val(meta), path(bam)
+    path bam
 
     output:
     path "*fwd.wig"                  , optional:true    , emit: fwdwig
@@ -33,18 +33,12 @@ process GROHMM_MAKEUCSCFILE {
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    makeucscfile.R \\
+    makeucscfile.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
 
-        --bam_files $bam \\
-        --outdir ./ \\
-        --cores $task.cpus \\
-        $options.args
-
-    if [ -f "R_sessionInfo.log" ]; then
+    # if [ -f "R_sessionInfo.log" ]; then
     # commands based on r file
-    fi
+    # fi
 
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
