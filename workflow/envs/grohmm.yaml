@@ -1,9 +1,0 @@
-channels:
-  - bioconda
-  - r
-dependencies:
-  - r
-  - r-tidyr
-  - bioconductor-edger
-  - bioconductor-grohmm
-  - bioconductor-org.Hs.eg.db

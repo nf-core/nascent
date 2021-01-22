@@ -1,9 +1,0 @@
-channels:
-  - defaults
-  - bioconda
-  - conda-forge
-dependencies:
-  - homer
-  - bioconductor-deseq2
-  - bioconductor-deseq
-  - bioconductor-edger
