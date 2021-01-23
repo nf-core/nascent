@@ -96,7 +96,7 @@ citation("GenomicFeatures")
 citation("org.Hs.eg.db")
 citation("edgeR")
 citation("TxDb.Hsapiens.UCSC.hg19.knownGene")
-citation("RMariaDB")
+#citation("RMariaDB")
 citation("AnnotationDbi")
 
 ## R SESSION INFO                             ##
