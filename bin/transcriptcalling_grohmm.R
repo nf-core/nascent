@@ -1,4 +1,4 @@
-#!usr/bin/env Rscript
+#!/usr/bin/env Rscript
 # TODO
 # Allow for user to input their own annotation dataset
 # REQUIREMENTS
@@ -41,7 +41,8 @@ setwd(opt$outdir)
 
 # Begin use of groHMM -> CURRENTLY ONLY TAKES ONE FILE
 #readsfile <- as(GenomicAlignments::readGAlignments(file = opt$bam_file, use.names = TRUE))
-readsfile <- readGAlignmentsList(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
+galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
+readsfile <- GRanges(galigned)
 
 #  make_option(c("-i", "--ref_transcript"), type="character", default=NULL    , metavar="path"   , help= "Reference transcript annotations."),
 
@@ -52,15 +53,12 @@ write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
 # TODO make reproducible, ask for sample file
 # Input transcript annotations > CURRENTLY JUST USES R LIBRARY > can be changed to generate from UCSC
 kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-kgChr7 <- transcripts(kgdb, filter=list(tx_chrom = "chr7"),
-columns=c("gene_id", "tx_id", "tx_name"))
-seqlevels(kgChr7) <- seqlevelsInUse(kgChr7)
+kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
-kgConsensus <- makeConsensusAnnotations(kgChr7, keytype="gene_id", mc.cores=getOption("mc.cores"))
+kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=getOption("mc.cores"))
 map <-select(org.Hs.eg.db, keys=unlist(mcols(kgConsensus)$gene_id), columns=c("SYMBOL"), keytype=c("ENTREZID"))
 mcols(kgConsensus)$symbol <- map$SYMBOL
 mcols(kgConsensus)$type <- "gene"
-
 
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(txHMM, kgConsensus)

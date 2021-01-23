@@ -9,5 +9,5 @@ include { GROHMM_PARAMETERTUNING } from '../process/grohmm/parametertuning/main.
 workflow GROHMM {
     def input = []
     input = [ file("${baseDir}/modules/local/process/grohmm/test/input/test.paired_end.name.sorted.bam", checkIfExists: true) ]
-    GROHMM_MAKEUCSCFILE ( input )
+    GROHMM_TRANSCRIPTCALLING ( input )
 }
