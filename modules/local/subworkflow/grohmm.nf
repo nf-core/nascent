@@ -8,6 +8,6 @@ include { GROHMM_PARAMETERTUNING } from '../process/grohmm/parametertuning/main.
 // Run the workflow
 workflow GROHMM {
     def input = []
-    input = [ file("${baseDir}/modules/local/process/grohmm/test/input/test.paired_end.name.sorted.bam", checkIfExists: true) ]
-    GROHMM_TRANSCRIPTCALLING ( input )
+    input = [ file("${baseDir}/modules/local/process/grohmm/test/input/S0mR1.bam", checkIfExists: true) ]
+    GROHMM_PARAMETERTUNING ( input )
 }
