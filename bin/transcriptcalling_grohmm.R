@@ -55,7 +55,7 @@ write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
 kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
-kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=getOption("mc.cores"))
+kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=opt$cores)
 map <-select(org.Hs.eg.db, keys=unlist(mcols(kgConsensus)$gene_id), columns=c("SYMBOL"), keytype=c("ENTREZID"))
 mcols(kgConsensus)$symbol <- map$SYMBOL
 mcols(kgConsensus)$type <- "gene"
@@ -79,13 +79,13 @@ bPlus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand="+")
 bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand="-")
 txBroken <- c(bPlus, bMinus)
 txFinal <- combineTranscripts(txBroken, kgConsensus)
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=getOption("mc.cores"))
+tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
 write.table(txFinal, file = paste(opt$outprefix,"final.transcripts.txt", sep=""))
 capture.output(tdFinal, file = paste(opt$outprefix, ".tdFinal.txt", header = TRUE))
 #Output plot
 jpeg(file = paste(opt$outprefix, ".tdplot.jpg", header = TRUE))
 # 2. Create the plot
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=getOption("mc.cores"))
+tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
 # 3. Close the file
 dev.off()
 
