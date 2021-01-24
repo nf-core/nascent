@@ -1,4 +1,4 @@
-#!usr/bin/env Rscript
+#!/usr/bin/env Rscript
 # TODO
 # Allow for user to input their own annotation dataset
 # REQUIREMENTS
@@ -22,7 +22,10 @@ option_list <- list(
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
 )
 
+
+opt_parser <- OptionParser(option_list=option_list)
 opt        <- parse_args(opt_parser)
+
 
 print(opt$bam_file)
 
@@ -40,9 +43,6 @@ if (file.exists(opt$outdir) == FALSE) {
 }
 setwd(opt$outdir)
 
-
-# Begin use of groHMM -> CURRENTLY ONLY TAKES ONE FILE
-readsfile <- as(readGAlignments(file = opt$count_file, "GRanges"))
 
 galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
 readsfile <- GRanges(galigned)
