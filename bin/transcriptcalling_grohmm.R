@@ -16,8 +16,8 @@ library(GenomicAlignments)
 option_list <- list(
     make_option(c("-i", "--bam_file"      ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
     make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
-    make_option(c("-ltprobb", "--ltprobb" ), type="integer", default=1         , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
-    make_option(c("-uts", "--uts"         ), type="integer", default=1         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
+    make_option(c("-l", "--ltprobb" ), type="integer", default=-200         , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
+    make_option(c("-u", "--uts"         ), type="integer", default=5         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
 )
