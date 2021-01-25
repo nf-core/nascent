@@ -19,9 +19,8 @@ process GROHMM_MAKEUCSCFILE {
     container "quay.io/biocontainers/mulled-v2-23844d1c70fe2a9a1394628f89f59b8eb6ce99ef:e59b53a885d99af36e5b0f1cf8e5bdeac2f30c22-0"
     }
 
-
     input:
-    path bam
+    tuple val(meta), path(bam)
 
     output:
     path "*fwd.wig"                  , optional:true    , emit: fwdwig

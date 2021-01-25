@@ -20,7 +20,7 @@ process GROHMM_TRANSCRIPTCALLING{
     }
 
     input:
-    path bam
+    tuple val(meta), path(bam)
 
     output:
     path "*.transcripts.txt"          , optional:true    , emit: transcripts

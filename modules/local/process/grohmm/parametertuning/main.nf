@@ -20,7 +20,7 @@ process GROHMM_PARAMETERTUNING{
     }
 
     input:
-    path bam
+    tuple val(meta), path(bam)
 
     output:
     path "*.tuning.tsv"    , optional:true    , emit: tuning
