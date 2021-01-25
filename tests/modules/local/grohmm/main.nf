@@ -9,6 +9,7 @@ include { GROHMM_PARAMETERTUNING } from '../../../../modules/local/process/grohm
 workflow test_grohmm {
     def input = []
     input = [ [ id:'test'],
-              [ file("${baseDir}/input/GroHMM_tutorial_input.bam", checkIfExists: true) ] ]
+             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
+             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true)]]
     GROHMM_MAKEUCSCFILE ( input )
 }
