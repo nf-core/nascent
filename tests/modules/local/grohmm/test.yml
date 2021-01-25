@@ -1,5 +1,7 @@
 - name: Run grohmm test workflow
-  command: nextflow run main.nf -profile docker,test
+  command: nextflow run ./tests/modules/local/grohmm/ -profile docker,test
+- name: Run grohmm makeucscfile
+  command: nextflow run tests/modules/local/grohmm/ -profile docker -entry test_grohmm_makeucscfile -c tests/config/nextflow.config
   tags:
     - grohmm
   files:
@@ -9,4 +11,3 @@
     - path: output/test_grohmm/test.rev.wig
     - path: output/test_grohmm/test.fwd.normalized.wig
     - path: output/test_grohmm/test.rev.normalized.wig
-
