@@ -7,6 +7,7 @@ def options    = initOptions(params.options)
 def VERSION = '1.24'
 
 process GROHMM_PARAMETERTUNING{
+    tag "$meta.id"
     label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
@@ -29,6 +30,7 @@ process GROHMM_PARAMETERTUNING{
 
     script:
     def software = getSoftwareName(task.process)
+
     """
     parameter_tuning.R --bam_file $bam --outdir ./ --cores $task.cpus $options.args
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"

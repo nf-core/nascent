@@ -7,6 +7,7 @@ def options    = initOptions(params.options)
 def VERSION = '1.24'
 
 process GROHMM_MAKEUCSCFILE {
+    tag "$meta.id"
     label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
@@ -23,15 +24,14 @@ process GROHMM_MAKEUCSCFILE {
     tuple val(meta), path(bam)
 
     output:
-    path "*fwd.wig"                  , optional:true    , emit: fwdwig
-    path "*rev.wig"                  , optional:true    , emit: revwig
-    path "*fwd.normalized.wig"       , optional:true    , emit: fwdwig_normalized
-    path "*rev.normalized.wig"       , optional:true    , emit: revwig_normalized
-    path "*.RData"                   , optional:true    , emit: rdata
-    path "*.version.txt"             , emit: version
+    path "*.wig"                  , optional:true    , emit: wig
+    path "*.normalized.wig"       , optional:true    , emit: normalizedwig
+    path "*.RData"                , optional:true    , emit: rdata
+    path "*.version.txt"          , emit: version
 
     script:
     def software = getSoftwareName(task.process)
+    def prefix   = options.suffix ? "${meta.id}.${options.suffix}" : "${meta.id}"
     """
     makeucscfile.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
 

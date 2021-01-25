@@ -7,6 +7,7 @@ def options    = initOptions(params.options)
 def VERSION = '1.24'
 
 process GROHMM_TRANSCRIPTCALLING{
+    tag "$meta.id"
     label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
