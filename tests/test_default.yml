@@ -1,0 +1,4 @@
+- name: Run test for everything
+  command: nextflow run main.nf -profile docker,test
+  files:
+    - path: output/multiqc_report.html
