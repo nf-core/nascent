@@ -51,7 +51,7 @@ include { MULTIQC               } from './modules/nf-core/software/multiqc/main'
 // Info required for completion email and summary
 def multiqc_report = []
 
-workflow {
+workflow GROSEQ {
 
     ch_software_versions = Channel.empty()
 
