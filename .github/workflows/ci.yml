@@ -39,6 +39,14 @@ jobs:
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker
 
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            .nextflow.log
+
   sra_download:
     name: Test downloading of public data
     if: ${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/rnaseq') }}
@@ -58,3 +66,11 @@ jobs:
       - name: Run pipeline to download public data
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test_sra,docker
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            .nextflow.log
