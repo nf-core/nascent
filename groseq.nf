@@ -82,7 +82,7 @@ workflow GROSEQ {
      * MultiQC
      */  
     if (!params.skip_multiqc) {
-        workflow_summary    = Schema.params_summary_multiqc(workflow, summary_params)
+        workflow_summary    = Schema.params_summary_multiqc(workflow, params.summary_params)
         ch_workflow_summary = Channel.value(workflow_summary)
 
         ch_multiqc_files = Channel.empty()
@@ -105,7 +105,7 @@ workflow GROSEQ {
 ////////////////////////////////////////////////////
 
 workflow.onComplete {
-    Completion.email(workflow, params, summary_params, projectDir, log, multiqc_report)
+    Completion.email(workflow, params, params.summary_params, projectDir, log, multiqc_report)
     Completion.summary(workflow, params, log)
 }
 
