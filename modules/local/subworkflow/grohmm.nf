@@ -12,9 +12,9 @@ include { GROHMM_PARAMETERTUNING } from '../process/grohmm/parametertuning/main.
 workflow GROHMM {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://raw.githack.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam', checkIfExists: true) ]]
-              //file('https://raw.githack.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam', checkIfExists: true)
-    GROHMM_MAKEUCSCFILE_FORWARD ( input )
+             [ file('https://raw.githack.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam', checkIfExists: true),
+               file("${launchDir}/modules/local/process/grohmm/test/tune.csv", checkIfExists: true) ]]
+    GROHMM_PARAMETERTUNING ( input )
 }
 
 /*
