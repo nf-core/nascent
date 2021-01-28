@@ -16,7 +16,7 @@ library(GenomicAlignments)
 
 option_list <- list(
     make_option(c("-i", "--bam_file"     ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
- #   make_option(c("-i", "--ref_transcript"), type="character", default=NULL    , metavar="path"   , help= "Reference transcript annotations."),
+    make_option(c("-t", "--tuning_file"   ), type="character", default=NULL    , metavar="path"   , help= "File with all possible LTS/UTS combinations."),
     make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
@@ -34,6 +34,12 @@ if (is.null(opt$bam_file)){
     stop("Please provide a bam file", call.=FALSE)
 
 }
+if (is.null(opt$tuning_file)){
+    print_help(opt_parser)
+    stop("Please provide a tuning file", call.=FALSE)
+
+}
+
 
 # Read in bam file.
 
@@ -62,9 +68,11 @@ kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=opt$co
 
 
 # TUNING
+tune <- read.csv(opt$tuning_file)
 
-tune <- data.frame(LtProbB=c(rep(-100,9), rep(-150,9), rep(-200,9), rep(-250,9), rep(-300,9),rep(-350,9),rep(-400,9) ),
-           UTS=rep(c(5,10,15,20,25,30,35,40,45), 7))
+# Default values
+#tune <- data.frame(LtProbB=c(rep(-100,9), rep(-150,9), rep(-200,9), rep(-250,9), rep(-300,9),rep(-350,9),rep(-400,9) ),
+ #          UTS=rep(c(5,10,15,20,25,30,35,40,45), 7))
 
 evals <- mclapply(seq_len(63), function(x) {
         hmm <- detectTranscripts(reads=readsfile, LtProbB=tune$LtProbB[x], UTS=tune$UTS[x])
@@ -73,7 +81,7 @@ evals <- mclapply(seq_len(63), function(x) {
         }, mc.cores=opt$cores,  mc.silent=TRUE)
 
 tune <- cbind(tune, do.call(rbind, evals))
-write.table(tune, file = paste(opt$outprefix,".tuning.tsv", sep="\t", row.names=F, col.names=T))
+write.csv(tune, file = paste(opt$outprefix,".tuning.csv", row.names=F, col.names=T))
 
 
 # CITE PACKAGES USED

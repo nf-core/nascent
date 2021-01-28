@@ -22,7 +22,7 @@ process GROHMM_PARAMETERTUNING{
 
     input:
     tuple val(meta), path(bam)
-    tuple val(meta), path(tune)
+    path(tune)
 
     output:
     path "*.tuning.csv"    , optional:true    , emit: tuning
@@ -33,7 +33,7 @@ process GROHMM_PARAMETERTUNING{
     def software = getSoftwareName(task.process)
 
     """
-    parameter_tuning.R --bam_file $bam --tuning_file $tune --outdir ./ --cores $task.cpus $options.args
+    parameter_tuning.R --bam_file ${bam} --tuning_file ${tune} --outdir ./ --cores $task.cpus $options.args
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
 }
