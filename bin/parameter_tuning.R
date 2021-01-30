@@ -74,7 +74,7 @@ tune <- read.csv(opt$tuning_file)
 #tune <- data.frame(LtProbB=c(rep(-100,9), rep(-150,9), rep(-200,9), rep(-250,9), rep(-300,9),rep(-350,9),rep(-400,9) ),
  #          UTS=rep(c(5,10,15,20,25,30,35,40,45), 7))
 
-evals <- mclapply(seq_len(63), function(x) {
+evals <- mclapply(seq_len(nrow(tune)), function(x) {
         hmm <- detectTranscripts(reads=readsfile, LtProbB=tune$LtProbB[x], UTS=tune$UTS[x])
         e <- evaluateHMMInAnnotations(hmm$transcripts, kgConsensus)
         e$eval
