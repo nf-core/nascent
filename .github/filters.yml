@@ -1,2 +1,5 @@
 grohmm:
   - modules/local/process/grohmm/**
+
+sloprefseq:
+  - modules/local/process/sloprefseq/**
