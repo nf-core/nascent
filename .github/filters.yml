@@ -1,5 +1,8 @@
 grohmm:
   - modules/local/process/grohmm/**
 
+remove_genes:
+  - modules/local/subworkflow/remove_genes.nf
+
 sloprefseq:
   - modules/local/process/sloprefseq/**
