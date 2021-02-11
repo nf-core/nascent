@@ -39,7 +39,7 @@ include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_ver
 
 // Local: Sub-workflows
 include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
-
+include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
@@ -61,7 +61,7 @@ workflow GROSEQ {
     INPUT_CHECK ( 
         ch_input
     )
-
+	GROHMM ()
     /*
      * MODULE: Run FastQC
      */

@@ -26,7 +26,7 @@ process GROHMM_TRANSCRIPTCALLING{
     output:
     path "*.transcripts.txt"          , optional:true    , emit: transcripts
     path "*.eval.txt"                 , optional:true    , emit: eval
-    path "*.final.transcripts.txt"    , optional:true    , emit: finaltranscripts
+    path "*.final.transcripts.bed"    , optional:true    , emit: transcriptsbed
     path "*.tdfinal.txt"              , optional:true    , emit: td
     path "*.tdplot.jpg"               , optional:true    , emit: tdplot
     path "*.RData"                    , optional:true    , emit: rdata

@@ -13,7 +13,7 @@ workflow GROHMM {
     def input = []
     input = [[ id: 'test' ],
              [ file('https://raw.githack.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam', checkIfExists: true)]]
-    GROHMM_PARAMETERTUNING ( input, file("${launchDir}/modules/local/process/grohmm/test/tune.csv", checkIfExists: true)  )
+    GROHMM_TRANSCRIPTCALLING ( input )
 }
 
 /*
