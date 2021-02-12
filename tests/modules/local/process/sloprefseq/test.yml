@@ -1,6 +1,0 @@
-- name: sloprefseq
-  command: nextflow run ./tests/modules/local/process/sloprefseq -entry test_sloprefseq -c tests/config/nextflow.config
-  tags:
-    - sloprefseq
-  files:
-    - path: output/bedtools/test.slop.refseq.bed
