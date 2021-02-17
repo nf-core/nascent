@@ -10,7 +10,9 @@ workflow test_remove_genes {
     def input = []
     input = [ [ id:'test'],
                file("https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/A.bed", checkIfExists: true),
-                file("https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/B.bed", checkIfExists: true) ]
+                file("https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/B.bed", checkIfExists: true),
+                file("https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/genome.sizes", checkIfExists: true) ]
 
     REMOVE_GENES         ( input )
 }
+
