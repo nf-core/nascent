@@ -25,12 +25,13 @@ jobs:
       - name: Check out pipeline code
         uses: actions/checkout@v2
 
-      - name: Install Nextflow
-        env:
-          CAPSULE_LOG: none
-        run: |
-          wget -qO- get.nextflow.io | bash
-          sudo mv nextflow /usr/local/bin/
+      # NOTE This fails on self-hosted
+      # name: Install Nextflow
+      #   env:
+      #     CAPSULE_LOG: none
+      #   run: |
+      #     wget -qO- get.nextflow.io | bash
+      #     sudo mv nextflow /usr/local/bin/
 
       - name: Run pipeline with test data
         # TODO nf-core: You can customise CI pipeline run tests as required
