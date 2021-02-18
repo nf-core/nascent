@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
+
 nextflow.enable.dsl = 2
+
 // Define input channels
 // Run the workflow
 include { BEDTOOLS_SORT } from '../../nf-core/software/bedtools/sort/main' addParams( options: [:] )
@@ -13,21 +15,11 @@ workflow REMOVE_GENES {
     chromsizes
 
     main:
-    BEDTOOLS_SORT ( reads )
-    def input = [[ id:'test'],
-    chromsizes ]
-    BEDTOOLS_SLOP ( BEDTOOLS_SORT.out.bed, input )
+    BEDTOOLS_SORT ( refseq )
+    BEDTOOLS_SLOP ( BEDTOOLS_SORT.out.bed, chromsizes )
+    // BEDTOOLS_INTERSECT ( BEDTOOLS_SLOP.out.bed, reads )
+
+
+    // emit:
+    // transcrips = BEDTOOLS_INERSECT.out.bed
 }
-
-
-  //  def input = []
-   // input = [ [ id:'test'],
-   // BEDTOOLS_SLOP.out.bed, bed2 ]
-   // BEDTOOLS_INTERSECT ( input )
-
-
-//    emit:
-//    transcripts = BEDTOOLS_INTERSECT.out.bed
-
-
-
