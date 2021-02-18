@@ -1,4 +1,4 @@
-name: Local Modules Pytest-workflow
+name: Local Modules pytest-workflow
 on: [push, pull_request]
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
           filters: '.github/filters.yml'
 
   test:
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     name: ${{ matrix.tags }} ${{ matrix.profile }} ${{ matrix.nxf_version }}
     needs: changes
     if: needs.changes.outputs.modules != '[]'
