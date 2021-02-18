@@ -58,7 +58,7 @@ kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=opt$cores)
-map <-select(org.Hs.eg.db, keys=unlist(mcols(kgConsensus)$gene_id), columns=c("SYMBOL"), keytype=c("ENTREZID"))
+map <- AnnotationDbi::select(org.Hs.eg.db, keys=unlist(mcols(kgConsensus)$gene_id), columns=c("SYMBOL"), keytype=c("ENTREZID"))
 mcols(kgConsensus)$symbol <- map$SYMBOL
 mcols(kgConsensus)$type <- "gene"
 
