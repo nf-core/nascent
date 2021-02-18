@@ -1,5 +1,5 @@
 - name: Run grohmm makeucscfile
-  command: nextflow run tests/modules/local/grohmm/ -profile docker -entry test_grohmm_makeucscfile -c tests/config/nextflow.config
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_makeucscfile -c tests/config/nextflow.config
   tags:
     - grohmm
   # FIXME files
@@ -12,13 +12,13 @@
   #   - path: output/test_grohmm/test.rev.normalized.wig
 
 - name: Run grohmm transcriptcalling
-  command: nextflow run tests/modules/local/grohmm/ -profile docker -entry test_grohmm_transcriptcalling -c tests/config/nextflow.config
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_transcriptcalling -c tests/config/nextflow.config
   tags:
     - grohmm
   # TODO Add Files
 
 - name: Run grohmm parametertuning
-  command: nextflow run tests/modules/local/grohmm/ -profile docker -entry test_grohmm_parametertuning -c tests/config/nextflow.config
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_parametertuning -c tests/config/nextflow.config
   tags:
     - grohmm
   # TODO Add Files
