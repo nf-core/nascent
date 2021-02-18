@@ -2,11 +2,13 @@
 
 nextflow.enable.dsl = 2
 
-// Define input channels
-// Run the workflow
-include { BEDTOOLS_SORT } from '../../nf-core/software/bedtools/sort/main' addParams( options: [:] )
-include { BEDTOOLS_SLOP } from '../../nf-core/software/bedtools/slop/main' addParams( options: [:] )
-include { BEDTOOLS_INTERSECT } from '../../nf-core/software/bedtools/intersect/main' addParams( options: [:] )
+params.sort_options    = [:]
+params.slop_options    = [:]
+params.intersect_options = [:]
+
+include { BEDTOOLS_SORT } from '../../nf-core/software/bedtools/sort/main' addParams( options: params.sort_options )
+include { BEDTOOLS_SLOP } from '../../nf-core/software/bedtools/slop/main' addParams( options: params.slop_options )
+include { BEDTOOLS_INTERSECT } from '../../nf-core/software/bedtools/intersect/main' addParams( options: params.intersect_options )
 
 workflow REMOVE_GENES {
     take:
