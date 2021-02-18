@@ -18,6 +18,7 @@ workflow REMOVE_GENES {
 
     main:
     BEDTOOLS_SORT ( refseq )
+    // FIXME slop args aren't getting passed correctly
     BEDTOOLS_SLOP ( BEDTOOLS_SORT.out.bed, chromsizes )
     // BEDTOOLS_INTERSECT ( BEDTOOLS_SLOP.out.bed, reads )
 

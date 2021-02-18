@@ -2,7 +2,9 @@
 
 nextflow.enable.dsl = 2
 
-include { REMOVE_GENES } from '../../../../../modules/local/subworkflow/remove_genes.nf' addParams( options: [publish_dir:'test_removegenes'] )
+params.remove_genes_options = [ publish_dir: 'test_removegenes', slop_options: '-l 15 -r 30' ]
+
+include { REMOVE_GENES } from '../../../../../modules/local/subworkflow/remove_genes.nf' addParams( options: params.remove_genes_options )
 
 // Define input channels
 // Run the workflow
