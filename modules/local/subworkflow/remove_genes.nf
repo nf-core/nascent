@@ -19,9 +19,9 @@ workflow REMOVE_GENES {
     main:
     BEDTOOLS_SORT ( refseq )
     BEDTOOLS_SLOP ( BEDTOOLS_SORT.out.bed, chromsizes )
-    // BEDTOOLS_INTERSECT ( BEDTOOLS_SLOP.out.bed, reads )
+    BEDTOOLS_INTERSECT ( BEDTOOLS_SLOP.out.bed, reads )
 
 
-    // emit:
-    // transcrips = BEDTOOLS_INERSECT.out.bed
+    emit:
+    transcripts = BEDTOOLS_INTERSECT.out.bed
 }

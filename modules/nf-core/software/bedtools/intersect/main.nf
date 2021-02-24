@@ -19,7 +19,8 @@ process BEDTOOLS_INTERSECT {
     }
 
     input:
-    tuple val(meta), path(bed1), path(bed2)
+    tuple val(meta), path(bed1)
+    path(bed2)
 
     output:
     tuple val(meta), path('*.bed'), emit: bed
@@ -34,7 +35,7 @@ process BEDTOOLS_INTERSECT {
         -a $bed1 \\
         -b $bed2 \\
         $options.args \\
-        > ${prefix}.bed
+        > ${prefix}.intersect.bed
 
     bedtools --version | sed -e "s/bedtools v//g" > ${software}.version.txt
     """

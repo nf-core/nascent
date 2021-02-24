@@ -10,9 +10,8 @@ workflow test_remove_genes {
     def reads = []
     def refseq = []
     def chromsizes  = []
-    reads = [ [ id:'test'],
-               file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/A.bed', checkIfExists: true) ]
-    refseq = [ [ id:'test1'],
+    reads = [  file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/A.bed', checkIfExists: true) ]
+    refseq = [ [ id:'test'],
                file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/B.bed', checkIfExists: true) ]
     chromsizes = [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/genome.sizes', checkIfExists: true) ]
 
