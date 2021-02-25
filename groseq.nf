@@ -52,7 +52,7 @@ if (!params.save_reference) { gffread_options['publish_files'] = false }
 // Local: Sub-workflows
 include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
 include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
-include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options,  star_index_options: star_genomegenerate_options,  hisat2_index_options: hisat2_build_options, rsem_index_options: rsem_preparereference_options, salmon_index_options: salmon_index_options )
+include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
