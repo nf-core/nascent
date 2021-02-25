@@ -10,39 +10,12 @@ include { GROHMM_PARAMETERTUNING } from '../process/grohmm/parametertuning/main.
  * Test with forward strand
  */
 workflow GROHMM {
-    def input = []
-    input = [[ id: 'test' ],
-             [ file('https://raw.githack.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam', checkIfExists: true)]]
-    GROHMM_TRANSCRIPTCALLING ( input )
+    take:
+    bam // channel: [ val(meta), [ bam ] ]
+
+    main:
+    GROHMM_TRANSCRIPTCALLING ( bam )
+
+    emit:
+    transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
 }
-
-/*
- * Test with reverse strand
-
-workflow test_grohmm_makeucscfile_reverse {
-    def input = []
-    input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
-    GROHMM_MAKEUCSCFILE_REVERSE ( input )
-}
-
-
-
-
-workflow test_grohmm_transcriptcalling {
-    def input = []
-    input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
-    GROHMM_TRANSCRIPTCALLING ( input )
-}
-
-workflow test_grohmm_parametertuning {
-    def input = []
-    input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
-    GROHMM_PARAMETERTUNING ( input )
-}
-*/

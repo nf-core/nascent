@@ -168,7 +168,8 @@ workflow GROSEQ {
     /*
      * SUBWORKFLOW: Transcript indetification with GROHMM
      */
-    // GROHMM ()
+
+    GROHMM ( ch_genome_bam )
 
     /*
      * MODULE: Pipeline reporting
@@ -190,7 +191,8 @@ workflow GROSEQ {
         ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
         ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-        
+        ch_multiqc_files = ch_multiqc_files.mix(GROHMM.out.transcripts.collect{it[1]}.ifEmpty([]))
+
         MULTIQC (
             ch_multiqc_files.collect()
         )
