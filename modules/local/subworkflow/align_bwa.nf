@@ -23,11 +23,7 @@ workflow ALIGN_BWA {
      * Uncompress BWA index or generate from scratch if required
     */
     if (index) {
-        if (index.endsWith('.tar.gz')) {
-            ch_index = UNTAR ( index ).untar
-        } else {
-            ch_index = file(index)
-        }
+        ch_index = index
     } else {
         ch_index = BWA_INDEX ( fasta, gtf ).index
     }
