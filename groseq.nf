@@ -17,6 +17,9 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 if (params.fasta) { ch_fasta = file(params.fasta) } else { exit 1, 'Genome fasta file not specified!' }
 
+// Check alignment parameters
+def prepareToolIndices  = []
+
 ////////////////////////////////////////////////////
 /* --          CONFIG FILES                    -- */
 ////////////////////////////////////////////////////
@@ -31,15 +34,25 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
 
+def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
+def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
+
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
 
 // Local: Modules
 include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
 
+/*
+ * SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+ */
+def gffread_options         = modules['gffread']
+if (!params.save_reference) { gffread_options['publish_files'] = false }
+
 // Local: Sub-workflows
 include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
 include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
+include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
@@ -52,8 +65,14 @@ include { MULTIQC               } from './modules/nf-core/software/multiqc/main'
 def multiqc_report = []
 
 workflow GROSEQ {
-
+    /*
+     * SUBWORKFLOW: Uncompress and prepare reference genome files
+     */
+    PREPARE_GENOME (
+        prepareToolIndices
+    )
     ch_software_versions = Channel.empty()
+    ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
 
     /*
      * SUBWORKFLOW: Read in samplesheet, validate and stage input files
