@@ -37,6 +37,12 @@ multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title
 // Local: Modules
 include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
 
+/*
+ * SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+ */
+def gffread_options         = modules['gffread']
+if (!params.save_reference) { gffread_options['publish_files'] = false }
+
 // Local: Sub-workflows
 include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
 include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
