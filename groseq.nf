@@ -49,10 +49,31 @@ include { GET_SOFTWARE_VERSIONS } from './modules/local/process/get_software_ver
 def gffread_options         = modules['gffread']
 if (!params.save_reference) { gffread_options['publish_files'] = false }
 
+def bwa_align_options            = modules['bwa_align']
+// TODO
+// bwa_align_options.args          += params.save_unaligned ? " --outReadsUnmapped Fastx" : ''
+// if (params.save_align_intermeds)  { bwa_align_options.publish_files.put('bam','') }
+// if (params.save_unaligned)        { bwa_align_options.publish_files.put('fastq.gz','unmapped') }
+
+def samtools_sort_options = modules['samtools_sort']
+// TODO
+// if (['bwa'].contains(params.aligner)) {
+//     if (params.save_align_intermeds || (!params.with_umi && params.skip_markduplicates)) {
+//         samtools_sort_options.publish_files.put('bam','')
+//         samtools_sort_options.publish_files.put('bai','')
+//     }
+// } else {
+//     if (params.save_align_intermeds || params.skip_markduplicates) {
+//         samtools_sort_options.publish_files.put('bam','')
+//         samtools_sort_options.publish_files.put('bai','')
+//     }
+// }
+
 // Local: Sub-workflows
 include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'       addParams( options: [:]                          )
 include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
 include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
+include { ALIGN_BWA             } from './modules/local/subworkflow/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
@@ -80,7 +101,6 @@ workflow GROSEQ {
     INPUT_CHECK ( 
         ch_input
     )
-	GROHMM ()
     /*
      * MODULE: Run FastQC
      */
@@ -89,6 +109,37 @@ workflow GROSEQ {
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
     
+
+    /*
+     * SUBWORKFLOW: Alignment with BWA
+     */
+    ch_genome_bam                 = Channel.empty()
+    ch_genome_bai                 = Channel.empty()
+    ch_samtools_stats             = Channel.empty()
+    ch_samtools_flagstat          = Channel.empty()
+    ch_samtools_idxstats          = Channel.empty()
+    ch_star_multiqc               = Channel.empty()
+    ch_aligner_pca_multiqc        = Channel.empty()
+    ch_aligner_clustering_multiqc = Channel.empty()
+    ALIGN_BWA(
+        INPUT_CHECK.out.reads,
+        PREPARE_GENOME.out.bwa_index,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.gtf
+    )
+    ch_genome_bam        = ALIGN_BWA.out.bam
+    ch_genome_bai        = ALIGN_BWA.out.bai
+    ch_samtools_stats    = ALIGN_BWA.out.stats
+    ch_samtools_flagstat = ALIGN_BWA.out.flagstat
+    ch_samtools_idxstats = ALIGN_BWA.out.idxstats
+    ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.bwa_version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.samtools_version.first().ifEmpty(null))
+
+
+    /*
+     * SUBWORKFLOW: Transcript indetification with GROHMM
+     */
+    // GROHMM ()
 
     /*
      * MODULE: Pipeline reporting
