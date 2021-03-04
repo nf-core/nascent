@@ -18,7 +18,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 * [FastQC](#fastqc) - Raw read QC
 * [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
-* [GroHMM](#grohmm) - Predicts transcripts from GROSeq data.
+* [GroHMM](#grohmm) - Predicts transcripts from aligned GROSeq data in the form of bed files.
 * [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
 ### FastQC
