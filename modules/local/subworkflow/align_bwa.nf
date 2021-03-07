@@ -15,23 +15,13 @@ workflow ALIGN_BWA {
     take:
     reads // channel: [ val(meta), [ reads ] ]
     index //    file: /path/to/bwa/index/
-    fasta //    file: /path/to/genome.fasta
     gtf   //    file: /path/to/genome.gtf
 
     main:
     /*
-     * Uncompress BWA index or generate from scratch if required
-    */
-    if (index) {
-        ch_index = index
-    } else {
-        ch_index = BWA_INDEX ( fasta, gtf ).index
-    }
-
-    /*
      * Map reads with BWA
      */
-    BWA_MEM ( reads, ch_index, gtf )
+    BWA_MEM ( reads, index, gtf )
 
     /*
      * Sort, index BAM file and run samtools stats, flagstat and idxstats

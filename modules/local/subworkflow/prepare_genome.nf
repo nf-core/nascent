@@ -20,7 +20,6 @@ include { GET_CHROM_SIZES             } from '../process/get_chrom_sizes'      a
 include { UNTAR as UNTAR_BWA_INDEX    } from '../process/untar'                addParams( options: params.bwa_index_options   )
 
 include { GFFREAD                     } from '../../nf-core/software/gffread/main'   addParams( options: params.gffread_options      )
-// TODO Genereate BWA index if not available
 include { BWA_INDEX                   } from '../../nf-core/software/bwa/index/main' addParams( options: params.bwa_index_options )
 
 workflow PREPARE_GENOME {
@@ -102,8 +101,8 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = file(params.bwa_index)
             }
         } else {
-            ch_bwa_index   = BWA_GENOMEGENERATE ( ch_fasta, ch_gtf ).index
-            ch_bwa_version = BWA_GENOMEGENERATE.out.version
+            ch_bwa_index   = BWA_INDEX ( ch_fasta ).index
+            ch_bwa_version = BWA_INDEX.out.version
         }
     }
 
