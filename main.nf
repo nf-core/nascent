@@ -31,7 +31,9 @@ params.fasta     = Checks.get_genome_attribute(params, 'fasta')
 params.gtf       = Checks.get_genome_attribute(params, 'gtf')
 params.gff       = Checks.get_genome_attribute(params, 'gff')
 params.gene_bed  = Checks.get_genome_attribute(params, 'bed12')
-params.bwa_index = Checks.get_genome_attribute(params, 'bwa')
+// FIXME Issue with $INDEX in bwa and igenomes hosting multiple versions
+// So we have to generate our own index for now
+// params.bwa_index = Checks.get_genome_attribute(params, 'bwa')
 
 ////////////////////////////////////////////////////
 /* --         PRINT PARAMETER SUMMARY          -- */
