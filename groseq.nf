@@ -19,6 +19,13 @@ if (params.fasta) { ch_fasta = file(params.fasta) } else { exit 1, 'Genome fasta
 
 // Check alignment parameters
 def prepareToolIndices  = []
+def alignerList         = ['bwa']
+if (!params.skip_alignment) {
+    if (!alignerList.contains(params.aligner)) {
+        exit 1, "Invalid aligner option: ${params.aligner}. Valid options: ${alignerList.join(', ')}"
+    }
+    prepareToolIndices << params.aligner
+}
 
 ////////////////////////////////////////////////////
 /* --          CONFIG FILES                    -- */
