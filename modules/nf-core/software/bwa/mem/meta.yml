@@ -32,6 +32,11 @@ params:
         description: |
             Run the module with Conda using the software specified
             via the `conda` directive
+    - singularity_pull_docker_container:
+        type: boolean
+        description: |
+            Instead of directly downloading Singularity images for use with Singularity,
+            force the workflow to pull and convert Docker containers instead.
 input:
     - meta:
         type: map
@@ -46,10 +51,7 @@ input:
     - index:
         type: file
         description: BWA genome index files
-        pattern: "*.{amb,ann,bwt,pac,sa}"
-    - fasta:
-        type: file
-        description: Input genome fasta file
+        pattern: "Directory containing BWA index *.{amb,ann,bwt,pac,sa}"
 output:
     - bam:
         type: file

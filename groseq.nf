@@ -131,7 +131,6 @@ workflow GROSEQ {
     ALIGN_BWA(
         INPUT_CHECK.out.reads,
         PREPARE_GENOME.out.bwa_index,
-        PREPARE_GENOME.out.gtf
     )
     ch_genome_bam        = ALIGN_BWA.out.bam
     ch_genome_bai        = ALIGN_BWA.out.bai
