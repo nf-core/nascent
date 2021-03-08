@@ -82,6 +82,8 @@ include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_geno
 include { ALIGN_BWA             } from './modules/local/subworkflow/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from './modules/local/subworkflow/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
+// Local: Sub-workflows
+include { HOMER_GROSEQ          } from './modules/nf-core/subworkflow/homer_groseq.nf' addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
@@ -155,6 +157,13 @@ workflow GROSEQ {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.first().ifEmpty(null))
     }
 
+    /*
+     * SUBWORKFLOW: Transcript indetification with homer
+     */
+    HOMER_GROSEQ(
+        ch_genome_bam,
+        PREPARE_GENOME.out.fasta
+    )
 
     /*
      * SUBWORKFLOW: Transcript indetification with GROHMM
