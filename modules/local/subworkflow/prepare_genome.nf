@@ -21,6 +21,7 @@ include { UNTAR as UNTAR_BWA_INDEX    } from '../process/untar'                a
 
 include { GFFREAD                     } from '../../nf-core/software/gffread/main'   addParams( options: params.gffread_options      )
 include { BWA_INDEX                   } from '../../nf-core/software/bwa/index/main' addParams( options: params.bwa_index_options )
+include { BWAMEM2_INDEX               } from '../../nf-core/software/bwamem2/index/main' addParams( options: params.bwa_index_options )
 
 workflow PREPARE_GENOME {
     take:
@@ -103,6 +104,17 @@ workflow PREPARE_GENOME {
         } else {
             ch_bwa_index   = BWA_INDEX ( ch_fasta ).index
             ch_bwa_version = BWA_INDEX.out.version
+        }
+    } else if ('bwamem2' in prepare_tool_indices) {
+        if (params.bwa_index) {
+            if (params.bwa_index.endsWith('.tar.gz')) {
+                ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
+            } else {
+                ch_bwa_index = file(params.bwa_index)
+            }
+        } else {
+            ch_bwa_index   = BWAMEM2_INDEX ( ch_fasta ).index
+            ch_bwa_version = BWAMEM2_INDEX.out.version
         }
     }
 
