@@ -2,9 +2,13 @@
  * Identify transcripts with homer
  */
 
-include { HOMER_MAKETAGDIRECTORY      } from '../software/homer/maketagdirectory/main' addParams( options: [:] )
-include { HOMER_MAKEUCSCFILE          } from '../software/homer/makeucscfile/main'     addParams( options: [:] )
-include { HOMER_FINDPEAKS             } from '../software/homer/findpeaks/main'        addParams( options: [args: '-style factor'] )
+params.maketagdirectory_options = [:]
+params.makeucscfile_options     = [:]
+params.findpeaks_options        = [args: '-style factor']
+
+include { HOMER_MAKETAGDIRECTORY      } from '../software/homer/maketagdirectory/main' addParams( options: params.maketagdirectory_options )
+include { HOMER_MAKEUCSCFILE          } from '../software/homer/makeucscfile/main'     addParams( options: params.makeucscfile_options )
+include { HOMER_FINDPEAKS             } from '../software/homer/findpeaks/main'        addParams( options: params.findpeaks_options )
 
 workflow HOMER_GROSEQ {
     take:
