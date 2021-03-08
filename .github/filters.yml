@@ -3,3 +3,8 @@ grohmm:
 
 remove_genes:
   - modules/local/subworkflow/remove_genes.nf
+
+homer:
+  - modules/nf-core/subworkflow/homer_groseq.nf
+  - modules/nf-core/software/homer/**
+  - tests/modules/nf-core/subworkflow/homer_groseq/**
