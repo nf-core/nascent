@@ -3,7 +3,7 @@
 nextflow.enable.dsl = 2
 
 include { HOMER_GROSEQ as HOMER_GROSEQ_BAM } from '../../../../../modules/nf-core/subworkflow/homer_groseq' addParams( options: [ publish_dir:'test_homer_groseq' ] )
-include { HOMER_GROSEQ as HOMER_GROSEQ_BED } from '../../../../../modules/nf-core/subworkflow/homer_groseq' addParams( options: [ publish_dir:'test_homer_groseq' ] )
+include { HOMER_GROSEQ as HOMER_GROSEQ_BED } from '../../../../../modules/nf-core/subworkflow/homer_groseq' addParams( options: [ publish_dir:'test_homer_groseq' ] , maketagdirectory_options: [ args: '-format bed -forceBED' ] )
 
 workflow test_homer_groseq_bam {
     def input = []
