@@ -81,11 +81,12 @@ include { INPUT_CHECK           } from './modules/local/subworkflow/input_check'
 include { PREPARE_GENOME        } from './modules/local/subworkflow/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
 include { ALIGN_BWA             } from './modules/local/subworkflow/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from './modules/local/subworkflow/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
-include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
-// Local: Sub-workflows
 include { HOMER_GROSEQ          } from './modules/nf-core/subworkflow/homer_groseq.nf' addParams( options: [:]                          )
+include { GROHMM                } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
+include { GROHMM as GROHMM_META } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
+include { PICARD_MERGESAMFILES  } from './modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: [:]            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
 
 ////////////////////////////////////////////////////
@@ -170,6 +171,8 @@ workflow GROSEQ {
      */
 
     GROHMM ( ch_genome_bam )
+    // Run Meta
+    PICARD_MERGESAMFILES ( ch_genome_bam ).bam | GROHMM_META
 
     /*
      * MODULE: Pipeline reporting
