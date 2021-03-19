@@ -86,7 +86,6 @@ include { GROHMM                } from './modules/local/subworkflow/grohmm'     
 include { GROHMM as GROHMM_META } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
-include { PICARD_MERGESAMFILES  } from './modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: [:]            )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
 
 ////////////////////////////////////////////////////
@@ -171,8 +170,6 @@ workflow GROSEQ {
      */
 
     GROHMM ( ch_genome_bam )
-    // Run Meta
-    PICARD_MERGESAMFILES ( ch_genome_bam.collect() ).bam | GROHMM_META
 
     /*
      * MODULE: Pipeline reporting
