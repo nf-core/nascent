@@ -172,7 +172,7 @@ workflow GROSEQ {
 
     GROHMM ( ch_genome_bam )
     // Run Meta
-    PICARD_MERGESAMFILES ( ch_genome_bam ).bam | GROHMM_META
+    PICARD_MERGESAMFILES ( ch_genome_bam.collect() ).bam | GROHMM_META
 
     /*
      * MODULE: Pipeline reporting
