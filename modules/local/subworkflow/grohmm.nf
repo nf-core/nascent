@@ -2,12 +2,11 @@
  * TODO
  */
 
-params.makeucscfile_options      = [:]
+params.makeucscfile_options      = [args:'--strand=*'] // Collapses both strands, used as default value
 params.transcriptcalling_options = [:]
 params.parametertuning_options   = [:]
 
-// FIXME include { GROHMM_MAKEUCSCFILE as GROHMM_MAKEUCSCFILE_FORWARD } from '../process/grohmm/makeucscfile/main.nf'      addParams( options: params.makeucscfile_options, args:'--strand=+' )
-// FIXME include { GROHMM_MAKEUCSCFILE as GROHMM_MAKEUCSCFILE_REVERSE } from '../process/grohmm/makeucscfile/main.nf'      addParams( options: params.makeucscfile, args:'--strand=-' )
+include { GROHMM_MAKEUCSCFILE } from '../process/grohmm/makeucscfile/main.nf'      addParams( options: params.makeucscfile_options  )
 include {
     GROHMM_TRANSCRIPTCALLING as GROHMM_TRANSCRIPTCALLING_INDIVIDUAL
     GROHMM_TRANSCRIPTCALLING as GROHMM_TRANSCRIPTCALLING_META } from '../process/grohmm/transcriptcalling/main.nf' addParams( options: params.transcriptcalling_options )
@@ -23,6 +22,8 @@ workflow GROHMM {
     bam // channel: [ val(meta), [ bam ] ]
 
     main:
+    // Generate UCSC files
+    GROHMM_MAKEUCSCFILE ( bam )
     GROHMM_TRANSCRIPTCALLING_INDIVIDUAL ( bam )
 
     // Run Meta
