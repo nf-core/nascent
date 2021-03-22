@@ -2,7 +2,7 @@
  * TODO
  */
 
-params.makeucscfile_options      = [args:'--strand=*'] // Collapses both strands, used as default value
+params.makeucscfile_options      = [:] // Collapses both strands, used as default value
 params.transcriptcalling_options = [:]
 params.parametertuning_options   = [:]
 
