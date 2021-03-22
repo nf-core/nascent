@@ -157,19 +157,23 @@ workflow GROSEQ {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.first().ifEmpty(null))
     }
 
-    /*
-     * SUBWORKFLOW: Transcript indetification with homer
-     */
-    HOMER_GROSEQ(
-        ch_genome_bam,
-        PREPARE_GENOME.out.fasta
-    )
 
-    /*
-     * SUBWORKFLOW: Transcript indetification with GROHMM
-     */
-
-    GROHMM ( ch_genome_bam )
+    ch_homer_multiqc = Channel.empty()
+    if (params.transcript_identification == 'grohmm') {
+        /*
+         * SUBWORKFLOW: Transcript indetification with GROHMM
+         */
+        GROHMM ( ch_genome_bam )
+    } else if (params.transcript_identification == 'homer') {
+        /*
+         * SUBWORKFLOW: Transcript indetification with homer
+         */
+        HOMER_GROSEQ(
+            ch_genome_bam,
+            PREPARE_GENOME.out.fasta
+        )
+        ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
+    }
 
     /*
      * MODULE: Pipeline reporting
@@ -191,7 +195,7 @@ workflow GROSEQ {
         ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
         ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(GROHMM.out.transcripts.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
         MULTIQC (
             ch_multiqc_files.collect()
