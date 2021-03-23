@@ -20,10 +20,11 @@ workflow GROHMM {
     bam // channel: [ val(meta), [ bam ] ]
 
     main:
+    PICARD_MERGESAMFILES ( bam.collect() )
     // Generate UCSC files
-    PICARD_MERGESAMFILES ( bam.collect() ).bam | GROHMM_MAKEUCSCFILE
+    GROHMM_MAKEUCSCFILE ( PICARD_MERGESAMFILES.out.bam )
     // Run Meta
-    PICARD_MERGESAMFILES ( bam.collect() ).bam | GROHMM_TRANSCRIPTCALLING_META
+    GROHMM_TRANSCRIPTCALLING ( PICARD_MERGESAMFILES.out.bam )
 
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
