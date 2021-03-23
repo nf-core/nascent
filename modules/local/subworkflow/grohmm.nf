@@ -6,12 +6,10 @@ params.makeucscfile_options      = [:] // Collapses both strands, used as defaul
 params.transcriptcalling_options = [:]
 params.parametertuning_options   = [:]
 
-include { GROHMM_MAKEUCSCFILE } from '../process/grohmm/makeucscfile/main.nf'      addParams( options: params.makeucscfile_options  )
-include {
-    GROHMM_TRANSCRIPTCALLING as GROHMM_TRANSCRIPTCALLING_INDIVIDUAL
-    GROHMM_TRANSCRIPTCALLING as GROHMM_TRANSCRIPTCALLING_META } from '../process/grohmm/transcriptcalling/main.nf' addParams( options: params.transcriptcalling_options )
-include { PICARD_MERGESAMFILES                                } from '../../nf-core/software/picard/mergesamfiles/main'        addParams( options: [:]            )
-include { GROHMM_PARAMETERTUNING                              } from '../process/grohmm/parametertuning/main.nf'   addParams( options: params.parametertuning_options )
+include { GROHMM_MAKEUCSCFILE      } from '../process/grohmm/makeucscfile/main.nf'      addParams( options: params.makeucscfile_options  )
+include { GROHMM_TRANSCRIPTCALLING } from '../process/grohmm/transcriptcalling/main.nf' addParams( options: params.transcriptcalling_options )
+include { PICARD_MERGESAMFILES     } from '../../nf-core/software/picard/mergesamfiles/main'        addParams( options: [:]            )
+include { GROHMM_PARAMETERTUNING   } from '../process/grohmm/parametertuning/main.nf'   addParams( options: params.parametertuning_options )
 
 
 /*
@@ -23,13 +21,13 @@ workflow GROHMM {
 
     main:
     // Generate UCSC files
-    GROHMM_MAKEUCSCFILE ( bam )
-    GROHMM_TRANSCRIPTCALLING_INDIVIDUAL ( bam )
-
+    PICARD_MERGESAMFILES ( bam.collect() ).bam | GROHMM_MAKEUCSCFILE
     // Run Meta
     PICARD_MERGESAMFILES ( bam.collect() ).bam | GROHMM_TRANSCRIPTCALLING_META
 
     emit:
-    transcripts      = GROHMM_TRANSCRIPTCALLING_INDIVIDUAL.out.transcripts
-    meta_transcripts = GROHMM_TRANSCRIPTCALLING_META.out.transcripts
+    transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
+    wig         = GROHMM_MAKEUCSCFILE.out.wig
+    plus_wig    = GROHMM_MAKEUCSCFILE.out.minuswig
+    minus_wig   = GROHMM_MAKEUCSCFILE.out.pluswig
 }
