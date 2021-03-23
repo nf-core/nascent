@@ -44,6 +44,8 @@ def modules = params.modules.clone()
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 
+def subread_featurecounts_options  = modules['subread_featurecounts']
+
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
 
@@ -86,6 +88,7 @@ include { GROHMM                } from './modules/local/subworkflow/grohmm'     
 include { GROHMM as GROHMM_META } from './modules/local/subworkflow/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                } from './modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
+include { SUBREAD_FEATURECOUNTS } from './modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options    )
 include { MULTIQC               } from './modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
 
 ////////////////////////////////////////////////////
@@ -174,6 +177,11 @@ workflow GROSEQ {
         )
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
     }
+
+    SUBREAD_FEATURECOUNTS (
+        ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
+    )
+    ch_software_versions = ch_software_versions.mix(SUBREAD_FEATURECOUNTS.out.version.first().ifEmpty(null))
 
     /*
      * MODULE: Pipeline reporting
