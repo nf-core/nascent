@@ -1,4 +1,4 @@
-FROM nfcore/base:1.13.2
+FROM nfcore/base:1.13.3
 LABEL authors="Ignacio Tripodi, Margaret Gruca" \
       description="Docker image containing all software requirements for the nf-core/nascent pipeline"
 
