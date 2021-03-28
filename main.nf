@@ -69,13 +69,13 @@ workflow {
         /*
          * SUBWORKFLOW: Get SRA run information for public database ids, download and md5sum check FastQ files, auto-create samplesheet
          */
-        include { SRA_DOWNLOAD } from './sra_download' addParams( summary_params: summary_params )
+        include { SRA_DOWNLOAD } from './workflows/sra_download' addParams( summary_params: summary_params )
         SRA_DOWNLOAD ()
     } else {
         /*
          * SUBWORKFLOW: Run main nf-core/groseq analysis pipeline
          */
-        include { GROSEQ } from './groseq' addParams( summary_params: summary_params )
+        include { GROSEQ } from './workflows/groseq' addParams( summary_params: summary_params )
         GROSEQ ()
     }
 }
