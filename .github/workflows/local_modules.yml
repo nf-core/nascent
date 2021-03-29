@@ -13,7 +13,7 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          filters: '.github/filters.yml'
+          filters: 'tests/config/pytest_software.yml'
 
   test:
     runs-on: ubuntu-latest
