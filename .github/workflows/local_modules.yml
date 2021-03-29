@@ -16,7 +16,7 @@ jobs:
           filters: '.github/filters.yml'
 
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: ${{ matrix.tags }} ${{ matrix.profile }} ${{ matrix.nxf_version }}
     needs: changes
     if: needs.changes.outputs.modules != '[]'
@@ -47,13 +47,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextflow-
 
-      # NOTE This fails on self-hosted
-      # - name: Install Nextflow
-      #   env:
-      #     NXF_VER: ${{ matrix.nxf_version }}
-      #   run: |
-      #     wget -qO- get.nextflow.io | bash
-      #     sudo mv nextflow /usr/local/bin/
+      - name: Install Nextflow
+        env:
+          NXF_VER: ${{ matrix.nxf_version }}
+        run: |
+          wget -qO- get.nextflow.io | bash
+          sudo mv nextflow /usr/local/bin/
 
       - name: Set up Python
         uses: actions/setup-python@v2
