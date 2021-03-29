@@ -1,0 +1,13 @@
+- name: subworkflow grohmm
+  command: nextflow run ./tests/modules/local/subworkflow/grohmm/ -entry test_grohmm -c tests/config/nextflow.config
+  tags:
+    - grohmm
+  # TODO md5 sum these
+  files:
+   - path: output/grohmm/grohmm.transcripts.txt
+   - path: output/grohmm/grohmmfinal.transcripts.bed
+   - path: 'output/grohmm/grohmm .normalized.wig'
+   - path: 'output/grohmm/grohmm .collapsed.wig'
+   - path: 'output/grohmm/grohmm .wig'
+   - path: 'output/grohmm/grohmm .minus.wig'
+   - path: 'output/grohmm/grohmm .plus.wig'
