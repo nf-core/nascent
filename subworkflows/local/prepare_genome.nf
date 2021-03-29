@@ -12,16 +12,16 @@ include {
     GUNZIP as GUNZIP_GTF
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED
-    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../process/gunzip'               addParams( options: params.genome_options       )
-include { GTF2BED                     } from '../process/gtf2bed'              addParams( options: params.genome_options       )
-include { CAT_ADDITIONAL_FASTA        } from '../process/cat_additional_fasta' addParams( options: params.genome_options       )
-include { GTF_GENE_FILTER             } from '../process/gtf_gene_filter'      addParams( options: params.genome_options       )
-include { GET_CHROM_SIZES             } from '../process/get_chrom_sizes'      addParams( options: params.genome_options       )
-include { UNTAR as UNTAR_BWA_INDEX    } from '../process/untar'                addParams( options: params.bwa_index_options   )
+    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/local/process/gunzip'               addParams( options: params.genome_options       )
+include { GTF2BED                     } from '../../modules/local/process/gtf2bed'              addParams( options: params.genome_options       )
+include { CAT_ADDITIONAL_FASTA        } from '../../modules/local/process/cat_additional_fasta' addParams( options: params.genome_options       )
+include { GTF_GENE_FILTER             } from '../../modules/local/process/gtf_gene_filter'      addParams( options: params.genome_options       )
+include { GET_CHROM_SIZES             } from '../../modules/local/process/get_chrom_sizes'      addParams( options: params.genome_options       )
+include { UNTAR as UNTAR_BWA_INDEX    } from '../../modules/local/process/untar'                addParams( options: params.bwa_index_options   )
 
-include { GFFREAD                     } from '../../nf-core/software/gffread/main'   addParams( options: params.gffread_options      )
-include { BWA_INDEX                   } from '../../nf-core/software/bwa/index/main' addParams( options: params.bwa_index_options )
-include { BWAMEM2_INDEX               } from '../../nf-core/software/bwamem2/index/main' addParams( options: params.bwa_index_options )
+include { GFFREAD                     } from '../../modules/nf-core/software/gffread/main'   addParams( options: params.gffread_options      )
+include { BWA_INDEX                   } from '../../modules/nf-core/software/bwa/index/main' addParams( options: params.bwa_index_options )
+include { BWAMEM2_INDEX               } from '../../modules/nf-core/software/bwamem2/index/main' addParams( options: params.bwa_index_options )
 
 workflow PREPARE_GENOME {
     take:

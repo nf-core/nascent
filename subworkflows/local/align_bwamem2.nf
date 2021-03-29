@@ -6,9 +6,9 @@ params.index_options    = [:]
 params.align_options    = [:]
 params.samtools_options = [:]
 
-include { UNTAR             } from '../process/untar'                            addParams( options: params.index_options    )
-include { BWAMEM2_MEM       } from '../../nf-core/software/bwamem2/mem/main'         addParams( options: params.align_options    )
-include { BAM_SORT_SAMTOOLS } from '../../nf-core/subworkflow/bam_sort_samtools' addParams( options: params.samtools_options )
+include { UNTAR             } from '../../modules/local/process/untar'               addParams( options: params.index_options    )
+include { BWAMEM2_MEM       } from '../../modules/nf-core/software/bwamem2/mem/main' addParams( options: params.align_options    )
+include { BAM_SORT_SAMTOOLS } from '../../subworkflows/nf-core/bam_sort_samtools'   addParams( options: params.samtools_options )
 
 workflow ALIGN_BWAMEM2 {
     take:
