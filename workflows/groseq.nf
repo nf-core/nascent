@@ -87,9 +87,11 @@ include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
 include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 include { GROHMM as GROHMM_META } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
-include { FASTQC                } from '../modules/nf-core/software/fastqc/main'        addParams( options: modules['fastqc']            )
-include { SUBREAD_FEATURECOUNTS } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options    )
-include { MULTIQC               } from '../modules/nf-core/software/multiqc/main'       addParams( options: multiqc_options              )
+include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']             )
+include { BED2SAF                                                  } from '../modules/local/process/bed2saf'                       addParams(                                        )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options )
+include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options               )
 
 ////////////////////////////////////////////////////
 /* --           RUN MAIN WORKFLOW              -- */
@@ -167,6 +169,10 @@ workflow GROSEQ {
          * SUBWORKFLOW: Transcript indetification with GROHMM
          */
         GROHMM ( ch_genome_bam )
+
+        SUBREAD_FEATURECOUNTS_PREDICTED (
+            ch_genome_bam.combine( BED2SAF ( GROHMM.out.bed ) )
+        )
     } else if (params.transcript_identification == 'homer') {
         /*
          * SUBWORKFLOW: Transcript indetification with homer
@@ -178,10 +184,10 @@ workflow GROSEQ {
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
     }
 
-    SUBREAD_FEATURECOUNTS (
+    SUBREAD_FEATURECOUNTS_GENE (
         ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
     )
-    ch_software_versions = ch_software_versions.mix(SUBREAD_FEATURECOUNTS.out.version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.version.first().ifEmpty(null))
 
     /*
      * MODULE: Pipeline reporting
