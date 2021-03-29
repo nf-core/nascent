@@ -8,8 +8,8 @@ include { HOMER_GROSEQ as HOMER_GROSEQ_BED } from '../../../../subworkflows/nf-c
 workflow test_homer_groseq_bam {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/genomics/sarscov2/bam/test_paired_end.sorted.bam', checkIfExists: true)]]
-    def fasta = [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/genomics/sarscov2/fasta/test_genome.fasta', checkIfExists: true) ]
+             [ file(params.test_data['nf-core']['test_paired_end_sorted_bam'], checkIfExists: true)]]
+    def fasta = [ file(params.test_data['nf-core']['genome_fasta'], checkIfExists: true) ]
 
     HOMER_GROSEQ_BAM ( input, fasta )
 }
@@ -17,8 +17,8 @@ workflow test_homer_groseq_bam {
 workflow test_homer_groseq_bed {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/genomics/sarscov2/bed/test.bed', checkIfExists: true)]]
-    def fasta = [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/genomics/sarscov2/fasta/test_genome.fasta', checkIfExists: true) ]
+             [ file(params.test_data['nf-core']['bed']['test_bed'], checkIfExists: true)]]
+    def fasta = [ file(params.test_data['nf-core']['genome_fasta'], checkIfExists: true) ]
 
     HOMER_GROSEQ_BED ( input, fasta )
 }

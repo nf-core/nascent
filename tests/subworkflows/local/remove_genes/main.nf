@@ -10,10 +10,10 @@ workflow test_remove_genes {
     def reads = []
     def refseq = []
     def chromsizes  = []
-    reads = [  file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/A.bed', checkIfExists: true) ]
+    reads = [ file(params.test_data['nf-core']['bed']['test_bed'], checkIfExists: true) ]
     refseq = [ [ id:'test'],
-               file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/B.bed', checkIfExists: true) ]
-    chromsizes = [ file('https://raw.githubusercontent.com/nf-core/modules/master/tests/data/bed/genome.sizes', checkIfExists: true) ]
+              file(params.test_data['nf-core']['bed']['test2_bed'] checkIfExists: true) ]
+    chromsizes = [ file(params.test_data['nf-core']['genome_sizes'], checkIfExists: true) ]
 
     REMOVE_GENES         ( reads,refseq,chromsizes )
 }

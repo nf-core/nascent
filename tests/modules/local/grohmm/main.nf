@@ -9,23 +9,23 @@ include { GROHMM_PARAMETERTUNING } from '../../../../modules/local/process/grohm
 workflow test_grohmm_makeucscfile {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
+             [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
+              file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
     GROHMM_MAKEUCSCFILE ( input )
 }
 
 workflow test_grohmm_transcriptcalling {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
+             [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
+              file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
     GROHMM_TRANSCRIPTCALLING ( input )
 }
 
 workflow test_grohmm_parametertuning {
     def input = []
     input = [[ id: 'test' ],
-             [ file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S0mR1.bam?raw=true', checkIfExists: true),
-              file('https://github.com/Kraus-Lab/groHMM/blob/master/inst/extdata/S40mR1.bam?raw=true', checkIfExists: true) ]]
+             [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
+              file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
     GROHMM_PARAMETERTUNING ( input )
 }
