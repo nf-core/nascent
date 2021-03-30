@@ -45,6 +45,8 @@ def publish_genome_options = params.save_reference ? [publish_dir: 'genome']    
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 
 def subread_featurecounts_options  = modules['subread_featurecounts']
+def subread_featurecounts_predicted_options  = modules['subread_featurecounts']
+subread_featurecounts_predicted_options['publish_dir']  = "${params.aligner}/featurecounts/predicted"
 
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
@@ -87,11 +89,11 @@ include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
 include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 include { GROHMM as GROHMM_META } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
-include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']             )
-include { BED2SAF                                                  } from '../modules/local/process/bed2saf'                       addParams(                                        )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options )
-include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options               )
+include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
+include { BED2SAF                                                  } from '../modules/local/process/bed2saf'                       addParams(                                                  )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
+include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options                         )
 
 ////////////////////////////////////////////////////
 /* --           RUN MAIN WORKFLOW              -- */
