@@ -2,10 +2,16 @@
 import pandas as pd
 import argparse
 
+
 def bed2saf(bed, output):
-    bed = pd.read_csv(bed, sep='\t')
+    bed = pd.read_csv(bed, sep="\t")
     bed.columns = ["Chr", "Start", "End", "GeneID", "frame", "Strand"]
-    bed.to_csv(output, sep='\t',columns=["GeneID", "Chr", "Start", "End", "Strand"],index=False)
+    bed.to_csv(
+        output,
+        sep="\t",
+        columns=["GeneID", "Chr", "Start", "End", "Strand"],
+        index=False,
+    )
 
 
 if __name__ == "__main__":
