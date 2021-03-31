@@ -28,6 +28,6 @@ process BED2SAF {
 
     script: // This script is bundled with the pipeline, in nf-core/chipseq/bin/
     """
-    bed2saf $bed > ${bed.baseName}.saf
+    bed2saf.py -o ${bed.baseName}.saf $bed
     """
 }

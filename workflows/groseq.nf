@@ -44,9 +44,11 @@ def modules = params.modules.clone()
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 
-def subread_featurecounts_options  = modules['subread_featurecounts']
-def subread_featurecounts_predicted_options  = modules['subread_featurecounts']
-subread_featurecounts_predicted_options['publish_dir']  = "${params.aligner}/featurecounts/predicted"
+def subread_featurecounts_options                      = modules['subread_featurecounts']
+def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
+def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
+subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/featurecounts/predicted"
+subread_featurecounts_predicted_options.args          += " -F \"SAF\""
 
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
