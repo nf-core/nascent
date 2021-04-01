@@ -6,7 +6,7 @@ params.index_options    = [:]
 params.align_options    = [:]
 params.samtools_options = [:]
 
-include { UNTAR             } from '../../modules/local/process/untar'             addParams( options: params.index_options    )
+include { UNTAR             } from '../../modules/local/untar'             addParams( options: params.index_options    )
 include { BWA_INDEX         } from '../../modules/nf-core/software/bwa/index/main' addParams( options: params.index_options    )
 include { BWA_MEM           } from '../../modules/nf-core/software/bwa/mem/main'   addParams( options: params.align_options    )
 include { BAM_SORT_SAMTOOLS } from '../../subworkflows/nf-core/bam_sort_samtools'  addParams( options: params.samtools_options )

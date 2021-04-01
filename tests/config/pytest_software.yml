@@ -1,5 +1,5 @@
 grohmm:
-  - modules/local/process/grohmm/**
+  - modules/local/grohmm/**
   - subworkflows/local/grohmm.nf
   - tests/modules/local/grohmm/**
 
