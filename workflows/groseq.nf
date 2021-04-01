@@ -48,7 +48,7 @@ def subread_featurecounts_options                      = modules['subread_featur
 def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
 def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
 subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/featurecounts/predicted"
-subread_featurecounts_predicted_options.args          += " -F \"SAF\""
+subread_featurecounts_predicted_options.args           = " -F \"SAF\""
 
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
