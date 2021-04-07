@@ -44,6 +44,9 @@ def modules = params.modules.clone()
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 
+def cat_fastq_options          = modules['cat_fastq']
+if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
+
 def subread_featurecounts_options                      = modules['subread_featurecounts']
 def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
 def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
@@ -92,6 +95,7 @@ include { GROHMM                } from '../subworkflows/local/grohmm'           
 include { GROHMM as GROHMM_META } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
+include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
 include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
@@ -120,11 +124,34 @@ workflow GROSEQ {
     INPUT_CHECK ( 
         ch_input
     )
+    .map {
+        meta, fastq ->
+            meta.id = meta.id.split('_')[0..-2].join('_')
+            [ meta, fastq ] }
+    .groupTuple(by: [0])
+    .branch {
+        meta, fastq ->
+            single  : fastq.size() == 1
+                return [ meta, fastq.flatten() ]
+            multiple: fastq.size() > 1
+                return [ meta, fastq.flatten() ]
+    }
+    .set { ch_fastq }
+
+    /*
+     * MODULE: Concatenate FastQ files from same sample if required
+     */
+    CAT_FASTQ (
+        ch_fastq.multiple
+    )
+    .mix(ch_fastq.single)
+    .set { ch_cat_fastq }
+
     /*
      * MODULE: Run FastQC
      */
     FASTQC (
-        INPUT_CHECK.out.reads
+        ch_cat_fastq
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
     
@@ -142,7 +169,7 @@ workflow GROSEQ {
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         ALIGN_BWA(
-            INPUT_CHECK.out.reads,
+            ch_cat_fastq,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWA.out.bam
@@ -154,7 +181,7 @@ workflow GROSEQ {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.samtools_version.first().ifEmpty(null))
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
-            INPUT_CHECK.out.reads,
+            ch_cat_fastq,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWAMEM2.out.bam
