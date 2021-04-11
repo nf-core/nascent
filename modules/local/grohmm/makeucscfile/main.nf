@@ -32,7 +32,6 @@ process GROHMM_MAKEUCSCFILE {
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}.${options.suffix}" : "${meta.id}"
     """
     makeucscfile.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
 

@@ -46,9 +46,9 @@ galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED 
 readsfile <- GRanges(galigned)
 
 # Generate normalized wig files with the number of reads normalizing -> ALLOW FOR USER INPUT, default has no normalization
-writeWiggle(reads= readsfile, file = paste(opt$outprefix,".plus.wig"), strand ="+", norm = opt$norm)
-writeWiggle(reads= readsfile, file = paste(opt$outprefix,".minus.wig"), strand ="-", norm = opt$norm)
-writeWiggle(reads= readsfile, file = paste(opt$outprefix,".collapsed.wig"), strand ="*", norm = opt$norm)
+writeWiggle(reads= readsfile, file = paste0(opt$outprefix,".plus.wig"), strand ="+", norm = opt$norm)
+writeWiggle(reads= readsfile, file = paste0(opt$outprefix,".minus.wig"), strand ="-", norm = opt$norm)
+writeWiggle(reads= readsfile, file = paste0(opt$outprefix,".collapsed.wig"), strand ="*", norm = opt$norm)
 
 ## CITE PACKAGES USED
 citation("groHMM")

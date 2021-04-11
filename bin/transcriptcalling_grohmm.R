@@ -65,7 +65,7 @@ mcols(kgConsensus)$type <- "gene"
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
 # Save as txt file
-capture.output(e$eval, file = paste(opt$outprefix, ".eval.txt", header = TRUE))
+capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt", header = TRUE))
 
 # TUNING IN A DIFFERENT SCRIPT
 
@@ -83,9 +83,9 @@ txBroken <- c(bPlus, bMinus)
 txFinal <- combineTranscripts(txBroken, kgConsensus)
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
 export(txFinal, con = paste(opt$outprefix,"final.transcripts.bed", sep=""))
-capture.output(tdFinal, file = paste(opt$outprefix, ".tdFinal.txt", header = TRUE))
+capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt", header = TRUE))
 #Output plot
-jpeg(file = paste(opt$outprefix, ".tdplot.jpg", header = TRUE))
+jpeg(file = paste0(opt$outprefix, ".tdplot.jpg", header = TRUE))
 # 2. Create the plot
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
 # 3. Close the file
