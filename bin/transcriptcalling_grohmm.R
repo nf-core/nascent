@@ -12,13 +12,15 @@ library(edgeR)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(optparse)
 library(GenomicAlignments)
+library(RMariaDB)
 
 option_list <- list(
     make_option(c("-i", "--bam_file"      ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
-    make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
-    make_option(c("-l", "--ltprobb" ), type="integer", default=-200         , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
-    make_option(c("-u", "--uts"         ), type="integer", default=5         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
+    make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."),                     
+    make_option(c("-l", "--ltprobb"       ), type="integer", default=-200      , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
+    make_option(c("-u", "--uts"           ), type="integer", default=5         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
+    make_option(c("-g", "--genome"        ), type="character", default='hg38'  , metavar="string" , help="Reference UCSC genome"),        
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
 )
 
@@ -46,15 +48,15 @@ setwd(opt$outdir)
 galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
 readsfile <- GRanges(galigned)
 
-#  make_option(c("-i", "--ref_transcript"), type="character", default=NULL    , metavar="path"   , help= "Reference transcript annotations."),
-
 # Call annotations > DEFAULT VALUES ASSIGNED
 hmmResult <- detectTranscripts(readsfile, LtProbB=opt$ltprobb, UTS=opt$uts, threshold=1)
 txHMM <- hmmResult$transcripts
 write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
-# TODO make reproducible, ask for sample file
-# Input transcript annotations > CURRENTLY JUST USES R LIBRARY > can be changed to generate from UCSC
-kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+
+# Input transcript annotations 
+kgdb <- makeTxDbFromUCSC(genome=opt$genome, tablename="refGene")
+saveDb(kgdb, file="RefGene.sqlite")
+kgdb <- loadDb("RefGene.sqlite")
 kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(kgtx, keytype="gene_id", mc.cores=opt$cores)
@@ -65,7 +67,7 @@ mcols(kgConsensus)$type <- "gene"
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
 # Save as txt file
-capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt", header = TRUE))
+capture.output(e$eval, file = paste(opt$outprefix, ".eval.txt"))
 
 # TUNING IN A DIFFERENT SCRIPT
 

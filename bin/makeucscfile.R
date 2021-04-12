@@ -12,6 +12,7 @@ library(edgeR)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(optparse)
 library(GenomicAlignments)
+library(RMariaDB)
 
 option_list <- list(
     make_option(c("-i", "--bam_file"      ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
