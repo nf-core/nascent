@@ -13,7 +13,7 @@ include { GROHMM_PARAMETERTUNING   } from '../../modules/local/grohmm/parametert
 
 
 /*
- * Test with forward strand
+ * Note meta refers to all merged files
  */
 workflow GROHMM {
     take:
@@ -21,14 +21,14 @@ workflow GROHMM {
 
     main:
     // FIXME
-    // ch_meta = Channel.value([[id: 'meta', single_end:false ]])
-    // meta_input = ch_meta.concat(  bam.collect{it[1]}.flatten() )
-    // PICARD_MERGESAMFILES ( meta_input )
+    ch_meta = Channel.empty()
+    ch_meta = ch_meta.mix(bam).collect()
+    PICARD_MERGESAMFILES ( ch_meta )
 
     // Generate UCSC files
-    GROHMM_MAKEUCSCFILE ( bam )
+    GROHMM_MAKEUCSCFILE ( PICARD_MERGESAMFILES.out.bam )
     // Run Meta
-    GROHMM_TRANSCRIPTCALLING ( bam )
+    GROHMM_TRANSCRIPTCALLING ( PICARD_MERGESAMFILES.out.bam )
 
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
@@ -37,3 +37,4 @@ workflow GROHMM {
     plus_wig    = GROHMM_MAKEUCSCFILE.out.minuswig
     minus_wig   = GROHMM_MAKEUCSCFILE.out.pluswig
 }
+
