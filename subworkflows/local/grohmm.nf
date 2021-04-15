@@ -21,10 +21,19 @@ workflow GROHMM {
     bam // channel: [ val(meta), [ bam ] ]
 
     main:
-    // FIXME
-    ch_meta = Channel.empty()
-    ch_meta = ch_meta.mix(bam).collect()
-    PICARD_MERGESAMFILES ( ch_meta )
+    bam
+        .map {
+            meta, bam ->
+            fmeta = meta.findAll { it.key != 'read_group' }
+            fmeta.id = "meta"
+            [ fmeta, bam ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { meta_bam }
+
+    PICARD_MERGESAMFILES (
+        meta_bam
+    )
 
     // Generate UCSC files
     GROHMM_MAKEUCSCFILE ( PICARD_MERGESAMFILES.out.bam )
