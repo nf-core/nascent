@@ -91,8 +91,7 @@ include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'   
 include { ALIGN_BWA             } from '../subworkflows/local/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from '../subworkflows/local/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
-include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
-include { GROHMM as GROHMM_META } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
+include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( picard_mergesamfiles_options: modules['picard_mergesamfiles']                          )
 // nf-core/modules: Modules
 include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
 include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
