@@ -32,6 +32,7 @@ process SAMPLESHEET_CHECK {
 def get_samplesheet_paths(LinkedHashMap row) {
     def meta = [:]
     meta.id           = row.sample
+    meta.group        = row.group
     meta.single_end   = row.single_end.toBoolean()
     meta.strandedness = row.strandedness
 

@@ -57,7 +57,7 @@ def check_samplesheet(file_in, file_out):
         ## Check header
         MIN_COLS = 3
         # TODO nf-core: Update the column names for the input samplesheet
-        HEADER = ["group", "replicate", "fastq_1", "fastq_2", "strandedness"]
+        HEADER = ["sample", "replicate", "fastq_1", "fastq_2", "strandedness","group"]
         header = [x.strip('"') for x in fin.readline().strip().split(",")]
         if header[: len(HEADER)] != HEADER:
             print("ERROR: Please check samplesheet header -> {} != {}".format(",".join(header), ",".join(HEADER)))
@@ -83,12 +83,12 @@ def check_samplesheet(file_in, file_out):
                 )
 
             ## Check sample name entries
-            sample, replicate, fastq_1, fastq_2, strandedness = lspl[: len(HEADER)]
+            sample, replicate, fastq_1, fastq_2, strandedness, group = lspl[: len(HEADER)]
             if sample:
                 if sample.find(" ") != -1:
-                    print_error("Group entry contains spaces!", "Line", line)
+                    print_error("Sample entry contains spaces!", "Line", line)
             else:
-                print_error("Group entry has not been specified!", "Line", line)
+                print_error("Sample entry has not been specified!", "Line", line)
 
             ## Check replicate entry is integer
             if not replicate.isdigit():
@@ -115,12 +115,19 @@ def check_samplesheet(file_in, file_out):
             else:
                 print_error(f"Strandedness has not been specified! Must be one of {', '.join(strandednesses)}.", 'Line', line)
 
+            ## Check group
+            if group:
+                if group.find(" ") != -1:
+                    print_error("Group entry contains spaces!", "Line", line)
+            else:
+                print_error("Group entry has not been specified!", "Line", line)
+
             ## Auto-detect paired-end/single-end
             sample_info = []  ## [single_end, fastq_1, fastq_2]
             if sample and fastq_1 and fastq_2:  ## Paired-end short reads
-                sample_info = ["0", fastq_1, fastq_2, strandedness]
+                sample_info = ["0", fastq_1, fastq_2, strandedness, group]
             elif sample and fastq_1 and not fastq_2:  ## Single-end short reads
-                sample_info = ["1", fastq_1, fastq_2, strandedness]
+                sample_info = ["1", fastq_1, fastq_2, strandedness, group]
             else:
                 print_error("Invalid combination of columns provided!", "Line", line)
             ## Create sample mapping dictionary = {sample: {replicate : [ single_end, fastq_1, fastq_2 ]}}
@@ -140,7 +147,7 @@ def check_samplesheet(file_in, file_out):
         make_dir(out_dir)
         with open(file_out, "w") as fout:
 
-            fout.write(",".join(["sample", "single_end", "fastq_1", "fastq_2", "strandedness"]) + "\n")
+            fout.write(",".join(["sample", "single_end", "fastq_1", "fastq_2", "strandedness", "group"]) + "\n")
             for sample in sorted(sample_run_dict.keys()):
 
                 ## Check that replicate ids are in format 1..<NUM_REPS>
