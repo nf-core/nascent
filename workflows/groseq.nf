@@ -91,11 +91,12 @@ include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'   
 include { ALIGN_BWA             } from '../subworkflows/local/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from '../subworkflows/local/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
-include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( picard_mergesamfiles_options: modules['picard_mergesamfiles']                          )
+include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
 include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
 include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
+include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
 include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options                         )
@@ -192,13 +193,25 @@ workflow GROSEQ {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.first().ifEmpty(null))
     }
 
+    ch_genome_bam.map {
+        meta, bam ->
+        fmeta = meta.findAll { it.key != 'read_group' }
+        fmeta.id = "meta"
+        [ fmeta, bam ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { meta_bam }
+
+    PICARD_MERGESAMFILES (
+        meta_bam
+    )
 
     ch_homer_multiqc = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
         /*
          * SUBWORKFLOW: Transcript indetification with GROHMM
          */
-        GROHMM ( ch_genome_bam )
+        GROHMM ( PICARD_MERGESAMFILES.out.bam )
 
         SUBREAD_FEATURECOUNTS_PREDICTED (
             ch_genome_bam.combine( BED2SAF ( GROHMM.out.bed ) )
