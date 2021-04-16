@@ -91,12 +91,14 @@ include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'   
 include { ALIGN_BWA             } from '../subworkflows/local/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from '../subworkflows/local/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
-include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
+include { GROHMM as GROHMM_GROUP
+          GROHMM as GROHMM_META } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 // nf-core/modules: Modules
 include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
 include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
 include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
-include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
+include { PICARD_MERGESAMFILES as PICARD_MERGESAMFILES_GROUP       } from '../modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
+include { PICARD_MERGESAMFILES as PICARD_MERGESAMFILES_META        } from '../modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
 include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options                         )
@@ -193,6 +195,22 @@ workflow GROSEQ {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.first().ifEmpty(null))
     }
 
+
+    // Merge biological replicates for Transcript Identification
+    ch_genome_bam.map {
+        meta, bam ->
+        fmeta = meta.findAll { it.key != 'read_group' }
+        fmeta.id = fmeta.id.split('_')[0..-2].join('_')
+        [ fmeta, bam ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { group_bam }
+
+    PICARD_MERGESAMFILES_GROUP (
+        group_bam
+    )
+
+    // Create meta group
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
@@ -202,7 +220,7 @@ workflow GROSEQ {
         .map { it ->  [ it[0], it[1].flatten() ] }
         .set { meta_bam }
 
-    PICARD_MERGESAMFILES (
+    PICARD_MERGESAMFILES_META (
         meta_bam
     )
 
@@ -211,10 +229,11 @@ workflow GROSEQ {
         /*
          * SUBWORKFLOW: Transcript indetification with GROHMM
          */
-        GROHMM ( PICARD_MERGESAMFILES.out.bam )
+        GROHMM_GROUP ( PICARD_MERGESAMFILES_GROUP.out.bam )
+        GROHMM_META ( PICARD_MERGESAMFILES_META.out.bam )
 
         SUBREAD_FEATURECOUNTS_PREDICTED (
-            ch_genome_bam.combine( BED2SAF ( GROHMM.out.bed ) )
+            PICARD_MERGESAMFILES_GROUP.out.bam.combine( BED2SAF ( GROHMM_GROUP.out.bed ) )
         )
     } else if (params.transcript_identification == 'homer') {
         /*
