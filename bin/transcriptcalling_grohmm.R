@@ -16,18 +16,18 @@ library(RMariaDB)
 
 option_list <- list(
     make_option(c("-i", "--bam_file"      ), type="character", default=NULL    , metavar="path"   , help="Time course of GRO SEQ data in bam files."),
-    make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."),                     
-    make_option(c("-l", "--ltprobb"       ), type="integer", default=-200      , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
-    make_option(c("-u", "--uts"           ), type="integer", default=5         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
+    make_option(c("-t", "--tuning_file"      ), type="character", default=NULL    , metavar="path"   , help="File with tuning parameters and error rates."),
+    make_option(c("-o", "--outdir"        ), type="character", default='./'    , metavar="path"   , help="Output directory."                                                                      ),
+    make_option(c("-l", "--ltprobb" ), type="integer", default=-200         , metavar="integer", help="Log-transformed transition probability of switching from transcribed state to non-transcribed state"                                                                  ),
+    make_option(c("-u", "--uts"         ), type="integer", default=5         , metavar="integer", help="Variance of the emission probability for reads in the non-transcribed state, respectively."                                                                  ),
     make_option(c("-p", "--outprefix"     ), type="character", default='grohmm', metavar="string" , help="Output prefix."                                                                         ),
-    make_option(c("-g", "--genome"        ), type="character", default='hg38'  , metavar="string" , help="Reference UCSC genome"),        
+    make_option(c("-g", "--genome"        ), type="character", default='hg38'  , metavar="string" , help="Reference UCSC genome"),
     make_option(c("-c", "--cores"         ), type="integer"  , default=1       , metavar="integer", help="Number of cores."                                                                       )
 )
 
 opt_parser <- OptionParser(option_list=option_list)
 opt        <- parse_args(opt_parser)
 
-print(opt$bam_file)
 
 if (is.null(opt$bam_file)){
     print_help(opt_parser)
@@ -49,11 +49,21 @@ galigned <- readGAlignments(BamFile(opt$bam_file, asMates=TRUE)) # CHANGE BASED 
 readsfile <- GRanges(galigned)
 
 # Call annotations > DEFAULT VALUES ASSIGNED
-hmmResult <- detectTranscripts(readsfile, LtProbB=opt$ltprobb, UTS=opt$uts, threshold=1)
+if (is.null(opt$tuning_file)){
+	hmmResult <- detectTranscripts(readsfile, LtProbB=opt$ltprobb, UTS=opt$uts, threshold=1) #Uses either inputted or default values
+} else {
+	tune <- read.csv(opt$tuning_file)
+	# Minimum error
+	uts = tune[which.min(tune$total),"UTS"]
+	ltprobb = tune[which.min(tune$total),"LtProbB"]
+        hmmResult <- detectTranscripts(readsfile, LtProbB=ltprobb, UTS = uts, threshold = 1)
+
+}
+
 txHMM <- hmmResult$transcripts
 write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
 
-# Input transcript annotations 
+# Input transcript annotations
 kgdb <- makeTxDbFromUCSC(genome=opt$genome, tablename="refGene")
 saveDb(kgdb, file="RefGene.sqlite")
 kgdb <- loadDb("RefGene.sqlite")
@@ -67,7 +77,11 @@ mcols(kgConsensus)$type <- "gene"
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
 # Save as txt file
+<<<<<<< HEAD
 capture.output(e$eval, file = paste(opt$outprefix, ".eval.txt"))
+=======
+capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt"))
+>>>>>>> Added param tuning processes
 
 # TUNING IN A DIFFERENT SCRIPT
 
@@ -84,12 +98,18 @@ bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand="-")
 txBroken <- c(bPlus, bMinus)
 txFinal <- combineTranscripts(txBroken, kgConsensus)
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
+<<<<<<< HEAD
 export(txFinal, con = paste(opt$outprefix,".transcripts.bed", sep=""))
 capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt", header = TRUE))
+=======
+export(txFinal, con = paste(opt$outprefix,"final.transcripts.bed", sep=""))
+capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt"))
+>>>>>>> Added param tuning processes
 #Output plot
-jpeg(file = paste0(opt$outprefix, ".tdplot.jpg", header = TRUE))
+jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
 # 2. Create the plot
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
+
 # 3. Close the file
 dev.off()
 

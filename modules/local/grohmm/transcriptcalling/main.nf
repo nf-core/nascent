@@ -21,6 +21,7 @@ process GROHMM_TRANSCRIPTCALLING{
 
     input:
     tuple val(meta), path(bam)
+    path(tuning)
 
     output:
     path "*.transcripts.txt"          , optional:true    , emit: transcripts
@@ -35,7 +36,7 @@ process GROHMM_TRANSCRIPTCALLING{
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    transcriptcalling_grohmm.R --bam_file ${bam} --outprefix ${prefix} --outdir ./ --cores $task.cpus $options.args
+    transcriptcalling_grohmm.R --bam_file ${bam} --tuning_file ${tuning} --outprefix ${prefix} --outdir ./ --cores $task.cpus $options.args
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
 }

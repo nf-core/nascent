@@ -84,7 +84,7 @@ evals <- mclapply(seq_len(nrow(tune)), function(x) {
         }, mc.cores=opt$cores,  mc.silent=TRUE)
 
 tune <- cbind(tune, do.call(rbind, evals))
-write.csv(tune, file = paste(opt$outprefix,".tuning.csv", row.names=F, col.names=T))
+write.csv(tune, file = paste0(opt$outprefix,".tuning.csv"))
 
 
 # CITE PACKAGES USED

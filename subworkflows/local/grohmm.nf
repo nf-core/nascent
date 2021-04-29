@@ -22,7 +22,8 @@ workflow GROHMM {
     // Generate UCSC files
     GROHMM_MAKEUCSCFILE ( bam )
     // Run Meta
-    GROHMM_TRANSCRIPTCALLING ( bam )
+    GROHMM_PARAMETERTUNING (bam, file("${launchDir}/modules/local/grohmm/test/tune.csv") )
+    GROHMM_TRANSCRIPTCALLING ( bam, GROHMM_PARAMETERTUNING.out.tuning )
 
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
