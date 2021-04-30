@@ -29,6 +29,8 @@ process SUBREAD_FEATURECOUNTS {
     script:
     def software   = getSoftwareName(task.process)
     def prefix     = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
+    // HACK
+    def ann_name = "${annotation.simpleName}"
     def paired_end = meta.single_end ? '' : '-p'
 
     def strandedness = 0
@@ -44,7 +46,7 @@ process SUBREAD_FEATURECOUNTS {
         -T $task.cpus \\
         -a $annotation \\
         -s $strandedness \\
-        -o ${prefix}.featureCounts.txt \\
+        -o ${prefix}_${ann_name}.featureCounts.txt \\
         ${bams.join(' ')}
 
     echo \$(featureCounts -v 2>&1) | sed -e "s/featureCounts v//g" > ${software}.version.txt
