@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0dev]
 
--   Updated Nextflow version to `v21.04.0-edge` (see [nextflow#572](https://github.com/nextflow-io/nextflow/issues/1964)).
+-   Updated Nextflow version to `v21.04.0` (see [nextflow#572](https://github.com/nextflow-io/nextflow/issues/1964)).
 
 ## [1.0dev] - [date]
 
