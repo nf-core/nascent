@@ -34,14 +34,15 @@ process GROHMM_TRANSCRIPTCALLING{
 
     script:
     def software = getSoftwareName(task.process)
+    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     if (params.with_tuning) {
    	 """
- 	 transcriptcalling_grohmm.R --bam_file ${bam} --tuning_file ${tuning} --outdir ./ --cores $task.cpus $options.args
+ 	 transcriptcalling_grohmm.R --bam_file ${bam} --tuning_file ${tuning} --outprefix ${prefix} --outdir ./ --cores $task.cpus $options.args
    	 Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
          """
     } else {
          """
-         transcriptcalling_grohmm.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
+         transcriptcalling_grohmm.R --bam_file ${bam} --outprefix ${prefix} --outdir ./ --cores $task.cpus $options.args
          Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
          """
     }
