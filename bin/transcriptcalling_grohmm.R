@@ -59,7 +59,6 @@ if (is.null(opt$tuning_file)) {
 }
 
 txHMM <- hmmResult$transcripts
-<<<<<<< HEAD
 write.table(txHMM, file = paste(opt$outprefix,".transcripts.txt", sep=""))
 
 # Input transcript annotations
@@ -67,13 +66,6 @@ kgdb <- makeTxDbFromUCSC(genome=opt$genome, tablename="refGene")
 saveDb(kgdb, file="RefGene.sqlite")
 kgdb <- loadDb("RefGene.sqlite")
 kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
-=======
-write.table(txHMM, file = paste(opt$outprefix, ".transcripts.txt", sep = ""))
-# TODO make reproducible, ask for sample file
-# Input transcript annotations > CURRENTLY JUST USES R LIBRARY > can be changed to generate from UCSC
-kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-kgtx <- transcripts(kgdb, columns = c("gene_id", "tx_id", "tx_name"))
->>>>>>> style: Run styler on R scripts
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(kgtx, keytype = "gene_id", mc.cores = opt$cores)
 map <- AnnotationDbi::select(org.Hs.eg.db, keys = unlist(mcols(kgConsensus)$gene_id), columns = c("SYMBOL"), keytype = c("ENTREZID"))
@@ -83,11 +75,7 @@ mcols(kgConsensus)$type <- "gene"
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
 # Save as txt file
-<<<<<<< HEAD
-capture.output(e$eval, file = paste(opt$outprefix, ".eval.txt"))
-=======
 capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt"))
->>>>>>> Added param tuning processes
 
 # TUNING IN A DIFFERENT SCRIPT
 
@@ -104,22 +92,10 @@ bPlus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "+")
 bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "-")
 txBroken <- c(bPlus, bMinus)
 txFinal <- combineTranscripts(txBroken, kgConsensus)
-<<<<<<< HEAD
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores=opt$cores)
-<<<<<<< HEAD
-export(txFinal, con = paste(opt$outprefix,".transcripts.bed", sep=""))
-capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt", header = TRUE))
-=======
 export(txFinal, con = paste(opt$outprefix,"final.transcripts.bed", sep=""))
 capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt"))
->>>>>>> Added param tuning processes
 #Output plot
-=======
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores = opt$cores)
-export(txFinal, con = paste(opt$outprefix, "final.transcripts.bed", sep = ""))
-capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt"))
-# Output plot
->>>>>>> style: Run styler on R scripts
 jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
 # 2. Create the plot
 tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores = opt$cores)
