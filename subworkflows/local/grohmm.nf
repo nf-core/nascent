@@ -21,13 +21,16 @@ workflow GROHMM {
     main:
     // Generate UCSC files
     GROHMM_MAKEUCSCFILE ( bam )
-    // Run Meta 
+
+    ch_tuning = Channel.empty()
+
     if (params.with_tuning) {
-         GROHMM_PARAMETERTUNING (bam, file("${launchDir}/modules/local/grohmm/test/tune.csv") )
-         GROHMM_TRANSCRIPTCALLING ( bam, GROHMM_PARAMETERTUNING.out.tuning)
-    } else {
-         GROHMM_TRANSCRIPTCALLING ( bam, [] )
+        GROHMM_PARAMETERTUNING (bam, file("${launchDir}/modules/local/grohmm/test/tune.csv") )
+        ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
     }
+
+    GROHMM_TRANSCRIPTCALLING ( bam, ch_tuning )
+
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
     bed         = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
