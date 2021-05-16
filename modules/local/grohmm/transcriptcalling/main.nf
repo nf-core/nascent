@@ -34,9 +34,16 @@ process GROHMM_TRANSCRIPTCALLING{
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    """
-    transcriptcalling_grohmm.R --bam_file ${bam} --tuning_file ${tuning} --outprefix ${prefix} --outdir ./ --cores $task.cpus $options.args
-    Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
-    """
+    if (params.skip_tuning) {
+   	 """
+ 	 transcriptcalling_grohmm.R --bam_file ${bam} --outdir ./ --cores $task.cpus $options.args
+   	 Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
+         """
+    } else {
+         """
+         transcriptcalling_grohmm.R --bam_file ${bam} --tuning_file ${tuning}  --outdir ./ --cores $task.cpus $options.args
+         Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
+         """
+    }
+
 }
