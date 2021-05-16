@@ -18,6 +18,7 @@ option_list <- list(
     make_option(c("-i", "--bam_file"), type = "character", default = NULL, metavar = "path", help = "Time course of GRO SEQ data in bam files."),
     make_option(c("-t", "--tuning_file"), type = "character", default = NULL, metavar = "path", help = "File with all possible LTS/UTS combinations."),
     make_option(c("-o", "--outdir"), type = "character", default = "./", metavar = "path", help = "Output directory."),
+    make_option(c("-g", "--genome"        ), type="character", default='hg19'  , metavar="string" , help="Reference UCSC genome"),
     make_option(c("-p", "--outprefix"), type = "character", default = "grohmm", metavar = "string", help = "Output prefix."),
     make_option(c("-c", "--cores"), type = "integer", default = 1, metavar = "integer", help = "Number of cores.")
 )
@@ -55,10 +56,11 @@ readsfile <- GRanges(galigned)
 hmmResult <- detectTranscripts(readsfile, LtProbB = -200, UTS = 5, threshold = 1)
 txHMM <- hmmResult$transcripts
 write.table(txHMM, file = paste(opt$outprefix, ".transcripts.txt", sep = ""))
-# TODO make reproducible, ask for sample file
-# Input transcript annotations > CURRENTLY JUST USES R LIBRARY > can be changed to generate from UCSC
-kgdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-kgtx <- transcripts(kgdb, columns = c("gene_id", "tx_id", "tx_name"))
+
+kgdb <- makeTxDbFromUCSC(genome=opt$genome, tablename="refGene")
+saveDb(kgdb, file="RefGene.sqlite")
+kgdb <- loadDb("RefGene.sqlite")
+kgtx <- transcripts(kgdb, columns=c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(kgtx, keytype = "gene_id", mc.cores = opt$cores)
 
