@@ -220,7 +220,7 @@ workflow GROSEQ {
         /*
          * SUBWORKFLOW: Transcript indetification with homer
          */
-        HOMER_GROSEQ(
+        HOMER_GROSEQ (
             PICARD_MERGESAMFILES.out.bam,
             PREPARE_GENOME.out.fasta
         )
