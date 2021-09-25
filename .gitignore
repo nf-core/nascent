@@ -6,10 +6,3 @@ results/
 testing/
 testing*
 *.pyc
-nextflow
-
-# Edmund Tools
-.direnv/
-.dir-locals.el
-.venv/
-.nvimlog
