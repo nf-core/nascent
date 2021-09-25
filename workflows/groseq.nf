@@ -96,7 +96,7 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 //
 // MODULE: Installed directly from nf-core/modules
 def cat_fastq_options          = modules['cat_fastq']
-if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
+// FIXME if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
 
 def subread_featurecounts_options                      = modules['subread_featurecounts']
 def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
