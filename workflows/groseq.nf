@@ -21,6 +21,10 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
+// Check alignment parameters
+def prepareToolIndices  = []
+if (!params.skip_alignment) { prepareToolIndices << params.aligner        }
+
 /*
 ========================================================================================
     CONFIG FILES
@@ -75,9 +79,6 @@ def samtools_sort_options = modules['samtools_sort']
 
 include { INPUT_CHECK           } from '../subworkflows/local/input_check'       addParams( options: [:]                          )
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
-include { ALIGN_BWA             } from '../subworkflows/local/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
-include { ALIGN_BWAMEM2         } from '../subworkflows/local/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
 include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
 
 /*
@@ -111,6 +112,13 @@ include { PICARD_MERGESAMFILES                                     } from '../mo
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
 include { MULTIQC                                                  } from '../modules/nf-core/modules/multiqc/main'               addParams( options: multiqc_options                         )
+
+//
+// SUBWORKFLOW: Consisting entirely of nf-core/modules
+//
+include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
+include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
+include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
 
 /*
 ========================================================================================
