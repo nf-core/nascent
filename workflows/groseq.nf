@@ -1,42 +1,40 @@
-////////////////////////////////////////////////////
-/* --         LOCAL PARAMETER VALUES           -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    VALIDATE INPUTS
+========================================================================================
+*/
 
-params.summary_params = [:]
+def valid_params = [
+    aligners       : ['bwa', 'bwamem2']
+]
 
-////////////////////////////////////////////////////
-/* --          VALIDATE INPUTS                 -- */
-////////////////////////////////////////////////////
+def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
+
+// Validate input parameters
+WorkflowGroseq.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if (params.fasta) { ch_fasta = file(params.fasta) } else { exit 1, 'Genome fasta file not specified!' }
 
-// Check alignment parameters
-def prepareToolIndices  = []
-def alignerList         = ['bwa', 'bwamem2']
-if (!params.skip_alignment) {
-    if (!alignerList.contains(params.aligner)) {
-        exit 1, "Invalid aligner option: ${params.aligner}. Valid options: ${alignerList.join(', ')}"
-    }
-    prepareToolIndices << params.aligner
-}
-
-////////////////////////////////////////////////////
-/* --          CONFIG FILES                    -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    CONFIG FILES
+========================================================================================
+*/
 
 ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
 ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
-////////////////////////////////////////////////////
-/* --       IMPORT MODULES / SUBWORKFLOWS      -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    IMPORT LOCAL MODULES/SUBWORKFLOWS
+========================================================================================
+*/
 
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
@@ -44,24 +42,14 @@ def modules = params.modules.clone()
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 
-def cat_fastq_options          = modules['cat_fastq']
-if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
+//
+// MODULE: Local to the pipeline
+//
+include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' addParams( options: [publish_files : ['tsv':'']] )
 
-def subread_featurecounts_options                      = modules['subread_featurecounts']
-def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
-def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
-subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/featurecounts/predicted"
-subread_featurecounts_predicted_options.args           = " -F \"SAF\""
-
-def multiqc_options   = modules['multiqc']
-multiqc_options.args += params.multiqc_title ? " --title \"$params.multiqc_title\"" : ''
-
-// Local: Modules
-include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' addParams( options: [publish_files : ['csv':'']] )
-
-/*
- * SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
- */
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
 def gffread_options         = modules['gffread']
 if (!params.save_reference) { gffread_options['publish_files'] = false }
 
@@ -85,14 +73,34 @@ def samtools_sort_options = modules['samtools_sort']
 //     }
 // }
 
-// Local: Sub-workflows
 include { INPUT_CHECK           } from '../subworkflows/local/input_check'       addParams( options: [:]                          )
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
 include { ALIGN_BWA             } from '../subworkflows/local/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { ALIGN_BWAMEM2         } from '../subworkflows/local/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
 include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
-// nf-core/modules: Modules
+
+/*
+========================================================================================
+    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+========================================================================================
+*/
+
+def multiqc_options   = modules['multiqc']
+multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
+
+//
+// MODULE: Installed directly from nf-core/modules
+def cat_fastq_options          = modules['cat_fastq']
+if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
+
+def subread_featurecounts_options                      = modules['subread_featurecounts']
+def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
+def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
+subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/featurecounts/predicted"
+subread_featurecounts_predicted_options.args           = " -F \"SAF\""
+
+//
 include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
 include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
 include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
@@ -101,27 +109,30 @@ include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../mo
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
 include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options                         )
 
-////////////////////////////////////////////////////
-/* --           RUN MAIN WORKFLOW              -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    RUN MAIN WORKFLOW
+========================================================================================
+*/
 
 // Info required for completion email and summary
 def multiqc_report = []
 
 workflow GROSEQ {
-    /*
-     * SUBWORKFLOW: Uncompress and prepare reference genome files
-     */
+
+    //
+    // SUBWORKFLOW: Uncompress and prepare reference genome files
+    //
     PREPARE_GENOME (
         prepareToolIndices
     )
     ch_software_versions = Channel.empty()
     ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
 
-    /*
-     * SUBWORKFLOW: Read in samplesheet, validate and stage input files
-     */
-    INPUT_CHECK ( 
+    //
+    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
+    //
+    INPUT_CHECK (
         ch_input
     )
     .map {
@@ -138,27 +149,26 @@ workflow GROSEQ {
     }
     .set { ch_fastq }
 
-    /*
-     * MODULE: Concatenate FastQ files from same sample if required
-     */
+    //
+    // MODULE: Concatenate FastQ files from same sample if required
+    //
     CAT_FASTQ (
         ch_fastq.multiple
     )
     .mix(ch_fastq.single)
     .set { ch_cat_fastq }
 
-    /*
-     * MODULE: Run FastQC
-     */
+    //
+    // MODULE: Run FastQC
+    //
     FASTQC (
         ch_cat_fastq
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
-    
 
-    /*
-     * SUBWORKFLOW: Alignment with BWA
-     */
+    //
+    // SUBWORKFLOW: Alignment with BWA
+    //
     ch_genome_bam                 = Channel.empty()
     ch_genome_bai                 = Channel.empty()
     ch_samtools_stats             = Channel.empty()
@@ -208,9 +218,9 @@ workflow GROSEQ {
 
     ch_homer_multiqc = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
-        /*
-         * SUBWORKFLOW: Transcript indetification with GROHMM
-         */
+        //
+        // SUBWORKFLOW: Transcript indetification with GROHMM
+        //
         GROHMM ( PICARD_MERGESAMFILES.out.bam )
 
         SUBREAD_FEATURECOUNTS_PREDICTED (
@@ -232,45 +242,57 @@ workflow GROSEQ {
     )
     ch_software_versions = ch_software_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.version.first().ifEmpty(null))
 
-    /*
-     * MODULE: Pipeline reporting
-     */
-    GET_SOFTWARE_VERSIONS ( 
+    //
+    // MODULE: Pipeline reporting
+    //
+    ch_software_versions
+        .map { it -> if (it) [ it.baseName, it ] }
+        .groupTuple()
+        .map { it[1][0] }
+        .flatten()
+        .collect()
+        .set { ch_software_versions }
+
+    GET_SOFTWARE_VERSIONS (
         ch_software_versions.map { it }.collect()
     )
 
-    /*
-     * MultiQC
-     */  
-    if (!params.skip_multiqc) {
-        workflow_summary    = Schema.params_summary_multiqc(workflow, params.summary_params)
-        ch_workflow_summary = Channel.value(workflow_summary)
+    //
+    // MODULE: MultiQC
+    //
+    workflow_summary    = WorkflowGroseq.paramsSummaryMultiqc(workflow, summary_params)
+    ch_workflow_summary = Channel.value(workflow_summary)
 
-        ch_multiqc_files = Channel.empty()
-        ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-        ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = Channel.empty()
+    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
-        MULTIQC (
-            ch_multiqc_files.collect()
-        )
-        multiqc_report       = MULTIQC.out.report.toList()
-        ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
-    }
+    MULTIQC (
+        ch_multiqc_files.collect()
+    )
+    multiqc_report       = MULTIQC.out.report.toList()
+    ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
 }
 
-////////////////////////////////////////////////////
-/* --              COMPLETION EMAIL            -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    COMPLETION EMAIL AND SUMMARY
+========================================================================================
+*/
 
 workflow.onComplete {
-    Completion.email(workflow, params, params.summary_params, projectDir, log, multiqc_report)
-    Completion.summary(workflow, params, log)
+    if (params.email || params.email_on_fail) {
+        NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
+    }
+    NfcoreTemplate.summary(workflow, params, log)
 }
 
-////////////////////////////////////////////////////
-/* --                  THE END                 -- */
-////////////////////////////////////////////////////
+/*
+========================================================================================
+    THE END
+========================================================================================
+*/
