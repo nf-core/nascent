@@ -3,10 +3,67 @@
     "homePage": "https://github.com/nf-core/groseq",
     "repos": {
         "nf-core/modules": {
+            "bedtools/intersect": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bedtools/slop": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bedtools/sort": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwa/index": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwa/mem": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwamem2/index": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwamem2/mem": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "cat/fastq": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
             "fastqc": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
+            "gffread": {
+                "git_sha": "e9c57083a0938c142e14ccf2b0275ed7724fe9a0"
+            },
+            "homer/findpeaks": {
+                "git_sha": "669fb5caed78bccbaf0f00746e2eb50644232722"
+            },
+            "homer/maketagdirectory": {
+                "git_sha": "669fb5caed78bccbaf0f00746e2eb50644232722"
+            },
+            "homer/makeucscfile": {
+                "git_sha": "669fb5caed78bccbaf0f00746e2eb50644232722"
+            },
             "multiqc": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "picard/mergesamfiles": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "samtools/flagstat": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "samtools/idxstats": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "samtools/index": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "samtools/sort": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "samtools/stats": {
+                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+            },
+            "subread/featurecounts": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             }
         }

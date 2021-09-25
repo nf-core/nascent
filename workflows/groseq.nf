@@ -86,6 +86,9 @@ include { GROHMM                } from '../subworkflows/local/grohmm'           
 ========================================================================================
 */
 
+//
+// MODULE: Installed directly from nf-core/modules
+//
 def multiqc_options   = modules['multiqc']
 multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
 
@@ -101,13 +104,13 @@ subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/feat
 subread_featurecounts_predicted_options.args           = " -F \"SAF\""
 
 //
-include { FASTQC                                                   } from '../modules/nf-core/software/fastqc/main'                addParams( options: modules['fastqc']                       )
-include { CAT_FASTQ                                                } from '../modules/nf-core/software/cat/fastq/main'             addParams( options: cat_fastq_options                )
+include { FASTQC                                                   } from '../modules/nf-core/modules/fastqc/main'                addParams( options: modules['fastqc']                       )
+include { CAT_FASTQ                                                } from '../modules/nf-core/modules/cat/fastq/main'             addParams( options: cat_fastq_options                )
 include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
-include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/software/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/software/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
-include { MULTIQC                                                  } from '../modules/nf-core/software/multiqc/main'               addParams( options: multiqc_options                         )
+include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/modules/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
+include { MULTIQC                                                  } from '../modules/nf-core/modules/multiqc/main'               addParams( options: multiqc_options                         )
 
 /*
 ========================================================================================

@@ -19,9 +19,9 @@ include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filte
 include { GET_CHROM_SIZES             } from '../../modules/local/get_chrom_sizes'      addParams( options: params.genome_options       )
 include { UNTAR as UNTAR_BWA_INDEX    } from '../../modules/local/untar'                addParams( options: params.bwa_index_options   )
 
-include { GFFREAD                     } from '../../modules/nf-core/software/gffread/main'   addParams( options: params.gffread_options      )
-include { BWA_INDEX                   } from '../../modules/nf-core/software/bwa/index/main' addParams( options: params.bwa_index_options )
-include { BWAMEM2_INDEX               } from '../../modules/nf-core/software/bwamem2/index/main' addParams( options: params.bwa_index_options )
+include { GFFREAD                     } from '../../modules/nf-core/modules/gffread/main'   addParams( options: params.gffread_options      )
+include { BWA_INDEX                   } from '../../modules/nf-core/modules/bwa/index/main' addParams( options: params.bwa_index_options )
+include { BWAMEM2_INDEX               } from '../../modules/nf-core/modules/bwamem2/index/main' addParams( options: params.bwa_index_options )
 
 workflow PREPARE_GENOME {
     take:
