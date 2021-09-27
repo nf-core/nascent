@@ -27,6 +27,8 @@ workflow GROHMM {
     if (params.with_tuning) {
         GROHMM_PARAMETERTUNING (bam, file("${launchDir}/modules/local/grohmm/test/tune.csv") )
         ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
+    } else {
+        ch_tuning = []
     }
 
     GROHMM_TRANSCRIPTCALLING ( bam, ch_tuning )
