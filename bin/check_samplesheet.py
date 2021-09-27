@@ -43,10 +43,10 @@ def check_samplesheet(file_in, file_out):
     """
     This function checks that the samplesheet follows the following structure:
 
-    sample,fastq_1,fastq_2
-    SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz
-    SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz
-    SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,
+    sample,fastq_1,fastq_2,strandedness,group
+    SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz,forward,control
+    SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz,forward,control
+    SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,,forward,condition
 
     For an example see:
     https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
@@ -58,7 +58,7 @@ def check_samplesheet(file_in, file_out):
         ## Check header
         MIN_COLS = 2
         # TODO nf-core: Update the column names for the input samplesheet
-        HEADER = ["sample", "fastq_1", "fastq_2"]
+        HEADER = ["sample", "fastq_1", "fastq_2", "strandedness", "group"]
         header = [x.strip('"') for x in fin.readline().strip().split(",")]
         if header[: len(HEADER)] != HEADER:
             print(
@@ -90,7 +90,7 @@ def check_samplesheet(file_in, file_out):
                 )
 
             ## Check sample name entries
-            sample, fastq_1, fastq_2 = lspl[: len(HEADER)]
+            sample, fastq_1, fastq_2, strandedness, group = lspl[: len(HEADER)]
             sample = sample.replace(" ", "_")
             if not sample:
                 print_error("Sample entry has not been specified!", "Line", line)
@@ -106,6 +106,25 @@ def check_samplesheet(file_in, file_out):
                             "Line",
                             line,
                         )
+
+            ## Check strandedness
+            strandednesses = ["unstranded", "forward", "reverse"]
+            if strandedness:
+                if strandedness not in strandednesses:
+                    print_error(
+                        f"Strandedness must be one of '{', '.join(strandednesses)}'!",
+                        "Line",
+                        line,
+                    )
+            else:
+                print_error(
+                    f"Strandedness has not been specified! Must be one of {', '.join(strandednesses)}.",
+                    "Line",
+                    line,
+                )
+
+            if not group:
+                print_error("Group entry has not been specified!", "Line", line)
 
             ## Auto-detect paired-end/single-end
             sample_info = []  ## [single_end, fastq_1, fastq_2]
@@ -130,7 +149,19 @@ def check_samplesheet(file_in, file_out):
         out_dir = os.path.dirname(file_out)
         make_dir(out_dir)
         with open(file_out, "w") as fout:
-            fout.write(",".join(["sample", "single_end", "fastq_1", "fastq_2"]) + "\n")
+            fout.write(
+                ",".join(
+                    [
+                        "sample",
+                        "single_end",
+                        "fastq_1",
+                        "fastq_2",
+                        "strandedness",
+                        "group",
+                    ]
+                )
+                + "\n"
+            )
             for sample in sorted(sample_mapping_dict.keys()):
 
                 ## Check that multiple runs of the same sample are of the same datatype
