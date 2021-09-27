@@ -287,5 +287,58 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "transcript_fasta": {
+            "type": "string"
+        },
+        "additional_fasta": {
+            "type": "string"
+        },
+        "splicesites": {
+            "type": "string"
+        },
+        "gtf_extra_attributes": {
+            "type": "string",
+            "default": "gene_name"
+        },
+        "gtf_group_features": {
+            "type": "string",
+            "default": "gene_id"
+        },
+        "featurecounts_feature_type": {
+            "type": "string",
+            "default": "exon"
+        },
+        "featurecounts_group_type": {
+            "type": "string",
+            "default": "gene_biotype"
+        },
+        "gencode": {
+            "type": "string"
+        },
+        "save_reference": {
+            "type": "string"
+        },
+        "aligner": {
+            "type": "string",
+            "default": "bwamem2"
+        },
+        "transcript_identification": {
+            "type": "string",
+            "default": "grohmm"
+        },
+        "with_tuning": {
+            "type": "boolean"
+        },
+        "gtf": {
+            "type": "string"
+        },
+        "gff": {
+            "type": "string"
+        },
+        "gene_bed": {
+            "type": "string"
+        }
+    }
 }
