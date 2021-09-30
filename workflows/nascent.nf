@@ -11,7 +11,7 @@ def valid_params = [
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowGroseq.initialise(params, log)
+WorkflowNascent.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
@@ -129,7 +129,7 @@ include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
 // Info required for completion email and summary
 def multiqc_report = []
 
-workflow GROSEQ {
+workflow NASCENT {
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -271,7 +271,7 @@ workflow GROSEQ {
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowGroseq.paramsSummaryMultiqc(workflow, summary_params)
+    workflow_summary    = WorkflowNascent.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
     ch_multiqc_files = Channel.empty()

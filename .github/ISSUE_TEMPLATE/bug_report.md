@@ -5,7 +5,7 @@ labels: bug
 ---
 
 <!--
-# nf-core/groseq bug report
+# nf-core/nascent bug report
 
 Hi there!
 
@@ -18,7 +18,7 @@ Please delete this text and anything that's not relevant from the template below
 I have checked the following places for your error:
 
 - [ ] [nf-core website: troubleshooting](https://nf-co.re/usage/troubleshooting)
-- [ ] [nf-core/groseq pipeline documentation](https://nf-co.re/groseq/usage)
+- [ ] [nf-core/nascent pipeline documentation](https://nf-co.re/nascent/usage)
 
 ## Description of the bug
 

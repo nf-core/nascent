@@ -1,8 +1,8 @@
 //
-// This file holds several functions specific to the workflow/groseq.nf in the nf-core/groseq pipeline
+// This file holds several functions specific to the workflow/nascent.nf in the nf-core/nascent pipeline
 //
 
-class WorkflowGroseq {
+class WorkflowNascent {
 
     //
     // Check and validate parameters

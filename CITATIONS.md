@@ -1,4 +1,4 @@
-# nf-core/groseq: Citations
+# nf-core/nascent: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ========================================================================================
-    nf-core/groseq
+    nf-core/nascent
 ========================================================================================
-    Github : https://github.com/nf-core/groseq
-    Website: https://nf-co.re/groseq
-    Slack  : https://nfcore.slack.com/channels/groseq
+    Github : https://github.com/nf-core/nascent
+    Website: https://nf-co.re/nascent
+    Slack  : https://nfcore.slack.com/channels/nascent
 ----------------------------------------------------------------------------------------
 */
 
@@ -39,13 +39,13 @@ WorkflowMain.initialise(workflow, params, log)
 ========================================================================================
 */
 
-include { GROSEQ } from './workflows/groseq'
+include { NASCENT } from './workflows/nascent'
 
 //
-// WORKFLOW: Run main nf-core/groseq analysis pipeline
+// WORKFLOW: Run main nf-core/nascent analysis pipeline
 //
-workflow NFCORE_GROSEQ {
-    GROSEQ ()
+workflow NFCORE_NASCENT {
+    NASCENT ()
 }
 
 /*
@@ -59,7 +59,7 @@ workflow NFCORE_GROSEQ {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    NFCORE_GROSEQ ()
+    NFCORE_NASCENT ()
 }
 
 /*

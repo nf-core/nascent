@@ -1,4 +1,4 @@
-# nf-core/groseq: Output
+# nf-core/nascent: Output
 
 ## Introduction
 

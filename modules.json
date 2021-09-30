@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/groseq",
-    "homePage": "https://github.com/nf-core/groseq",
+    "name": "nf-core/nascent",
+    "homePage": "https://github.com/nf-core/nascent",
     "repos": {
         "nf-core/modules": {
             "bedtools/intersect": {

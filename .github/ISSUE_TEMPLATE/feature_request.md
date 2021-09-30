@@ -1,11 +1,11 @@
 ---
 name: Feature request
-about: Suggest an idea for the nf-core/groseq pipeline
+about: Suggest an idea for the nf-core/nascent pipeline
 labels: enhancement
 ---
 
 <!--
-# nf-core/groseq feature request
+# nf-core/nascent feature request
 
 Hi there!
 
