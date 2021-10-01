@@ -19,7 +19,6 @@
 <!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 **nf-core/nascent** is designed to process the sequencing output of nascent transcription assays, like GRO-seq or PRO-seq. It produces bedGraph- and bigWig-fomatted outputs after mapping strand-specific reads, as well as other useful outputs like quality control reports or IGV-ready (Integrative Genomics Viewer) tdf files.
 
-
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
 <!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
@@ -63,8 +62,6 @@ The nf-core/nascent pipeline comes with documentation about the pipeline [usage]
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
 
 The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@Emiller88](https://github.com/emiller88)) and Sruthi Suresh ([@sruthipsuresh](https://github.com/sruthipsuresh)) from [The Functional Genomics Laboratory](https://taehoonkim.org/) at [The Univeristy of Texas at Dallas](https://www.utdallas.edu/)
-
-
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
