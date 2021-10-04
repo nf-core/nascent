@@ -27,11 +27,11 @@ class Checks {
 
         if (conda_check_failed) {
             log.warn "=============================================================================\n" +
-                     "  There is a problem with your Conda configuration!\n\n" + 
-                     "  You will need to set-up the conda-forge and bioconda channels correctly.\n" +
-                     "  Please refer to https://bioconda.github.io/user/install.html#set-up-channels\n" +
-                     "  NB: The order of the channels matters!\n" +
-                     "==================================================================================="
+                    "  There is a problem with your Conda configuration!\n\n" +
+                    "  You will need to set-up the conda-forge and bioconda channels correctly.\n" +
+                    "  Please refer to https://bioconda.github.io/user/install.html#set-up-channels\n" +
+                    "  NB: The order of the channels matters!\n" +
+                    "==================================================================================="
         }
     }
 
@@ -54,10 +54,10 @@ class Checks {
                 hnames.each { hname ->
                     if (hostname.contains(hname) && !workflow.profile.contains(prof)) {
                         log.info "=${colors.yellow}====================================================${colors.reset}=\n" +
-                                  "${colors.yellow}WARN: You are running with `-profile $workflow.profile`\n" +
-                                  "      but your machine hostname is ${colors.white}'$hostname'${colors.reset}.\n" +
-                                  "      ${colors.yellow_bold}Please use `-profile $prof${colors.reset}`\n" +
-                                  "=${colors.yellow}====================================================${colors.reset}="
+                                "${colors.yellow}WARN: You are running with `-profile $workflow.profile`\n" +
+                                "      but your machine hostname is ${colors.white}'$hostname'${colors.reset}.\n" +
+                                "      ${colors.yellow_bold}Please use `-profile $prof${colors.reset}`\n" +
+                                "=${colors.yellow}====================================================${colors.reset}="
                     }
                 }
             }
@@ -67,23 +67,23 @@ class Checks {
     // Citation string
     private static String citation(workflow) {
         return "If you use ${workflow.manifest.name} for your analysis please cite:\n\n" +
-               "* The pipeline\n" + 
-               "  https://doi.org/10.5281/zenodo.1400710\n\n" +
-               "* The nf-core framework\n" +
-               "  https://dx.doi.org/10.1038/s41587-020-0439-x\n" +
-               "  https://rdcu.be/b1GjZ\n\n" +
-               "* Software dependencies\n" +
-               "  https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md"
+                "* The pipeline\n" +
+                "  https://doi.org/10.5281/zenodo.1400710\n\n" +
+                "* The nf-core framework\n" +
+                "  https://dx.doi.org/10.1038/s41587-020-0439-x\n" +
+                "  https://rdcu.be/b1GjZ\n\n" +
+                "* Software dependencies\n" +
+                "  https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md"
     }
 
     // Exit pipeline if incorrect --genome key provided
     static void genome_exists(params, log) {
         if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
             log.error "=============================================================================\n" +
-                      "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
-                      "  Currently, the available genome keys are:\n" +
-                      "  ${params.genomes.keySet().join(", ")}\n" +
-                      "============================================================================="
+                    "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
+                    "  Currently, the available genome keys are:\n" +
+                    "  ${params.genomes.keySet().join(", ")}\n" +
+                    "============================================================================="
             System.exit(0)
         }
     }
@@ -97,5 +97,5 @@ class Checks {
             }
         }
         return val
-    }    
+    }
 }

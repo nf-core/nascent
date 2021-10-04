@@ -11,7 +11,7 @@ workflow test_remove_genes {
 
     reads = [ file(params.test_data['nf-core']['bed']['test_bed'], checkIfExists: true) ]
     refseq = [ [ id:'test'],
-              file(params.test_data['nf-core']['bed']['test2_bed'] checkIfExists: true) ]
+            file(params.test_data['nf-core']['bed']['test2_bed'] checkIfExists: true) ]
     chromsizes = [ file(params.test_data['nf-core']['genome_sizes'], checkIfExists: true) ]
 
     REMOVE_GENES ( reads,refseq,chromsizes )

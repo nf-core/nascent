@@ -22,7 +22,7 @@ process BED2SAF {
 
     input:
     path bed
-    
+
     output:
     path '*.saf' , emit: saf
 

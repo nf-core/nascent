@@ -23,7 +23,7 @@ process CAT_ADDITIONAL_FASTA {
     path fasta
     path gtf
     path add_fasta
-    
+
     output:
     path "${name}.fasta", emit: fasta
     path "${name}.gtf"  , emit: gtf

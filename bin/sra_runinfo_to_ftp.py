@@ -48,10 +48,10 @@ def parse_sra_runinfo(file_in):
                     sample_dict['fastq_1']  = fastq_files
                     sample_dict['md5_1']    = fastq_md5
                 else:
-                    ## In some instances FTP links don't exist for FastQ files 
+                    ## In some instances FTP links don't exist for FastQ files
                     ## These have to be downloaded via fastq-dump / fasterq-dump / parallel-fastq-dump via the run id
                     db_id = run_id
-            
+
             elif library == 'PAIRED':
                 sample_dict = collections.OrderedDict([('fastq_1',''), ('fastq_2',''), ('md5_1',''), ('md5_2',''), ('single_end','false')])
                 if fastq_files:
@@ -66,7 +66,7 @@ def parse_sra_runinfo(file_in):
                         print("Invalid FastQ files found for database id:'{}'!.".format(run_id))
                 else:
                     db_id = run_id
-            
+
             if sample_dict:
                 sample_dict.update(line_dict)
                 if db_id not in runinfo_dict:
@@ -76,20 +76,20 @@ def parse_sra_runinfo(file_in):
                         print("Input run info file contains duplicate rows!\nLine: '{}'".format(line))
                     else:
                         runinfo_dict[db_id].append(sample_dict)
-    
+
     return runinfo_dict
 
 
 def sra_runinfo_to_ftp(files_in,file_out):
     samplesheet_dict = {}
     for file_in in files_in:
-        runinfo_dict = parse_sra_runinfo(file_in)        
+        runinfo_dict = parse_sra_runinfo(file_in)
         for db_id in runinfo_dict.keys():
             if db_id not in samplesheet_dict:
                 samplesheet_dict[db_id] = runinfo_dict[db_id]
             else:
                 print("Duplicate sample identifier found!\nID: '{}'".format(db_id))
-    
+
     ## Write samplesheet with paths to FastQ files and md5 sums
     if samplesheet_dict:
         out_dir = os.path.dirname(file_out)
@@ -105,7 +105,7 @@ def sra_runinfo_to_ftp(files_in,file_out):
 def main(args=None):
     args = parse_args(args)
     sra_runinfo_to_ftp([x.strip() for x in args.FILES_IN.split(',')], args.FILE_OUT)
-    
+
 
 if __name__ == '__main__':
     sys.exit(main())

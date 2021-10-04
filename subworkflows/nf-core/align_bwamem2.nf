@@ -16,13 +16,13 @@ workflow ALIGN_BWAMEM2 {
 
     main:
     /*
-     * Map reads with BWA
-     */
+    * Map reads with BWA
+    */
     BWAMEM2_MEM ( reads, index )
 
     /*
-     * Sort, index BAM file and run samtools stats, flagstat and idxstats
-     */
+    * Sort, index BAM file and run samtools stats, flagstat and idxstats
+    */
     BAM_SORT_SAMTOOLS ( BWAMEM2_MEM.out.bam )
 
     emit:

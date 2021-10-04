@@ -6,8 +6,8 @@ import groovy.json.JsonSlurper
 
 class Schema {
     /*
-     * This method tries to read a JSON params file
-     */
+    * This method tries to read a JSON params file
+    */
     private static LinkedHashMap params_load(String json_schema) {
         def params_map = new LinkedHashMap()
         try {
@@ -32,24 +32,24 @@ class Schema {
         def json = new File(json_schema).text
         def Map json_params = (Map) new JsonSlurper().parseText(json).get('definitions')
         /* Tree looks like this in nf-core schema
-         * definitions <- this is what the first get('definitions') gets us
-             group 1
-               title
-               description
-                 properties
-                   parameter 1
-                     type
-                     description
-                   parameter 2
-                     type
-                     description
-             group 2
-               title
-               description
-                 properties
-                   parameter 1
-                     type
-                     description
+        * definitions <- this is what the first get('definitions') gets us
+            group 1
+                title
+                description
+                properties
+                    parameter 1
+                    type
+                    description
+                    parameter 2
+                    type
+                    description
+            group 2
+                title
+                description
+                properties
+                    parameter 1
+                    type
+                    description
         */
         def params_map = new LinkedHashMap()
         json_params.each { key, val ->
@@ -65,8 +65,8 @@ class Schema {
     }
 
     /*
-     * Get maximum number of characters across all parameter names
-     */
+    * Get maximum number of characters across all parameter names
+    */
     private static Integer params_max_chars(params_map) {
         Integer max_chars = 0
         for (group in params_map.keySet()) {
@@ -81,8 +81,8 @@ class Schema {
     }
 
     /*
-     * Beautify parameters for --help
-     */
+    * Beautify parameters for --help
+    */
     private static String params_help(workflow, params, json_schema, command) {
         String output  = Headers.nf_core(workflow, params.monochrome_logs) + "\n"
         output        += "Typical pipeline command:\n\n"
@@ -106,11 +106,11 @@ class Schema {
     }
 
     /*
-     * Groovy Map summarising parameters/workflow options used by the pipeline
-     */
+    * Groovy Map summarising parameters/workflow options used by the pipeline
+    */
     private static LinkedHashMap params_summary_map(workflow, params, json_schema) {
         // Get a selection of core Nextflow workflow options
-        def Map workflow_summary = [:]        
+        def Map workflow_summary = [:]
         if (workflow.revision) {
             workflow_summary['revision'] = workflow.revision
         }
@@ -127,7 +127,7 @@ class Schema {
         workflow_summary['userName']     = workflow.userName
         workflow_summary['profile']      = workflow.profile
         workflow_summary['configFiles']  = workflow.configFiles.join(', ')
-        
+
         // Get pipeline parameters defined in JSON Schema
         def Map params_summary = [:]
         def blacklist  = ['hostnames']
@@ -180,8 +180,8 @@ class Schema {
     }
 
     /*
-     * Beautify parameters for summary and return as string
-     */
+    * Beautify parameters for summary and return as string
+    */
     private static String params_summary_log(workflow, params, json_schema) {
         String output  = Headers.nf_core(workflow, params.monochrome_logs) + "\n"
         def params_map = params_summary_map(workflow, params, json_schema)

@@ -40,4 +40,3 @@ workflow GROHMM {
     plus_wig    = GROHMM_MAKEUCSCFILE.out.minuswig
     minus_wig   = GROHMM_MAKEUCSCFILE.out.pluswig
 }
-

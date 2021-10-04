@@ -22,7 +22,7 @@ process GTF2BED {
 
     input:
     path gtf
-    
+
     output:
     path '*.bed'
 

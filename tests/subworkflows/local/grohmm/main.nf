@@ -6,8 +6,8 @@ include { GROHMM } from '../../../../subworkflows/local/grohmm' addParams( optio
 
 workflow test_grohmm {
     def input = [[ id: 'test' ],
-             [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
-              file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
+            [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
+            file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
 
     GROHMM ( input )
 }

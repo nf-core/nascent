@@ -29,8 +29,8 @@ workflow PREPARE_GENOME {
 
     main:
     /*
-     * Uncompress genome fasta file if required
-     */
+    * Uncompress genome fasta file if required
+    */
     if (params.fasta.endsWith('.gz')) {
         ch_fasta = GUNZIP_FASTA ( params.fasta ).gunzip
     } else {
@@ -38,8 +38,8 @@ workflow PREPARE_GENOME {
     }
 
     /*
-     * Uncompress GTF annotation file or create from GFF3 if required
-     */
+    * Uncompress GTF annotation file or create from GFF3 if required
+    */
     ch_gffread_version = Channel.empty()
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
@@ -58,8 +58,8 @@ workflow PREPARE_GENOME {
     }
 
     /*
-     * Uncompress additional fasta file and concatenate with reference fasta and gtf files
-     */
+    * Uncompress additional fasta file and concatenate with reference fasta and gtf files
+    */
     if (params.additional_fasta) {
         if (params.additional_fasta.endsWith('.gz')) {
             ch_add_fasta = GUNZIP_ADDITIONAL_FASTA ( params.additional_fasta ).gunzip
@@ -72,8 +72,8 @@ workflow PREPARE_GENOME {
     }
 
     /*
-     * Uncompress gene BED annotation file or create from GTF if required
-     */
+    * Uncompress gene BED annotation file or create from GTF if required
+    */
     if (params.gene_bed) {
         if (params.gene_bed.endsWith('.gz')) {
             ch_gene_bed = GUNZIP_GENE_BED ( params.gene_bed ).gunzip
@@ -85,13 +85,13 @@ workflow PREPARE_GENOME {
     }
 
     /*
-     * Create chromosome sizes file
-     */
+    * Create chromosome sizes file
+    */
     ch_chrom_sizes = GET_CHROM_SIZES ( ch_fasta ).sizes
 
     /*
-     * Uncompress BWA index or generate from scratch if required
-     */
+    * Uncompress BWA index or generate from scratch if required
+    */
     ch_bwa_index   = Channel.empty()
     ch_bwa_version = Channel.empty()
     if ('bwa' in prepare_tool_indices) {

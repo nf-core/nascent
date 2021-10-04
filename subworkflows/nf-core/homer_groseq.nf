@@ -17,18 +17,18 @@ workflow HOMER_GROSEQ {
 
     main:
     /*
-     * Create a Tag Directory From The GRO-Seq experiment
-     */
+    * Create a Tag Directory From The GRO-Seq experiment
+    */
     HOMER_MAKETAGDIRECTORY ( bam, fasta )
 
     /*
-     * Creating UCSC Visualization Files
-     */
+    * Creating UCSC Visualization Files
+    */
     HOMER_MAKEUCSCFILE ( HOMER_MAKETAGDIRECTORY.out.tagdir )
 
     /*
-     * Find transcripts directly from GRO-Seq
-     */
+    * Find transcripts directly from GRO-Seq
+    */
     HOMER_FINDPEAKS ( HOMER_MAKETAGDIRECTORY.out.tagdir )
 
     emit:

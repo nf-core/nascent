@@ -239,8 +239,8 @@ workflow NASCENT {
         )
     } else if (params.transcript_identification == 'homer') {
         /*
-         * SUBWORKFLOW: Transcript indetification with homer
-         */
+        * SUBWORKFLOW: Transcript indetification with homer
+        */
         HOMER_GROSEQ (
             PICARD_MERGESAMFILES.out.bam,
             PREPARE_GENOME.out.fasta
