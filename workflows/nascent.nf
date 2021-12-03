@@ -232,7 +232,10 @@ workflow NASCENT {
         //
         // SUBWORKFLOW: Transcript indetification with GROHMM
         //
-        GROHMM ( PICARD_MERGESAMFILES.out.bam )
+        GROHMM (
+            PICARD_MERGESAMFILES.out.bam,
+            PREPARE_GENOME.out.gtf
+        )
 
         SUBREAD_FEATURECOUNTS_PREDICTED (
             ch_genome_bam.combine( BED2SAF ( GROHMM.out.bed ) )

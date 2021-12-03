@@ -9,7 +9,6 @@ library(groHMM)
 library(GenomicFeatures)
 library(org.Hs.eg.db)
 library(edgeR)
-library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(optparse)
 library(GenomicAlignments)
 library(RMariaDB)
@@ -51,11 +50,11 @@ option_list <- list(
     metavar = "string",
     help = "Output prefix."
   ),
-  make_option(c("-g", "--genome"),
+  make_option(c("-g", "--gtf"),
     type = "character",
-    default = "hg19",
+    default = NULL,
     metavar = "string",
-    help = "Reference UCSC genome"
+    help = "GTF File to create TxDb"
   ),
   make_option(c("-c", "--cores"),
     type = "integer",
@@ -118,9 +117,7 @@ write.table(
 )
 
 # Input transcript annotations
-kgdb <- makeTxDbFromUCSC(genome = opt$genome, tablename = "refGene")
-saveDb(kgdb, file = "RefGene.sqlite")
-kgdb <- loadDb("RefGene.sqlite")
+kgdb <- makeTxDbFromGFF(opt$gtf)
 kgtx <- transcripts(kgdb, columns = c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(

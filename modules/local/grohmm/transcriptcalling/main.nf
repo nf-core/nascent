@@ -21,6 +21,7 @@ process GROHMM_TRANSCRIPTCALLING{
 
     input:
     tuple val(meta), path(bam)
+    path gtf
     path tuning
 
     output:
@@ -41,7 +42,7 @@ process GROHMM_TRANSCRIPTCALLING{
             --bam_file ${bam} \\
             --tuning_file ${tuning} \\
             --outprefix ${prefix} \\
-            --genome $params.genome \\
+            --gtf $gtf \\
             --outdir ./ \\
             --cores $task.cpus \\
             $options.args
@@ -53,7 +54,7 @@ process GROHMM_TRANSCRIPTCALLING{
         transcriptcalling_grohmm.R \\
             --bam_file ${bam} \\
             --outprefix ${prefix} \\
-            --genome $params.genome \\
+            --gtf $gtf \\
             --outdir ./ \\
             --cores $task.cpus \\
             $options.args

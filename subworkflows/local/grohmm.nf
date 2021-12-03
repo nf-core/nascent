@@ -17,6 +17,7 @@ include { GROHMM_PARAMETERTUNING   } from '../../modules/local/grohmm/parametert
 workflow GROHMM {
     take:
     bam // channel: [ val(meta), [ bam ] ]
+    gtf
 
     main:
     // Generate UCSC files
@@ -31,7 +32,11 @@ workflow GROHMM {
         ch_tuning = []
     }
 
-    GROHMM_TRANSCRIPTCALLING ( bam, ch_tuning )
+    GROHMM_TRANSCRIPTCALLING (
+        bam,
+        gtf,
+        ch_tuning
+    )
 
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
