@@ -33,7 +33,15 @@ process GROHMM_PARAMETERTUNING{
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    parameter_tuning.R --bam_file ${bam} --tuning_file ${tune} --outprefix ${prefix}  --genome $params.genome --outdir ./ --cores $task.cpus $options.args
+    parameter_tuning.R \\
+        --bam_file ${bam} \\
+        --tuning_file ${tune} \\
+        --outprefix ${prefix} \\
+        --genome $params.genome \\
+        --outdir ./ \\
+        --cores $task.cpus \\
+        $options.args
+
     Rscript -e "library(groHMM); write(x=as.character(packageVersion('groHMM')), file='${software}.version.txt')"
     """
 }
