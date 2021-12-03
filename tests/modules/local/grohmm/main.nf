@@ -19,7 +19,13 @@ workflow test_grohmm_transcriptcalling {
     input = [[ id: 'test' ],
             [ file(params.test_data['grohmm']['s0mR1'], checkIfExists: true),
             file(params.test_data['grohmm']['s40mR1'], checkIfExists: true) ]]
-    GROHMM_TRANSCRIPTCALLING ( input )
+    gtf = file(params.test_data['homo_sapiens']['genome']['genome_gtf'], checkIfExists: true)
+
+    GROHMM_TRANSCRIPTCALLING (
+        input,
+        gtf,
+        []
+    )
 }
 
 workflow test_grohmm_parametertuning {
