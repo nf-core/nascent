@@ -79,21 +79,22 @@ if (file.exists(opt$outdir) == FALSE) {
 }
 setwd(opt$outdir)
 
-# Begin use of groHMM -> CURRENTLY ONLY TAKES ONE FILE
-readsfile <- as(
-    GenomicAlignments::readGAlignments(
-        file = opt$bam_file,
-        use.names = TRUE
-    )
-)
+# Begin use of groHMM
+# TODO CURRENTLY ONLY TAKES ONE FILE
+## readsfile <- as(
+##     GenomicAlignments::readGAlignments(
+##         file = opt$bam_file,
+##         use.names = TRUE
+##     )
+## )
 # TODO CHANGE BASED ON PAIRED OR SINGLE END
 galigned <- readGAlignments(BamFile(opt$bam_file, asMates = TRUE))
-readsfile <- GRanges(galigned)
+reads_file <- GRanges(galigned)
 
 # Call annotations > DEFAULT VALUES ASSIGNED
 if (is.null(opt$tuning_file)) {
-    hmmResult <- detectTranscripts(
-        readsfile,
+    hmm_result <- detectTranscripts(
+        reads_file,
         LtProbB = opt$ltprobb,
         UTS = opt$uts,
         threshold = 1
@@ -102,18 +103,18 @@ if (is.null(opt$tuning_file)) {
     tune <- read.csv(opt$tuning_file)
     # Minimum error
     uts <- tune[which.min(tune$total), "UTS"]
-    ltprobb <- tune[which.min(tune$total), "LtProbB"]
-    hmmResult <- detectTranscripts(
-        readsfile,
-        LtProbB = ltprobb,
+    lt_probb <- tune[which.min(tune$total), "LtProbB"]
+    hmm_result <- detectTranscripts(
+        reads_file,
+        LtProbB = lt_probb,
         UTS = uts,
         threshold = 1
     )
 }
 
-txHMM <- hmmResult$transcripts
+tx_hmm <- hmm_result$transcripts
 write.table(
-    txHMM,
+    tx_hmm,
     file = paste(opt$outprefix,
         ".transcripts.txt",
         sep = ""
@@ -121,53 +122,53 @@ write.table(
 )
 
 # Input transcript annotations
-kgdb <- makeTxDbFromGFF(opt$gtf)
-kgtx <- transcripts(kgdb, columns = c("gene_id", "tx_id", "tx_name"))
+kg_db <- makeTxDbFromGFF(opt$gtf)
+kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
-kgConsensus <- makeConsensusAnnotations(
-    kgtx,
+kg_consensus <- makeConsensusAnnotations(
+    kg_tx,
     keytype = "gene_id",
     mc.cores = opt$cores
 )
 map <- AnnotationDbi::select(
     org.Hs.eg.db,
-    keys = unlist(mcols(kgConsensus)$gene_id),
+    keys = unlist(mcols(kg_consensus)$gene_id),
     columns = c("SYMBOL"),
     keytype = c("ENTREZID")
 )
-mcols(kgConsensus)$symbol <- map$SYMBOL
-mcols(kgConsensus)$type <- "gene"
+mcols(kg_consensus)$symbol <- map$SYMBOL
+mcols(kg_consensus)$type <- "gene"
 
 # Evaluate HMM Annotations
-e <- evaluateHMMInAnnotations(txHMM, kgConsensus)
+e <- evaluateHMMInAnnotations(tx_hmm, kg_consensus)
 # Save as txt file
 capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt"))
 
 # TUNING IN A DIFFERENT SCRIPT
 
 # repairing with annotations
-getExpressedAnnotations <- function(features, reads) {
-    fLimit <- limitToXkb(features)
-    count <- countOverlaps(fLimit, reads)
+get_expressed_annotations <- function(features, reads) {
+    f_limit <- limitToXkb(features)
+    count <- countOverlaps(f_limit, reads)
     features <- features[count != 0, ]
     return(features[(quantile(width(features), .05) < width(features)) &
         (width(features) < quantile(width(features), .95)), ])
 }
-conExpressed <- getExpressedAnnotations(
-    features = kgConsensus,
-    reads = readsfile
+con_expressed <- get_expressed_annotations(
+    features = kg_consensus,
+    reads = reads_file
 )
-bPlus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "+")
-bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "-")
-txBroken <- c(bPlus, bMinus)
-txFinal <- combineTranscripts(txBroken, kgConsensus)
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores = opt$cores)
-export(txFinal, con = paste(opt$outprefix, "final.transcripts.bed", sep = ""))
-capture.output(tdFinal, file = paste0(opt$outprefix, ".tdFinal.txt"))
+b_plus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "+")
+b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
+tx_broken <- c(b_plus, b_minus)
+tx_final <- combineTranscripts(tx_broken, kg_consensus)
+td_final <- getTxDensity(tx_final, con_expressed, mc.cores = opt$cores)
+export(tx_final, con = paste(opt$outprefix, "final.transcripts.bed", sep = ""))
+capture.output(td_final, file = paste0(opt$outprefix, ".tdFinal.txt"))
 # Output plot
 jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
 # 2. Create the plot
-tdFinal <- getTxDensity(txFinal, conExpressed, mc.cores = opt$cores)
+td_final <- getTxDensity(tx_final, conExpressed, mc.cores = opt$cores)
 
 # 3. Close the file
 dev.off()
@@ -186,8 +187,8 @@ citation("AnnotationDbi")
 ################################################
 ################################################
 
-RLogFile <- "R_sessionInfo.log"
-if (file.exists(RLogFile) == FALSE) {
+r_log_file <- "R_sessionInfo.log"
+if (file.exists(r_log_file) == FALSE) {
     sink(RLogFile)
     a <- sessionInfo()
     print(a)
