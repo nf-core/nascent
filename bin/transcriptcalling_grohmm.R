@@ -14,54 +14,54 @@ library(GenomicAlignments)
 library(RMariaDB)
 
 option_list <- list(
-  make_option(c("-i", "--bam_file"),
-    type = "character",
-    default = NULL,
-    metavar = "path",
-    help = "Time course of GRO SEQ data in bam files."
-  ),
-  make_option(c("-t", "--tuning_file"),
-    type = "character",
-    default = NULL,
-    metavar = "path",
-    help = "File with tuning parameters and error rates."
-  ),
-  make_option(c("-o", "--outdir"),
-    type = "character",
-    default = "./",
-    metavar = "path",
-    help = "Output directory."
-  ),
-  make_option(c("-l", "--ltprobb"),
-    type = "integer",
-    default = -200,
-    metavar = "integer",
-    help = "Log-transformed transition probability of switching from transcribed state to non-transcribed state"
-  ),
-  make_option(c("-u", "--uts"),
-    type = "integer",
-    default = 5,
-    metavar = "integer",
-    help = "Variance of the emission probability for reads in the non-transcribed state, respectively."
-  ),
-  make_option(c("-p", "--outprefix"),
-    type = "character",
-    default = "grohmm",
-    metavar = "string",
-    help = "Output prefix."
-  ),
-  make_option(c("-g", "--gtf"),
-    type = "character",
-    default = NULL,
-    metavar = "string",
-    help = "GTF File to create TxDb"
-  ),
-  make_option(c("-c", "--cores"),
-    type = "integer",
-    default = 1,
-    metavar = "integer",
-    help = "Number of cores."
-  )
+    make_option(c("-i", "--bam_file"),
+        type = "character",
+        default = NULL,
+        metavar = "path",
+        help = "Time course of GRO SEQ data in bam files."
+    ),
+    make_option(c("-t", "--tuning_file"),
+        type = "character",
+        default = NULL,
+        metavar = "path",
+        help = "File with tuning parameters and error rates."
+    ),
+    make_option(c("-o", "--outdir"),
+        type = "character",
+        default = "./",
+        metavar = "path",
+        help = "Output directory."
+    ),
+    make_option(c("-l", "--ltprobb"),
+        type = "integer",
+        default = -200,
+        metavar = "integer",
+        help = "Log-transformed transition probability of switching from transcribed state to non-transcribed state"
+    ),
+    make_option(c("-u", "--uts"),
+        type = "integer",
+        default = 5,
+        metavar = "integer",
+        help = "Variance of the emission probability for reads in the non-transcribed state, respectively."
+    ),
+    make_option(c("-p", "--outprefix"),
+        type = "character",
+        default = "grohmm",
+        metavar = "string",
+        help = "Output prefix."
+    ),
+    make_option(c("-g", "--gtf"),
+        type = "character",
+        default = NULL,
+        metavar = "string",
+        help = "GTF File to create TxDb"
+    ),
+    make_option(c("-c", "--cores"),
+        type = "integer",
+        default = 1,
+        metavar = "integer",
+        help = "Number of cores."
+    )
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -69,51 +69,55 @@ opt <- parse_args(opt_parser)
 
 
 if (is.null(opt$bam_file)) {
-  print_help(opt_parser)
-  stop("Please provide a bam file", call. = FALSE)
+    print_help(opt_parser)
+    stop("Please provide a bam file", call. = FALSE)
 }
 
 # Read in bam file.
-
-
 if (file.exists(opt$outdir) == FALSE) {
-  dir.create(opt$outdir, recursive = TRUE)
+    dir.create(opt$outdir, recursive = TRUE)
 }
 setwd(opt$outdir)
 
 # Begin use of groHMM -> CURRENTLY ONLY TAKES ONE FILE
-# readsfile <- as(GenomicAlignments::readGAlignments(file = opt$bam_file, use.names = TRUE))
-galigned <- readGAlignments(BamFile(opt$bam_file, asMates = TRUE)) # CHANGE BASED ON PAIRED OR SINGLE END
+readsfile <- as(
+    GenomicAlignments::readGAlignments(
+        file = opt$bam_file,
+        use.names = TRUE
+    )
+)
+# TODO CHANGE BASED ON PAIRED OR SINGLE END
+galigned <- readGAlignments(BamFile(opt$bam_file, asMates = TRUE))
 readsfile <- GRanges(galigned)
 
 # Call annotations > DEFAULT VALUES ASSIGNED
 if (is.null(opt$tuning_file)) {
-  hmmResult <- detectTranscripts(
-    readsfile,
-    LtProbB = opt$ltprobb,
-    UTS = opt$uts,
-    threshold = 1
-  ) # Uses either inputted or default values
+    hmmResult <- detectTranscripts(
+        readsfile,
+        LtProbB = opt$ltprobb,
+        UTS = opt$uts,
+        threshold = 1
+    ) # Uses either inputted or default values
 } else {
-  tune <- read.csv(opt$tuning_file)
-  # Minimum error
-  uts <- tune[which.min(tune$total), "UTS"]
-  ltprobb <- tune[which.min(tune$total), "LtProbB"]
-  hmmResult <- detectTranscripts(
-    readsfile,
-    LtProbB = ltprobb,
-    UTS = uts,
-    threshold = 1
-  )
+    tune <- read.csv(opt$tuning_file)
+    # Minimum error
+    uts <- tune[which.min(tune$total), "UTS"]
+    ltprobb <- tune[which.min(tune$total), "LtProbB"]
+    hmmResult <- detectTranscripts(
+        readsfile,
+        LtProbB = ltprobb,
+        UTS = uts,
+        threshold = 1
+    )
 }
 
 txHMM <- hmmResult$transcripts
 write.table(
-  txHMM,
-  file = paste(opt$outprefix,
-    ".transcripts.txt",
-    sep = ""
-  )
+    txHMM,
+    file = paste(opt$outprefix,
+        ".transcripts.txt",
+        sep = ""
+    )
 )
 
 # Input transcript annotations
@@ -121,15 +125,15 @@ kgdb <- makeTxDbFromGFF(opt$gtf)
 kgtx <- transcripts(kgdb, columns = c("gene_id", "tx_id", "tx_name"))
 # Collapse annotations in preparation for overlap
 kgConsensus <- makeConsensusAnnotations(
-  kgtx,
-  keytype = "gene_id",
-  mc.cores = opt$cores
+    kgtx,
+    keytype = "gene_id",
+    mc.cores = opt$cores
 )
 map <- AnnotationDbi::select(
-  org.Hs.eg.db,
-  keys = unlist(mcols(kgConsensus)$gene_id),
-  columns = c("SYMBOL"),
-  keytype = c("ENTREZID")
+    org.Hs.eg.db,
+    keys = unlist(mcols(kgConsensus)$gene_id),
+    columns = c("SYMBOL"),
+    keytype = c("ENTREZID")
 )
 mcols(kgConsensus)$symbol <- map$SYMBOL
 mcols(kgConsensus)$type <- "gene"
@@ -143,15 +147,15 @@ capture.output(e$eval, file = paste0(opt$outprefix, ".eval.txt"))
 
 # repairing with annotations
 getExpressedAnnotations <- function(features, reads) {
-  fLimit <- limitToXkb(features)
-  count <- countOverlaps(fLimit, reads)
-  features <- features[count != 0, ]
-  return(features[(quantile(width(features), .05) < width(features)) &
-    (width(features) < quantile(width(features), .95)), ])
+    fLimit <- limitToXkb(features)
+    count <- countOverlaps(fLimit, reads)
+    features <- features[count != 0, ]
+    return(features[(quantile(width(features), .05) < width(features)) &
+        (width(features) < quantile(width(features), .95)), ])
 }
 conExpressed <- getExpressedAnnotations(
-  features = kgConsensus,
-  reads = readsfile
+    features = kgConsensus,
+    reads = readsfile
 )
 bPlus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "+")
 bMinus <- breakTranscriptsOnGenes(txHMM, kgConsensus, strand = "-")
@@ -184,10 +188,10 @@ citation("AnnotationDbi")
 
 RLogFile <- "R_sessionInfo.log"
 if (file.exists(RLogFile) == FALSE) {
-  sink(RLogFile)
-  a <- sessionInfo()
-  print(a)
-  sink()
+    sink(RLogFile)
+    a <- sessionInfo()
+    print(a)
+    sink()
 }
 
 ################################################################################
