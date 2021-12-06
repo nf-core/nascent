@@ -130,14 +130,6 @@ kg_consensus <- makeConsensusAnnotations(
     keytype = "gene_id",
     mc.cores = opt$cores
 )
-map <- AnnotationDbi::select(
-    org.Hs.eg.db,
-    keys = unlist(mcols(kg_consensus)$gene_id),
-    columns = c("SYMBOL"),
-    keytype = c("ENTREZID")
-)
-mcols(kg_consensus)$symbol <- map$SYMBOL
-mcols(kg_consensus)$type <- "gene"
 
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(tx_hmm, kg_consensus)
