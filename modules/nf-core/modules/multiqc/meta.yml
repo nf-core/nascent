@@ -11,6 +11,10 @@ tools:
             It's a general use tool, perfect for summarising the output from numerous bioinformatics tools.
         homepage: https://multiqc.info/
         documentation: https://multiqc.info/docs/
+<<<<<<< HEAD
+=======
+        licence: ['GPL-3.0-or-later']
+>>>>>>> TEMPLATE
 input:
     - multiqc_files:
         type: file
@@ -29,10 +33,17 @@ output:
         type: file
         description: Plots created by MultiQC
         pattern: "*_data"
+<<<<<<< HEAD
     - version:
         type: file
         description: File containing software version
         pattern: "*.{version.txt}"
+=======
+    - versions:
+        type: file
+        description: File containing software versions
+        pattern: "versions.yml"
+>>>>>>> TEMPLATE
 authors:
     - "@abhi18av"
     - "@bunop"

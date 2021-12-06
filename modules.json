@@ -27,8 +27,11 @@
             "cat/fastq": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
+            "custom/dumpsoftwareversions": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
             "fastqc": {
-                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
             "gffread": {
                 "git_sha": "e9c57083a0938c142e14ccf2b0275ed7724fe9a0"
@@ -43,8 +46,8 @@
                 "git_sha": "669fb5caed78bccbaf0f00746e2eb50644232722"
             },
             "multiqc": {
-                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
-            },
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            }
             "picard/mergesamfiles": {
                 "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
             },
