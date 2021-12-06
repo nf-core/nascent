@@ -1,3 +1,7 @@
-sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+sample,fastq_1,fastq_2,strandedness,group
+SRX882903_T1,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,,reverse,cd4
+SRX882903_T2,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,,reverse,cd4
+SRX882903_T3,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882903_T3.fastq.gz,,reverse,cd4
+SRX882903_T4,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882903_T4.fastq.gz,,reverse,cd4
+SRX882904_T1,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882904_T1.fastq.gz,,reverse,jurkat
+SRX882904_T2,https://raw.githubusercontent.com/emiller88/test-datasets/nascent/testdata/SRX882904_T2.fastq.gz,,reverse,jurkat
