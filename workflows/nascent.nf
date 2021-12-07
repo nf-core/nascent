@@ -61,8 +61,8 @@ include { MULTIQC                                                  } from '../mo
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
-include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa'
-include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2'
+include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
+include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
 
 /*
