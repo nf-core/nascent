@@ -13,13 +13,13 @@ process GROHMM_TRANSCRIPTCALLING{
     path tuning
 
     output:
-    path "*.transcripts.txt"          , optional:true    , emit: transcripts
-    path "*.eval.txt"                 , optional:true    , emit: eval
-    path "*transcripts.bed"           , optional:true    , emit: transcripts_bed
-    path "*.tdfinal.txt"              , optional:true    , emit: td
-    path "*.tdplot.jpg"               , optional:true    , emit: tdplot
-    path "*.RData"                    , optional:true    , emit: rdata
-    path  "versions.yml"          , emit: versions
+    path "*.transcripts.txt", emit: transcripts
+    path "*.eval.txt"       , emit: eval
+    path "*transcripts.bed" , emit: transcripts_bed
+    path "*.tdfinal.txt"    , emit: td
+    path "*.tdplot.jpg"     , emit: tdplot
+    path "*.RData"          , emit: rdata
+    path  "versions.yml"    , emit: versions
 
     script:
     def args = task.ext.args ?: ''

@@ -12,9 +12,9 @@ process GROHMM_PARAMETERTUNING{
     path(tune)
 
     output:
-    path "*.tuning.csv"    , optional:true    , emit: tuning
-    path "*.RData"                    , optional:true    , emit: rdata
-    path "*.version.txt"              , emit: version
+    path "*.tuning.csv" , emit: tuning
+    path "*.RData"      , emit: rdata
+    path  "versions.yml", emit: versions
 
     script:
     def args = task.ext.args ?: ''

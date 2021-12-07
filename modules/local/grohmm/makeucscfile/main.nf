@@ -11,11 +11,11 @@ process GROHMM_MAKEUCSCFILE {
     tuple val(meta), path(bam)
 
     output:
-    path "*.collapsed.wig"        , optional:true    , emit: wig
-    path "*.plus.wig"             , optional:true    , emit: pluswig
-    path "*.minus.wig"            , optional:true    , emit: minuswig
-    path "*.RData"                , optional:true    , emit: rdata
-    path "*.version.txt"          , emit: version
+    path "*.collapsed.wig", emit: wig
+    path "*.plus.wig"     , emit: pluswig
+    path "*.minus.wig"    , emit: minuswig
+    path "*.RData"        , emit: rdata
+    path  "versions.yml"  , emit: versions
 
     script:
     def args = task.ext.args ?: ''
