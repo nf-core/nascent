@@ -29,7 +29,9 @@ workflow PREPARE_GENOME {
     // Uncompress genome fasta file if required
     //
     if (params.fasta.endsWith('.gz')) {
-        ch_fasta = GUNZIP_FASTA ( params.fasta ).gunzip
+        input = [[ id: "${params.fasta.baseName}" ],
+                  file(params.fasta, checkIfExists: true)]
+        ch_fasta = GUNZIP_FASTA ( input ).gunzip
     } else {
         ch_fasta = file(params.fasta)
     }
