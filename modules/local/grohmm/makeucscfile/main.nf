@@ -14,7 +14,7 @@ process GROHMM_MAKEUCSCFILE {
     path "*.collapsed.wig", emit: wig
     path "*.plus.wig"     , emit: pluswig
     path "*.minus.wig"    , emit: minuswig
-    path "*.RData"        , emit: rdata
+    // FIXME path "*.RData"          , emit: rdata
     path  "versions.yml"  , emit: versions
 
     script:

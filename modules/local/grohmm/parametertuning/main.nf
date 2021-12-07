@@ -13,7 +13,7 @@ process GROHMM_PARAMETERTUNING{
 
     output:
     path "*.tuning.csv" , emit: tuning
-    path "*.RData"      , emit: rdata
+    // FIXME path "*.RData"          , emit: rdata
     path  "versions.yml", emit: versions
 
     script:

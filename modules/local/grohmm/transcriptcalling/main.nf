@@ -18,7 +18,7 @@ process GROHMM_TRANSCRIPTCALLING{
     path "*transcripts.bed" , emit: transcripts_bed
     path "*.tdfinal.txt"    , emit: td
     path "*.tdplot.jpg"     , emit: tdplot
-    path "*.RData"          , emit: rdata
+    // FIXME path "*.RData"          , emit: rdata
     path  "versions.yml"    , emit: versions
 
     script:
