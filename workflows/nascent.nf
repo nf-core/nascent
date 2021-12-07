@@ -40,46 +40,9 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 ========================================================================================
 */
 
-// Don't overwrite global params.modules, create a copy instead and use that within the main script.
-def modules = params.modules.clone()
-
-def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
-def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
-
-//
-// MODULE: Local to the pipeline
-//
-include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' addParams( options: [publish_files : ['tsv':'']] )
-
-//
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-def gffread_options         = modules['gffread']
-if (!params.save_reference) { gffread_options['publish_files'] = false }
-
-def bwa_align_options            = modules['bwa_align']
-// TODO
-// bwa_align_options.args          += params.save_unaligned ? " --outReadsUnmapped Fastx" : ''
-// if (params.save_align_intermeds)  { bwa_align_options.publish_files.put('bam','') }
-// if (params.save_unaligned)        { bwa_align_options.publish_files.put('fastq.gz','unmapped') }
-
-def samtools_sort_options = modules['samtools_sort']
-// TODO
-// if (['bwa'].contains(params.aligner)) {
-//     if (params.save_align_intermeds || (!params.with_umi && params.skip_markduplicates)) {
-//         samtools_sort_options.publish_files.put('bam','')
-//         samtools_sort_options.publish_files.put('bai','')
-//     }
-// } else {
-//     if (params.save_align_intermeds || params.skip_markduplicates) {
-//         samtools_sort_options.publish_files.put('bam','')
-//         samtools_sort_options.publish_files.put('bai','')
-//     }
-// }
-
-include { INPUT_CHECK           } from '../subworkflows/local/input_check'       addParams( options: [:]                          )
-include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'    addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options )
-include { GROHMM                } from '../subworkflows/local/grohmm'            addParams( options: [:]                          )
+include { INPUT_CHECK           } from '../subworkflows/local/input_check'
+include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
+include { GROHMM                } from '../subworkflows/local/grohmm'
 
 /*
 ========================================================================================
@@ -87,38 +50,20 @@ include { GROHMM                } from '../subworkflows/local/grohmm'           
 ========================================================================================
 */
 
-//
-// MODULE: Installed directly from nf-core/modules
-//
-def multiqc_options   = modules['multiqc']
-multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
-
-//
-// MODULE: Installed directly from nf-core/modules
-def cat_fastq_options          = modules['cat_fastq']
-// FIXME if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
-
-def subread_featurecounts_options                      = modules['subread_featurecounts']
-def subread_featurecounts_gene_options                 = subread_featurecounts_options.clone()
-def subread_featurecounts_predicted_options            = subread_featurecounts_options.clone()
-subread_featurecounts_predicted_options['publish_dir'] = "${params.aligner}/featurecounts/predicted"
-subread_featurecounts_predicted_options.args           = " -F \"SAF\""
-
-//
-include { FASTQC                                                   } from '../modules/nf-core/modules/fastqc/main'                addParams( options: modules['fastqc']                       )
-include { CAT_FASTQ                                                } from '../modules/nf-core/modules/cat/fastq/main'             addParams( options: cat_fastq_options                )
-include { BED2SAF                                                  } from '../modules/local/bed2saf'                       addParams(                                                  )
-include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/modules/picard/mergesamfiles/main'        addParams( options: modules['picard_mergesamfiles'] )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_predicted_options )
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/modules/subread/featurecounts/main' addParams( options: subread_featurecounts_options           )
-include { MULTIQC                                                  } from '../modules/nf-core/modules/multiqc/main'               addParams( options: multiqc_options                         )
+include { FASTQC                                                   } from '../modules/nf-core/modules/fastqc/main'
+include { CAT_FASTQ                                                } from '../modules/nf-core/modules/cat/fastq/main'
+include { BED2SAF                                                  } from '../modules/local/bed2saf'
+include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/modules/picard/mergesamfiles/main'
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED
+          SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/modules/subread/featurecounts/main'
+include { MULTIQC                                                  } from '../modules/nf-core/modules/multiqc/main'
 
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
-include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa'         addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
-include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2'     addParams( align_options: bwa_align_options, samtools_options: samtools_sort_options )
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf' addParams( options: [:]                          )
+include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa'
+include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2'
+include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
 
 /*
 ========================================================================================

@@ -2,12 +2,8 @@
  * Alignment with BWA
  */
 
-params.index_options    = [:]
-params.align_options    = [:]
-params.samtools_options = [:]
-
-include { BWA_MEM           } from '../../modules/nf-core/modules/bwa/mem/main'   addParams( options: params.align_options    )
-include { BAM_SORT_SAMTOOLS } from './bam_sort_samtools'  addParams( options: params.samtools_options )
+include { BWA_MEM           } from '../../modules/nf-core/modules/bwa/mem/main'
+include { BAM_SORT_SAMTOOLS } from './bam_sort_samtools'
 
 workflow ALIGN_BWA {
     take:
