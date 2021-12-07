@@ -155,7 +155,7 @@ b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
 tx_broken <- c(b_plus, b_minus)
 tx_final <- combineTranscripts(tx_broken, kg_consensus)
 td_final <- getTxDensity(tx_final, con_expressed, mc.cores = opt$cores)
-export(tx_final, con = paste(opt$outprefix, "final.transcripts.bed", sep = ""))
+export(tx_final, con = paste(opt$outprefix, ".final.transcripts.bed", sep = ""))
 capture.output(td_final, file = paste0(opt$outprefix, ".tdFinal.txt"))
 # Output plot
 jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
