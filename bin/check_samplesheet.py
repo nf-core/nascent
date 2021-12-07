@@ -106,7 +106,6 @@ def check_samplesheet(file_in, file_out):
                             line,
                         )
 
-<<<<<<< HEAD
             ## Check strandedness
             strandednesses = ["unstranded", "forward", "reverse"]
             if strandedness:
@@ -126,8 +125,6 @@ def check_samplesheet(file_in, file_out):
             if not group:
                 print_error("Group entry has not been specified!", "Line", line)
 
-=======
->>>>>>> TEMPLATE
             ## Auto-detect paired-end/single-end
             sample_info = []  ## [single_end, fastq_1, fastq_2]
             if sample and fastq_1 and fastq_2:  ## Paired-end short reads
