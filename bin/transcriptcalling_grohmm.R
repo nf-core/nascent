@@ -160,7 +160,7 @@ capture.output(td_final, file = paste0(opt$outprefix, ".tdFinal.txt"))
 # Output plot
 jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
 # 2. Create the plot
-td_final <- getTxDensity(tx_final, conExpressed, mc.cores = opt$cores)
+td_final <- getTxDensity(tx_final, con_expressed, mc.cores = opt$cores)
 
 # 3. Close the file
 dev.off()
@@ -181,7 +181,7 @@ citation("AnnotationDbi")
 
 r_log_file <- "R_sessionInfo.log"
 if (file.exists(r_log_file) == FALSE) {
-    sink(RLogFile)
+    sink(r_log_file)
     a <- sessionInfo()
     print(a)
     sink()
