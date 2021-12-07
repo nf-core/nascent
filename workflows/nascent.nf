@@ -50,13 +50,15 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 ========================================================================================
 */
 
-include { FASTQC                                                   } from '../modules/nf-core/modules/fastqc/main'
-include { CAT_FASTQ                                                } from '../modules/nf-core/modules/cat/fastq/main'
-include { BED2SAF                                                  } from '../modules/local/bed2saf'
-include { PICARD_MERGESAMFILES                                     } from '../modules/nf-core/modules/picard/mergesamfiles/main'
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED
-          SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/modules/subread/featurecounts/main'
-include { MULTIQC                                                  } from '../modules/nf-core/modules/multiqc/main'
+include { FASTQC                                                  } from '../modules/nf-core/modules/fastqc/main'
+include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
+include { BED2SAF                                                 } from '../modules/local/bed2saf'
+include { PICARD_MERGESAMFILES                                    } from '../modules/nf-core/modules/picard/mergesamfiles/main'
+include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
+         SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main'
+include { MULTIQC                                                 } from '../modules/nf-core/modules/multiqc/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+
 
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
@@ -76,14 +78,15 @@ def multiqc_report = []
 
 workflow NASCENT {
 
+    ch_versions = Channel.empty()
+
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (
         prepareToolIndices
     )
-    ch_software_versions = Channel.empty()
-    ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -91,19 +94,21 @@ workflow NASCENT {
     INPUT_CHECK (
         ch_input
     )
-    .map {
+    INPUT_CHECK.out.reads.map {
         meta, fastq ->
-            meta.id = meta.id.split('_')[0..-2].join('_')
-            [ meta, fastq ] }
-    .groupTuple(by: [0])
-    .branch {
-        meta, fastq ->
+        meta.id = meta.id.split('_')[0..-2].join('_')
+        [ meta, fastq ] }
+        .groupTuple(by: [0])
+        .branch {
+            meta, fastq ->
             single  : fastq.size() == 1
-                return [ meta, fastq.flatten() ]
+            return [ meta, fastq.flatten() ]
             multiple: fastq.size() > 1
-                return [ meta, fastq.flatten() ]
-    }
-    .set { ch_fastq }
+            return [ meta, fastq.flatten() ]
+        }
+        .set { ch_fastq }
+
+    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions.first())
 
     //
     // MODULE: Concatenate FastQ files from same sample if required
@@ -111,8 +116,12 @@ workflow NASCENT {
     CAT_FASTQ (
         ch_fastq.multiple
     )
-    .mix(ch_fastq.single)
-    .set { ch_cat_fastq }
+
+    CAT_FASTQ.out.reads
+        .mix(ch_fastq.single)
+        .set { ch_cat_fastq }
+
+    ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
 
     //
     // MODULE: Run FastQC
@@ -120,7 +129,7 @@ workflow NASCENT {
     FASTQC (
         ch_cat_fastq
     )
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // SUBWORKFLOW: Alignment with BWA
@@ -143,8 +152,8 @@ workflow NASCENT {
         ch_samtools_stats    = ALIGN_BWA.out.stats
         ch_samtools_flagstat = ALIGN_BWA.out.flagstat
         ch_samtools_idxstats = ALIGN_BWA.out.idxstats
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.bwa_version.first().ifEmpty(null))
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWA.out.samtools_version.first().ifEmpty(null))
+
+        ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
             ch_cat_fastq,
@@ -155,8 +164,8 @@ workflow NASCENT {
         ch_samtools_stats    = ALIGN_BWAMEM2.out.stats
         ch_samtools_flagstat = ALIGN_BWAMEM2.out.flagstat
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.bwa_version.first().ifEmpty(null))
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.first().ifEmpty(null))
+
+        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions.first())
     }
 
     ch_genome_bam.map {
@@ -199,22 +208,7 @@ workflow NASCENT {
     SUBREAD_FEATURECOUNTS_GENE (
         ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
     )
-    ch_software_versions = ch_software_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.version.first().ifEmpty(null))
-
-    //
-    // MODULE: Pipeline reporting
-    //
-    ch_software_versions
-        .map { it -> if (it) [ it.baseName, it ] }
-        .groupTuple()
-        .map { it[1][0] }
-        .flatten()
-        .collect()
-        .set { ch_software_versions }
-
-    GET_SOFTWARE_VERSIONS (
-        ch_software_versions.map { it }.collect()
-    )
+    ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 
     //
     // MODULE: MultiQC
@@ -226,7 +220,6 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
     ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
@@ -234,7 +227,15 @@ workflow NASCENT {
         ch_multiqc_files.collect()
     )
     multiqc_report       = MULTIQC.out.report.toList()
-    ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
+    ch_versions = ch_versions.mix(MULTIQC.out.versions.first())
+
+
+    //
+    // MODULE: Dump software versions for all tools used in the workflow
+    //
+    CUSTOM_DUMPSOFTWAREVERSIONS (
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
+    )
 }
 
 /*
