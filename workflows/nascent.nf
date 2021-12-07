@@ -54,8 +54,9 @@ include { FASTQC                                                  } from '../mod
 include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include { PICARD_MERGESAMFILES                                    } from '../modules/nf-core/modules/picard/mergesamfiles/main'
-include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
-         SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main'
+include {
+    SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
+    SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main'
 include { MULTIQC                                                 } from '../modules/nf-core/modules/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
