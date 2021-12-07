@@ -5,14 +5,12 @@
 # Packages below need to be available to load when running R.
 
 
-library(groHMM)
-library(GenomicFeatures)
-library(org.Hs.eg.db)
-library(edgeR)
-library(TxDb.Hsapiens.UCSC.hg19.knownGene)
-library(optparse)
-library(GenomicAlignments)
-
+suppressPackageStartupMessages(library(groHMM))
+suppressPackageStartupMessages(library(GenomicFeatures))
+suppressPackageStartupMessages(library(org.Hs.eg.db))
+suppressPackageStartupMessages(library(edgeR))
+suppressPackageStartupMessages(library(optparse))
+suppressPackageStartupMessages(library(GenomicAlignments))
 
 option_list <- list(
   make_option(c("-i", "--bam_file"),
