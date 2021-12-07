@@ -3,7 +3,6 @@
 //
 
 include { GTF2BED                     } from '../../modules/local/gtf2bed'
-include { CAT_ADDITIONAL_FASTA        } from '../../modules/local/cat_additional_fasta'
 include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filter'
 
 include {
