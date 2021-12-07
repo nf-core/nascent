@@ -30,10 +30,16 @@
             "custom/dumpsoftwareversions": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
+            "custom/getchromsizes": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
             "fastqc": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
             "gffread": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "gunzip": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
             "homer/findpeaks": {
@@ -68,6 +74,9 @@
             },
             "subread/featurecounts": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "untar": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             }
         }
     }

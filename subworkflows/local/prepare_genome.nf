@@ -7,21 +7,21 @@ params.index_options        = [:]
 params.gffread_options      = [:]
 params.bwa_index_options    = [:]
 
+include { GTF2BED                     } from '../../modules/local/gtf2bed'              addParams( options: params.genome_options       )
+include { CAT_ADDITIONAL_FASTA        } from '../../modules/local/cat_additional_fasta' addParams( options: params.genome_options       )
+include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filter'      addParams( options: params.genome_options       )
+
 include {
     GUNZIP as GUNZIP_FASTA
     GUNZIP as GUNZIP_GTF
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED
-    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/local/gunzip'               addParams( options: params.genome_options       )
-include { GTF2BED                     } from '../../modules/local/gtf2bed'              addParams( options: params.genome_options       )
-include { CAT_ADDITIONAL_FASTA        } from '../../modules/local/cat_additional_fasta' addParams( options: params.genome_options       )
-include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filter'      addParams( options: params.genome_options       )
-include { GET_CHROM_SIZES             } from '../../modules/local/get_chrom_sizes'      addParams( options: params.genome_options       )
-include { UNTAR as UNTAR_BWA_INDEX    } from '../../modules/local/untar'                addParams( options: params.bwa_index_options   )
-
+    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/modules/gunzip/main'               addParams( options: params.genome_options       )
+include { UNTAR as UNTAR_BWA_INDEX    } from '../../modules/nf-core/modules/untar/main'                addParams( options: params.bwa_index_options   )
 include { GFFREAD                     } from '../../modules/nf-core/modules/gffread/main'   addParams( options: params.gffread_options      )
 include { BWA_INDEX                   } from '../../modules/nf-core/modules/bwa/index/main' addParams( options: params.bwa_index_options )
 include { BWAMEM2_INDEX               } from '../../modules/nf-core/modules/bwamem2/index/main' addParams( options: params.bwa_index_options )
+include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/modules/custom/getchromsizes/main'      addParams( options: params.genome_options       )
 
 workflow PREPARE_GENOME {
     take:
@@ -87,7 +87,7 @@ workflow PREPARE_GENOME {
     /*
     * Create chromosome sizes file
     */
-    ch_chrom_sizes = GET_CHROM_SIZES ( ch_fasta ).sizes
+    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( ch_fasta ).sizes
 
     /*
     * Uncompress BWA index or generate from scratch if required
