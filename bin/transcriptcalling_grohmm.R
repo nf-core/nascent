@@ -158,7 +158,7 @@ td_final <- getTxDensity(tx_final, con_expressed, mc.cores = opt$cores)
 export(tx_final, con = paste(opt$outprefix, ".final.transcripts.bed", sep = ""))
 capture.output(td_final, file = paste0(opt$outprefix, ".tdFinal.txt"))
 # Output plot
-jpeg(file = paste0(opt$outprefix, ".tdplot.jpg"))
+jpeg(file = paste0(opt$outprefix, ".tdplot_mqc.jpg"))
 # 2. Create the plot
 td_final <- getTxDensity(tx_final, con_expressed, mc.cores = opt$cores)
 
