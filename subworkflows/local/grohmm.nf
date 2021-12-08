@@ -36,6 +36,7 @@ workflow GROHMM {
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
     bed         = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
+    td_plot     = GROHMM_TRANSCRIPTCALLING.out.td_plot
     wig         = GROHMM_MAKEUCSCFILE.out.wig
     plus_wig    = GROHMM_MAKEUCSCFILE.out.minuswig
     minus_wig   = GROHMM_MAKEUCSCFILE.out.pluswig
