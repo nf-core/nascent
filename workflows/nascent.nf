@@ -181,6 +181,7 @@ workflow NASCENT {
     PICARD_MERGESAMFILES (
         group_bam
     )
+    ch_versions = ch_versions.mix(PICARD_MERGESAMFILES.out.versions.first().ifEmpty(null))
 
     ch_homer_multiqc = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
