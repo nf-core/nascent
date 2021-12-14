@@ -42,6 +42,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
+include { GROHMM_MAKEUCSCFILE   } from '../modules/local/grohmm/makeucscfile/main.nf'
 include { GROHMM                } from '../subworkflows/local/grohmm'
 
 /*
@@ -188,6 +189,8 @@ workflow NASCENT {
         //
         // SUBWORKFLOW: Transcript indetification with GROHMM
         //
+        GROHMM_MAKEUCSCFILE ( ch_genome_bam )
+
         GROHMM (
             PICARD_MERGESAMFILES.out.bam,
             PREPARE_GENOME.out.gtf

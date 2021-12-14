@@ -2,7 +2,6 @@
  * TODO
  */
 
-include { GROHMM_MAKEUCSCFILE      } from '../../modules/local/grohmm/makeucscfile/main.nf'
 include { GROHMM_TRANSCRIPTCALLING } from '../../modules/local/grohmm/transcriptcalling/main.nf'
 include { GROHMM_PARAMETERTUNING   } from '../../modules/local/grohmm/parametertuning/main.nf'
 
@@ -11,13 +10,10 @@ include { GROHMM_PARAMETERTUNING   } from '../../modules/local/grohmm/parametert
  */
 workflow GROHMM {
     take:
-    bam // channel: [ val(meta), [ bam ] ]
+    bams // channel: [ val(meta), [ bams ] ]
     gtf
 
     main:
-    // Generate UCSC files
-    GROHMM_MAKEUCSCFILE ( bam )
-
     ch_tuning = Channel.empty()
 
     if (params.with_tuning) {
@@ -28,7 +24,7 @@ workflow GROHMM {
     }
 
     GROHMM_TRANSCRIPTCALLING (
-        bam,
+        bams,
         gtf,
         ch_tuning
     )
@@ -37,7 +33,4 @@ workflow GROHMM {
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
     bed         = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
     td_plot     = GROHMM_TRANSCRIPTCALLING.out.td_plot
-    wig         = GROHMM_MAKEUCSCFILE.out.wig
-    plus_wig    = GROHMM_MAKEUCSCFILE.out.minuswig
-    minus_wig   = GROHMM_MAKEUCSCFILE.out.pluswig
 }
