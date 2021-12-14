@@ -5,13 +5,11 @@
 # Packages below need to be available to load when running R.
 
 
-suppressPackageStartupMessages(library(groHMM))
-suppressPackageStartupMessages(library(GenomicFeatures))
-suppressPackageStartupMessages(library(org.Hs.eg.db))
-suppressPackageStartupMessages(library(edgeR))
 suppressPackageStartupMessages(library(optparse))
+suppressPackageStartupMessages(library(argparse))
+suppressPackageStartupMessages(library(GenomicFeatures))
 suppressPackageStartupMessages(library(GenomicAlignments))
-suppressPackageStartupMessages(library(RMariaDB))
+suppressPackageStartupMessages(library(groHMM))
 
 option_list <- list(
     make_option(c("-i", "--bam_file"),
@@ -169,10 +167,7 @@ dev.off()
 # CITE PACKAGES USED
 citation("groHMM")
 citation("GenomicFeatures")
-citation("org.Hs.eg.db")
-citation("edgeR")
-citation("TxDb.Hsapiens.UCSC.hg19.knownGene")
-# citation("RMariaDB")
+citation("GenomicAlignments")
 citation("AnnotationDbi")
 
 ## R SESSION INFO                             ##
