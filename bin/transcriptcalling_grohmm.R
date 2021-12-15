@@ -83,23 +83,19 @@ args <- parser$parse_args()
 
 setwd(args$outdir)
 
-# Begin use of groHMM
-# TODO CURRENTLY ONLY TAKES ONE FILE
-## readsfile <- as(
-##     GenomicAlignments::readGAlignments(
-##         file = args$bam_file,
-##         use.names = TRUE
-##     )
-## )
-# TODO CHANGE BASED ON PAIRED OR SINGLE END
-# FIXME
-galigned <- readGAlignments(BamFile(args$bam_file, asMates = TRUE))
-reads_file <- GRanges(galigned)
+# Load alignment files
+alignments <- c()
+for (bam in args$bam_files) {
+    alignments <- append(
+        alignments,
+        as(readGAlignments(bam), "GRanges")
+    )
+}
 
 # Call annotations > DEFAULT VALUES ASSIGNED
 if (is.null(args$tuning_file)) {
     hmm_result <- detectTranscripts(
-        reads_file,
+        alignments,
         LtProbB = args$ltprobb,
         UTS = args$uts,
         threshold = 1
@@ -110,7 +106,7 @@ if (is.null(args$tuning_file)) {
     uts <- tune[which.min(tune$total), "UTS"]
     lt_probb <- tune[which.min(tune$total), "LtProbB"]
     hmm_result <- detectTranscripts(
-        reads_file,
+        alignments,
         LtProbB = lt_probb,
         UTS = uts,
         threshold = 1
@@ -153,7 +149,7 @@ get_expressed_annotations <- function(features, reads) {
 }
 con_expressed <- get_expressed_annotations(
     features = kg_consensus,
-    reads = reads_file
+    reads = alignments
 )
 b_plus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "+")
 b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
