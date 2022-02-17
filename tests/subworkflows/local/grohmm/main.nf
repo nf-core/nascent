@@ -2,7 +2,7 @@
 
 nextflow.enable.dsl = 2
 
-include { GROHMM } from '../../../../subworkflows/local/grohmm' addParams( options: [ publish_dir:'test_removegenes' ], slop_options: [args: '-l 15 -r 30'] )
+include { GROHMM } from '../../../../subworkflows/local/grohmm'
 
 workflow test_grohmm {
     def input = [[ id: 'test' ],

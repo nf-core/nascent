@@ -1,5 +1,5 @@
 - name: subworkflow grohmm
-  command: nextflow run ./tests/modules/local/subworkflow/grohmm/ -entry test_grohmm -c tests/config/nextflow.config
+  command: nextflow run ./tests/modules/local/subworkflow/grohmm/ -entry test_grohmm -c tests/config/nextflow.config -c tests/subworkflows/local/grohmm/nextflow.config
   tags:
     - grohmm
   # TODO md5 sum these
