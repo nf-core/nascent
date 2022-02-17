@@ -54,7 +54,6 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 include { FASTQC                                                  } from '../modules/nf-core/modules/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
-include { PICARD_MERGESAMFILES                                    } from '../modules/nf-core/modules/picard/mergesamfiles/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main'
@@ -179,20 +178,15 @@ workflow NASCENT {
         .map { it ->  [ it[0], it[1].flatten() ] }
         .set { ch_sort_bam }
 
-    PICARD_MERGESAMFILES (
-        ch_sort_bam
-    )
-    ch_versions = ch_versions.mix(PICARD_MERGESAMFILES.out.versions.first().ifEmpty(null))
-
     ch_homer_multiqc = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
         //
         // SUBWORKFLOW: Transcript indetification with GROHMM
         //
-        GROHMM_MAKEUCSCFILE ( ch_genome_bam )
+        // GROHMM_MAKEUCSCFILE ( ch_genome_bam )
 
         GROHMM (
-            PICARD_MERGESAMFILES.out.bam,
+            ch_sort_bam,
             PREPARE_GENOME.out.gtf
         )
 
@@ -204,7 +198,7 @@ workflow NASCENT {
         * SUBWORKFLOW: Transcript indetification with homer
         */
         HOMER_GROSEQ (
-            PICARD_MERGESAMFILES.out.bam,
+            ch_sort_bam,
             PREPARE_GENOME.out.fasta
         )
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir

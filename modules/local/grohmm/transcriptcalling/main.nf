@@ -9,7 +9,7 @@ process GROHMM_TRANSCRIPTCALLING{
         'quay.io/biocontainers/mulled-v2-e9a6cb7894dd2753aff7d9446ea95c962cce8c46:0a46dae3241b1c4f02e46468f5d54eadcf64beca-0' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bams)
     path gtf
     path tuning
 
@@ -25,10 +25,11 @@ process GROHMM_TRANSCRIPTCALLING{
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def bam_files = bams.sort()
     if (params.with_tuning) {
         """
         transcriptcalling_grohmm.R \\
-            --bam_file ${bam} \\
+            --bam_file ${bam_files} \\
             --tuning_file ${tuning} \\
             --outprefix ${prefix} \\
             --gtf $gtf \\
@@ -45,7 +46,7 @@ process GROHMM_TRANSCRIPTCALLING{
     } else {
         """
         transcriptcalling_grohmm.R \\
-            --bam_file ${bam} \\
+            --bam_files ${bam_files} \\
             --outprefix ${prefix} \\
             --gtf $gtf \\
             --outdir ./ \\
