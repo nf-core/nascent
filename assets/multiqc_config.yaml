@@ -7,6 +7,8 @@ run_modules:
     - custom_content
     - fastqc
     - samtools
+    - preseq
+    - rseqc
     - featurecounts
     - homer
 
