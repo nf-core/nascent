@@ -171,7 +171,8 @@ workflow NASCENT {
     }
 
     QUALITY_CONTROL (
-        ch_genome_bam
+        ch_genome_bam,
+        PREPARE_GENOME.out.gene_bed
     )
 
     ch_genome_bam.map {
