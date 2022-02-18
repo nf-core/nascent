@@ -7,6 +7,7 @@ include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/modules/preseq/lcextrap/
 include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/modules/rseqc/readdistribution/main'
 include { RSEQC_READDUPLICATION } from '../../modules/nf-core/modules/rseqc/readduplication/main'
 include { RSEQC_INFEREXPERIMENT } from '../../modules/nf-core/modules/rseqc/inferexperiment/main'
+include { BBMAP_PILEUP } from '../../modules/local/bbmap/pileup/main'
 
 workflow QUALITY_CONTROL {
     take:
@@ -38,6 +39,8 @@ workflow QUALITY_CONTROL {
     )
     ch_versions = ch_versions.mix(RSEQC_INFEREXPERIMENT.out.versions.first())
 
+    BBMAP_PILEUP ( bam )
+
     emit:
     preseq_ccurve = PRESEQ_CCURVE.out.ccurve
     preseq_lcextrap = PRESEQ_LCEXTRAP.out.ccurve
@@ -48,6 +51,9 @@ workflow QUALITY_CONTROL {
     readduplication_pdf = RSEQC_READDUPLICATION.out.pdf
     readduplication_rscript = RSEQC_READDUPLICATION.out.rscript
     inferexperiment_txt = RSEQC_INFEREXPERIMENT.out.txt
+
+    pileup_stats = BBMAP_PILEUP.out.stats
+    pileup_hist = BBMAP_PILEUP.out.hist
 
     versions        = ch_versions                      // channel: [ versions.yml ]
 }
