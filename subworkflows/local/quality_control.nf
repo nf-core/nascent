@@ -5,6 +5,7 @@
 include { PRESEQ_CCURVE } from '../../modules/local/preseq/ccurve/main'
 include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/modules/preseq/lcextrap/main'
 include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/modules/rseqc/readdistribution/main'
+include { RSEQC_READDUPLICATION } from '../../modules/nf-core/modules/rseqc/readduplication/main'
 
 workflow QUALITY_CONTROL {
     take:
@@ -27,10 +28,17 @@ workflow QUALITY_CONTROL {
     )
     ch_versions = ch_versions.mix(RSEQC_READDISTRIBUTION.out.versions.first())
 
+    RSEQC_READDUPLICATION ( bam )
+    ch_versions = ch_versions.mix(RSEQC_READDUPLICATION.out.versions.first())
+
     emit:
     preseq_ccurve = PRESEQ_CCURVE.out.ccurve
     preseq_lcextrap = PRESEQ_LCEXTRAP.out.ccurve
 
     readdistribution_txt = RSEQC_READDISTRIBUTION.out.txt
+    readduplication_seq_xls = RSEQC_READDUPLICATION.out.seq_xls
+    readduplication_pos_xls = RSEQC_READDUPLICATION.out.pos_xls
+    readduplication_pdf = RSEQC_READDUPLICATION.out.pdf
+    readduplication_rscript = RSEQC_READDUPLICATION.out.rscript
     versions        = ch_versions                      // channel: [ versions.yml ]
 }
