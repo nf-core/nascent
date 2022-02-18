@@ -55,5 +55,5 @@ workflow QUALITY_CONTROL {
     pileup_stats = BBMAP_PILEUP.out.stats
     pileup_hist = BBMAP_PILEUP.out.hist
 
-    versions        = ch_versions                      // channel: [ versions.yml ]
+    versions = ch_versions                      // channel: [ versions.yml ]
 }
