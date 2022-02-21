@@ -2,6 +2,7 @@
  * Identify transcripts with homer
  */
 
+include { BEDTOOLS_BAMTOBED           } from '../../modules/nf-core/modules/bedtools/bamtobed/main'
 include { HOMER_MAKETAGDIRECTORY      } from '../../modules/nf-core/modules/homer/maketagdirectory/main'
 include { HOMER_MAKEUCSCFILE          } from '../../modules/nf-core/modules/homer/makeucscfile/main'
 include { HOMER_FINDPEAKS             } from '../../modules/nf-core/modules/homer/findpeaks/main'
@@ -15,10 +16,22 @@ workflow HOMER_GROSEQ {
 
     ch_versions = Channel.empty()
 
+    // HACK Covert to bed files because homer doesn't have samtools included
+    BEDTOOLS_BAMTOBED ( bam )
+    BEDTOOLS_BAMTOBED.out.bed.map {
+        meta, bed ->
+        fmeta = meta.findAll { it.key != 'read_group' }
+        fmeta.id = fmeta.id.split('_')[0..-2].join('_')
+        [ fmeta, bed ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { ch_grouped_bed }
+
+
     /*
     * Create a Tag Directory From The GRO-Seq experiment
     */
-    HOMER_MAKETAGDIRECTORY ( bam, fasta )
+    HOMER_MAKETAGDIRECTORY ( ch_grouped_bed, fasta )
     ch_versions = ch_versions.mix(HOMER_MAKETAGDIRECTORY.out.versions.first())
 
     /*

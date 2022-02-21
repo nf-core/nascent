@@ -3,6 +3,9 @@
     "homePage": "https://github.com/nf-core/nascent",
     "repos": {
         "nf-core/modules": {
+            "bedtools/bamtobed": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
             "bedtools/intersect": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },

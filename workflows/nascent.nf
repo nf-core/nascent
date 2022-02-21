@@ -211,7 +211,7 @@ workflow NASCENT {
         * SUBWORKFLOW: Transcript indetification with homer
         */
         HOMER_GROSEQ (
-            ch_sort_bam,
+            ch_genome_bam,
             PREPARE_GENOME.out.fasta
         )
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
