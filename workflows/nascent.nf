@@ -215,6 +215,7 @@ workflow NASCENT {
             PREPARE_GENOME.out.fasta
         )
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
+        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
     }
 
     SUBREAD_FEATURECOUNTS_GENE (
