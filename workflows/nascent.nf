@@ -214,6 +214,11 @@ workflow NASCENT {
             ch_genome_bam,
             PREPARE_GENOME.out.fasta
         )
+
+        SUBREAD_FEATURECOUNTS_PREDICTED (
+            ch_genome_bam.combine( BED2SAF ( HOMER_GROSEQ.out.bed ) )
+        )
+
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
     }

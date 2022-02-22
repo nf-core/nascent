@@ -6,6 +6,7 @@ include { BEDTOOLS_BAMTOBED           } from '../../modules/nf-core/modules/bedt
 include { HOMER_MAKETAGDIRECTORY      } from '../../modules/nf-core/modules/homer/maketagdirectory/main'
 include { HOMER_MAKEUCSCFILE          } from '../../modules/nf-core/modules/homer/makeucscfile/main'
 include { HOMER_FINDPEAKS             } from '../../modules/nf-core/modules/homer/findpeaks/main'
+include { HOMER_POS2BED               } from '../../modules/local/homer/pos2bed/main'
 
 workflow HOMER_GROSEQ {
     take:
@@ -46,10 +47,17 @@ workflow HOMER_GROSEQ {
     HOMER_FINDPEAKS ( HOMER_MAKETAGDIRECTORY.out.tagdir )
     ch_versions = ch_versions.mix(HOMER_FINDPEAKS.out.versions.first())
 
+    /*
+    * Convert peak file to bed file
+    */
+    HOMER_POS2BED ( HOMER_FINDPEAKS.out.txt )
+    ch_versions = ch_versions.mix(HOMER_POS2BED.out.versions.first())
+
     emit:
     tag_dir            = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tag_dir ] ]
     bed_graph          = HOMER_MAKEUCSCFILE.out.bedGraph    // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
     peaks              = HOMER_FINDPEAKS.out.txt            // channel: [ val(meta), [ *peaks.txt ] ]
+    bed                = HOMER_POS2BED.out.bed            // channel: [ val(meta), [ *peaks.txt ] ]
 
     versions = ch_versions                      // channel: [ versions.yml ]
 }
