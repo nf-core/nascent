@@ -182,6 +182,9 @@ workflow NASCENT {
     )
     ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions.first())
 
+    //
+    // SUBWORKFLOW: Transcript indetification
+    //
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
@@ -193,10 +196,6 @@ workflow NASCENT {
 
     ch_homer_multiqc = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
-        //
-        // SUBWORKFLOW: Transcript indetification with GROHMM
-        //
-        // GROHMM_MAKEUCSCFILE ( ch_genome_bam )
 
         GROHMM (
             ch_sort_bam,
