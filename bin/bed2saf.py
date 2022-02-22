@@ -4,7 +4,7 @@ import argparse
 
 
 def bed2saf(bed, output):
-    bed = pd.read_csv(bed, sep="\t")
+    bed = pd.read_csv(bed, sep="\t", comment="#")
     bed.columns = ["Chr", "Start", "End", "GeneID", "frame", "Strand"]
     # TODO Clever naming scheme
     bed["GeneID"] = (
