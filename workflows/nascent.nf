@@ -214,8 +214,13 @@ workflow NASCENT {
             PREPARE_GENOME.out.fasta
         )
 
+        HOMER_GROSEQ.out.bed.map {
+            meta, bed ->
+            bed
+        }.set { ch_transcript_bed }
+
         SUBREAD_FEATURECOUNTS_PREDICTED (
-            ch_genome_bam.combine( BED2SAF ( HOMER_GROSEQ.out.bed ) )
+            ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ) )
         )
 
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
