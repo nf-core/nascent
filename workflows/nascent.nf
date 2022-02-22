@@ -195,6 +195,7 @@ workflow NASCENT {
         .set { ch_sort_bam }
 
     ch_homer_multiqc = Channel.empty()
+    ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
 
         GROHMM (
@@ -202,9 +203,7 @@ workflow NASCENT {
             PREPARE_GENOME.out.gtf
         )
 
-        SUBREAD_FEATURECOUNTS_PREDICTED (
-            ch_genome_bam.combine( BED2SAF ( GROHMM.out.bed ) )
-        )
+        ch_identification_bed = GROHMM.out.bed
     } else if (params.transcript_identification == 'homer') {
         /*
         * SUBWORKFLOW: Transcript indetification with homer
@@ -213,19 +212,21 @@ workflow NASCENT {
             ch_genome_bam,
             PREPARE_GENOME.out.fasta
         )
-
-        HOMER_GROSEQ.out.bed.map {
-            meta, bed ->
-            bed
-        }.set { ch_transcript_bed }
-
-        SUBREAD_FEATURECOUNTS_PREDICTED (
-            ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ) )
-        )
+        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
 
         ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
-        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+        ch_identification_bed = HOMER_GROSEQ.out.bed
     }
+
+    ch_identification_bed.map {
+        meta, bed ->
+        bed
+    }.set { ch_transcript_bed }
+
+    SUBREAD_FEATURECOUNTS_PREDICTED (
+        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ) )
+    )
+
 
     SUBREAD_FEATURECOUNTS_GENE (
         ch_genome_bam.combine(PREPARE_GENOME.out.gtf)

@@ -14,11 +14,11 @@ process GROHMM_TRANSCRIPTCALLING{
     path tuning
 
     output:
-    path "*.transcripts.txt" , emit: transcripts
-    path "*.eval.txt"        , emit: eval
-    path "*.transcripts.bed" , emit: transcripts_bed
-    path "*.tdFinal.txt"     , emit: td
-    path "*.tdplot_mqc.jpg"  , emit: td_plot
+    tuple val(meta), path("*.transcripts.txt"), emit: transcripts
+    tuple val(meta), path("*.eval.txt")       , emit: eval
+    tuple val(meta), path("*.transcripts.bed"), emit: transcripts_bed
+    tuple val(meta), path("*.tdFinal.txt")    , emit: td
+    tuple val(meta), path("*.tdplot_mqc.jpg") , emit: td_plot
     // FIXME path "*.RData"  , emit: rdata
     path  "versions.yml"     , emit: versions
 
