@@ -214,7 +214,7 @@ workflow NASCENT {
         )
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
 
-        ch_homer_multiqc = HOMER_GROSEQ.out.tag_dir
+        ch_homer_multiqc = HOMER_GROSEQ.out.peaks
         ch_identification_bed = HOMER_GROSEQ.out.bed
     }
 
@@ -255,7 +255,7 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(GROHMM.out.td_plot.collect().ifEmpty([]))
     // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
-    // TODO ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
