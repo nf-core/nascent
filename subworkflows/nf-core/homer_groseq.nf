@@ -54,7 +54,7 @@ workflow HOMER_GROSEQ {
     ch_versions = ch_versions.mix(HOMER_POS2BED.out.versions.first())
 
     emit:
-    tag_dir            = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tag_dir ] ]
+    tagdir             = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tagdir ] ]
     bed_graph          = HOMER_MAKEUCSCFILE.out.bedGraph    // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
     peaks              = HOMER_FINDPEAKS.out.txt            // channel: [ val(meta), [ *peaks.txt ] ]
     bed                = HOMER_POS2BED.out.bed            // channel: [ val(meta), [ *peaks.txt ] ]

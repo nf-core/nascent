@@ -215,7 +215,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
 
         ch_homer_multiqc = HOMER_GROSEQ.out.peaks
-        ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tag_dir)
+        ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
         ch_identification_bed = HOMER_GROSEQ.out.bed
     }
 
