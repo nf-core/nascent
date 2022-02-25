@@ -199,6 +199,7 @@ workflow NASCENT {
     ch_homer_multiqc = Channel.empty()
     ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
+        // FIXME Works with small test data set but not on real files
 
         GROHMM (
             ch_sort_bam,
@@ -208,6 +209,7 @@ workflow NASCENT {
         ch_identification_bed = GROHMM.out.bed
 
     } else if (params.transcript_identification == 'dreg') {
+        // FIXME bedGraphtoBigWig failing
 
         ch_dreg_model = file("ftp://cbsuftp.tc.cornell.edu/danko/hub/dreg.models/asvm.gdm.6.6M.20170828.rdata")
 
