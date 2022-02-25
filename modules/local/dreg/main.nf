@@ -1,4 +1,4 @@
-process DREG {
+process DREG_PEAKCALLING {
     tag "$meta.id"
     label 'process_high'
     label 'process_long'
@@ -20,12 +20,13 @@ process DREG {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    run_predict.bsh \\
+    bash /dREG/run_peakcalling.bsh \\
         $plus \\
         $minus \\
         $prefix \\
         $model \\
         $task.cpus \\
+        0
         $args
 
     cat <<-END_VERSIONS > versions.yml
