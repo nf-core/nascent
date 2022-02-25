@@ -30,9 +30,13 @@ workflow COVERAGE_GRAPHS {
     )
     ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_MINUS.out.versions.first())
 
+    ch_plus_minus = BEDTOOLS_GENOMECOV_PLUS.out.genomecov.join(BEDTOOLS_GENOMECOV_MINUS.out.genomecov)
+
     emit:
     plus_bedGraph = BEDTOOLS_GENOMECOV_PLUS.out.genomecov
     minus_bedGraph = BEDTOOLS_GENOMECOV_MINUS.out.genomecov
+
+    plus_minus = ch_plus_minus
 
     versions = ch_versions                      // channel: [ versions.yml ]
 }

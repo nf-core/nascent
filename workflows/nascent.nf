@@ -55,6 +55,7 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 
 include { FASTQC                                                  } from '../modules/nf-core/modules/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
+include { DREG                                                    } from '../modules/local/dreg/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
@@ -201,6 +202,17 @@ workflow NASCENT {
         GROHMM (
             ch_sort_bam,
             PREPARE_GENOME.out.gtf
+        )
+
+        ch_identification_bed = GROHMM.out.bed
+
+    } else if (params.transcript_identification == 'dreg') {
+
+        ch_dreg_model = file("ftp://cbsuftp.tc.cornell.edu/danko/hub/dreg.models/asvm.gdm.6.6M.20170828.rdata")
+
+        DREG (
+            COVERAGE_GRAPHS.out.plus_minus,
+            ch_dreg_model
         )
 
         ch_identification_bed = GROHMM.out.bed
