@@ -7,12 +7,13 @@ include {
     BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_MINUS } from '../../modules/nf-core/modules/bedtools/genomecov/main'
 
 include {
-    UCSC_BEDGRAPHTOBIGWIG as UCSC_BEDGRAPHTOBIGWIG_PLUS
-    UCSC_BEDGRAPHTOBIGWIG as UCSC_BEDGRAPHTOBIGWIG_MINUS } from '../../modules/nf-core/modules/ucsc/bedgraphtobigwig/main'
+    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS
+    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/local/deeptools/bamcoverage/main'
 
 workflow COVERAGE_GRAPHS {
     take:
     bam // channel: [ val(meta), [ bam ] ]
+    bai
     sizes
 
     main:
@@ -35,17 +36,18 @@ workflow COVERAGE_GRAPHS {
     )
     ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_MINUS.out.versions.first())
 
-    UCSC_BEDGRAPHTOBIGWIG_PLUS (
-        BEDTOOLS_GENOMECOV_PLUS.out.genomecov,
-        sizes
+
+    bam.join(bai, by: [0], remainder: true).set { ch_bam_bai }
+
+    DEEPTOOLS_BAMCOVERAGE_PLUS (
+        ch_bam_bai
     )
 
-    UCSC_BEDGRAPHTOBIGWIG_MINUS (
-        BEDTOOLS_GENOMECOV_MINUS.out.genomecov,
-        sizes
+    DEEPTOOLS_BAMCOVERAGE_MINUS (
+        ch_bam_bai
     )
 
-    ch_plus_minus = UCSC_BEDGRAPHTOBIGWIG_PLUS.out.bigwig.join(UCSC_BEDGRAPHTOBIGWIG_MINUS.out.bigwig)
+    ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
     emit:
     plus_bedGraph = BEDTOOLS_GENOMECOV_PLUS.out.genomecov

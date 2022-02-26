@@ -180,6 +180,7 @@ workflow NASCENT {
 
     COVERAGE_GRAPHS (
         ch_genome_bam,
+        ch_genome_bai,
         PREPARE_GENOME.out.chrom_sizes
     )
     ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions.first())
