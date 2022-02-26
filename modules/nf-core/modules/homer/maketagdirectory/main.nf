@@ -2,7 +2,7 @@ def VERSION = '4.11' // Version information not provided by tool on CLI
 
 process HOMER_MAKETAGDIRECTORY {
     tag "$meta.id"
-    label 'process_medium'
+    label 'process_high'
 
     conda (params.enable_conda ? "bioconda::homer=4.11=pl526hc9558a2_3" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
