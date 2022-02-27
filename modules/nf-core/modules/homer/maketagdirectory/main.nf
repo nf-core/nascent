@@ -26,9 +26,9 @@ process HOMER_MAKETAGDIRECTORY {
     """
     makeTagDirectory \\
         ${prefix}_tagdir \\
-        $args \\
         $bed \\
-        -genome $fasta
+        -genome $fasta \\
+        $args
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
