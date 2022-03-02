@@ -6,11 +6,11 @@ process HOMER_MAKETAGDIRECTORY {
 
     conda (params.enable_conda ? "bioconda::homer=4.11=pl526hc9558a2_3" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/homer:4.11--pl526hc9558a2_3' :
-        'quay.io/biocontainers/homer:4.11--pl526hc9558a2_3' }"
+        'https://depot.galaxyproject.org/singularity/mulled-v2-e7cf478db279450ded3321ece4ab34e14ee09fff:24fc913fe7d89b2142a4adaf04f4b934589498b4-0' :
+        'quay.io/biocontainers/mulled-v2-e7cf478db279450ded3321ece4ab34e14ee09fff:24fc913fe7d89b2142a4adaf04f4b934589498b4-0' }"
 
     input:
-    tuple val(meta), path(bed)
+    tuple val(meta), path(bam)
     path fasta
 
     output:
@@ -26,7 +26,7 @@ process HOMER_MAKETAGDIRECTORY {
     """
     makeTagDirectory \\
         ${prefix}_tagdir \\
-        $bed \\
+        $bam \\
         -genome $fasta \\
         $args
 

@@ -227,7 +227,7 @@ workflow NASCENT {
         * SUBWORKFLOW: Transcript indetification with homer
         */
         HOMER_GROSEQ (
-            ch_genome_bam,
+            ch_sort_bam,
             PREPARE_GENOME.out.fasta
         )
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
