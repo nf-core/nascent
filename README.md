@@ -1,84 +1,97 @@
-# nf-core/nascent
+# ![nf-core/nascent](docs/images/nf-core-nascent_logo.png)
 
-**Nascent Transcription Processing Pipeline**.
+[![GitHub Actions CI Status](https://github.com/nf-core/nascent/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/nascent/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions Linting Status](https://github.com/nf-core/nascent/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/nascent/actions?query=workflow%3A%22nf-core+linting%22)
+[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/nascent/results)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
-[![Build Status](https://travis-ci.com/nf-core/nascent.svg?branch=master)](https://travis-ci.com/nf-core/nascent)
-[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.32.0-brightgreen.svg)](https://www.nextflow.io/)
-[![DOI](https://zenodo.org/badge/157735234.svg)](https://zenodo.org/badge/latestdoi/157735234)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A521.10.3-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
+[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](http://bioconda.github.io/)
-[![Docker](https://img.shields.io/docker/automated/nfcore/nascent.svg)](https://hub.docker.com/r/nfcore/nascent)
-![Singularity Container available](
-https://img.shields.io/badge/singularity-available-7E4C74.svg)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23nascent-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/nascent)
+[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)
+[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
-### Introduction
-The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It comes with docker / singularity containers making installation trivial and results highly reproducible.
+## Introduction
 
+<!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
+**nf-core/nascent** is designed to process the sequencing output of nascent transcription assays, like GRO-seq or PRO-seq. It produces bedGraph- and bigWig-fomatted outputs after mapping strand-specific reads, as well as other useful outputs like quality control reports or IGV-ready (Integrative Genomics Viewer) tdf files.
 
-#### Reference
+The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
+
+<!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
+On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/nascent/results).
+
+## Pipeline summary
+
+1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+
+## Quick Start
+
+1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.3`)
+
+2. Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) for full pipeline reproducibility _(please only use [`Conda`](https://conda.io/miniconda.html) as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_
+
+3. Download the pipeline and test it on a minimal dataset with a single command:
+
+    ```console
+    nextflow run nf-core/nascent -profile test,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+    ```
+
+    > * Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
+    > * If you are using `singularity` then the pipeline will auto-detect this and attempt to download the Singularity images directly as opposed to performing a conversion from Docker images. If you are persistently observing issues downloading Singularity images directly due to timeout or network issues then please use the `--singularity_pull_docker_container` parameter to pull and convert the Docker image instead. Alternatively, it is highly recommended to use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to pre-download all of the required containers before running the pipeline and to set the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options to be able to store and re-use the images from a central location for future pipeline runs.
+    > * If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
+
+4. Start running your own analysis!
+
+    <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
+
+    ```console
+    nextflow run nf-core/nascent -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv --genome GRCh37
+    ```
+
+## Documentation
+
+The nf-core/nascent pipeline comes with documentation about the pipeline [usage](https://nf-co.re/nascent/usage), [parameters](https://nf-co.re/nascent/parameters) and [output](https://nf-co.re/nascent/output).
+
+## Credits
+
+nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
+
+The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@Emiller88](https://github.com/emiller88)) and Sruthi Suresh ([@sruthipsuresh](https://github.com/sruthipsuresh)) from [The Functional Genomics Laboratory](https://taehoonkim.org/) at [The Univeristy of Texas at Dallas](https://www.utdallas.edu/)
+
+We thank the following people for their extensive assistance in the development of this pipeline:
+
+[@apeltzer](https://github.com/apeltzer)
+[@ewels](https://github.com/ewels)
+[@drpatelh](https://github.com/drpatelh)
+[@pditommaso](https://github.com/pditommaso)
+[Tae Hoon Kim](https://github.com/taehoonkim-phd)
+[@easterwoods](https://github.com/easterwoods)
+
+## Contributions and Support
+
+If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+
+For further information or help, don't hesitate to get in touch on the [Slack `#nascent` channel](https://nfcore.slack.com/channels/nascent) (you can join with [this invite](https://nf-co.re/join/slack)).
+
+## Citations
+
+<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
+<!-- If you use  nf-core/nascent for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 If you've used this pipeline in your research, you can cite this pipeline using DOI 10.17605/OSF.IO/SV4UB ([OSF project](https://osf.io/sv4ub/)).
 
-### Documentation
-The nf-core/nascent pipeline comes with documentation about the pipeline, found in the `docs/` directory:
-1. [Installation](https://nf-co.re/usage/installation)
-2. Pipeline configuration
-    * [Local installation](https://nf-co.re/usage/local_installation)
-    * [Adding your own system config](https://nf-co.re/usage/adding_own_config)
-    * [Reference genomes](https://nf-co.re/usage/reference_genomes)
-3. [Running the pipeline](docs/usage.md)
-4. [Output and how to interpret the results](docs/output.md)
-5. [Troubleshooting](https://nf-co.re/usage/troubleshooting)
+<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
-This pipeline is designed to process the sequencing output of nascent transcription assays, like GRO-seq or PRO-seq. It produces bedGraph- and bigWig-fomatted outputs after mapping strand-specific reads, as well as other useful outputs like quality control reports or IGV-ready (Integrative Genomics Viewer) tdf files.
+You can cite the `nf-core` publication as follows:
 
-### Quick start
-
-Edit the appropriate config file, e.g. `conf/slurm_grch38.config`, to ensure the proper paths are set for genome reference files and other executables (look for all mentions of `COMPLETE_*`). Variable names should hopefully be self-explanatory. You can specify the Nextflow working directory and output directory with flags. Note you must also now specify the email to which the report will be sent for the run.
-
-    nextflow run nf-core/nascent --reads '*_R{1,2}.fastq.gz' -profile standard,docker
-
-## Arguments
-
-### Required Arguments
-| Argument  | Usage                            | Description                                                          |
-|-----------|----------------------------------|----------------------------------------------------------------------|
-| -profile  | \<base,slurm\>                    | Configuration profile to use.                                       |
-| --fastqs  | \</project/\*\_{R1,R2}\*.fastq\> | Directory pattern for fastq files.                                   |
-| --sras    | \</project/\*.sra\>              | Directory pattern for sra files.                                     |
-| --genome_id | \<'hg38'>                      | Genome ID to which the samples will be mapped (e.g. hg38, mm10, rn6).|
-| --workdir | \</project/tmp/\>                | Nextflow working directory where all intermediate files are saved.   |
-| --email   | \<EMAIL\>                        | Where to send workflow report email.                                 |
-
-### Save Options
-| Arguments  | Usage         | Description                                               |
-|------------|---------------|-----------------------------------------------------------|
-| --outdir   | \</project/\> | Specifies where to save the output from the nextflow run. |
-| --savefq   |               | Compresses and saves raw fastq reads.                     |
-| --saveTrim |               | Compresses and saves trimmed fastq reads.                 |
-| --saveAll  |               | Compresses and saves all fastq reads.                     |
-| --skipBAM  |               | Skips saving BAM files (only save CRAM). Default=False    |
-
-### Input File Options
-| Arguments    | Usage       | Description                                                                  |
-|--------------|-------------|------------------------------------------------------------------------------|
-| --singleEnd  |             | Specifies that the input files are not paired reads (default is paired-end). |
-| --flip       |             | Reverse complements each strand. Necessary for some library preps.           |
-
-### Performance Options
-
-| Arguments       | Usage       | Description                                             |
-|-----------------|-------------|---------------------------------------------------------|
-| --threadfqdump  |             | Runs multi-threading for fastq-dump for sra processing. |
-
-### QC Options
-
-| Arguments       | Usage       | Description                                             |
-|-----------------|-------------|---------------------------------------------------------|
-| --skipMultiQC   |             | Skip running MultiQC.                                   |
-| --skipRSeQC     |             | Skip running RSeQC.                                     |
-
-## Credits
-nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
-
-Many thanks to the nf-core team and all who provided invaluable feedback and assistance along the way, particularly to [@apeltzer](https://github.com/apeltzer), [@ewels](https://github.com/ewels), [@drpatelh](https://github.com/drpatelh), and [@pditommaso](https://github.com/pditommaso).
+> **The nf-core framework for community-curated bioinformatics pipelines.**
+>
+> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
+>
+> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
