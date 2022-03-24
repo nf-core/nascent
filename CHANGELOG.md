@@ -5,7 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0dev]
 
+
+### `Added`
+
+### `Fixed`
+
+### `Dependencies`
+
 - Updated Nextflow version to `v21.10.3`
+
+### `Deprecated`
 
 ## v1.0.1 - 2020-03-03
 
