@@ -11,9 +11,12 @@ process BBMAP_PILEUP {
     tuple val(meta), path(bam)
 
     output:
-    tuple val(meta), path("*.stats.txt"), emit: stats
+    tuple val(meta), path("*.stats.txt"), emit: covstats
     tuple val(meta), path("*.hist.txt") , emit: hist
     path "versions.yml"                 , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
