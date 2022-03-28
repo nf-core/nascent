@@ -12,12 +12,7 @@ jobs:
     steps:
       # Launch workflow using Tower CLI tool action
       - name: Launch workflow via tower
-<<<<<<< HEAD
-        uses: nf-core/tower-action@v2
-
-=======
         uses: nf-core/tower-action@v3
->>>>>>> nf-core-template-merge-2.3.1
         with:
           workspace_id: ${{ secrets.TOWER_WORKSPACE_ID }}
           access_token: ${{ secrets.TOWER_ACCESS_TOKEN }}
@@ -28,10 +23,6 @@ jobs:
               "outdir": "s3://${{ secrets.AWS_S3_BUCKET }}/nascent/results-test-${{ github.sha }}"
             }
           profiles: test,aws_tower
-<<<<<<< HEAD
-          pre_run_script: 'export NXF_VER=21.10.3'
-=======
           nextflow_config: |
             process.errorStrategy = 'retry'
             process.maxRetries = 3
->>>>>>> nf-core-template-merge-2.3.1
