@@ -2,7 +2,7 @@
  * TODO
  */
 
-include { PRESEQ_CCURVE } from '../../modules/local/preseq/ccurve/main'
+include { PRESEQ_CCURVE } from '../../modules/nf-core/modules/preseq/ccurve/main'
 include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/modules/preseq/lcextrap/main'
 include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/modules/rseqc/readdistribution/main'
 include { RSEQC_READDUPLICATION } from '../../modules/nf-core/modules/rseqc/readduplication/main'
@@ -42,8 +42,8 @@ workflow QUALITY_CONTROL {
     BBMAP_PILEUP ( bam )
 
     emit:
-    preseq_ccurve = PRESEQ_CCURVE.out.ccurve
-    preseq_lcextrap = PRESEQ_LCEXTRAP.out.ccurve
+    preseq_ccurve = PRESEQ_CCURVE.out.c_curve
+    preseq_lcextrap = PRESEQ_LCEXTRAP.out.lc_extrap
 
     readdistribution_txt = RSEQC_READDISTRIBUTION.out.txt
     readduplication_seq_xls = RSEQC_READDUPLICATION.out.seq_xls

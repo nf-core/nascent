@@ -6,7 +6,7 @@ include { BEDTOOLS_BAMTOBED           } from '../../modules/nf-core/modules/bedt
 include { HOMER_MAKETAGDIRECTORY      } from '../../modules/nf-core/modules/homer/maketagdirectory/main'
 include { HOMER_MAKEUCSCFILE          } from '../../modules/nf-core/modules/homer/makeucscfile/main'
 include { HOMER_FINDPEAKS             } from '../../modules/nf-core/modules/homer/findpeaks/main'
-include { HOMER_POS2BED               } from '../../modules/local/homer/pos2bed/main'
+include { HOMER_POS2BED               } from '../../modules/nf-core/modules/homer/pos2bed/main'
 
 workflow HOMER_GROSEQ {
     take:
