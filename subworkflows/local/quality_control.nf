@@ -7,7 +7,7 @@ include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/modules/preseq/lcextrap/
 include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/modules/rseqc/readdistribution/main'
 include { RSEQC_READDUPLICATION } from '../../modules/nf-core/modules/rseqc/readduplication/main'
 include { RSEQC_INFEREXPERIMENT } from '../../modules/nf-core/modules/rseqc/inferexperiment/main'
-include { BBMAP_PILEUP } from '../../modules/local/bbmap/pileup/main'
+include { BBMAP_PILEUP } from '../../modules/nf-core/modules/bbmap/pileup/main'
 
 workflow QUALITY_CONTROL {
     take:
