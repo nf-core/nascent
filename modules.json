@@ -3,6 +3,9 @@
     "homePage": "https://github.com/nf-core/nascent",
     "repos": {
         "nf-core/modules": {
+            "bbmap/pileup": {
+                "git_sha": "6806cd1de9f493ecba86960fc8a6e7d86e262d9b"
+            },
             "bedtools/bamtobed": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
@@ -39,6 +42,9 @@
             "custom/getchromsizes": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
+            "deeptools/bamcoverage": {
+                "git_sha": "fe088745e03f21d07477cc0c655c24ae9f72ac31"
+            },
             "fastqc": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
@@ -49,13 +55,16 @@
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
             "homer/findpeaks": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "e3a5795652ae9838111b33483a80ad733e7501c4"
             },
             "homer/maketagdirectory": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "5832fbc225b59577677bd8c38353a3de293998d1"
             },
             "homer/makeucscfile": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "1fb1801dcbbc556d04985bda5ba4329a4f50543f"
+            },
+            "homer/pos2bed": {
+                "git_sha": "98ed71c8f6968bc689f170e2b79d0866e3f28cda"
             },
             "multiqc": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
@@ -63,8 +72,11 @@
             "picard/mergesamfiles": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
+            "preseq/ccurve": {
+                "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
+            },
             "preseq/lcextrap": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
             },
             "rseqc/inferexperiment": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"

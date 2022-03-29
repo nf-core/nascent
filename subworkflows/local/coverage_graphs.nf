@@ -8,7 +8,7 @@ include {
 
 include {
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS
-    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/local/deeptools/bamcoverage/main'
+    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/modules/deeptools/bamcoverage/main'
 
 workflow COVERAGE_GRAPHS {
     take:
