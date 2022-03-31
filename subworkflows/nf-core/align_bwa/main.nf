@@ -17,7 +17,7 @@ workflow ALIGN_BWA {
     //
     // Map reads with BWA MEM
     //
-    BWA_MEM ( reads, index )
+    BWA_MEM ( reads, index, true )
     ch_versions = ch_versions.mix(BWA_MEM.out.versions)
 
     //

@@ -17,7 +17,7 @@ workflow ALIGN_BWAMEM2 {
     //
     // Map reads with BWAMEM2
     //
-    BWAMEM2_MEM ( reads, index )
+    BWAMEM2_MEM ( reads, index, true )
     ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
 
     //
