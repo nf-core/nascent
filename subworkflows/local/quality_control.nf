@@ -52,7 +52,7 @@ workflow QUALITY_CONTROL {
     readduplication_rscript = RSEQC_READDUPLICATION.out.rscript
     inferexperiment_txt = RSEQC_INFEREXPERIMENT.out.txt
 
-    pileup_stats = BBMAP_PILEUP.out.stats
+    pileup_stats = BBMAP_PILEUP.out.covstats
     pileup_hist = BBMAP_PILEUP.out.hist
 
     versions = ch_versions                      // channel: [ versions.yml ]
