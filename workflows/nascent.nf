@@ -202,7 +202,7 @@ workflow NASCENT {
     ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
         // FIXME
-        println "Works with small test data set but not on full files."
+        log.warn "grohmm works with small test data set but not on full files."
 
         GROHMM (
             ch_sort_bam,
