@@ -23,7 +23,7 @@ workflow ALIGN_BWA {
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
-    BAM_SORT_SAMTOOLS ( BWAMEM2_MEM.out.bam )
+    BAM_SORT_SAMTOOLS ( BWA_MEM.out.bam )
     ch_versions = ch_versions.mix(BAM_SORT_SAMTOOLS.out.versions)
 
     emit:
@@ -34,7 +34,6 @@ workflow ALIGN_BWA {
     stats            = BAM_SORT_SAMTOOLS.out.stats    // channel: [ val(meta), [ stats ] ]
     flagstat         = BAM_SORT_SAMTOOLS.out.flagstat // channel: [ val(meta), [ flagstat ] ]
     idxstats         = BAM_SORT_SAMTOOLS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
-    samtools_version = BAM_SORT_SAMTOOLS.out.version  //    path: *.version.txt
 
     versions       = ch_versions                      // channel: [ versions.yml ]
 }
