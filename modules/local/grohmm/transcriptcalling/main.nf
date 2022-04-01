@@ -25,11 +25,10 @@ process GROHMM_TRANSCRIPTCALLING{
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def bam_files = bams.sort()
     def tuning = tuning_file ? "--tuning_file ${tuning_file}" : ""
     """
     transcriptcalling_grohmm.R \\
-        --bam_file ${bam_files} \\
+        --bam_file ${bams} \\
         $tuning \\
         --outprefix ${prefix} \\
         --gtf $gtf \\
