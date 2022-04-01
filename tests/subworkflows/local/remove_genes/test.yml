@@ -1,5 +1,0 @@
-- name: subworkflow remove_genes
-  command: nextflow run ./tests/subworkflows/local/remove_genes/ -entry test_remove_genes -c tests/config/nextflow.config
-  tags:
-    - remove_genes
-    - bedtools

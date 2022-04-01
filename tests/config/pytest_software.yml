@@ -3,10 +3,6 @@ grohmm:
   - subworkflows/local/grohmm.nf
   - tests/modules/local/grohmm/**
 
-remove_genes:
-  - subworkflows/local/remove_genes.nf
-  - tests/subworkflows/local/homer_groseq/**
-
 homer:
   - subworkflows/nf-core/homer_groseq.nf
   - modules/nf-core/software/homer/**
