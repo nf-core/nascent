@@ -1,7 +1,8 @@
-grohmm:
-  - modules/local/grohmm/**
-  - subworkflows/local/grohmm.nf
-  - tests/modules/local/grohmm/**
+# FIXME Tests don't work because of bin/ scripts
+# grohmm:
+#   - modules/local/grohmm/**
+#   - subworkflows/local/grohmm.nf
+#   - tests/modules/local/grohmm/**
 
 homer:
   - subworkflows/nf-core/homer_groseq.nf
