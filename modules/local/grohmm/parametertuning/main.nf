@@ -1,4 +1,4 @@
-process GROHMM_PARAMETERTUNING{
+process GROHMM_PARAMETERTUNING {
     tag "$meta.id"
     label 'process_medium'
 
@@ -13,8 +13,10 @@ process GROHMM_PARAMETERTUNING{
 
     output:
     path "*.tuning.csv" , emit: tuning
-    // FIXME path "*.RData"          , emit: rdata
     path  "versions.yml", emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''

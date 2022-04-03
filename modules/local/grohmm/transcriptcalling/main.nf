@@ -1,4 +1,4 @@
-process GROHMM_TRANSCRIPTCALLING{
+process GROHMM_TRANSCRIPTCALLING {
     tag "$meta.id"
     label 'process_high'
     label 'process_long'
@@ -19,8 +19,10 @@ process GROHMM_TRANSCRIPTCALLING{
     tuple val(meta), path("*.transcripts.bed"), emit: transcripts_bed
     tuple val(meta), path("*.tdFinal.txt")    , emit: td
     tuple val(meta), path("*.tdplot_mqc.jpg") , emit: td_plot
-    // FIXME path "*.RData"  , emit: rdata
     path  "versions.yml"     , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
