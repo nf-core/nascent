@@ -1,5 +1,5 @@
 - name: subworkflow homer_groseq bam
-  command: nextflow run ./tests/subworkflows/nf-core/homer_groseq/ -entry test_homer_groseq_bam -c tests/config/nextflow.config
+  command: nextflow run ./tests/subworkflows/nf-core/homer_groseq/ -entry test_homer_groseq_bam -c tests/config/nextflow.config -c tests/subworkflows/nf-core/homer_groseq/nextflow.config
   tags:
     - homer
   files:
@@ -10,7 +10,7 @@
       md5sum: e567770514ac9a75b0f24a2a1e17bd69
 
 - name: subworkflow homer_groseq bed
-  command: nextflow run ./tests/subworkflows/nf-core/homer_groseq/ -entry test_homer_groseq_bed -c tests/config/nextflow.config
+  command: nextflow run ./tests/subworkflows/nf-core/homer_groseq/ -entry test_homer_groseq_bed -c tests/config/nextflow.config -c tests/subworkflows/nf-core/homer_groseq/nextflow.config
   tags:
     - homer
   files:
