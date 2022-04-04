@@ -68,7 +68,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 //
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
+include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer/groseq/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

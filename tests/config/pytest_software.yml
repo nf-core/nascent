@@ -3,8 +3,3 @@
 #   - modules/local/grohmm/**
 #   - subworkflows/local/grohmm.nf
 #   - tests/modules/local/grohmm/**
-
-homer:
-  - subworkflows/nf-core/homer_groseq.nf
-  - modules/nf-core/software/homer/**
-  - tests/subworkflows/nf-core/homer_groseq/**
