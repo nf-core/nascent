@@ -1,6 +1,5 @@
 name: Local Modules pytest-workflow
 on: [push, pull_request]
-
 jobs:
   changes:
     name: Check for changes
@@ -23,23 +22,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nxf_version: ["21.10.3"]
+        nxf_version: ["21.04.0"]
         tags: ["${{ fromJson(needs.changes.outputs.modules) }}"]
-        profile: ["docker", "singularity"] ## 'conda'
+        profile: ["docker", "singularity"] # 'conda'
     env:
       NXF_ANSI_LOG: false
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.x"
+
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip pytest-workflow
+
       - uses: actions/cache@v2
         with:
           path: /usr/local/bin/nextflow
@@ -50,16 +55,10 @@ jobs:
       - name: Install Nextflow
         env:
           NXF_VER: ${{ matrix.nxf_version }}
+          CAPSULE_LOG: none
         run: |
           wget -qO- get.nextflow.io | bash
           sudo mv nextflow /usr/local/bin/
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip pytest-workflow
 
       - name: Set up Singularity
         if: matrix.profile == 'singularity'
@@ -74,13 +73,15 @@ jobs:
           auto-update-conda: true
           channels: conda-forge,bioconda,defaults
           python-version: ${{ matrix.python-version }}
+
       - name: Conda clean
         if: matrix.profile == 'conda'
         run: conda clean -a
 
       # Test the module
       - name: Run pytest-workflow
-        run: TMPDIR=~ PROFILE=${{ matrix.profile }} pytest --tag ${{ matrix.tags }} --symlink --wt 2 --kwdof
+        # only use one thread for pytest-workflow to avoid race condition on conda cache.
+        run: TMPDIR=~ PROFILE=${{ matrix.profile }} pytest --tag ${{ matrix.tags }} --symlink --kwdof
 
       - name: Upload logs on failure
         if: failure()
