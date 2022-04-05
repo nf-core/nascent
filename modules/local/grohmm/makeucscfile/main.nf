@@ -15,8 +15,10 @@ process GROHMM_MAKEUCSCFILE {
     path "*.collapsed.wig", emit: wig
     path "*.plus.wig"     , emit: pluswig
     path "*.minus.wig"    , emit: minuswig
-    // FIXME path "*.RData"          , emit: rdata
     path  "versions.yml"  , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''

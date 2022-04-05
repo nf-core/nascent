@@ -55,7 +55,6 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 
 include { FASTQC                                                  } from '../modules/nf-core/modules/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
-include { DREG_PEAKCALLING                                        } from '../modules/local/dreg/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
@@ -69,7 +68,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 //
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer_groseq.nf'
+include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer/groseq/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,7 +201,7 @@ workflow NASCENT {
     ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
         // FIXME
-        println "Works with small test data set but not on full files."
+        log.warn "grohmm works with small test data set but not on full files."
 
         GROHMM (
             ch_sort_bam,
@@ -211,18 +210,6 @@ workflow NASCENT {
 
         ch_identification_bed = GROHMM.out.bed
 
-    } else if (params.transcript_identification == 'dreg') {
-        // FIXME
-        println "Docker image is broken"
-
-        ch_dreg_model = file("ftp://cbsuftp.tc.cornell.edu/danko/hub/dreg.models/asvm.gdm.6.6M.20170828.rdata")
-
-        DREG_PEAKCALLING (
-            COVERAGE_GRAPHS.out.plus_minus,
-            ch_dreg_model
-        )
-
-        ch_identification_bed = GROHMM.out.bed
     } else if (params.transcript_identification == 'homer') {
         /*
         * SUBWORKFLOW: Transcript indetification with homer

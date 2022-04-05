@@ -1,6 +1,5 @@
 name: Local Modules pytest-workflow
 on: [push, pull_request]
-
 jobs:
   changes:
     name: Check for changes
@@ -13,7 +12,7 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          filters: 'tests/config/pytest_software.yml'
+          filters: "tests/config/pytest_software.yml"
 
   test:
     runs-on: ubuntu-latest
@@ -23,23 +22,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nxf_version: ['21.10.3']
-        tags: ['${{ fromJson(needs.changes.outputs.modules) }}']
-        profile: ['docker', 'singularity'] ## 'conda'
+        nxf_version: ["21.04.0"]
+        tags: ["${{ fromJson(needs.changes.outputs.modules) }}"]
+        profile: ["docker", "singularity"] # 'conda'
     env:
       NXF_ANSI_LOG: false
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.x"
+
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip pytest-workflow
+
       - uses: actions/cache@v2
         with:
           path: /usr/local/bin/nextflow
@@ -50,16 +55,10 @@ jobs:
       - name: Install Nextflow
         env:
           NXF_VER: ${{ matrix.nxf_version }}
+          CAPSULE_LOG: none
         run: |
           wget -qO- get.nextflow.io | bash
           sudo mv nextflow /usr/local/bin/
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip pytest-workflow
 
       - name: Set up Singularity
         if: matrix.profile == 'singularity'
@@ -74,20 +73,31 @@ jobs:
           auto-update-conda: true
           channels: conda-forge,bioconda,defaults
           python-version: ${{ matrix.python-version }}
+
       - name: Conda clean
         if: matrix.profile == 'conda'
         run: conda clean -a
 
       # Test the module
       - name: Run pytest-workflow
-        run: TMPDIR=~ PROFILE=${{ matrix.profile }} pytest --tag ${{ matrix.tags }} --symlink --wt 2 --kwdof
+        # only use one thread for pytest-workflow to avoid race condition on conda cache.
+        run: TMPDIR=~ PROFILE=${{ matrix.profile }} pytest --tag ${{ matrix.tags }} --symlink --kwdof --git-aware --color=yes
+
+      - name: Output log on failure
+        if: failure()
+        run: |
+          sudo apt install bat > /dev/null
+          batcat --decorations=always --color=always /home/runner/pytest_workflow_*/*/log.{out,err}
 
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: logs-${{ matrix.tags }}-${{ matrix.profile }}-${{ matrix.nxf_version }}
+          name: logs-${{ matrix.profile }}
           path: |
             /home/runner/pytest_workflow_*/*/.nextflow.log
             /home/runner/pytest_workflow_*/*/log.out
             /home/runner/pytest_workflow_*/*/log.err
+            /home/runner/pytest_workflow_*/*/work
+            !/home/runner/pytest_workflow_*/*/work/conda
+            !/home/runner/pytest_workflow_*/*/work/singularity

@@ -21,9 +21,7 @@ params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
 params.gtf       = WorkflowMain.getGenomeAttribute(params, 'gtf')
 params.gff       = WorkflowMain.getGenomeAttribute(params, 'gff')
 params.gene_bed  = WorkflowMain.getGenomeAttribute(params, 'bed12')
-// FIXME Issue with $INDEX in bwa and igenomes hosting multiple versions
-// So we have to generate our own index for now
-// params.bwa_index = Checks.get_genome_attribute(params, 'bwa')
+params.bwa_index = Checks.get_genome_attribute(params, 'bwa')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,4 +1,4 @@
-process GROHMM_TRANSCRIPTCALLING{
+process GROHMM_TRANSCRIPTCALLING {
     tag "$meta.id"
     label 'process_high'
     label 'process_long'
@@ -11,7 +11,7 @@ process GROHMM_TRANSCRIPTCALLING{
     input:
     tuple val(meta), path(bams)
     path gtf
-    path tuning
+    path tuning_file
 
     output:
     tuple val(meta), path("*.transcripts.txt"), emit: transcripts
@@ -19,45 +19,29 @@ process GROHMM_TRANSCRIPTCALLING{
     tuple val(meta), path("*.transcripts.bed"), emit: transcripts_bed
     tuple val(meta), path("*.tdFinal.txt")    , emit: td
     tuple val(meta), path("*.tdplot_mqc.jpg") , emit: td_plot
-    // FIXME path "*.RData"  , emit: rdata
     path  "versions.yml"     , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def bam_files = bams.sort()
-    if (params.with_tuning) {
-        """
-        transcriptcalling_grohmm.R \\
-            --bam_file ${bam_files} \\
-            --tuning_file ${tuning} \\
-            --outprefix ${prefix} \\
-            --gtf $gtf \\
-            --outdir ./ \\
-            --cores $task.cpus \\
-            $args
+    def tuning = tuning_file ? "--tuning_file ${tuning_file}" : ""
+    """
+    transcriptcalling_grohmm.R \\
+        --bam_file ${bams} \\
+        $tuning \\
+        --outprefix ${prefix} \\
+        --gtf $gtf \\
+        --outdir ./ \\
+        --cores $task.cpus \\
+        $args
 
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            r-base: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
-            bioconductor-grohmm: \$(Rscript -e "library(groHMM); cat(as.character(packageVersion('groHMM')))")
-        END_VERSIONS
-        """
-    } else {
-        """
-        transcriptcalling_grohmm.R \\
-            --bam_files ${bam_files} \\
-            --outprefix ${prefix} \\
-            --gtf $gtf \\
-            --outdir ./ \\
-            --cores $task.cpus \\
-            $args
-
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            r-base: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
-            bioconductor-grohmm: \$(Rscript -e "library(groHMM); cat(as.character(packageVersion('groHMM')))")
-        END_VERSIONS
-        """
-    }
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
+        bioconductor-grohmm: \$(Rscript -e "library(groHMM); cat(as.character(packageVersion('groHMM')))")
+    END_VERSIONS
+    """
 }

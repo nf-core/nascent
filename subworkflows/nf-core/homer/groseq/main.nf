@@ -2,15 +2,14 @@
  * Identify transcripts with homer
  */
 
-include { BEDTOOLS_BAMTOBED           } from '../../modules/nf-core/modules/bedtools/bamtobed/main'
-include { HOMER_MAKETAGDIRECTORY      } from '../../modules/nf-core/modules/homer/maketagdirectory/main'
-include { HOMER_MAKEUCSCFILE          } from '../../modules/nf-core/modules/homer/makeucscfile/main'
-include { HOMER_FINDPEAKS             } from '../../modules/nf-core/modules/homer/findpeaks/main'
-include { HOMER_POS2BED               } from '../../modules/nf-core/modules/homer/pos2bed/main'
+include { HOMER_MAKETAGDIRECTORY      } from '../../../../modules/nf-core/modules/homer/maketagdirectory/main'
+include { HOMER_MAKEUCSCFILE          } from '../../../../modules/nf-core/modules/homer/makeucscfile/main'
+include { HOMER_FINDPEAKS             } from '../../../../modules/nf-core/modules/homer/findpeaks/main'
+include { HOMER_POS2BED               } from '../../../../modules/nf-core/modules/homer/pos2bed/main'
 
 workflow HOMER_GROSEQ {
     take:
-    bam // channel: [ val(meta), [ reads ] ]
+    bam   // channel: [ val(meta), [ reads ] ]
     fasta //    file: /path/to/bwa/index/
 
     main:
@@ -43,9 +42,9 @@ workflow HOMER_GROSEQ {
 
     emit:
     tagdir             = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tagdir ] ]
-    bed_graph          = HOMER_MAKEUCSCFILE.out.bedGraph    // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
-    peaks              = HOMER_FINDPEAKS.out.txt            // channel: [ val(meta), [ *peaks.txt ] ]
-    bed                = HOMER_POS2BED.out.bed            // channel: [ val(meta), [ *peaks.txt ] ]
+    bed_graph          = HOMER_MAKEUCSCFILE.out.bedGraph   // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
+    peaks              = HOMER_FINDPEAKS.out.txt           // channel: [ val(meta), [ *peaks.txt ] ]
+    bed                = HOMER_POS2BED.out.bed             // channel: [ val(meta), [ *peaks.txt ] ]
 
-    versions = ch_versions                      // channel: [ versions.yml ]
+    versions = ch_versions                                 // channel: [ versions.yml ]
 }
