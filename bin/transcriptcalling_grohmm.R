@@ -90,6 +90,7 @@ for (bam in args$bam_files) {
         alignments,
         as(readGAlignments(bam), "GRanges")
     )
+    alignments <- keepStandardChromosomes(alignments, pruning.mode = "coarse")
 }
 
 # Call annotations > DEFAULT VALUES ASSIGNED

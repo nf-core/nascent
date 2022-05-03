@@ -66,7 +66,8 @@ setwd(opt$outdir)
 # TODO CURRENTLY ONLY TAKES ONE FILE
 # TODO CHANGE BASED ON PAIRED OR SINGLE END
 galigned <- readGAlignments(BamFile(opt$bam_file, asMates = TRUE))
-readsfile <- GRanges(galigned)
+readfile <- GRanges(galigned)
+readsfile <- keepStandardChromosomes(readfile, pruning.mode = "coarse")
 
 # Generate normalized wig files with the number of reads normalizing
 # TODO ALLOW FOR USER INPUT, default has no normalization
