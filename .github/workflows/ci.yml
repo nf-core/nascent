@@ -46,5 +46,3 @@ jobs:
       - name: Run pipeline with test data
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
-
-#
