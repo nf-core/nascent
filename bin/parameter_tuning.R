@@ -75,7 +75,8 @@ setwd(opt$outdir)
 
 # CHANGE BASED ON PAIRED OR SINGLE END
 galigned <- readGAlignments(BamFile(opt$bam_file, asMates = TRUE))
-reads_file <- GRanges(galigned)
+read_file <- GRanges(galigned)
+reads_file <- keepStandardChromosomes(read_file, pruning.mode = "coarse")
 
 # Call annotations > DEFAULT VALUES ASSIGNED
 hmm_result <- detectTranscripts(
