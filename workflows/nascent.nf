@@ -100,7 +100,8 @@ workflow NASCENT {
     INPUT_CHECK.out.reads.map {
         meta, fastq ->
         meta.id = meta.id.split('_')[0..-2].join('_')
-        [ meta, fastq ] }
+        [ meta, fastq ]
+    }
         .groupTuple(by: [0])
         .branch {
             meta, fastq ->
@@ -212,8 +213,8 @@ workflow NASCENT {
 
     } else if (params.transcript_identification == 'homer') {
         /*
-        * SUBWORKFLOW: Transcript indetification with homer
-        */
+         * SUBWORKFLOW: Transcript indetification with homer
+         */
         HOMER_GROSEQ (
             ch_sort_bam,
             PREPARE_GENOME.out.fasta
