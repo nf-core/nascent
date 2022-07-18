@@ -1,3 +1,7 @@
 sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+cd4_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,
+cd4_REP2,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,
+cd4_REP3,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T3.fastq.gz,
+cd4_REP4,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T4.fastq.gz,
+jurkat_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T1.fastq.gz,
+jurkat_REP2,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T2.fastq.gz,

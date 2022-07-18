@@ -19,7 +19,7 @@
 
 <!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 
-**nf-core/nascent** is a bioinformatics best-practice analysis pipeline for Global Run-On sequencing analysis pipeline.
+**nf-core/nascent** is a bioinformatics best-practice analysis pipeline for nascent transcript (NT) and Transcriptional Start Site (TSS) assays.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -28,8 +28,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/nascent/results).
 
 ## Pipeline summary
-
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
@@ -67,11 +65,18 @@ The nf-core/nascent pipeline comes with documentation about the pipeline [usage]
 
 ## Credits
 
-nf-core/nascent was originally written by Edmund Miller.
+nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
+
+The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@Emiller88](https://github.com/emiller88)) and Sruthi Suresh ([@sruthipsuresh](https://github.com/sruthipsuresh)) from [The Functional Genomics Laboratory](https://taehoonkim.org/) at [The Univeristy of Texas at Dallas](https://www.utdallas.edu/)
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+[@apeltzer](https://github.com/apeltzer)
+[@ewels](https://github.com/ewels)
+[@drpatelh](https://github.com/drpatelh)
+[@pditommaso](https://github.com/pditommaso)
+[Tae Hoon Kim](https://github.com/taehoonkim-phd)
+[@easterwoods](https://github.com/easterwoods)
 
 ## Contributions and Support
 
@@ -83,6 +88,8 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use  nf-core/nascent for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+
+If you've used this pipeline in your research, you can cite this pipeline using DOI 10.17605/OSF.IO/SV4UB ([OSF project](https://osf.io/sv4ub/)).
 
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 

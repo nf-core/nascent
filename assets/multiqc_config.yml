@@ -8,4 +8,28 @@ report_section_order:
   "nf-core-nascent-summary":
     order: -1001
 
+run_modules:
+  - custom_content
+  - fastqc
+  - samtools
+  - preseq
+  - rseqc
+  - featurecounts
+  - homer
+
+module_order:
+  - fastqc:
+      name: "FastQC (raw)"
+      info: "This section of the report shows FastQC results before adapter trimming."
+      path_filters:
+        - "./fastqc/*.zip"
+
+custom_data:
+  grohmm_plot:
+    section_name: "groHMM TD Plot"
+sp:
+  my_custom_content_image:
+    fn: "./grohmm/*.tdplot.jpg"
+ignore_images: false
+
 export_plots: true
