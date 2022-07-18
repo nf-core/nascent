@@ -97,41 +97,12 @@ workflow NASCENT {
     INPUT_CHECK (
         ch_input
     )
-    INPUT_CHECK.out.reads.map {
-        meta, fastq ->
-        meta.id = meta.id.split('_')[0..-2].join('_')
-        [ meta, fastq ]
-    }
-        .groupTuple(by: [0])
-        .branch {
-            meta, fastq ->
-            single  : fastq.size() == 1
-            return [ meta, fastq.flatten() ]
-            multiple: fastq.size() > 1
-            return [ meta, fastq.flatten() ]
-        }
-        .set { ch_fastq }
-
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-
-    //
-    // MODULE: Concatenate FastQ files from same sample if required
-    //
-    CAT_FASTQ (
-        ch_fastq.multiple
-    )
-
-    CAT_FASTQ.out.reads
-        .mix(ch_fastq.single)
-        .set { ch_cat_fastq }
-
-    ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
 
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        ch_cat_fastq
+        INPUT_CHECK.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
@@ -148,7 +119,7 @@ workflow NASCENT {
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         ALIGN_BWA(
-            ch_cat_fastq,
+            INPUT_CHECK.out.reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWA.out.bam
@@ -160,7 +131,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
-            ch_cat_fastq,
+            INPUT_CHECK.out.reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWAMEM2.out.bam
@@ -191,8 +162,7 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        // FIXME Group splitting is broken
-        // fmeta.id = fmeta.id.split('_')[0..-2].join('_')
+        fmeta.id = fmeta.id.split('_')[0..-2].join('_')
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
