@@ -171,9 +171,6 @@ workflow NASCENT {
     ch_homer_multiqc = Channel.empty()
     ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
-        // FIXME
-        log.warn "grohmm works with small test data set but not on full files."
-
         GROHMM (
             ch_sort_bam,
             PREPARE_GENOME.out.gtf
