@@ -168,6 +168,7 @@ workflow NASCENT {
         .map { it ->  [ it[0], it[1].flatten() ] }
         .set { ch_sort_bam }
 
+    ch_grohmm_multiqc = Channel.empty()
     ch_homer_multiqc = Channel.empty()
     ch_identification_bed = Channel.empty()
     if (params.transcript_identification == 'grohmm') {
@@ -176,8 +177,8 @@ workflow NASCENT {
             PREPARE_GENOME.out.gtf
         )
 
+        ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
         ch_identification_bed = GROHMM.out.bed
-
     } else if (params.transcript_identification == 'homer') {
         /*
          * SUBWORKFLOW: Transcript indetification with homer
@@ -233,7 +234,7 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_seq_xls.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_pos_xls.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
-    // FIXME ch_multiqc_files = ch_multiqc_files.mix(GROHMM.out.td_plot.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_grohmm_multiqc.collect{it[1]}.ifEmpty([]))
     // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
