@@ -298,6 +298,11 @@
         },
         "gene_bed": {
             "type": "string"
+        },
+        "skip_alignment": {
+            "type": "boolean",
+            "fa_icon": "fas fa-fast-forward",
+            "description": "Skip all of the alignment-based processes within the pipeline."
         }
     }
 }
