@@ -123,15 +123,16 @@ write.table(
     )
 )
 
-# Input transcript annotations
+print("Input transcript annotations")
 kg_db <- makeTxDbFromGFF(args$gtf)
 kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
-# Collapse annotations in preparation for overlap
+print("Collapse annotations in preparation for overlap")
 kg_consensus <- makeConsensusAnnotations(
     kg_tx,
     keytype = "gene_id",
     mc.cores = args$cores
 )
+print("Finished consensus annotations")
 
 # Evaluate HMM Annotations
 e <- evaluateHMMInAnnotations(tx_hmm, kg_consensus)
