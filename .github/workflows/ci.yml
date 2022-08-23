@@ -28,6 +28,9 @@ jobs:
           # Test latest edge release of Nextflow
           - NXF_VER: ""
             NXF_EDGE: "1"
+        parameters:
+          - "--transcript_identification homer"
+          - "--transcript_identification grohmm"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
@@ -45,4 +48,4 @@ jobs:
 
       - name: Run pipeline with test data
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile test,docker ${{ matrix.parameters }} --outdir ./results
