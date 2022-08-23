@@ -30,7 +30,7 @@ jobs:
             NXF_EDGE: "1"
         parameters:
           - "--transcript_identification homer"
-          - "--transcript_identification grohmm"
+          # - "--transcript_identification grohmm"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
