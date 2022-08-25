@@ -11,10 +11,21 @@ process GTF2BED {
     path gtf
 
     output:
-    path '*.bed'
+    path '*.bed'       , emit: bed
+    path "versions.yml", emit: versions
 
-    script: // This script is bundled with the pipeline, borrowed from nf-core/chipseq/bin/
+    when:
+    task.ext.when == null || task.ext.when
+
+    script: // This script is bundled with the pipeline, in nf-core/rnaseq/bin/
     """
-    gtf2bed $gtf > ${gtf.baseName}.bed
+    gtf2bed \\
+        $gtf \\
+        > ${gtf.baseName}.bed
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        perl: \$(echo \$(perl --version 2>&1) | sed 's/.*v\\(.*\\)) built.*/\\1/')
+    END_VERSIONS
     """
 }

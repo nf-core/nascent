@@ -40,13 +40,15 @@ workflow PREPARE_GENOME {
     //
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
-            ch_gtf = GUNZIP_GTF ( params.gtf ).gunzip
+            ch_gtf = GUNZIP_GTF ( [ [:], params.gtf ] ).gunzip.map { it[1] }
+            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         } else {
             ch_gtf = file(params.gtf)
         }
     } else if (params.gff) {
         if (params.gff.endsWith('.gz')) {
-            ch_gff = GUNZIP_GFF ( params.gff ).gunzip
+            ch_gff = GUNZIP_GFF ( [ [:], params.gff ] ).gunzip.map { it[1] }
+            ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
         } else {
             ch_gff = file(params.gff)
         }
@@ -59,12 +61,14 @@ workflow PREPARE_GENOME {
     //
     if (params.gene_bed) {
         if (params.gene_bed.endsWith('.gz')) {
-            ch_gene_bed = GUNZIP_GENE_BED ( params.gene_bed ).gunzip
+            ch_gene_bed = GUNZIP_GENE_BED ( [ [:], params.gene_bed ] ).gunzip.map { it[1] }
+            ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
             ch_gene_bed = file(params.gene_bed)
         }
     } else {
-        ch_gene_bed = GTF2BED ( ch_gtf )
+        ch_gene_bed = GTF2BED ( ch_gtf ).bed
+        ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
 
     //
@@ -107,5 +111,5 @@ workflow PREPARE_GENOME {
     chrom_sizes = ch_chrom_sizes // path: genome.sizes
     bwa_index   = ch_bwa_index   // path: star/index/
 
-    versions    = ch_versions    // channel: [ versions.yml ]
+    versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
