@@ -69,18 +69,16 @@
             "description": "",
             "default": "",
             "properties": {
-                "transcript_identification": {
-                    "type": "string",
-                    "default": "homer",
-                    "fa_icon": "fas fa-microscope",
-                    "description": "Method to use for transcript Identification",
-                    "enum": ["homer", "grohmm"]
-                },
                 "skip_tuning": {
                     "type": "boolean",
                     "description": "Skip grohmm tuning step as it can take a long time.",
                     "fa_icon": "fas fa-wrench",
                     "hidden": true
+                },
+                "skip_grohmm": {
+                    "type": "boolean",
+                    "default": "false",
+                    "fa_icon": "fas fa-eye-slash"
                 },
                 "tuning_file": {
                     "type": "string",
@@ -92,7 +90,8 @@
                     "description": "File of parameters to test for groHMM tuning"
                 }
             },
-            "required": ["transcript_identification"]
+            "required": ["skip_grohmm"],
+            "fa_icon": "fas fa-microscope"
         },
         "reference_genome_options": {
             "title": "Reference genome options",

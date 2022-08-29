@@ -198,29 +198,23 @@ workflow NASCENT {
     ch_homer_multiqc = Channel.empty()
     ch_identification_bed = Channel.empty()
     ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
-    if (params.transcript_identification == 'grohmm') {
-        GROHMM (
-            ch_sort_bam,
-            PREPARE_GENOME.out.gtf,
-            ch_tuning_file
-        )
+    GROHMM (
+        ch_sort_bam,
+        PREPARE_GENOME.out.gtf,
+        ch_tuning_file
+    )
 
-        ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
-        ch_identification_bed = GROHMM.out.bed
-    } else if (params.transcript_identification == 'homer') {
-        /*
-         * SUBWORKFLOW: Transcript indetification with homer
-         */
-        HOMER_GROSEQ (
-            ch_sort_bam,
-            PREPARE_GENOME.out.fasta
-        )
-        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+    ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
+    ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
 
-        ch_homer_multiqc = HOMER_GROSEQ.out.peaks
-        ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
-        ch_identification_bed = HOMER_GROSEQ.out.bed
-    }
+    HOMER_GROSEQ (
+        ch_sort_bam,
+        PREPARE_GENOME.out.fasta
+    )
+    ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+    ch_homer_multiqc = HOMER_GROSEQ.out.peaks
+    ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
+    ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
 
     ch_identification_bed.map {
         meta, bed ->
