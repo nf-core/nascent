@@ -3,110 +3,148 @@
     "homePage": "https://github.com/nf-core/nascent",
     "repos": {
         "nf-core/modules": {
-            "bbmap/pileup": {
-                "git_sha": "6806cd1de9f493ecba86960fc8a6e7d86e262d9b"
-            },
-            "bedtools/bamtobed": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bedtools/genomecov": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bedtools/intersect": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bedtools/slop": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bedtools/sort": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bwa/index": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "bwa/mem": {
-                "git_sha": "950700bcdc0e9a2b6883d40d2c51c6fc435cd714"
-            },
-            "bwamem2/index": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "bwamem2/mem": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "cat/fastq": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "custom/dumpsoftwareversions": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "custom/getchromsizes": {
-                "git_sha": "950700bcdc0e9a2b6883d40d2c51c6fc435cd714"
-            },
-            "deeptools/bamcoverage": {
-                "git_sha": "fe088745e03f21d07477cc0c655c24ae9f72ac31"
-            },
-            "fastqc": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "gffread": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "gunzip": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "homer/findpeaks": {
-                "git_sha": "e3a5795652ae9838111b33483a80ad733e7501c4"
-            },
-            "homer/maketagdirectory": {
-                "git_sha": "5832fbc225b59577677bd8c38353a3de293998d1"
-            },
-            "homer/makeucscfile": {
-                "git_sha": "1fb1801dcbbc556d04985bda5ba4329a4f50543f"
-            },
-            "homer/pos2bed": {
-                "git_sha": "98ed71c8f6968bc689f170e2b79d0866e3f28cda"
-            },
-            "multiqc": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "picard/mergesamfiles": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "preseq/ccurve": {
-                "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
-            },
-            "preseq/lcextrap": {
-                "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
-            },
-            "rseqc/inferexperiment": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "rseqc/readdistribution": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "rseqc/readduplication": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "samtools/flagstat": {
-                "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
-            },
-            "samtools/idxstats": {
-                "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
-            },
-            "samtools/index": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "samtools/sort": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "samtools/stats": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "subread/featurecounts": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "untar": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            "git_url": "https://github.com/nf-core/modules.git",
+            "modules": {
+                "bbmap/pileup": {
+                    "branch": "master",
+                    "git_sha": "6806cd1de9f493ecba86960fc8a6e7d86e262d9b"
+                },
+                "bedtools/bamtobed": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bedtools/genomecov": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bedtools/intersect": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bedtools/slop": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bedtools/sort": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bwa/index": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "bwa/mem": {
+                    "branch": "master",
+                    "git_sha": "950700bcdc0e9a2b6883d40d2c51c6fc435cd714"
+                },
+                "bwamem2/index": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "bwamem2/mem": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "cat/fastq": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "custom/dumpsoftwareversions": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "custom/getchromsizes": {
+                    "branch": "master",
+                    "git_sha": "950700bcdc0e9a2b6883d40d2c51c6fc435cd714"
+                },
+                "deeptools/bamcoverage": {
+                    "branch": "master",
+                    "git_sha": "fe088745e03f21d07477cc0c655c24ae9f72ac31"
+                },
+                "fastqc": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "gffread": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "gunzip": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "homer/findpeaks": {
+                    "branch": "master",
+                    "git_sha": "e3a5795652ae9838111b33483a80ad733e7501c4"
+                },
+                "homer/maketagdirectory": {
+                    "branch": "master",
+                    "git_sha": "5832fbc225b59577677bd8c38353a3de293998d1"
+                },
+                "homer/makeucscfile": {
+                    "branch": "master",
+                    "git_sha": "1fb1801dcbbc556d04985bda5ba4329a4f50543f"
+                },
+                "homer/pos2bed": {
+                    "branch": "master",
+                    "git_sha": "98ed71c8f6968bc689f170e2b79d0866e3f28cda"
+                },
+                "multiqc": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "picard/mergesamfiles": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "preseq/ccurve": {
+                    "branch": "master",
+                    "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
+                },
+                "preseq/lcextrap": {
+                    "branch": "master",
+                    "git_sha": "7111e571cc5b6069de4673cd6165af680f17b4d7"
+                },
+                "rseqc/inferexperiment": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "rseqc/readdistribution": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "rseqc/readduplication": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "samtools/flagstat": {
+                    "branch": "master",
+                    "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
+                },
+                "samtools/idxstats": {
+                    "branch": "master",
+                    "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
+                },
+                "samtools/index": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "samtools/sort": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "samtools/stats": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                },
+                "subread/featurecounts": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
+                "untar": {
+                    "branch": "master",
+                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                }
             }
         }
     }
