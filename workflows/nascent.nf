@@ -65,6 +65,7 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
+include { PINTS_CALLER                                            } from '../modules/nf-core/pints/caller/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
@@ -215,6 +216,14 @@ workflow NASCENT {
     ch_homer_multiqc = HOMER_GROSEQ.out.peaks
     ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
     ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
+
+    PINTS_CALLER (
+        ch_sort_bam
+    )
+    ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
+    ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.divergent_TREs)
+    // ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
+    // ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.unidirectional_TREs)
 
     ch_identification_bed.map {
         meta, bed ->
