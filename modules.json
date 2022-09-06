@@ -61,6 +61,14 @@
                     "branch": "master",
                     "git_sha": "fe088745e03f21d07477cc0c655c24ae9f72ac31"
                 },
+                "dragmap/align": {
+                    "branch": "master",
+                    "git_sha": "4f5274c3de0c9521f5033893ff61057a74c45ba9"
+                },
+                "dragmap/hashtable": {
+                    "branch": "master",
+                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                },
                 "fastqc": {
                     "branch": "master",
                     "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
