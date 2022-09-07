@@ -221,9 +221,7 @@ workflow NASCENT {
         ch_sort_bam
     )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
-    ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.divergent_TREs)
-    // ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
-    // ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.unidirectional_TREs)
+    ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
 
     ch_identification_bed.map {
         meta, bed ->
