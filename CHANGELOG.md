@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#28](https://github.com/nf-core/nascent/issues/28)] - Added DRAGMAP alignment
+
 ### `Fixed`
 
 - [[#33](https://github.com/nf-core/nascent/issues/33)] - groHMM works on full runs. Added the keep standard chromosomes function to standardize bam files.
