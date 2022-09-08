@@ -24,6 +24,7 @@ jobs:
           - "latest-everything"
         parameters:
           - "--transcript_identification homer"
+          - "--aligner dragmap --transcript_identification homer"
           # - "--transcript_identification grohmm"
     steps:
       - name: Check out pipeline code
