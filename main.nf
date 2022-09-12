@@ -22,6 +22,7 @@ params.gtf       = WorkflowMain.getGenomeAttribute(params, 'gtf')
 params.gff       = WorkflowMain.getGenomeAttribute(params, 'gff')
 params.gene_bed  = WorkflowMain.getGenomeAttribute(params, 'bed12')
 params.bwa_index = WorkflowMain.getGenomeAttribute(params, 'bwa')
+params.dragmap = WorkflowMain.getGenomeAttribute(params, 'dragmap')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

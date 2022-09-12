@@ -5,7 +5,7 @@
 */
 
 def valid_params = [
-    aligners       : ['bwa', 'bwamem2']
+    aligners       : ['bwa', 'bwamem2', 'dragmap']
 ]
 
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
@@ -68,6 +68,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 //
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
+include { ALIGN_DRAGMAP         } from '../subworkflows/nf-core/align_dragmap/main'
 include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer/groseq/main'
 
 /*
@@ -141,6 +142,18 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions.first())
+    } else if (!params.skip_alignment && params.aligner == 'dragmap') {
+        ALIGN_DRAGMAP(
+            INPUT_CHECK.out.reads,
+            PREPARE_GENOME.out.dragmap
+        )
+        ch_genome_bam        = ALIGN_DRAGMAP.out.bam
+        ch_genome_bai        = ALIGN_DRAGMAP.out.bai
+        ch_samtools_stats    = ALIGN_DRAGMAP.out.stats
+        ch_samtools_flagstat = ALIGN_DRAGMAP.out.flagstat
+        ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
+
+        ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions.first())
     }
 
     QUALITY_CONTROL (

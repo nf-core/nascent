@@ -69,6 +69,13 @@
                     "fa_icon": "fas fa-copy",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
                 },
+                "dragmap": {
+                    "type": "string",
+                    "fa_icon": "fas fa-copy",
+                    "description": "Path to dragmap indices.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\nIf you wish to recompute indices available on igenomes, set `--dragmap false`.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference, if `--aligner dragmap` is specified. Combine with `--save_reference` to save for future runs.",
+                    "hidden": true
+                },
                 "igenomes_base": {
                     "type": "string",
                     "format": "directory-path",
@@ -281,7 +288,11 @@
         },
         "aligner": {
             "type": "string",
-            "default": "bwamem2"
+            "default": "bwa",
+            "fa_icon": "fas fa-puzzle-piece",
+            "enum": ["bwa", "bwamem2", "dragmap"],
+            "description": "Specify aligner to be used to map reads to reference genome.",
+            "help_text": "TODO"
         },
         "transcript_identification": {
             "type": "string",

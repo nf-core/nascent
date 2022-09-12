@@ -11,10 +11,12 @@ include {
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED
     GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/modules/gunzip/main'
-include { UNTAR as UNTAR_BWA_INDEX    } from '../../modules/nf-core/modules/untar/main'
+include { UNTAR as UNTAR_BWA_INDEX
+          UNTAR as UNTAR_DRAGMAP      } from '../../modules/nf-core/modules/untar/main'
 include { GFFREAD                     } from '../../modules/nf-core/modules/gffread/main'
 include { BWA_INDEX                   } from '../../modules/nf-core/modules/bwa/index/main'
 include { BWAMEM2_INDEX               } from '../../modules/nf-core/modules/bwamem2/index/main'
+include { DRAGMAP_HASHTABLE           } from '../../modules/nf-core/modules/dragmap/hashtable/main'
 include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/modules/custom/getchromsizes/main'
 
 workflow PREPARE_GENOME {
@@ -80,6 +82,7 @@ workflow PREPARE_GENOME {
     // Uncompress BWA index or generate from scratch if required
     //
     ch_bwa_index   = Channel.empty()
+    ch_dragmap     = Channel.empty()
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
             if (params.bwa_index.endsWith('.tar.gz')) {
@@ -102,6 +105,17 @@ workflow PREPARE_GENOME {
             ch_bwa_index = BWAMEM2_INDEX ( ch_fasta ).index
             ch_versions  = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
+    } else if ('dragmap' in prepare_tool_indices) {
+        if (params.dragmap) {
+            if (params.dragmap.endsWith('.tar.gz')) {
+                ch_bwa_index = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
+            } else {
+                ch_bwa_index = file(params.dragmap)
+            }
+        } else {
+            ch_dragmap = DRAGMAP_HASHTABLE( ch_fasta ).hashmap
+            ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
+        }
     }
 
     emit:
@@ -110,6 +124,7 @@ workflow PREPARE_GENOME {
     gene_bed    = ch_gene_bed    // path: gene.bed
     chrom_sizes = ch_chrom_sizes // path: genome.sizes
     bwa_index   = ch_bwa_index   // path: star/index/
+    dragmap     = ch_dragmap     // path:
 
     versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
