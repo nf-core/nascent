@@ -298,8 +298,10 @@
             "type": "string",
             "default": "grohmm"
         },
-        "with_tuning": {
-            "type": "boolean"
+        "skip_tuning": {
+            "type": "boolean",
+            "description": "Skip grohmm tuning step as it can take a long time.",
+            "fa_icon": "fas fa-wrench"
         },
         "gtf": {
             "type": "string"

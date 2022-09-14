@@ -14,14 +14,10 @@ workflow GROHMM {
     gtf
 
     main:
-    ch_tuning = Channel.empty()
+    ch_tuning = []
 
-    if (params.with_tuning) {
-        GROHMM_PARAMETERTUNING (bam, file("${launchDir}/modules/local/grohmm/test/tune.csv") )
-        ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
-    } else {
-        ch_tuning = []
-    }
+    GROHMM_PARAMETERTUNING (bams, file("${launchDir}/assets/tuningparamstotest.csv") )
+    ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
 
     GROHMM_TRANSCRIPTCALLING (
         bams,
