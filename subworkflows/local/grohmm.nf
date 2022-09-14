@@ -12,11 +12,12 @@ workflow GROHMM {
     take:
     bams // channel: [ val(meta), [ bams ] ]
     gtf
+    tuning_file
 
     main:
     ch_tuning = []
 
-    GROHMM_PARAMETERTUNING (bams, file("${launchDir}/assets/tuningparamstotest.csv") )
+    GROHMM_PARAMETERTUNING (bams, tuning_file )
     ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
 
     GROHMM_TRANSCRIPTCALLING (
