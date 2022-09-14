@@ -104,8 +104,8 @@ if (is.null(args$tuning_file)) {
 } else {
     tune <- read.csv(args$tuning_file)
     # Minimum error
-    uts <- tune[which.min(tune$total), "UTS"]
-    lt_probb <- tune[which.min(tune$total), "LtProbB"]
+    uts <- tune[which.min(tune$errorRate), "UTS"]
+    lt_probb <- tune[which.min(tune$errorRate), "LtProbB"]
     hmm_result <- detectTranscripts(
         alignments,
         LtProbB = lt_probb,
