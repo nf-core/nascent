@@ -17,7 +17,11 @@ workflow GROHMM {
     main:
     ch_tuning = []
 
-    GROHMM_PARAMETERTUNING (bams, tuning_file )
+    GROHMM_PARAMETERTUNING (
+        bams,
+        gtf,
+        tuning_file
+    )
     ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
 
     GROHMM_TRANSCRIPTCALLING (

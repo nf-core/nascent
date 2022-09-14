@@ -9,7 +9,8 @@ process GROHMM_PARAMETERTUNING {
 
     input:
     tuple val(meta), path(bam)
-    path(tune)
+    path gtf
+    path tune_parameter_file
 
     output:
     path "*.tuning.csv" , emit: tuning
@@ -24,9 +25,9 @@ process GROHMM_PARAMETERTUNING {
     """
     parameter_tuning.R \\
         --bam_file ${bam} \\
-        --tuning_file ${tune} \\
+        --tuning_file ${tune_parameter_file} \\
         --outprefix ${prefix} \\
-        --genome $params.genome \\
+        --gtf $gtf \\
         --outdir ./ \\
         --cores $task.cpus \\
         $args
