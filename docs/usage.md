@@ -51,6 +51,13 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 | `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+### Alignment Options
+### TODO REF GENOME
+### TODO: Quantification Options
+### Transcript Identification Options
+The current options for transcript identification include [GroHMM](https://bioconductor.org/packages/release/bioc/html/groHMM.html) using (`--transcript_identification grohmm`) and HOMER. The default transcript identification option is HOMER but this may change in future releases. 
+When selecting GroHMM as an option, the pipeline by default tests a list of preset hold-out parameters to select for the combination of arguments which would result in the lowest possible error rate during the transcript identification process. The user may also choose to provide their own list of hold-out parameters to test, or skip the tuning process altogether due to time constraints. If the tuning process is skipped ('--skip_tuning') then the user may indicate the specific holdout parameters to use ('--uts' and '--ltprobb') or choose to use the default parameters.
+
 
 ## Running the pipeline
 
