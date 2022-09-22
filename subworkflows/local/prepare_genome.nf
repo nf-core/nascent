@@ -95,11 +95,11 @@ workflow PREPARE_GENOME {
             ch_versions    = ch_versions.mix(BWA_INDEX.out.versions)
         }
     } else if ('bwamem2' in prepare_tool_indices) {
-        if (params.bwa_index) {
-            if (params.bwa_index.endsWith('.tar.gz')) {
-                ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
+        if (params.bwamem2_index) {
+            if (params.bwamem2_index.endsWith('.tar.gz') || params.bwamem2_index.endsWith('.tgz')) {
+                ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], params.bwamem2_index ] ).untar
             } else {
-                ch_bwa_index = file(params.bwa_index)
+                ch_bwa_index = file(params.bwamem2_index)
             }
         } else {
             ch_bwa_index = BWAMEM2_INDEX ( ch_fasta ).index

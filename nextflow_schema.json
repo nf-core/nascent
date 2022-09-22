@@ -69,6 +69,13 @@
                     "fa_icon": "fas fa-copy",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
                 },
+                "bwamem2_index": {
+                    "type": "string",
+                    "description": "Path to bwa-mem2 mem indices.",
+                    "fa_icon": "fas fa-copy",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference.",
+                    "hidden": true
+                },
                 "dragmap": {
                     "type": "string",
                     "fa_icon": "fas fa-copy",
