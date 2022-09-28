@@ -175,7 +175,7 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        fmeta.id = fmeta.id.split('_')[0..-2].join('_')
+        fmeta.id = fmeta.id.split('_')[0..-3].join('_')
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
@@ -184,10 +184,12 @@ workflow NASCENT {
     ch_grohmm_multiqc = Channel.empty()
     ch_homer_multiqc = Channel.empty()
     ch_identification_bed = Channel.empty()
+    ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
     if (params.transcript_identification == 'grohmm') {
         GROHMM (
             ch_sort_bam,
-            PREPARE_GENOME.out.gtf
+            PREPARE_GENOME.out.gtf,
+            ch_tuning_file
         )
 
         ch_grohmm_multiqc = GROHMM.out.td_plot.collect()

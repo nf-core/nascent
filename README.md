@@ -26,6 +26,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+3. Transcript identification ([`GroHMM`](https://bioconductor.org/packages/release/bioc/html/groHMM.html))
 
 ## Quick Start
 

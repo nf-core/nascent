@@ -1,6 +1,7 @@
 process GROHMM_PARAMETERTUNING {
     tag "$meta.id"
-    label 'process_medium'
+    label 'process_high'
+    label 'process_long'
 
     conda    (params.enable_conda ? "conda-forge::r-base=4.1.1 conda-forge::r-optparse=1.7.1 conda-forge::r-argparse=2.1.3 bioconda::bioconductor-genomicfeatures=1.46.1 bioconda::bioconductor-grohmm=1.28.0"  : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -9,7 +10,8 @@ process GROHMM_PARAMETERTUNING {
 
     input:
     tuple val(meta), path(bam)
-    path(tune)
+    path gtf
+    path tune_parameter_file
 
     output:
     path "*.tuning.csv" , emit: tuning
@@ -24,9 +26,9 @@ process GROHMM_PARAMETERTUNING {
     """
     parameter_tuning.R \\
         --bam_file ${bam} \\
-        --tuning_file ${tune} \\
+        --tuning_file ${tune_parameter_file} \\
         --outprefix ${prefix} \\
-        --genome $params.genome \\
+        --gtf $gtf \\
         --outdir ./ \\
         --cores $task.cpus \\
         $args
