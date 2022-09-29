@@ -28,7 +28,11 @@ option_list <- list(
         type = "integer",
         default = 1,
         metavar = "integer",
-        help = "A normalization factor correcting for library size or other effects. For example, total mappible read counts might be a reasonable value. Default: 1 (i.e. no normalization)."
+        help = cat(
+            "A normalization factor correcting for library size or other
+            effects. For example, total mappible read counts might be a
+            reasonable value. Default: 1 (i.e. no normalization)."
+        )
     ),
     make_option(c("-p", "--outprefix"),
         type = "character",

@@ -43,7 +43,10 @@ parser$add_argument(
     type = "integer",
     default = -200,
     metavar = "integer",
-    help = "Log-transformed transition probability of switching from transcribed state to non-transcribed state"
+    help = cat(
+        "Log-transformed transition probability of switching from transcribed
+        state to non-transcribed state"
+    )
 )
 parser$add_argument(
     "-u",
@@ -51,7 +54,10 @@ parser$add_argument(
     type = "integer",
     default = 5,
     metavar = "integer",
-    help = "Variance of the emission probability for reads in the non-transcribed state, respectively."
+    help = cat(
+        "Variance of the emission probability for reads in the
+        non-transcribed state, respectively."
+    )
 )
 parser$add_argument(
     "-p",
@@ -122,23 +128,6 @@ print("Finished consensus annotations")
 
 # TUNING
 tune <- read.csv(args$tuning_file)
-
-# Default values creation
-## tune <- data.frame(
-##   LtProbB = c(
-##     rep(-100, 9),
-##     rep(-150, 9),
-##     rep(-200, 9),
-##     rep(-250, 9),
-##     rep(-300, 9),
-##     rep(-350, 9),
-##     rep(-400, 9)
-##   ),
-##   UTS = rep(
-##     c(5, 10, 15, 20, 25, 30, 35, 40, 45),
-##     7
-##   )
-## )
 
 evals <- mclapply(seq_len(nrow(tune)), function(x) {
     hmm <- detectTranscripts(
