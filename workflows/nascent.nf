@@ -218,7 +218,7 @@ workflow NASCENT {
     }.set { ch_transcript_bed }
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ) )
+        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ).saf )
     )
 
 

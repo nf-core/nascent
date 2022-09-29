@@ -12,10 +12,22 @@ process GTF_GENE_FILTER {
     path gtf
 
     output:
-    path "*.gtf"
+    path "*.gtf", emit: gtf
+    path "versions.yml", emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script: // filter_gtf_for_genes_in_genome.py is bundled with the pipeline, borrowed from nf-core/rnaseq/bin/
     """
-    filter_gtf_for_genes_in_genome.py --gtf $gtf --fasta $fasta -o ${fasta.baseName}_genes.gtf
+    filter_gtf_for_genes_in_genome.py \\
+        --gtf $gtf \\
+        --fasta $fasta \\
+        -o ${fasta.baseName}_genes.gtf
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        python: \$(python --version | sed 's/Python //g')
+    END_VERSIONS
     """
 }

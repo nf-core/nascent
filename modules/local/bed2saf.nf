@@ -1,6 +1,6 @@
 process BED2SAF {
     tag "$bed"
-    label 'process_low'
+    label 'process_single'
 
     conda (params.enable_conda ? "pandas" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -12,9 +12,18 @@ process BED2SAF {
 
     output:
     path '*.saf' , emit: saf
+    path "versions.yml", emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script: // This script is bundled with the pipeline, in nf-core/nascent/bin/
     """
     bed2saf.py -o ${bed.baseName}.saf $bed
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        python: \$(python --version | sed 's/Python //g')
+    END_VERSIONS
     """
 }
