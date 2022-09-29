@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 from __future__ import print_function
+
+import argparse
 import logging
 from itertools import groupby
-import argparse
 
 # Create a logger
 logging.basicConfig(format="%(name)s - %(asctime)s %(levelname)s: %(message)s")

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-import pandas as pd
+
 import argparse
+
+import pandas as pd
 
 
 def bed2saf(bed, output):

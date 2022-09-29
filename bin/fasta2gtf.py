@@ -3,8 +3,8 @@
 Read a custom fasta file and create a custom GTF containing each entry
 """
 import argparse
-from itertools import groupby
 import logging
+from itertools import groupby
 
 # Create a logger
 logging.basicConfig(format="%(name)s - %(asctime)s %(levelname)s: %(message)s")
