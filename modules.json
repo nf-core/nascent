@@ -125,6 +125,10 @@
                     "branch": "master",
                     "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
                 },
+                "samtools/faidx": {
+                    "branch": "master",
+                    "git_sha": "3eb99152cedbb7280258858e5df08478a4670696"
+                },
                 "samtools/flagstat": {
                     "branch": "master",
                     "git_sha": "bbb99cb8d679555cc01c98766de7869f83283545"
