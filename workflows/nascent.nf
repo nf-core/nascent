@@ -83,6 +83,7 @@ def multiqc_report = []
 workflow NASCENT {
 
     ch_versions = Channel.empty()
+    ch_nascent_logo = Channel.fromPath("$projectDir/docs/images/nf-core-nascent_logo_light.png")
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -237,8 +238,6 @@ workflow NASCENT {
     ch_workflow_summary = Channel.value(workflow_summary)
 
     ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
@@ -256,7 +255,10 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
-        ch_multiqc_files.collect()
+        ch_multiqc_files.collect(),
+        ch_multiqc_config,
+        ch_multiqc_custom_config.ifEmpty([]),
+        ch_nascent_logo
     )
     multiqc_report       = MULTIQC.out.report.toList()
     ch_versions = ch_versions.mix(MULTIQC.out.versions.first())
