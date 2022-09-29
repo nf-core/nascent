@@ -79,7 +79,7 @@ workflow PREPARE_GENOME {
     //
     // Create chromosome sizes file
     //
-    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( ch_fasta ).sizes
+    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( [ [:], ch_fasta ] ).sizes
 
     //
     // Uncompress BWA index or generate from scratch if required
