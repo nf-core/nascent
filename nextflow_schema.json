@@ -315,7 +315,6 @@
             "format": "file-path",
             "mimetype": "text/csv",
             "pattern": "^\\S+\\.csv$",
-            "default": null,
             "hidden": true,
             "fa_icon": "fas fa-file-csv",
             "description": "File of parameters to test for groHMM tuning"
