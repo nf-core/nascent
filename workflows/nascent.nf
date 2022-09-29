@@ -53,7 +53,6 @@ include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
 include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS       } from '../subworkflows/local/coverage_graphs.nf'
-include { GROHMM_MAKEUCSCFILE   } from '../modules/local/grohmm/makeucscfile/main.nf'
 include { GROHMM                } from '../subworkflows/local/grohmm'
 
 /*
