@@ -5,12 +5,13 @@ from itertools import groupby
 import argparse
 
 # Create a logger
-logging.basicConfig(format='%(name)s - %(asctime)s %(levelname)s: %(message)s')
+logging.basicConfig(format="%(name)s - %(asctime)s %(levelname)s: %(message)s")
 logger = logging.getLogger(__file__)
 logger.setLevel(logging.INFO)
 
+
 def is_header(line):
-    return line[0] == '>'
+    return line[0] == ">"
 
 
 def extract_fasta_seq_names(fasta_name):
@@ -43,7 +44,7 @@ def extract_genes_in_genome(fasta, gtf_in, gtf_out):
 
     n_total_lines = 0
     n_lines_in_genome = 0
-    with open(gtf_out, 'w') as f:
+    with open(gtf_out, "w") as f:
         with open(gtf_in) as g:
 
             for line in g.readlines():
@@ -53,8 +54,9 @@ def extract_genes_in_genome(fasta, gtf_in, gtf_out):
                 if seq_name_gtf in seq_names_in_genome:
                     n_lines_in_genome += 1
                     f.write(line)
-    logger.info("Extracted %d / %d lines from %s matching sequences in %s" %
-                (n_lines_in_genome, n_total_lines, gtf_in, fasta))
+    logger.info(
+        "Extracted %d / %d lines from %s matching sequences in %s" % (n_lines_in_genome, n_total_lines, gtf_in, fasta)
+    )
     logger.info("All sequence IDs from GTF: " + ", ".join(sorted(x for x in seq_name_gtf)))
 
     logger.info("Wrote matching lines to %s" % gtf_out)
@@ -64,9 +66,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""Filter GTF only for features in the genome""")
     parser.add_argument("--gtf", type=str, help="GTF file")
     parser.add_argument("--fasta", type=str, help="Genome fasta file")
-    parser.add_argument("-o", "--output", dest='output',
-                        default='genes_in_genome.gtf',
-                        type=str, help="GTF features on fasta genome sequences")
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        default="genes_in_genome.gtf",
+        type=str,
+        help="GTF features on fasta genome sequences",
+    )
 
     args = parser.parse_args()
     extract_genes_in_genome(args.fasta, args.gtf, args.output)
