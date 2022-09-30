@@ -43,7 +43,10 @@ parser$add_argument(
     type = "integer",
     default = -200,
     metavar = "integer",
-    help = "Log-transformed transition probability of switching from transcribed state to non-transcribed state"
+    help = cat(
+        "Log-transformed transition probability of switching from transcribed
+        state to non-transcribed state"
+    )
 )
 parser$add_argument(
     "-u",
@@ -51,7 +54,10 @@ parser$add_argument(
     type = "integer",
     default = 5,
     metavar = "integer",
-    help = "Variance of the emission probability for reads in the non-transcribed state, respectively."
+    help = cat(
+        "Variance of the emission probability for reads in the
+        non-transcribed state, respectively."
+    )
 )
 parser$add_argument(
     "-p",
@@ -158,7 +164,10 @@ b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
 tx_broken <- c(b_plus, b_minus)
 tx_final <- combineTranscripts(tx_broken, kg_consensus)
 td_final <- getTxDensity(tx_final, con_expressed, mc.cores = args$cores)
-export(tx_final, con = paste(args$outprefix, ".final.transcripts.bed", sep = ""))
+export(
+    tx_final,
+    con = paste(args$outprefix, ".final.transcripts.bed", sep = "")
+)
 capture.output(td_final, file = paste0(args$outprefix, ".tdFinal.txt"))
 # Output plot
 jpeg(file = paste0(args$outprefix, ".tdplot_mqc.jpg"))

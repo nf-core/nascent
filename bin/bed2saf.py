@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-import pandas as pd
+
 import argparse
+
+import pandas as pd
 
 
 def bed2saf(bed, output):
     bed = pd.read_csv(bed, sep="\t", comment="#")
     bed.columns = ["Chr", "Start", "End", "GeneID", "frame", "Strand"]
     # TODO Clever naming scheme
-    bed["GeneID"] = (
-        bed["Chr"] + "-" + bed["Start"].astype(str) + "-" + bed["End"].astype(str)
-    )
+    bed["GeneID"] = bed["Chr"] + "-" + bed["Start"].astype(str) + "-" + bed["End"].astype(str)
     bed.to_csv(
         output,
         sep="\t",

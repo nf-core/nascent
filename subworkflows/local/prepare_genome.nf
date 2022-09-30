@@ -13,6 +13,7 @@ include {
     GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/modules/gunzip/main'
 include { UNTAR as UNTAR_BWA_INDEX
           UNTAR as UNTAR_DRAGMAP      } from '../../modules/nf-core/modules/untar/main'
+include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
 include { GFFREAD                     } from '../../modules/nf-core/modules/gffread/main'
 include { BWA_INDEX                   } from '../../modules/nf-core/modules/bwa/index/main'
 include { BWAMEM2_INDEX               } from '../../modules/nf-core/modules/bwamem2/index/main'
@@ -37,6 +38,8 @@ workflow PREPARE_GENOME {
         ch_fasta = file(params.fasta)
     }
 
+    // Create Fai file
+    ch_fai = SAMTOOLS_FAIDX( [ [:], ch_fasta ] ).fai.map { it[1] }
     //
     // Uncompress GTF annotation file or create from GFF3 if required
     //
@@ -76,7 +79,7 @@ workflow PREPARE_GENOME {
     //
     // Create chromosome sizes file
     //
-    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( ch_fasta ).sizes
+    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( [ [:], ch_fasta ] ).sizes
 
     //
     // Uncompress BWA index or generate from scratch if required
@@ -120,6 +123,7 @@ workflow PREPARE_GENOME {
 
     emit:
     fasta       = ch_fasta       // path: genome.fasta
+    fai         = ch_fai         // path: genome.fasta.fai
     gtf         = ch_gtf         // path: genome.gtf
     gene_bed    = ch_gene_bed    // path: gene.bed
     chrom_sizes = ch_chrom_sizes // path: genome.sizes

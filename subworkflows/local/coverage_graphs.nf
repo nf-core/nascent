@@ -15,6 +15,8 @@ workflow COVERAGE_GRAPHS {
     bam // channel: [ val(meta), [ bam ] ]
     bai
     sizes
+    fasta
+    fai
 
     main:
 
@@ -40,11 +42,15 @@ workflow COVERAGE_GRAPHS {
     bam.join(bai, by: [0], remainder: true).set { ch_bam_bai }
 
     DEEPTOOLS_BAMCOVERAGE_PLUS (
-        ch_bam_bai
+        ch_bam_bai,
+        fasta,
+        fai
     )
 
     DEEPTOOLS_BAMCOVERAGE_MINUS (
-        ch_bam_bai
+        ch_bam_bai,
+        fasta,
+        fai
     )
 
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)

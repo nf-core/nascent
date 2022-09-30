@@ -3,8 +3,8 @@
 Read a custom fasta file and create a custom GTF containing each entry
 """
 import argparse
-from itertools import groupby
 import logging
+from itertools import groupby
 
 # Create a logger
 logging.basicConfig(format="%(name)s - %(asctime)s %(levelname)s: %(message)s")
@@ -38,10 +38,8 @@ def fasta2gtf(fasta, output):
     fiter = fasta_iter(fasta)
     # GTF output lines
     lines = []
-    attributes = 'gene_id "{name_sanitized}"; gene_name "{name_sanitized}";transcript_id "{name_sanitized}"; gene_biotype "{name_sanitized}"; gene_type "{name_sanitized}"\n'
-    line_template = (
-        "{name_sanitized}\ttransgene\texon\t1\t{length}\t.\t+\t.\t" + attributes
-    )
+    attributes = 'gene_id "{name_sanitized}"; gene_name "{name_sanitized}";transcript_id "{name_sanitized}"; gene_biotype "{name_sanitized}"; gene_type "{name_sanitized}"\n'  # noqa: E501
+    line_template = "{name_sanitized}\ttransgene\texon\t1\t{length}\t.\t+\t.\t" + attributes
 
     for ff in fiter:
         name, seq = ff

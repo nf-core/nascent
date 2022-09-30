@@ -13,9 +13,18 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowNascent.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+def checkPathParamList = [
+    params.input,
+    params.multiqc_config,
+    params.fasta,
+    params.gtf,
+    params.gff,
+    params.gene_bed,
+    params.bwa_index,
+    params.bwamem2_index,
+    params.dragmap
+]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
@@ -44,7 +53,6 @@ include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
 include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS       } from '../subworkflows/local/coverage_graphs.nf'
-include { GROHMM_MAKEUCSCFILE   } from '../modules/local/grohmm/makeucscfile/main.nf'
 include { GROHMM                } from '../subworkflows/local/grohmm'
 
 /*
@@ -83,6 +91,7 @@ def multiqc_report = []
 workflow NASCENT {
 
     ch_versions = Channel.empty()
+    ch_nascent_logo = Channel.fromPath("$projectDir/docs/images/nf-core-nascent_logo_light.png")
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -165,7 +174,9 @@ workflow NASCENT {
     COVERAGE_GRAPHS (
         ch_genome_bam,
         ch_genome_bai,
-        PREPARE_GENOME.out.chrom_sizes
+        PREPARE_GENOME.out.chrom_sizes,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai
     )
     ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions.first())
 
@@ -215,7 +226,7 @@ workflow NASCENT {
     }.set { ch_transcript_bed }
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ) )
+        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ).saf )
     )
 
 
@@ -235,8 +246,6 @@ workflow NASCENT {
     ch_workflow_summary = Channel.value(workflow_summary)
 
     ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
@@ -254,7 +263,10 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
-        ch_multiqc_files.collect()
+        ch_multiqc_files.collect(),
+        ch_multiqc_config,
+        ch_multiqc_custom_config.ifEmpty([]),
+        ch_nascent_logo
     )
     multiqc_report       = MULTIQC.out.report.toList()
     ch_versions = ch_versions.mix(MULTIQC.out.versions.first())
