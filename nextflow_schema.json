@@ -66,9 +66,30 @@
         "transcript_identification_options": {
             "title": "Transcript Identification Options",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Type of experiment to use for Transcript Identification(NT or TSS)",
             "properties": {
+                "assay_type": {
+                    "type": "string",
+                    "fa_icon": "fas fa-vial",
+                    "enum": [
+                        "CoPRO",
+                        "GROcap",
+                        "PROcap",
+                        "CAGE",
+                        "NETCAGE",
+                        "RAMPAGE",
+                        "csRNAseq",
+                        "STRIPEseq",
+                        "PROseq",
+                        "GROseq",
+                        "R_5",
+                        "R_3",
+                        "R1_5",
+                        "R1_3",
+                        "R2_5",
+                        "R2_3"
+                    ]
+                },
                 "skip_tuning": {
                     "type": "boolean",
                     "description": "Skip grohmm tuning step as it can take a long time.",
@@ -77,7 +98,6 @@
                 },
                 "skip_grohmm": {
                     "type": "boolean",
-                    "default": "false",
                     "fa_icon": "fas fa-eye-slash"
                 },
                 "tuning_file": {
@@ -90,7 +110,7 @@
                     "description": "File of parameters to test for groHMM tuning"
                 }
             },
-            "required": ["skip_grohmm"],
+            "required": ["assay_type"],
             "fa_icon": "fas fa-microscope"
         },
         "reference_genome_options": {
