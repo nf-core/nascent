@@ -51,6 +51,8 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { BED2SAF } from '../modules/local/bed2saf'
+
 include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
 include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
@@ -66,7 +68,6 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
 include { PINTS_CALLER                                            } from '../modules/nf-core/pints/caller/main'
-include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
