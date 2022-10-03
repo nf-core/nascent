@@ -108,6 +108,18 @@
                     "hidden": true,
                     "fa_icon": "fas fa-file-csv",
                     "description": "File of parameters to test for groHMM tuning"
+                },
+                "filter_bed": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-filter",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$"
+                },
+                "no_overlap": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "far fa-chart-bar",
+                    "description": "Only report those entries in A that have no overlap in B"
                 }
             },
             "required": ["assay_type"],

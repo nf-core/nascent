@@ -34,6 +34,11 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 def prepareToolIndices  = []
 if (!params.skip_alignment) { prepareToolIndices << params.aligner        }
 
+if (params.filter_bed) {
+    ch_filter_bed = file(params.filter_bed, checkIfExists: true)
+    // if (ch_ribo_db.isEmpty()) {exit 1, "File provided with --ribo_database_manifest is empty: ${ch_ribo_db.getName()}!"}
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -68,6 +73,7 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
 include { PINTS_CALLER                                            } from '../modules/nf-core/pints/caller/main'
+include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../modules/nf-core/bedtools/intersect/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -223,6 +229,15 @@ workflow NASCENT {
     )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
+
+    // FIXME Drop any empty bed files
+
+    // TODO Support gzipped bed files
+    ch_filter_bed = Channel.from(params.filter_bed)
+    BEDTOOLS_INTERSECT_FILTER (
+        ch_identification_bed.combine(ch_filter_bed),
+        "bed"
+    )
 
     ch_identification_bed.map {
         meta, bed ->
