@@ -62,7 +62,7 @@ include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
 include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS       } from '../subworkflows/local/coverage_graphs.nf'
-include { GROHMM                } from '../subworkflows/local/grohmm'
+include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,9 +72,6 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
-include { PINTS_CALLER                                            } from '../modules/nf-core/pints/caller/main'
-include { BEDTOOLS_MERGE                                          } from '../modules/nf-core/bedtools/merge/main'
-include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../modules/nf-core/bedtools/intersect/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -88,7 +85,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
 include { ALIGN_DRAGMAP         } from '../subworkflows/nf-core/align_dragmap/main'
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer/groseq/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,54 +199,22 @@ workflow NASCENT {
         .map { it ->  [ it[0], it[1].flatten() ] }
         .set { ch_sort_bam }
 
-    ch_grohmm_multiqc = Channel.empty()
-    ch_homer_multiqc = Channel.empty()
-    ch_identification_bed = Channel.empty()
-    ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
-    GROHMM (
+    TRANSCRIPT_INDENTIFICATION (
         ch_sort_bam,
         PREPARE_GENOME.out.gtf,
-        ch_tuning_file
-    )
-
-    ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
-    ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
-
-    HOMER_GROSEQ (
-        ch_sort_bam,
         PREPARE_GENOME.out.fasta
     )
-    ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
-    ch_homer_multiqc = HOMER_GROSEQ.out.peaks
-    ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
-    ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
-
-    // TODO Merge technical replicates
-    PINTS_CALLER (
-        ch_sort_bam
-    )
-    ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
-    // HACK Not sure if this is as good as reporting all of them, but it should
-    // reduce the overall noise.
-    BEDTOOLS_MERGE (
-        PINTS_CALLER.out.bidirectional_TREs
-    )
-    ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
-
-    // Drop any empty bed files
-    ch_identification_bed
-        .filter { meta, bed -> bed.size() > 0 }
-        .set { ch_identification_bed_filtered }
-
-    // TODO Support gzipped bed files
-    ch_filter_bed = Channel.from(params.filter_bed)
-    BEDTOOLS_INTERSECT_FILTER (
-        ch_identification_bed_filtered.combine(ch_filter_bed),
-        "bed"
-    )
+    ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
+    ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
+    ch_homer_multiqc = ch_homer_multiqc.mix(TRANSCRIPT_INDENTIFICATION.out.homer_tagdir)
+    ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_sort_bam.combine( BED2SAF ( ch_identification_bed_filtered ).saf.map { it[1] } )
+        ch_sort_bam.combine(
+            BED2SAF (
+                TRANSCRIPT_INDENTIFICATION.out.transcript_beds
+            ).saf.map { it[1] }
+        )
     )
 
     SUBREAD_FEATURECOUNTS_GENE (
@@ -286,8 +250,8 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_pos_xls.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_grohmm_multiqc.collect{it[1]}.ifEmpty([]))
-    // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
+    // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
