@@ -216,6 +216,7 @@ workflow NASCENT {
             ).saf.map { it[1] }
         )
     )
+    ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
         ch_sort_bam.combine(PREPARE_GENOME.out.gtf)

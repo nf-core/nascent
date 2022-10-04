@@ -14,8 +14,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
     main:
 
-    ch_versions = Channel.empty()
-
     ch_identification_bed = Channel.empty()
 
     ch_grohmm_multiqc = Channel.empty()
@@ -25,7 +23,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
         gtf,
         ch_tuning_file
     )
-
     ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
     ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
 
@@ -35,7 +32,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
         group_bams,
         fasta
     )
-    // ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
     ch_homer_multiqc = HOMER_GROSEQ.out.peaks
     ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
     ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
@@ -45,7 +41,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
     PINTS_CALLER (
         group_bams
     )
-    // ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.
     BEDTOOLS_MERGE (
@@ -69,6 +64,14 @@ workflow TRANSCRIPT_INDENTIFICATION {
         // Drop any empty bed files
         .filter { meta, bed -> bed.size() > 0 }
         .set { ch_identification_bed_clean }
+
+    // Gather versions of all tools used
+    ch_versions = Channel.empty()
+    ch_versions = ch_versions.mix(GROHMM.out.versions.first())
+    ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+    ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
+    ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions.first())
+    ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
 
     emit:
     grohmm_td_plot = GROHMM.out.td_plot
