@@ -1,5 +1,5 @@
 process BED2SAF {
-    tag "$bed"
+    tag "$meta.id"
     label 'process_single'
 
     conda (params.enable_conda ? "pandas" : null)
@@ -8,10 +8,10 @@ process BED2SAF {
         'quay.io/biocontainers/mulled-v2-2076f4a3fb468a04063c9e6b7747a630abb457f6:fccb0c41a243c639e11dd1be7b74f563e624fcca-0' }"
 
     input:
-    path bed
+    tuple val(meta), path(bed)
 
     output:
-    path '*.saf' , emit: saf
+    tuple val(meta), path("*.saf"), emit: saf
     path "versions.yml", emit: versions
 
     when:

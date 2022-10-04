@@ -242,15 +242,9 @@ workflow NASCENT {
         "bed"
     )
 
-    ch_identification_bed_filtered.map {
-        meta, bed ->
-        bed
-    }.set { ch_transcript_bed }
-
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ).saf )
+        ch_genome_bam.combine( BED2SAF ( ch_identification_bed_filtered ).saf.map { it[1] } )
     )
-
 
     SUBREAD_FEATURECOUNTS_GENE (
         ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
