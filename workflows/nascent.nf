@@ -243,11 +243,11 @@ workflow NASCENT {
     )
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_genome_bam.combine( BED2SAF ( ch_identification_bed_filtered ).saf.map { it[1] } )
+        ch_sort_bam.combine( BED2SAF ( ch_identification_bed_filtered ).saf.map { it[1] } )
     )
 
     SUBREAD_FEATURECOUNTS_GENE (
-        ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
+        ch_sort_bam.combine(PREPARE_GENOME.out.gtf)
     )
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 
