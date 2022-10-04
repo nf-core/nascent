@@ -230,16 +230,19 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
 
-    // FIXME Drop any empty bed files
+    // Drop any empty bed files
+    ch_identification_bed
+        .filter { meta, bed -> bed.size() > 0 }
+        .set { ch_identification_bed_filtered }
 
     // TODO Support gzipped bed files
     ch_filter_bed = Channel.from(params.filter_bed)
     BEDTOOLS_INTERSECT_FILTER (
-        ch_identification_bed.combine(ch_filter_bed),
+        ch_identification_bed_filtered.combine(ch_filter_bed),
         "bed"
     )
 
-    ch_identification_bed.map {
+    ch_identification_bed_filtered.map {
         meta, bed ->
         bed
     }.set { ch_transcript_bed }
