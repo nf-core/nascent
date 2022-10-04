@@ -73,6 +73,7 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
 include { PINTS_CALLER                                            } from '../modules/nf-core/pints/caller/main'
+include { BEDTOOLS_MERGE                                          } from '../modules/nf-core/bedtools/merge/main'
 include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../modules/nf-core/bedtools/intersect/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
@@ -224,11 +225,17 @@ workflow NASCENT {
     ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
     ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
 
+    // TODO Merge technical replicates
     PINTS_CALLER (
         ch_sort_bam
     )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
-    ch_identification_bed = ch_identification_bed.mix(PINTS_CALLER.out.bidirectional_TREs)
+    // HACK Not sure if this is as good as reporting all of them, but it should
+    // reduce the overall noise.
+    BEDTOOLS_MERGE (
+        PINTS_CALLER.out.bidirectional_TREs
+    )
+    ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
 
     // Drop any empty bed files
     ch_identification_bed
