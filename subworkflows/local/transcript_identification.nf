@@ -1,6 +1,7 @@
 include { GROHMM                } from './grohmm'
 
 include { PINTS_CALLER                                            } from '../../modules/nf-core/pints/caller/main'
+include { CAT_CAT                                                 } from '../../modules/nf-core/cat/cat/main'
 include { BEDTOOLS_MERGE                                          } from '../../modules/nf-core/bedtools/merge/main'
 include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../../modules/nf-core/bedtools/intersect/main'
 
@@ -43,8 +44,11 @@ workflow TRANSCRIPT_INDENTIFICATION {
     )
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.
-    BEDTOOLS_MERGE (
+    CAT_CAT (
         PINTS_CALLER.out.bidirectional_TREs
+    )
+    BEDTOOLS_MERGE (
+        CAT_CAT.out.file_out
     )
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
 
