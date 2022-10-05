@@ -4,11 +4,11 @@
 
 include {
     BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_PLUS
-    BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_MINUS } from '../../modules/nf-core/modules/bedtools/genomecov/main'
+    BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_MINUS } from '../../modules/nf-core/bedtools/genomecov/main'
 
 include {
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS
-    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/modules/deeptools/bamcoverage/main'
+    DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/deeptools/bamcoverage/main'
 
 workflow COVERAGE_GRAPHS {
     take:

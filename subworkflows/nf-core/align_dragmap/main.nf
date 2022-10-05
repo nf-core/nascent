@@ -2,7 +2,7 @@
 // Alignment with dragmap
 //
 
-include { DRAGMAP_ALIGN } from '../../../modules/nf-core/modules/dragmap/align/main'
+include { DRAGMAP_ALIGN } from '../../../modules/nf-core/dragmap/align/main'
 include { BAM_SORT_SAMTOOLS } from '../bam_sort_samtools/main'
 
 workflow ALIGN_DRAGMAP {

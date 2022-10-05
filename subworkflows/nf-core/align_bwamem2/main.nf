@@ -2,7 +2,7 @@
 // Alignment with BWAMEM2
 //
 
-include { BWAMEM2_MEM       } from '../../../modules/nf-core/modules/bwamem2/mem/main'
+include { BWAMEM2_MEM       } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BAM_SORT_SAMTOOLS } from '../bam_sort_samtools/main'
 
 workflow ALIGN_BWAMEM2 {

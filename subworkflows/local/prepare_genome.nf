@@ -10,15 +10,15 @@ include {
     GUNZIP as GUNZIP_GTF
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED
-    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/modules/gunzip/main'
+    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/gunzip/main'
 include { UNTAR as UNTAR_BWA_INDEX
-          UNTAR as UNTAR_DRAGMAP      } from '../../modules/nf-core/modules/untar/main'
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
-include { GFFREAD                     } from '../../modules/nf-core/modules/gffread/main'
-include { BWA_INDEX                   } from '../../modules/nf-core/modules/bwa/index/main'
-include { BWAMEM2_INDEX               } from '../../modules/nf-core/modules/bwamem2/index/main'
-include { DRAGMAP_HASHTABLE           } from '../../modules/nf-core/modules/dragmap/hashtable/main'
-include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/modules/custom/getchromsizes/main'
+          UNTAR as UNTAR_DRAGMAP      } from '../../modules/nf-core/untar/main'
+include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
+include { GFFREAD                     } from '../../modules/nf-core/gffread/main'
+include { BWA_INDEX                   } from '../../modules/nf-core/bwa/index/main'
+include { BWAMEM2_INDEX               } from '../../modules/nf-core/bwamem2/index/main'
+include { DRAGMAP_HASHTABLE           } from '../../modules/nf-core/dragmap/hashtable/main'
+include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/custom/getchromsizes/main'
 
 workflow PREPARE_GENOME {
     take:

@@ -2,12 +2,12 @@
  * TODO
  */
 
-include { PRESEQ_CCURVE } from '../../modules/nf-core/modules/preseq/ccurve/main'
-include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/modules/preseq/lcextrap/main'
-include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/modules/rseqc/readdistribution/main'
-include { RSEQC_READDUPLICATION } from '../../modules/nf-core/modules/rseqc/readduplication/main'
-include { RSEQC_INFEREXPERIMENT } from '../../modules/nf-core/modules/rseqc/inferexperiment/main'
-include { BBMAP_PILEUP } from '../../modules/nf-core/modules/bbmap/pileup/main'
+include { PRESEQ_CCURVE } from '../../modules/nf-core/preseq/ccurve/main'
+include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/preseq/lcextrap/main'
+include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/rseqc/readdistribution/main'
+include { RSEQC_READDUPLICATION } from '../../modules/nf-core/rseqc/readduplication/main'
+include { RSEQC_INFEREXPERIMENT } from '../../modules/nf-core/rseqc/inferexperiment/main'
+include { BBMAP_PILEUP } from '../../modules/nf-core/bbmap/pileup/main'
 
 workflow QUALITY_CONTROL {
     take:

@@ -64,11 +64,11 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 */
 
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
-include { CAT_FASTQ                                               } from '../modules/nf-core/modules/cat/fastq/main'
+include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
 include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
-    SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/modules/subread/featurecounts/main'
+    SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
 include { MULTIQC                                                 } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 

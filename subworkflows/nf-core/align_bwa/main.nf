@@ -2,7 +2,7 @@
 // Alignment with BWA MEM
 //
 
-include { BWA_MEM           } from '../../../modules/nf-core/modules/bwa/mem/main'
+include { BWA_MEM           } from '../../../modules/nf-core/bwa/mem/main'
 include { BAM_SORT_SAMTOOLS } from '../bam_sort_samtools/main'
 
 workflow ALIGN_BWA {
