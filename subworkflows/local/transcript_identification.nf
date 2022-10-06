@@ -52,7 +52,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
     )
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
 
-    // TODO Support gzipped bed files
     ch_filter_bed = Channel.from(params.filter_bed)
     BEDTOOLS_INTERSECT_FILTER (
         ch_identification_bed.combine(ch_filter_bed),
