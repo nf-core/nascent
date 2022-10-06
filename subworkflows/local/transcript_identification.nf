@@ -3,6 +3,7 @@ include { GROHMM                } from './grohmm'
 include { PINTS_CALLER                                            } from '../../modules/nf-core/pints/caller/main'
 include { CAT_CAT                                                 } from '../../modules/nf-core/cat/cat/main'
 include { BEDTOOLS_MERGE                                          } from '../../modules/nf-core/bedtools/merge/main'
+include { BEDTOOLS_SORT                                           } from '../../modules/nf-core/bedtools/sort/main'
 include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../../modules/nf-core/bedtools/intersect/main'
 
 include { HOMER_GROSEQ          } from '../nf-core/homer/groseq/main'
@@ -47,9 +48,8 @@ workflow TRANSCRIPT_INDENTIFICATION {
     CAT_CAT (
         PINTS_CALLER.out.bidirectional_TREs
     )
-    BEDTOOLS_MERGE (
-        CAT_CAT.out.file_out
-    )
+    BEDTOOLS_SORT ( CAT_CAT.out.file_out, "bed" )
+    BEDTOOLS_MERGE ( BEDTOOLS_SORT.out.sorted )
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
 
     ch_filter_bed = Channel.from(params.filter_bed)
