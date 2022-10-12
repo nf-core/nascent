@@ -18,17 +18,12 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
     ch_identification_bed = Channel.empty()
 
-    ch_grohmm_multiqc = Channel.empty()
     ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
     GROHMM ( group_bams, gtf, ch_tuning_file )
-    ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
     ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
 
 
-    ch_homer_multiqc = Channel.empty()
     HOMER_GROSEQ ( group_bams, fasta )
-    ch_homer_multiqc = HOMER_GROSEQ.out.peaks
-    ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
     ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
 
 
