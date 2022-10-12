@@ -48,6 +48,10 @@
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
+- [PINTS](https://pints.yulab.org/)
+
+  > Yao, L., Liang, J., Ozer, A. et al. A comparison of experimental assays and analytical methods for genome-wide identification of active enhancers. Nat Biotechnol 40, 1056–1065 (2022). https://doi.org/10.1038/s41587-022-01211-7
+
 - [preseq](https://pubmed.ncbi.nlm.nih.gov/23435259/)
 
   > Daley T, Smith AD. Predicting the molecular complexity of sequencing libraries. Nat Methods. 2013 Apr;10(4):325-7. doi: 10.1038/nmeth.2375. Epub 2013 Feb 24. PubMed PMID: 23435259; PubMed Central PMCID: PMC3612374.

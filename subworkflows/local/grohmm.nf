@@ -30,8 +30,15 @@ workflow GROHMM {
         ch_tuning
     )
 
+    // Gather versions of all tools used
+    ch_versions = Channel.empty()
+    ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
+    ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
+
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
     bed         = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
     td_plot     = GROHMM_TRANSCRIPTCALLING.out.td_plot
+
+    versions = ch_versions
 }

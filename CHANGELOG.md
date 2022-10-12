@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#28](https://github.com/nf-core/nascent/issues/28)] - Added DRAGMAP alignment
 - [[#64](https://github.com/nf-core/nascent/pull/64)] - Added CHM13 igenomes config
+- [[#39](https://github.com/nf-core/nascent/issues/39)] - Add PINTS for TSS identification
 
 ### `Fixed`
 
@@ -16,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-- Updated Nextflow version to `v21.10.3`
+- Updated Nextflow version to `v21.10.6`
 
 ### `Deprecated`
 

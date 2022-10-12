@@ -34,6 +34,11 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 def prepareToolIndices  = []
 if (!params.skip_alignment) { prepareToolIndices << params.aligner        }
 
+if (params.filter_bed) {
+    ch_filter_bed = file(params.filter_bed, checkIfExists: true)
+    // if (ch_ribo_db.isEmpty()) {exit 1, "File provided with --ribo_database_manifest is empty: ${ch_ribo_db.getName()}!"}
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -51,11 +56,13 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { BED2SAF } from '../modules/local/bed2saf'
+
 include { INPUT_CHECK           } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
 include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS       } from '../subworkflows/local/coverage_graphs.nf'
-include { GROHMM                } from '../subworkflows/local/grohmm'
+include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,7 +72,6 @@ include { GROHMM                } from '../subworkflows/local/grohmm'
 
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
-include { BED2SAF                                                 } from '../modules/local/bed2saf'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -79,7 +85,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
 include { ALIGN_DRAGMAP         } from '../subworkflows/nf-core/align_dragmap/main'
-include { HOMER_GROSEQ          } from '../subworkflows/nf-core/homer/groseq/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -194,46 +199,27 @@ workflow NASCENT {
         .map { it ->  [ it[0], it[1].flatten() ] }
         .set { ch_sort_bam }
 
-    ch_grohmm_multiqc = Channel.empty()
-    ch_homer_multiqc = Channel.empty()
-    ch_identification_bed = Channel.empty()
-    ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
-    if (params.transcript_identification == 'grohmm') {
-        GROHMM (
-            ch_sort_bam,
-            PREPARE_GENOME.out.gtf,
-            ch_tuning_file
-        )
-
-        ch_grohmm_multiqc = GROHMM.out.td_plot.collect()
-        ch_identification_bed = GROHMM.out.bed
-    } else if (params.transcript_identification == 'homer') {
-        /*
-         * SUBWORKFLOW: Transcript indetification with homer
-         */
-        HOMER_GROSEQ (
-            ch_sort_bam,
-            PREPARE_GENOME.out.fasta
-        )
-        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
-
-        ch_homer_multiqc = HOMER_GROSEQ.out.peaks
-        ch_homer_multiqc = ch_homer_multiqc.mix(HOMER_GROSEQ.out.tagdir)
-        ch_identification_bed = HOMER_GROSEQ.out.bed
-    }
-
-    ch_identification_bed.map {
-        meta, bed ->
-        bed
-    }.set { ch_transcript_bed }
+    TRANSCRIPT_INDENTIFICATION (
+        ch_sort_bam,
+        PREPARE_GENOME.out.gtf,
+        PREPARE_GENOME.out.fasta
+    )
+    ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
+    ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
+    ch_homer_multiqc = ch_homer_multiqc.mix(TRANSCRIPT_INDENTIFICATION.out.homer_tagdir)
+    ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_genome_bam.combine( BED2SAF ( ch_transcript_bed ).saf )
+        ch_sort_bam.combine(
+            BED2SAF (
+                TRANSCRIPT_INDENTIFICATION.out.transcript_beds
+            ).saf.map { it[1] }
+        )
     )
-
+    ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
-        ch_genome_bam.combine(PREPARE_GENOME.out.gtf)
+        ch_sort_bam.combine(PREPARE_GENOME.out.gtf)
     )
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 
@@ -265,8 +251,8 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_pos_xls.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_grohmm_multiqc.collect{it[1]}.ifEmpty([]))
-    // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
+    // FIXME ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),

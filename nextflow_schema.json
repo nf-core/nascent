@@ -66,21 +66,39 @@
         "transcript_identification_options": {
             "title": "Transcript Identification Options",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Type of experiment to use for Transcript Identification(NT or TSS)",
             "properties": {
-                "transcript_identification": {
+                "assay_type": {
                     "type": "string",
-                    "default": "homer",
-                    "fa_icon": "fas fa-microscope",
-                    "description": "Method to use for transcript Identification",
-                    "enum": ["homer", "grohmm"]
+                    "fa_icon": "fas fa-vial",
+                    "enum": [
+                        "CoPRO",
+                        "GROcap",
+                        "PROcap",
+                        "CAGE",
+                        "NETCAGE",
+                        "RAMPAGE",
+                        "csRNAseq",
+                        "STRIPEseq",
+                        "PROseq",
+                        "GROseq",
+                        "R_5",
+                        "R_3",
+                        "R1_5",
+                        "R1_3",
+                        "R2_5",
+                        "R2_3"
+                    ]
                 },
                 "skip_tuning": {
                     "type": "boolean",
                     "description": "Skip grohmm tuning step as it can take a long time.",
                     "fa_icon": "fas fa-wrench",
                     "hidden": true
+                },
+                "skip_grohmm": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-eye-slash"
                 },
                 "tuning_file": {
                     "type": "string",
@@ -90,9 +108,21 @@
                     "hidden": true,
                     "fa_icon": "fas fa-file-csv",
                     "description": "File of parameters to test for groHMM tuning"
+                },
+                "filter_bed": {
+                    "type": "string",
+                    "fa_icon": "fas fa-filter",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$"
+                },
+                "no_overlap": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "far fa-chart-bar",
+                    "description": "Only report those entries in A that have no overlap in B"
                 }
             },
-            "required": ["transcript_identification"]
+            "required": ["assay_type"],
+            "fa_icon": "fas fa-microscope"
         },
         "reference_genome_options": {
             "title": "Reference genome options",
