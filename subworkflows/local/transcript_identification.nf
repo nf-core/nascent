@@ -1,4 +1,4 @@
-include { GROHMM                } from './grohmm'
+include { GROHMM } from './grohmm'
 
 include { PINTS_CALLER                                            } from '../../modules/nf-core/pints/caller/main'
 include { CAT_CAT                                                 } from '../../modules/nf-core/cat/cat/main'
