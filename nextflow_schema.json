@@ -111,7 +111,6 @@
                 },
                 "filter_bed": {
                     "type": "string",
-                    "default": null,
                     "fa_icon": "fas fa-filter",
                     "pattern": "^\\S+\\.bed(\\.gz)?$"
                 },
