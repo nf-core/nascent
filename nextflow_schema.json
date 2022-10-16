@@ -69,6 +69,26 @@
                 }
             }
         },
+        "umi_options": {
+            "title": "UMI options",
+            "type": "object",
+            "description": "Options for processing reads with unique molecular identifiers",
+            "default": "",
+            "fa_icon": "fas fa-barcode",
+            "properties": {
+                "with_umi": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-barcode",
+                    "description": "Enable UMI-based read deduplication."
+                },
+                "umitools_dedup_stats": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-barcode",
+                    "help_text": "It can be quite time consuming generating these output stats - see [#827](https://github.com/nf-core/rnaseq/issues/827).",
+                    "description": "Generate output stats when running \"umi_tools dedup\"."
+                }
+            }
+        },
         "transcript_identification_options": {
             "title": "Transcript Identification Options",
             "type": "object",
@@ -413,6 +433,9 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/umi_options"
         },
         {
             "$ref": "#/definitions/transcript_identification_options"

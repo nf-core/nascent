@@ -86,6 +86,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../mod
 include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
 include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
 include { ALIGN_DRAGMAP         } from '../subworkflows/nf-core/align_dragmap/main'
+include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,6 +180,20 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions.first())
+    }
+
+    if(params.with_umi) {
+        BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS (
+            ch_genome_bam.join(ch_genome_bai, by: [0]),
+            params.umitools_dedup_stats
+        )
+        ch_genome_bam = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.bam
+        ch_genome_bai = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.bai
+        ch_samtools_stats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.stats
+        ch_samtools_flagstat = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.flagstat
+        ch_samtools_idxstats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.idxstats
+
+        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions)
     }
 
     QUALITY_CONTROL (
