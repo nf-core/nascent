@@ -6,9 +6,10 @@ include { SAMTOOLS_SORT      } from '../../../modules/nf-core/samtools/sort/main
 include { SAMTOOLS_INDEX     } from '../../../modules/nf-core/samtools/index/main'
 include { BAM_STATS_SAMTOOLS } from '../bam_stats_samtools/main'
 
-workflow BAM_SORT_SAMTOOLS {
+workflow BAM_SORT_STATS_SAMTOOLS {
     take:
-    ch_bam // channel: [ val(meta), [ bam ] ]
+    ch_bam   // channel: [ val(meta), [ bam ] ]
+    ch_fasta // channel: [ fasta ]
 
     main:
 
@@ -33,7 +34,7 @@ workflow BAM_SORT_SAMTOOLS {
         }
         .set { ch_bam_bai }
 
-    BAM_STATS_SAMTOOLS ( ch_bam_bai )
+    BAM_STATS_SAMTOOLS ( ch_bam_bai, ch_fasta )
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions)
 
     emit:
