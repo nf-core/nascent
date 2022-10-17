@@ -24,7 +24,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Quality control](#quality-control)
   - [RSeQC](#rseqc) - Various RNA-seq QC metrics
   - [Preseq](#preseq) - Estimation of library complexity
-  - [BBMap](#bbmap) - TODO
+  - [BBMap](#bbmap) - Analyzes the sequencing coverage
 - [Coverage Graphs](#coverage-graphs)
   - [BEDTools Genomecov](#bedtools-genomcov) - Create bigWig coverage files
   - [deepTools bamcoverage](#deeptools-bamcoverage) - TODO
@@ -185,7 +185,16 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 ### BBMap
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bbmap/`
+  - `*.coverage.hist.txt`: Histogram of read coverage over each chromosome
+  - `*.coverage.stats.txt`: Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
+
+</details>
+
+[BBMap](https://github.com/BioInfoTools/BBMap/blob/master/sh/pileup.sh) includes a tool called `pileup`, which analyzes the sequencing coverage for each sample.
 
 ## Coverage Graphs
 
