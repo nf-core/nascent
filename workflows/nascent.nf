@@ -124,7 +124,13 @@ workflow NASCENT {
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-    FASTP ( INPUT_CHECK.out.reads, [], [] )
+    ch_reads = Channel.empty()
+    if(!params.skip_trimming) {
+        FASTP ( INPUT_CHECK.out.reads, [], [] )
+        ch_reads = FASTP.out.reads
+    } else {
+        ch_reads = INPUT_CHECK.out.reads
+    }
 
     //
     // SUBWORKFLOW: Alignment with BWA
@@ -139,7 +145,7 @@ workflow NASCENT {
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         ALIGN_BWA(
-            FASTP.out.reads,
+            ch_reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWA.out.bam
@@ -151,7 +157,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
-            FASTP.out.reads,
+            ch_reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWAMEM2.out.bam
@@ -163,7 +169,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
         ALIGN_DRAGMAP(
-            FASTP.out.reads,
+            ch_reads,
             PREPARE_GENOME.out.dragmap
         )
         ch_genome_bam        = ALIGN_DRAGMAP.out.bam
