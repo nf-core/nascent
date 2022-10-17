@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#64](https://github.com/nf-core/nascent/pull/64)] - Added CHM13 igenomes config
 - [[#39](https://github.com/nf-core/nascent/issues/39)] - Add PINTS for TSS identification
 - [[#71](https://github.com/nf-core/nascent/issues/71)] - Add FASTP for adapter trimming
+- [[#77](https://github.com/nf-core/nascent/issues/77)] - Add dedup subworkflow
 
 ### `Fixed`
 
