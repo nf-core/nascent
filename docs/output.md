@@ -93,7 +93,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### DRAGMAP
 
-<!-- TODO -->
+<!-- TODO Add files -->
+
+[DragMap](https://github.com/Illumina/dragmap) is an open-source software implementation of the DRAGEN mapper, which the Illumina team created so that we would have an open-source way to produce the same results as their proprietary DRAGEN hardware. The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
 ## Alignment post-processing
 
