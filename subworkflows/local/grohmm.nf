@@ -3,7 +3,7 @@
  */
 
 include { GROHMM_TRANSCRIPTCALLING } from '../../modules/local/grohmm/transcriptcalling/main.nf'
-include { GROHMM_PARAMETERTUNING   } from '../../modules/local/grohmm/parametertuning/main.nf'
+include { GROHMM_PARAMETERTUNING } from '../../modules/local/grohmm/parametertuning/main.nf'
 
 /*
  * Note meta refers to all merged files
@@ -37,8 +37,8 @@ workflow GROHMM {
 
     emit:
     transcripts = GROHMM_TRANSCRIPTCALLING.out.transcripts
-    bed         = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
-    td_plot     = GROHMM_TRANSCRIPTCALLING.out.td_plot
+    bed = GROHMM_TRANSCRIPTCALLING.out.transcripts_bed
+    td_plot = GROHMM_TRANSCRIPTCALLING.out.td_plot
 
     versions = ch_versions
 }

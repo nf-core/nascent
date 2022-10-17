@@ -5,7 +5,7 @@
 */
 
 def valid_params = [
-    aligners       : ['bwa', 'bwamem2', 'dragmap']
+    aligners : ['bwa', 'bwamem2', 'dragmap']
 ]
 
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
@@ -31,7 +31,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
 // Check alignment parameters
-def prepareToolIndices  = []
+def prepareToolIndices = []
 if (!params.skip_alignment) { prepareToolIndices << params.aligner        }
 
 if (params.filter_bed) {
@@ -45,9 +45,9 @@ if (params.filter_bed) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
-ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
+ch_multiqc_config = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
+ch_multiqc_logo = params.multiqc_logo ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
 ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
 /*
@@ -58,10 +58,10 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { BED2SAF } from '../modules/local/bed2saf'
 
-include { INPUT_CHECK           } from '../subworkflows/local/input_check'
-include { PREPARE_GENOME        } from '../subworkflows/local/prepare_genome'
-include { QUALITY_CONTROL       } from '../subworkflows/local/quality_control.nf'
-include { COVERAGE_GRAPHS       } from '../subworkflows/local/coverage_graphs.nf'
+include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
+include { QUALITY_CONTROL } from '../subworkflows/local/quality_control.nf'
+include { COVERAGE_GRAPHS } from '../subworkflows/local/coverage_graphs.nf'
 include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
 
 /*
@@ -70,22 +70,22 @@ include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_id
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
-include { FASTP                                                   } from '../modules/nf-core/fastp/main'
-include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
+include { FASTQC } from '../modules/nf-core/fastqc/main'
+include { FASTP } from '../modules/nf-core/fastp/main'
+include { CAT_FASTQ } from '../modules/nf-core/cat/fastq/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
-include { MULTIQC                                                 } from '../modules/nf-core/multiqc/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS                             } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { MULTIQC } from '../modules/nf-core/multiqc/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
-include { ALIGN_BWA             } from '../subworkflows/nf-core/align_bwa/main'
-include { ALIGN_BWAMEM2         } from '../subworkflows/nf-core/align_bwamem2/main'
-include { ALIGN_DRAGMAP         } from '../subworkflows/nf-core/align_dragmap/main'
+include { ALIGN_BWA } from '../subworkflows/nf-core/align_bwa/main'
+include { ALIGN_BWAMEM2 } from '../subworkflows/nf-core/align_bwamem2/main'
+include { ALIGN_DRAGMAP } from '../subworkflows/nf-core/align_dragmap/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -136,22 +136,22 @@ workflow NASCENT {
     //
     // SUBWORKFLOW: Alignment with BWA
     //
-    ch_genome_bam                 = Channel.empty()
-    ch_genome_bai                 = Channel.empty()
-    ch_samtools_stats             = Channel.empty()
-    ch_samtools_flagstat          = Channel.empty()
-    ch_samtools_idxstats          = Channel.empty()
-    ch_star_multiqc               = Channel.empty()
-    ch_aligner_pca_multiqc        = Channel.empty()
+    ch_genome_bam = Channel.empty()
+    ch_genome_bai = Channel.empty()
+    ch_samtools_stats = Channel.empty()
+    ch_samtools_flagstat = Channel.empty()
+    ch_samtools_idxstats = Channel.empty()
+    ch_star_multiqc = Channel.empty()
+    ch_aligner_pca_multiqc = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         ALIGN_BWA(
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
         )
-        ch_genome_bam        = ALIGN_BWA.out.bam
-        ch_genome_bai        = ALIGN_BWA.out.bai
-        ch_samtools_stats    = ALIGN_BWA.out.stats
+        ch_genome_bam = ALIGN_BWA.out.bam
+        ch_genome_bai = ALIGN_BWA.out.bai
+        ch_samtools_stats = ALIGN_BWA.out.stats
         ch_samtools_flagstat = ALIGN_BWA.out.flagstat
         ch_samtools_idxstats = ALIGN_BWA.out.idxstats
 
@@ -161,9 +161,9 @@ workflow NASCENT {
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
         )
-        ch_genome_bam        = ALIGN_BWAMEM2.out.bam
-        ch_genome_bai        = ALIGN_BWAMEM2.out.bai
-        ch_samtools_stats    = ALIGN_BWAMEM2.out.stats
+        ch_genome_bam = ALIGN_BWAMEM2.out.bam
+        ch_genome_bai = ALIGN_BWAMEM2.out.bai
+        ch_samtools_stats = ALIGN_BWAMEM2.out.stats
         ch_samtools_flagstat = ALIGN_BWAMEM2.out.flagstat
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
@@ -173,9 +173,9 @@ workflow NASCENT {
             ch_reads,
             PREPARE_GENOME.out.dragmap
         )
-        ch_genome_bam        = ALIGN_DRAGMAP.out.bam
-        ch_genome_bai        = ALIGN_DRAGMAP.out.bai
-        ch_samtools_stats    = ALIGN_DRAGMAP.out.stats
+        ch_genome_bam = ALIGN_DRAGMAP.out.bam
+        ch_genome_bai = ALIGN_DRAGMAP.out.bai
+        ch_samtools_stats = ALIGN_DRAGMAP.out.stats
         ch_samtools_flagstat = ALIGN_DRAGMAP.out.flagstat
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
@@ -254,10 +254,10 @@ workflow NASCENT {
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowNascent.paramsSummaryMultiqc(workflow, summary_params)
+    workflow_summary = WorkflowNascent.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
-    methods_description    = WorkflowNascent.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+    methods_description = WorkflowNascent.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
     ch_methods_description = Channel.value(methods_description)
 
     ch_multiqc_files = Channel.empty()

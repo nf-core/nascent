@@ -1,12 +1,12 @@
 include { GROHMM } from './grohmm'
 
-include { PINTS_CALLER                                            } from '../../modules/nf-core/pints/caller/main'
-include { CAT_CAT                                                 } from '../../modules/nf-core/cat/cat/main'
-include { BEDTOOLS_MERGE                                          } from '../../modules/nf-core/bedtools/merge/main'
-include { BEDTOOLS_SORT                                           } from '../../modules/nf-core/bedtools/sort/main'
-include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER         } from '../../modules/nf-core/bedtools/intersect/main'
+include { PINTS_CALLER } from '../../modules/nf-core/pints/caller/main'
+include { CAT_CAT } from '../../modules/nf-core/cat/cat/main'
+include { BEDTOOLS_MERGE } from '../../modules/nf-core/bedtools/merge/main'
+include { BEDTOOLS_SORT } from '../../modules/nf-core/bedtools/sort/main'
+include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER } from '../../modules/nf-core/bedtools/intersect/main'
 
-include { HOMER_GROSEQ          } from '../nf-core/homer/groseq/main'
+include { HOMER_GROSEQ } from '../nf-core/homer/groseq/main'
 
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
