@@ -32,7 +32,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [GroHMM](#grohmm) - Predicts transcripts from aligned GROSeq data in the form of bed files.
   - [HOMER](#homer) - Transcript identification from GROSeq data
   - [PINTS](#pints) - Identifies transcriptional regulatory elements (TREs) identified from nascent-transcript sequencing.
-  - [BEDTools Insersect](#bedtools-intersect) - TODO
+  - [BEDTools Insersect](#bedtools-intersect) - Filtering of predicted TREs
 - [Quantification](#quantification)
   - [featureCounts](#featurecounts) - Read counting relative to gene biotype
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
@@ -252,6 +252,32 @@ By default, tuning will be performed by inputting a preset comma-separated value
 The transcript calling step will use the two-state hidden Markov model (HMM) which GroHMM employs in order to identify boundaries of transcription across the genome in a de-novo manner. The output is a .bed file of transcripts used in downstream analysis.
 
 For more information about how to use GROHMM, see the [tutorial](https://www.bioconductor.org/packages/release/bioc/vignettes/groHMM/inst/doc/groHMM.pdf) or [documentation](https://www.bioconductor.org/packages/release/bioc/manuals/groHMM/man/groHMM.pdf).
+
+### BEDTools intersect
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bedtools/`
+  - `*_filtered.bed`:
+
+</details>
+
+The pipeline optionally takes a `filter_bed`, which can then be used to filter the predicted transcripts before counting is performed. This could be promoter regions to drop or histone modifications, such as **H3K4me1** and **H3K27ac**, which are often associated with enhancers.
+
+From the [PINTS documentation](https://pints.yulab.org/tre_calling):
+
+> We assume distal bidirectional transcripts are mainly from enhancer RNA transcription. To extract candidate enhancers from the pool of all TREs, we need a bed file that defines proximal TREs (promoters), then we can use bedtools to extract distal TREs as follows:
+
+> `bedtools intersect -a SampleA_1_bidirectional_peaks.bed -b promoters.bed -v > SampleA_1_bidirectional_peaks.distalTREs.bed`
+
+They've also created some bed files that might be useful for analysis.
+
+> We have prepared promoter reference bed files (500 bp regions flanking protein-coding transcripts) for human and mouse genomes:
+
+- [promoter for hg38](https://pints.yulab.org/ref/examples/promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (v24)
+- [promoter for hg19](https://pints.yulab.org/ref/examples/hg19_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (v19)
+- [promoter for mm10](https://pints.yulab.org/ref/examples/mm10_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (m23)
 
 ## Quatification
 
