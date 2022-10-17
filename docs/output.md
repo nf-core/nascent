@@ -15,8 +15,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [fastp](#fastp) - Adapter and quality trimming
 - [Alignment](#alignment)
   - [bwa](#bwa) - Mapping low-divergent sequences against a large reference genome
-  - [bwa-mem2](#bwa-mem2) - TODO
   - [DRAGMAP](#dragmap) - TODO
+  - [bwa-mem2](#bwa-mem2) -  The next version of bwa-mem
 - [Alignment post-processing](#alignment-post-processing)
   - [SAMtools](#samtools) - Sort and index alignments
   - [UMI-tools dedup](#umi-tools-dedup) - UMI-based deduplication
@@ -93,7 +93,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### bwa-mem2
 
-<!-- TODO Add files -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bwamem2/`
+  - `*.bam`: The original BAM file containing read alignments to the reference genome.
+
+</details>
 
 [BWA-mem2](https://github.com/bwa-mem2/bwa-mem2) is a software package for mapping low-divergent sequences against a large reference genome.The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
