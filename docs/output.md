@@ -12,7 +12,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Preprocessing](#preprocessing)
   - [FastQC](#fastqc) - Raw read QC
-  - [fastp](#fastp) - TODO
+  - [fastp](#fastp) - Adapter and quality trimming
 - [Alignment](#alignment)
   - [bwa](#bwa) - TODO
   - [bwa-mem2](#bwa-mem2) - TODO
@@ -63,7 +63,20 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### fastp
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `<flowcell_id>/`
+  - `*.fastp.html`: Trimming report in html format.
+  - `*.fastp.json`: Trimming report in json format.
+  - `*.fastp.log`: Trimming log file.
+
+</details>
+
+[fastp](https://github.com/OpenGene/fastp) is a tool designed to provide fast, all-in-one preprocessing for FastQ files. It has been developed in C++ with multithreading support to achieve higher performance. fastp is used in this pipeline for standard adapter trimming and quality filtering.
+
+![MultiQC - fastp filtered reads plot](images/mqc_fastp_plot.png)
+
 
 ## Alignment
 
