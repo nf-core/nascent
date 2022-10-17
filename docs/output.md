@@ -14,7 +14,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [FastQC](#fastqc) - Raw read QC
   - [fastp](#fastp) - Adapter and quality trimming
 - [Alignment](#alignment)
-  - [bwa](#bwa) - TODO
+  - [bwa](#bwa) - Mapping low-divergent sequences against a large reference genome
   - [bwa-mem2](#bwa-mem2) - TODO
   - [DRAGMAP](#dragmap) - TODO
 - [Alignment post-processing](#alignment-post-processing)
@@ -81,7 +81,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### bwa
 
-<!-- TODO Add files -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bwa/`
+  - `*.bam`: The original BAM file containing read alignments to the reference genome.
+
+</details>
 
 [BWA](https://github.com/lh3/bwa) is a software package for mapping low-divergent sequences against a large reference genome. The aligned reads are then coordinate-sorted is used for duplicate marking) with [samtools](https://www.htslib.org/doc/samtools.html).
 
