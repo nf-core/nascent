@@ -71,6 +71,7 @@ include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_id
 */
 
 include { FASTQC                                                  } from '../modules/nf-core/fastqc/main'
+include { FASTP                                                   } from '../modules/nf-core/fastp/main'
 include { CAT_FASTQ                                               } from '../modules/nf-core/cat/fastq/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
@@ -123,6 +124,8 @@ workflow NASCENT {
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
+    FASTP ( INPUT_CHECK.out.reads, [], [] )
+
     //
     // SUBWORKFLOW: Alignment with BWA
     //
@@ -136,7 +139,7 @@ workflow NASCENT {
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         ALIGN_BWA(
-            INPUT_CHECK.out.reads,
+            FASTP.out.reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWA.out.bam
@@ -148,7 +151,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
-            INPUT_CHECK.out.reads,
+            FASTP.out.reads,
             PREPARE_GENOME.out.bwa_index,
         )
         ch_genome_bam        = ALIGN_BWAMEM2.out.bam
@@ -160,7 +163,7 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
         ALIGN_DRAGMAP(
-            INPUT_CHECK.out.reads,
+            FASTP.out.reads,
             PREPARE_GENOME.out.dragmap
         )
         ch_genome_bam        = ALIGN_DRAGMAP.out.bam
