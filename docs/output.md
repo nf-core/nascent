@@ -87,7 +87,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### bwa-mem2
 
-<!-- TODO -->
+<!-- TODO Add files -->
+
+[BWA-mem2](https://github.com/bwa-mem2/bwa-mem2) is a software package for mapping low-divergent sequences against a large reference genome.The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
 ### DRAGMAP
 
