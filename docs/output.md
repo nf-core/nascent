@@ -31,7 +31,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Transcript Identification](#transcript-identification)
   - [GroHMM](#grohmm) - Predicts transcripts from aligned GROSeq data in the form of bed files.
   - [HOMER](#homer) - Transcript identification from GROSeq data
-  - [PINTS](#pints) - TODO
+  - [PINTS](#pints) - Identifies transcriptional regulatory elements (TREs) identified from nascent-transcript sequencing.
   - [BEDTools Insersect](#bedtools-intersect) - TODO
 - [Quantification](#quantification)
   - [featureCounts](#featurecounts) - Read counting relative to gene biotype
@@ -218,7 +218,19 @@ For now the pipeline only supports the HOMER groseq workflow, feel free to open 
 
 ### PINTS
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `pints/`
+  - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent)
+  - `*_divergent_peaks.bed`: Divergent TREs
+  - `*_unidirectional_peaks.bed`: Unidirectional TREs, maybe lncRNAs transcribed from enhancers (e-lncRNAs)
+
+</details>
+
+[PINTS](https://pints.yulab.org/) (Peak Identifier for Nascent Transcript Starts) is a tool used to identify narrower regions for potential regulatory elements (mainly promoters and enhancers, often referred to as a peak caller). PINTS was inspired by [MACS2](https://github.com/macs3-project/MACS) with modifications specifically implemented for identifying eRNA TSSs from genome-wide TSS-assays.
+
+For more information about how PINTS works, see the paper [A comparison of experimental assays and analytical methods for genome-wide identification of active enhancers](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9288987/).
 
 ### GroHMM
 
