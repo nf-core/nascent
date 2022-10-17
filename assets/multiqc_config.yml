@@ -13,6 +13,7 @@ report_section_order:
 run_modules:
   - custom_content
   - fastqc
+  - fastp
   - samtools
   - preseq
   - rseqc
