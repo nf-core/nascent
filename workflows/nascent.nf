@@ -285,16 +285,8 @@ workflow NASCENT {
         ch_multiqc_custom_config.collect().ifEmpty([]),
         ch_multiqc_logo.collect().ifEmpty([])
     )
-    multiqc_report       = MULTIQC.out.report.toList()
-    ch_versions = ch_versions.mix(MULTIQC.out.versions.first())
-
-
-    //
-    // MODULE: Dump software versions for all tools used in the workflow
-    //
-
     multiqc_report = MULTIQC.out.report.toList()
-    ch_versions    = ch_versions.mix(MULTIQC.out.versions)
+    ch_versions = ch_versions.mix(MULTIQC.out.versions)
 }
 
 /*
