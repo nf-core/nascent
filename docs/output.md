@@ -157,7 +157,9 @@ Unless you are using [UMIs](https://emea.illumina.com/science/sequencing-method-
 
 ### RSeQC
 
-<!-- TODO -->
+[RSeQC](<(http://rseqc.sourceforge.net/)>) is a package of scripts designed to evaluate the quality of RNA-seq data. This pipeline runs several, but not all RSeQC scripts. You can tweak the supported scripts you would like to run by adjusting the `--rseqc_modules` parameter which by default will run all of the following: `bam_stat.py`, `inner_distance.py`, `infer_experiment.py`, `junction_annotation.py`, `junction_saturation.py`,`read_distribution.py` and `read_duplication.py`.
+
+The majority of RSeQC scripts generate output files which can be plotted and summarised in the MultiQC report.
 
 ### Preseq
 
