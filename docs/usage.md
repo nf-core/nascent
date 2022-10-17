@@ -6,8 +6,6 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
 ## Samplesheet input
 
 You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
@@ -52,15 +50,29 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
-### Alignment Options
+## Alignment Options
 
-### TODO REF GENOME
+By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (i.e. `--aligner bwa`) to map the raw FastQ reads to the reference genome. Research as to which aligner works best with Nascent Transcript and Transcription Start Site assays is pending.
 
-### TODO: Quantification Options
+## Reference genome files
 
-### Transcript Identification Options
+The minimum reference genome requirements are a FASTA and GTF file, all other files required to run the pipeline can be generated from these files. However, it is more storage and compute friendly if you are able to re-use reference genome files as efficiently as possible. It is recommended to use the `--save_reference` parameter if you are using the pipeline to build new indices (e.g. those unavailable on [AWS iGenomes](https://nf-co.re/usage/reference_genomes)) so that you can save them somewhere locally. The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/BWA/index/'`) or via a custom config file.
 
-The current options for transcript identification include [GroHMM](https://bioconductor.org/packages/release/bioc/html/groHMM.html) using (`--transcript_identification grohmm`) and HOMER. The default transcript identification option is HOMER but this may change in future releases.
+- If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
+- If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
+
+## Quantification Options
+
+Currently only featureCounts is supported for quatification. It counts both the genes, and the predicted transcripts.
+
+## Transcript Identification Options
+
+The current options for transcript identification include [GroHMM](https://bioconductor.org/packages/release/bioc/html/groHMM.html), [HOMER](http://homer.ucsd.edu/), and [PINTS](https://pints.yulab.org/).
+
+The default transcript identification option is PINTS, and HOMER if the transcript `assay_type` is `GROseq` but this may change in future releases.
+
+### GroHMM
+
 When selecting GroHMM as an option, the pipeline by default tests a list of preset hold-out parameters to select for the combination of arguments which would result in the lowest possible error rate during the transcript identification process. The user may also choose to provide their own list of hold-out parameters to test, or skip the tuning process altogether due to time constraints. If the tuning process is skipped ('--skip_tuning') then the user may indicate the specific holdout parameters to use ('--uts' and '--ltprobb') or choose to use the default parameters.
 
 ## Running the pipeline
