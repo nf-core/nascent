@@ -9,10 +9,6 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
-                    "bedtools/bamtobed": {
-                        "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
-                    },
                     "bedtools/genomecov": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
@@ -22,10 +18,6 @@
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "bedtools/merge": {
-                        "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
-                    },
-                    "bedtools/slop": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
@@ -110,10 +102,6 @@
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "multiqc": {
-                        "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
-                    },
-                    "picard/mergesamfiles": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
