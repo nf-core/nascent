@@ -15,6 +15,9 @@ workflow GROHMM {
     tuning_file
 
     main:
+
+    ch_versions = Channel.empty()
+
     ch_tuning = []
 
     GROHMM_PARAMETERTUNING (
@@ -23,16 +26,13 @@ workflow GROHMM {
         tuning_file
     )
     ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
+    ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
 
     GROHMM_TRANSCRIPTCALLING (
         bams,
         gtf,
         ch_tuning
     )
-
-    // Gather versions of all tools used
-    ch_versions = Channel.empty()
-    ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
 
     emit:
