@@ -220,7 +220,19 @@ For more information about how to use GROHMM, see the [tutorial](https://www.bio
 
 ### featureCounts
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `<ALIGNER>/featurecounts/`
+  - `*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
+  - `*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
+  - `*_mqc.tsv`: MultiQC custom content files used to plot biotypes in report.
+
+</details>
+
+[featureCounts](http://bioinf.wehi.edu.au/featureCounts/) from the [Subread](http://subread.sourceforge.net/) package is a quantification tool used to summarise the mapped read distribution over genomic features such as genes, exons, promotors, gene bodies, genomic bins and chromosomal locations. We can also use featureCounts to count overlaps with different classes of genomic features. This provides an additional QC to check which features are most abundant in the sample, and to highlight potential problems such as rRNA contamination.
+
+<!-- TODO Add example plot -->
 
 ### MultiQC
 
