@@ -60,6 +60,9 @@ include { BED2SAF } from '../modules/local/bed2saf'
 
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
+include { ALIGN_BWA } from '../subworkflows/local/align_bwa/main'
+include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
+include { ALIGN_DRAGMAP } from '../subworkflows/local/align_dragmap/main'
 include { QUALITY_CONTROL } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS } from '../subworkflows/local/coverage_graphs.nf'
 include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
@@ -83,9 +86,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
-include { ALIGN_BWA } from '../subworkflows/nf-core/align_bwa/main'
-include { ALIGN_BWAMEM2 } from '../subworkflows/nf-core/align_bwamem2/main'
-include { ALIGN_DRAGMAP } from '../subworkflows/nf-core/align_dragmap/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*

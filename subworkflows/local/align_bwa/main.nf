@@ -1,11 +1,11 @@
 //
-// Alignment with dragmap
+// Alignment with BWA MEM
 //
 
-include { DRAGMAP_ALIGN } from '../../../modules/nf-core/dragmap/align/main'
-include { BAM_SORT_STATS_SAMTOOLS } from '../bam_sort_stats_samtools/main'
+include { BWA_MEM           } from '../../../modules/nf-core/bwa/mem/main'
+include { BAM_SORT_STATS_SAMTOOLS } from '../../nf-core/bam_sort_stats_samtools/main'
 
-workflow ALIGN_DRAGMAP {
+workflow ALIGN_BWA {
     take:
     reads // channel: [ val(meta), [ reads ] ]
     index //    file: /path/to/bwa/index/
@@ -17,17 +17,17 @@ workflow ALIGN_DRAGMAP {
     //
     // Map reads with BWA MEM
     //
-    DRAGMAP_ALIGN ( reads, index, true )
-    ch_versions = ch_versions.mix(DRAGMAP_ALIGN.out.versions)
+    BWA_MEM ( reads, index, true )
+    ch_versions = ch_versions.mix(BWA_MEM.out.versions)
 
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
-    BAM_SORT_STATS_SAMTOOLS ( DRAGMAP_ALIGN.out.bam, [] )
+    BAM_SORT_STATS_SAMTOOLS ( BWA_MEM.out.bam, [] )
     ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
 
     emit:
-    orig_bam         = DRAGMAP_ALIGN.out.bam                // channel: [ val(meta), bam ]
+    orig_bam         = BWA_MEM.out.bam                // channel: [ val(meta), bam ]
 
     bam              = BAM_SORT_STATS_SAMTOOLS.out.bam      // channel: [ val(meta), [ bam ] ]
     bai              = BAM_SORT_STATS_SAMTOOLS.out.bai      // channel: [ val(meta), [ bai ] ]
@@ -35,5 +35,5 @@ workflow ALIGN_DRAGMAP {
     flagstat         = BAM_SORT_STATS_SAMTOOLS.out.flagstat // channel: [ val(meta), [ flagstat ] ]
     idxstats         = BAM_SORT_STATS_SAMTOOLS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
 
-    versions       = ch_versions                      // channel: [ versions.yml ]
+    versions         = ch_versions                      // channel: [ versions.yml ]
 }
