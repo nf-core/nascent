@@ -30,7 +30,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [deepTools bamcoverage](#deeptools-bamcoverage) - TODO
 - [Transcript Identification](#transcript-identification)
   - [GroHMM](#grohmm) - Predicts transcripts from aligned GROSeq data in the form of bed files.
-  - [HOMER](#homer) - TODO
+  - [HOMER](#homer) - Transcript identification from GROSeq data
   - [PINTS](#pints) - TODO
   - [BEDTools Insersect](#bedtools-intersect) - TODO
 - [Quantification](#quantification)
@@ -201,7 +201,20 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 ### HOMER
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `homer/`
+  - `*.bed`: HOMER Nascent RNA (GroSeq) transcripts after pos2bed
+  - `*.peaks.txt`: HOMER Nascent RNA (GroSeq) transcripts
+  - `*.bedGraph.gz`: UCSC bedGraph
+  - `*_tagdir`: homer tagdir
+
+</details>
+
+[HOMER](http://homer.ucsd.edu) HOMER (Hypergeometric Optimization of Motif EnRichment) is a suite of tools for Motif Discovery and next-gen sequencing analysis. It is a collection of command line programs for UNIX-style operating systems written in Perl and C++. HOMER was primarily written as a de novo motif discovery algorithm and is well suited for finding 8-20 bp motifs in large scale genomics data. HOMER contains many useful tools for analyzing ChIP-Seq, GRO-Seq, RNA-Seq, DNase-Seq, Hi-C and numerous other types of functional genomics sequencing data sets.
+
+For now the pipeline only supports the HOMER groseq workflow, feel free to open an issue or PR if you'd like to see others. For more information about how to use HOMER, see the [GRO-Seq Analysis Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
 
 ### PINTS
 
