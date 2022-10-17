@@ -212,7 +212,13 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-<!-- Add output files once full pipeline is run -->
+- `grohmm/`
+  - `*.eval.txt`: Evaluation of HMM Annotations
+  - `*.final.transcripts.bed`: Predicted transcripts
+  - `*.tdFinal.txt`: Final quality metrics
+  - `*.tdplot_mqc.jpg`: TD plot included in multiqc
+  - `*.transcripts.txt`: Predicted transcripts in txt form
+  - `*.tuning.csv`: The tuning csv that was used
 
 </details>
 
