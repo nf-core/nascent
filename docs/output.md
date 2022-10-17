@@ -203,7 +203,10 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 ### GroHMM
 
-#### TODO: Add output files once full pipeline is run
+<details markdown="1">
+<summary>Output files</summary>
+
+<!-- Add output files once full pipeline is run -->
 
 </details>
 
