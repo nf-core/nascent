@@ -15,8 +15,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [fastp](#fastp) - Adapter and quality trimming
 - [Alignment](#alignment)
   - [bwa](#bwa) - Mapping low-divergent sequences against a large reference genome
-  - [DRAGMAP](#dragmap) - TODO
-  - [bwa-mem2](#bwa-mem2) -  The next version of bwa-mem
+  - [bwa-mem2](#bwa-mem2) - The next version of bwa-mem
+  - [DRAGMAP](#dragmap) - Open-source software implementation of the DRAGEN mapper
 - [Alignment post-processing](#alignment-post-processing)
   - [SAMtools](#samtools) - Sort and index alignments
   - [UMI-tools dedup](#umi-tools-dedup) - UMI-based deduplication
@@ -105,7 +105,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### DRAGMAP
 
-<!-- TODO Add files -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `dragmap/`
+  - `*.bam`: The original BAM file containing read alignments to the reference genome.
+  - `*.dragmap.log`: Log of the stderr from the aligner
+
+</details>
 
 [DragMap](https://github.com/Illumina/dragmap) is an open-source software implementation of the DRAGEN mapper, which the Illumina team created so that we would have an open-source way to produce the same results as their proprietary DRAGEN hardware. The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
