@@ -17,7 +17,7 @@ run_modules:
   - samtools
   - preseq
   - rseqc
-  - featurecounts
+  - featureCounts
   - homer
 
 module_order:
