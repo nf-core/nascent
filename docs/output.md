@@ -81,7 +81,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### bwa
 
-<!-- TODO -->
+<!-- TODO Add files -->
+
+[BWA](https://github.com/lh3/bwa) is a software package for mapping low-divergent sequences against a large reference genome. The aligned reads are then coordinate-sorted is used for duplicate marking) with [samtools](https://www.htslib.org/doc/samtools.html).
 
 ### bwa-mem2
 
