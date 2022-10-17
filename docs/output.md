@@ -26,8 +26,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [Preseq](#preseq) - Estimation of library complexity
   - [BBMap](#bbmap) - Analyzes the sequencing coverage
 - [Coverage Graphs](#coverage-graphs)
-  - [BEDTools Genomecov](#bedtools-genomcov) - Create bigWig coverage files
   - [deepTools bamcoverage](#deeptools-bamcoverage) - TODO
+  - [BEDTools Genomecov](#bedtools-genomecov) - Create bedGraph coverage files
 - [Transcript Identification](#transcript-identification)
   - [GroHMM](#grohmm) - Predicts transcripts from aligned GROSeq data in the form of bed files.
   - [HOMER](#homer) - Transcript identification from GROSeq data
@@ -200,7 +200,14 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 ### BEDTools Genomecov
 
-<!-- TODO -->
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bedtools/`
+  - `*.minus.bedGraph`: Sample coverage file (negative strand only) in bedGraph format
+  - `*.plus.bedGraph`: Sample coverage file (positive strand only) in bedGraph format
+
+</details>
 
 ### deepTools bamcoverage
 
