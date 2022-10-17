@@ -22,7 +22,7 @@ include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsize
 
 workflow PREPARE_GENOME {
     take:
-    prepare_tool_indices // list: tools to prepare indices for
+    prepare_tool_indices
 
     main:
 
@@ -122,13 +122,13 @@ workflow PREPARE_GENOME {
     }
 
     emit:
-    fasta = ch_fasta       // path: genome.fasta
-    fai = ch_fai         // path: genome.fasta.fai
-    gtf = ch_gtf         // path: genome.gtf
-    gene_bed = ch_gene_bed    // path: gene.bed
-    chrom_sizes = ch_chrom_sizes // path: genome.sizes
-    bwa_index = ch_bwa_index   // path: star/index/
-    dragmap = ch_dragmap     // path:
+    fasta = ch_fasta
+    fai = ch_fai
+    gtf = ch_gtf
+    gene_bed = ch_gene_bed
+    chrom_sizes = ch_chrom_sizes
+    bwa_index = ch_bwa_index
+    dragmap = ch_dragmap
 
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+    versions = ch_versions.ifEmpty(null)
 }

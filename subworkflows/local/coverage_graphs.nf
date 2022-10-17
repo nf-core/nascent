@@ -12,7 +12,7 @@ include {
 
 workflow COVERAGE_GRAPHS {
     take:
-    bam // channel: [ val(meta), [ bam ] ]
+    bam
     bai
     sizes
     fasta
@@ -61,5 +61,5 @@ workflow COVERAGE_GRAPHS {
 
     plus_minus = ch_plus_minus
 
-    versions = ch_versions                      // channel: [ versions.yml ]
+    versions = ch_versions
 }

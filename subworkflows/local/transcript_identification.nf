@@ -10,7 +10,7 @@ include { HOMER_GROSEQ } from '../nf-core/homer/groseq/main'
 
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
-    group_bams // channel: [ val(meta), [ bams ] ]
+    group_bams
     gtf
     fasta
 

@@ -11,7 +11,7 @@ include { BBMAP_PILEUP } from '../../modules/nf-core/bbmap/pileup/main'
 
 workflow QUALITY_CONTROL {
     take:
-    bam // channel: [ val(meta), [ bam ] ]
+    bam
     bed
 
     main:
@@ -55,5 +55,5 @@ workflow QUALITY_CONTROL {
     pileup_stats = BBMAP_PILEUP.out.covstats
     pileup_hist = BBMAP_PILEUP.out.hist
 
-    versions = ch_versions                      // channel: [ versions.yml ]
+    versions = ch_versions
 }

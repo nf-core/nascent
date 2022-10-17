@@ -10,7 +10,7 @@ include { GROHMM_PARAMETERTUNING } from '../../modules/local/grohmm/parametertun
  */
 workflow GROHMM {
     take:
-    bams // channel: [ val(meta), [ bams ] ]
+    bams
     gtf
     tuning_file
 
