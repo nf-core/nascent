@@ -2,27 +2,26 @@
 // Uncompress and prepare reference genome files
 //
 
-include { GTF2BED                     } from '../../modules/local/gtf2bed'
-include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filter'
+include { GTF2BED } from '../../modules/local/gtf2bed'
+include { GTF_GENE_FILTER } from '../../modules/local/gtf_gene_filter'
 
 include {
     GUNZIP as GUNZIP_FASTA
     GUNZIP as GUNZIP_GTF
     GUNZIP as GUNZIP_GFF
-    GUNZIP as GUNZIP_GENE_BED
-    GUNZIP as GUNZIP_ADDITIONAL_FASTA } from '../../modules/nf-core/gunzip/main'
+    GUNZIP as GUNZIP_GENE_BED } from '../../modules/nf-core/gunzip/main'
 include { UNTAR as UNTAR_BWA_INDEX
-          UNTAR as UNTAR_DRAGMAP      } from '../../modules/nf-core/untar/main'
+          UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
 include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
-include { GFFREAD                     } from '../../modules/nf-core/gffread/main'
-include { BWA_INDEX                   } from '../../modules/nf-core/bwa/index/main'
-include { BWAMEM2_INDEX               } from '../../modules/nf-core/bwamem2/index/main'
-include { DRAGMAP_HASHTABLE           } from '../../modules/nf-core/dragmap/hashtable/main'
-include { CUSTOM_GETCHROMSIZES        } from '../../modules/nf-core/custom/getchromsizes/main'
+include { GFFREAD } from '../../modules/nf-core/gffread/main'
+include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
+include { BWAMEM2_INDEX } from '../../modules/nf-core/bwamem2/index/main'
+include { DRAGMAP_HASHTABLE } from '../../modules/nf-core/dragmap/hashtable/main'
+include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
 
 workflow PREPARE_GENOME {
     take:
-    prepare_tool_indices // list: tools to prepare indices for
+    prepare_tool_indices
 
     main:
 
@@ -32,7 +31,7 @@ workflow PREPARE_GENOME {
     // Uncompress genome fasta file if required
     //
     if (params.fasta.endsWith('.gz')) {
-        ch_fasta    = GUNZIP_FASTA ( [ [:], params.fasta ] ).gunzip.map { it[1] }
+        ch_fasta = GUNZIP_FASTA ( [ [:], params.fasta ] ).gunzip.map { it[1] }
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
         ch_fasta = file(params.fasta)
@@ -84,8 +83,8 @@ workflow PREPARE_GENOME {
     //
     // Uncompress BWA index or generate from scratch if required
     //
-    ch_bwa_index   = Channel.empty()
-    ch_dragmap     = Channel.empty()
+    ch_bwa_index = Channel.empty()
+    ch_dragmap = Channel.empty()
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
             if (params.bwa_index.endsWith('.tar.gz')) {
@@ -94,8 +93,8 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = file(params.bwa_index)
             }
         } else {
-            ch_bwa_index   = BWA_INDEX ( ch_fasta ).index
-            ch_versions    = ch_versions.mix(BWA_INDEX.out.versions)
+            ch_bwa_index = BWA_INDEX ( ch_fasta ).index
+            ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
         }
     } else if ('bwamem2' in prepare_tool_indices) {
         if (params.bwamem2_index) {
@@ -106,7 +105,7 @@ workflow PREPARE_GENOME {
             }
         } else {
             ch_bwa_index = BWAMEM2_INDEX ( ch_fasta ).index
-            ch_versions  = ch_versions.mix(BWAMEM2_INDEX.out.versions)
+            ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
     } else if ('dragmap' in prepare_tool_indices) {
         if (params.dragmap) {
@@ -122,13 +121,13 @@ workflow PREPARE_GENOME {
     }
 
     emit:
-    fasta       = ch_fasta       // path: genome.fasta
-    fai         = ch_fai         // path: genome.fasta.fai
-    gtf         = ch_gtf         // path: genome.gtf
-    gene_bed    = ch_gene_bed    // path: gene.bed
-    chrom_sizes = ch_chrom_sizes // path: genome.sizes
-    bwa_index   = ch_bwa_index   // path: star/index/
-    dragmap     = ch_dragmap     // path:
+    fasta = ch_fasta
+    fai = ch_fai
+    gtf = ch_gtf
+    gene_bed = ch_gene_bed
+    chrom_sizes = ch_chrom_sizes
+    bwa_index = ch_bwa_index
+    dragmap = ch_dragmap
 
-    versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+    versions = ch_versions.ifEmpty(null)
 }

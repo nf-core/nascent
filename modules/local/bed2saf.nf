@@ -17,7 +17,7 @@ process BED2SAF {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in nf-core/nascent/bin/
+    script:
     """
     awk 'OFS="\\t" {print \$1"."\$2"."\$3, \$1, \$2, \$3, "."}' \\
         $bed \\

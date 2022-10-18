@@ -3,7 +3,7 @@
 //
 
 include { BWAMEM2_MEM       } from '../../../modules/nf-core/bwamem2/mem/main'
-include { BAM_SORT_STATS_SAMTOOLS } from '../bam_sort_stats_samtools/main'
+include { BAM_SORT_STATS_SAMTOOLS } from '../../nf-core/bam_sort_stats_samtools/main'
 
 workflow ALIGN_BWAMEM2 {
     take:
