@@ -23,9 +23,9 @@ jobs:
           - "21.10.6"
           - "latest-everything"
         parameters:
-          - "--transcript_identification homer"
-          - "--aligner dragmap --transcript_identification homer"
-          # - "--transcript_identification grohmm"
+          - ""
+          - "--aligner bwamem2"
+          - "--aligner dragmap"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
