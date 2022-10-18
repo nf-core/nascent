@@ -24,8 +24,27 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Pipeline summary
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
-3. Transcript identification ([`GroHMM`](https://bioconductor.org/packages/release/bioc/html/groHMM.html))
+2. Adapter and quality trimming ([`fastp`](https://github.com/OpenGene/fastp))
+3. Alignment
+   1. [`bwa`](https://bio-bwa.sourceforge.net/)
+   2. [`bwamem2`](https://github.com/bwa-mem2/bwa-mem2)
+   3. [`DRAGMAP`](https://github.com/Illumina/DRAGMAP)
+4. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))
+5. UMI-based deduplication ([`UMI-tools`](https://github.com/CGATOxford/UMI-tools))
+6. Duplicate read marking ([`picard MarkDuplicates`](https://broadinstitute.github.io/picard/))
+7. Quality Control
+   1. [`RSeQC`](https://rseqc.sourceforge.net/index.html) - Various RNA-seq QC metrics
+   2. [`Preseq`](http://smithlabresearch.org/software/preseq/) - Estimation of library complexity
+   3. [`BBMap`](https://sourceforge.net/projects/bbmap/) - Analyzes the sequencing coverage
+8. Coverage Graphs
+   1. Create bedGraph coverage files ([`BEDTools`](https://github.com/arq5x/bedtools2/)
+   2. Create bigWig coverage files ([`deeptools`](https://deeptools.readthedocs.io/en/develop/))
+9. Transcript identification
+   1. [`HOMER`](http://homer.ucsd.edu/)
+   2. [`GroHMM`](https://bioconductor.org/packages/release/bioc/html/groHMM.html)
+   3. [`PINTS`](https://pints.yulab.org/)
+10. Quantification of Genes and Nascent Transcripts ([`featureCounts`](https://subread.sourceforge.net/featureCounts.html))
+11. Aggregate report describing results and QC from the whole pipeline ([`MultiQC`](http://multiqc.info/))
 
 ## Quick Start
 
