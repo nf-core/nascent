@@ -30,6 +30,10 @@
 
 - [DragMap](https://github.com/Illumina/DRAGMAP)
 
+- [FastP](https://academic.oup.com/bioinformatics/article/34/17/i884/5093234)
+
+  > Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu, fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i884–i890, doi: 10.1093/bioinformatics/bty560. PubMed PMID: 30423086. PubMed Central PMCID: PMC6129281
+
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
 - [featureCounts](https://pubmed.ncbi.nlm.nih.gov/24227677/)
