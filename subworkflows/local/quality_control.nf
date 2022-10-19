@@ -36,6 +36,7 @@ workflow QUALITY_CONTROL {
     ch_versions = ch_versions.mix(RSEQC_INFEREXPERIMENT.out.versions.first())
 
     BBMAP_PILEUP ( bam )
+    ch_versions = ch_versions.mix(BBMAP_PILEUP.out.versions.first())
 
     emit:
     preseq_ccurve = PRESEQ_CCURVE.out.c_curve

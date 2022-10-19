@@ -39,6 +39,8 @@ workflow PREPARE_GENOME {
 
     // Create Fai file
     ch_fai = SAMTOOLS_FAIDX( [ [:], ch_fasta ] ).fai.map { it[1] }
+    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+
     //
     // Uncompress GTF annotation file or create from GFF3 if required
     //
@@ -79,6 +81,7 @@ workflow PREPARE_GENOME {
     // Create chromosome sizes file
     //
     ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( [ [:], ch_fasta ] ).sizes
+    ch_versions = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
 
     //
     // Uncompress BWA index or generate from scratch if required
@@ -89,6 +92,7 @@ workflow PREPARE_GENOME {
         if (params.bwa_index) {
             if (params.bwa_index.endsWith('.tar.gz')) {
                 ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
+                ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
                 ch_bwa_index = file(params.bwa_index)
             }
@@ -100,6 +104,7 @@ workflow PREPARE_GENOME {
         if (params.bwamem2_index) {
             if (params.bwamem2_index.endsWith('.tar.gz') || params.bwamem2_index.endsWith('.tgz')) {
                 ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], params.bwamem2_index ] ).untar
+                ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
                 ch_bwa_index = file(params.bwamem2_index)
             }
@@ -111,6 +116,7 @@ workflow PREPARE_GENOME {
         if (params.dragmap) {
             if (params.dragmap.endsWith('.tar.gz')) {
                 ch_bwa_index = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
+                ch_versions = ch_versions.mix(UNTAR_DRAGMAP_INDEX.out.versions)
             } else {
                 ch_bwa_index = file(params.dragmap)
             }

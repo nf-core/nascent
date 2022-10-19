@@ -116,6 +116,7 @@ workflow NASCENT {
     INPUT_CHECK (
         ch_input
     )
+    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
     //
     // MODULE: Run FastQC
@@ -129,6 +130,7 @@ workflow NASCENT {
     if(!params.skip_trimming) {
         FASTP ( INPUT_CHECK.out.reads, [], [] )
         ch_reads = FASTP.out.reads
+        ch_versions = ch_versions.mix(FASTP.out.versions)
     } else {
         ch_reads = INPUT_CHECK.out.reads
     }

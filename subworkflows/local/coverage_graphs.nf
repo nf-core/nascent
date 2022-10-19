@@ -46,12 +46,14 @@ workflow COVERAGE_GRAPHS {
         fasta,
         fai
     )
+    ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_PLUS.out.versions.first())
 
     DEEPTOOLS_BAMCOVERAGE_MINUS (
         ch_bam_bai,
         fasta,
         fai
     )
+    ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_MINUS.out.versions.first())
 
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
