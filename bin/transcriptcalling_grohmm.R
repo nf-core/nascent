@@ -1,9 +1,4 @@
 #!/usr/bin/env Rscript
-# TODO
-# Allow for user to input their own annotation dataset
-# REQUIREMENTS
-# Packages below need to be available to load when running R.
-
 
 suppressPackageStartupMessages(library(argparse))
 suppressPackageStartupMessages(library(GenomicFeatures))

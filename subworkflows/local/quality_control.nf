@@ -1,7 +1,3 @@
-/*
- * TODO
- */
-
 include { PRESEQ_CCURVE } from '../../modules/nf-core/preseq/ccurve/main'
 include { PRESEQ_LCEXTRAP } from '../../modules/nf-core/preseq/lcextrap/main'
 include { RSEQC_READDISTRIBUTION } from '../../modules/nf-core/rseqc/readdistribution/main'
