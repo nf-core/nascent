@@ -53,8 +53,7 @@
                     "default": "bwa",
                     "fa_icon": "fas fa-puzzle-piece",
                     "enum": ["bwa", "bwamem2", "dragmap"],
-                    "description": "Specify aligner to be used to map reads to reference genome.",
-                    "help_text": "TODO"
+                    "description": "Specify aligner to be used to map reads to reference genome."
                 },
                 "skip_alignment": {
                     "type": "boolean",
