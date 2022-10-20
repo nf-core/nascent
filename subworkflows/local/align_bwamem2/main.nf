@@ -18,13 +18,13 @@ workflow ALIGN_BWAMEM2 {
     // Map reads with BWAMEM2
     //
     BWAMEM2_MEM ( reads, index, false )
-    ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
+    ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
 
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
     BAM_SORT_STATS_SAMTOOLS ( BWAMEM2_MEM.out.bam, [] )
-    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
+    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions.first())
 
     emit:
     orig_bam         = BWAMEM2_MEM.out.bam            // channel: [ val(meta), bam ]

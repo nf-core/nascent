@@ -130,7 +130,7 @@ workflow NASCENT {
     if(!params.skip_trimming) {
         FASTP ( INPUT_CHECK.out.reads, [], [] )
         ch_reads = FASTP.out.reads
-        ch_versions = ch_versions.mix(FASTP.out.versions)
+        ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
         ch_reads = INPUT_CHECK.out.reads
     }
@@ -195,7 +195,7 @@ workflow NASCENT {
         ch_samtools_flagstat = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.flagstat
         ch_samtools_idxstats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.idxstats
 
-        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions)
+        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions.first())
     }
 
     QUALITY_CONTROL (
