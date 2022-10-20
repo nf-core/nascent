@@ -321,7 +321,7 @@ They've also created some bed files that might be useful for analysis.
 - [promoter for hg19](https://pints.yulab.org/ref/examples/hg19_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (v19)
 - [promoter for mm10](https://pints.yulab.org/ref/examples/mm10_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (m23)
 
-## Quatification
+## Quantification
 
 ### featureCounts
 

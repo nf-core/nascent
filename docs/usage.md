@@ -63,7 +63,7 @@ The minimum reference genome requirements are a FASTA and GTF file, all other fi
 
 ## Quantification Options
 
-Currently only featureCounts is supported for quatification. It counts both the genes, and the predicted transcripts.
+Currently only featureCounts is supported for quantification. It counts both the genes, and the predicted transcripts.
 
 ## Transcript Identification Options
 
