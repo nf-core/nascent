@@ -87,6 +87,7 @@ We thank the following people for their extensive assistance in the development 
 [@ewels](https://github.com/ewels)
 [@drpatelh](https://github.com/drpatelh)
 [@pditommaso](https://github.com/pditommaso)
+[@FriederikeHanssen](https://github.com/FriederikeHanssen)
 [Tae Hoon Kim](https://github.com/taehoonkim-phd)
 [@easterwoods](https://github.com/easterwoods)
 
