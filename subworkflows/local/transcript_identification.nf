@@ -30,7 +30,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
 
 
-    // TODO Merge technical replicates
+    // TODO https://github.com/hyulab/PINTS/issues/15
     PINTS_CALLER ( group_bams )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     // HACK Not sure if this is as good as reporting all of them, but it should
