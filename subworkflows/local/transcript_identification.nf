@@ -1,3 +1,7 @@
+/*
+ * Calls Transcripts and Transcript Start Sites and various cleaning steps
+ */
+
 include { GROHMM } from './grohmm'
 
 include { PINTS_CALLER } from '../../modules/nf-core/pints/caller/main'

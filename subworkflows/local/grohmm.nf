@@ -1,3 +1,7 @@
+/*
+ * Run parametertuning optionally, otherwise just run transcript calling
+ */
+
 include { GROHMM_TRANSCRIPTCALLING } from '../../modules/local/grohmm/transcriptcalling/main.nf'
 include { GROHMM_PARAMETERTUNING } from '../../modules/local/grohmm/parametertuning/main.nf'
 
