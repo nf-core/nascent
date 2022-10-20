@@ -20,13 +20,15 @@ workflow GROHMM {
 
     ch_tuning = []
 
-    GROHMM_PARAMETERTUNING (
-        bams,
-        gtf,
-        tuning_file
-    )
-    ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
-    ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
+    if(!params.skip_tuning) {
+        GROHMM_PARAMETERTUNING (
+            bams,
+            gtf,
+            tuning_file
+        )
+        ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
+        ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
+    }
 
     GROHMM_TRANSCRIPTCALLING (
         bams,

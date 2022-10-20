@@ -24,14 +24,22 @@ workflow TRANSCRIPT_INDENTIFICATION {
     ch_identification_bed = Channel.empty()
 
     ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
-    GROHMM ( group_bams, gtf, ch_tuning_file )
-    ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
-    ch_versions = ch_versions.mix(GROHMM.out.versions.first())
+    grohmm_td_plot = Channel.empty()
+    if(!params.skip_grohmm && params.assay_type == "GROseq") {
+        GROHMM ( group_bams, gtf, ch_tuning_file )
+        ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
+        grohmm_td_plot = GROHMM.out.td_plot
+        ch_versions = ch_versions.mix(GROHMM.out.versions.first())
+    }
 
 
-    HOMER_GROSEQ ( group_bams, fasta )
-    ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
-    ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+    if(params.assay_type == "GROseq") {
+        HOMER_GROSEQ ( group_bams, fasta )
+        ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
+        homer_peaks = HOMER_GROSEQ.out.peaks
+        homer_tagdir = HOMER_GROSEQ.out.tagdir
+        ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
+    }
 
 
     // TODO https://github.com/hyulab/PINTS/issues/15
@@ -47,12 +55,14 @@ workflow TRANSCRIPT_INDENTIFICATION {
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
     ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions.first())
 
-    ch_filter_bed = Channel.from(params.filter_bed)
-    BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), "bed" )
-    ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
+    if(params.filter_bed) {
+        ch_filter_bed = Channel.from(params.filter_bed)
+        BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), "bed" )
+        ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
+    }
 
     // Use non-filtered bed files if we skip filtering
-    if(params.filter_bed) {
+    if(!params.filter_bed) {
         ch_identification_bed = BEDTOOLS_INTERSECT_FILTER.out.intersect
     }
 
@@ -62,9 +72,9 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .set { ch_identification_bed_clean }
 
     emit:
-    grohmm_td_plot = GROHMM.out.td_plot
-    homer_peaks = HOMER_GROSEQ.out.peaks
-    homer_tagdir = HOMER_GROSEQ.out.tagdir
+    grohmm_td_plot
+    homer_peaks
+    homer_tagdir
 
     transcript_beds = ch_identification_bed_clean
 
