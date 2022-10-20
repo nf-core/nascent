@@ -17,7 +17,7 @@ workflow ALIGN_DRAGMAP {
     //
     // Map reads with BWA MEM
     //
-    DRAGMAP_ALIGN ( reads, index, true )
+    DRAGMAP_ALIGN ( reads, index, false )
     ch_versions = ch_versions.mix(DRAGMAP_ALIGN.out.versions)
 
     //
