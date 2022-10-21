@@ -24,7 +24,7 @@ workflow ALIGN_DRAGMAP {
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
     BAM_SORT_STATS_SAMTOOLS ( DRAGMAP_ALIGN.out.bam, [] )
-    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions.first())
+    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
 
     emit:
     orig_bam         = DRAGMAP_ALIGN.out.bam                // channel: [ val(meta), bam ]

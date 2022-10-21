@@ -169,7 +169,7 @@ workflow NASCENT {
         ch_samtools_flagstat = ALIGN_BWAMEM2.out.flagstat
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions.first())
+        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
         ALIGN_DRAGMAP(
             ch_reads,
@@ -181,7 +181,7 @@ workflow NASCENT {
         ch_samtools_flagstat = ALIGN_DRAGMAP.out.flagstat
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions.first())
+        ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
     }
 
     if(params.with_umi) {
@@ -195,14 +195,14 @@ workflow NASCENT {
         ch_samtools_flagstat = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.flagstat
         ch_samtools_idxstats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.idxstats
 
-        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions.first())
+        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions)
     }
 
     QUALITY_CONTROL (
         ch_genome_bam,
         PREPARE_GENOME.out.gene_bed
     )
-    ch_versions = ch_versions.mix(QUALITY_CONTROL.out.versions.first())
+    ch_versions = ch_versions.mix(QUALITY_CONTROL.out.versions)
 
     COVERAGE_GRAPHS (
         ch_genome_bam,
@@ -211,7 +211,7 @@ workflow NASCENT {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai
     )
-    ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions.first())
+    ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions)
 
     //
     // SUBWORKFLOW: Transcript indetification
@@ -233,7 +233,7 @@ workflow NASCENT {
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
     ch_homer_multiqc = ch_homer_multiqc.mix(TRANSCRIPT_INDENTIFICATION.out.homer_tagdir)
-    ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions.first())
+    ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions)
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
         ch_sort_bam.combine(
@@ -250,7 +250,7 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
+        ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
     )
 
     //
