@@ -1,0 +1,30 @@
+- name: Run grohmm makeucscfile
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_makeucscfile -c tests/config/nextflow.config -c tests/modules/local/grohmm/nextflow.config --transcript_identification grohmm
+  # FIXME Tests don't work because of bin/ scripts
+  # https://github.com/nextflow-io/nextflow/issues/1868
+  # tags:
+  # - grohmm
+  # TODO Add Files
+  # files:
+  #   - path: output/test_grohmm/test.transcripts.txt
+  #   - path: output/test_grohmm/test.eval.txt
+  #   - path: output/test_grohmm/test.fwd.wig
+  #   - path: output/test_grohmm/test.rev.wig
+  #   - path: output/test_grohmm/test.fwd.normalized.wig
+  #   - path: output/test_grohmm/test.rev.normalized.wig
+
+- name: Run grohmm transcriptcalling
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_transcriptcalling -c tests/config/nextflow.config -c tests/modules/local/grohmm/nextflow.config --transcript_identification grohmm
+  # FIXME Tests don't work because of bin/ scripts
+  # https://github.com/nextflow-io/nextflow/issues/1868
+  # tags:
+  #   - grohmm
+  # TODO Add Files
+
+- name: Run grohmm parametertuning
+  command: nextflow run tests/modules/local/grohmm/ -entry test_grohmm_parametertuning -c tests/modules/local/grohmm/nextflow.config -c tests/config/nextflow.config --transcript_identification grohmm
+  # FIXME Tests don't work because of bin/ scripts
+  # https://github.com/nextflow-io/nextflow/issues/1868
+  # tags:
+  #   - grohmm
+  # TODO Add Files

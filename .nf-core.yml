@@ -1,0 +1,6 @@
+repository_type: pipeline
+lint:
+  files_unchanged:
+    - .github/workflows/linting.yml
+    - LICENSE
+    - assets/email_template.html

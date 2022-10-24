@@ -1,0 +1,7 @@
+sample,fastq_1,fastq_2
+cd4_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,
+cd4_REP2,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,
+cd4_REP3,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T3.fastq.gz,
+cd4_REP4,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T4.fastq.gz,
+jurkat_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T1.fastq.gz,
+jurkat_REP2,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T2.fastq.gz,

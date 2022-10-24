@@ -1,0 +1,5 @@
+# FIXME Tests don't work because of bin/ scripts
+grohmm:
+  - modules/local/grohmm/**
+  - subworkflows/local/grohmm.nf
+  - tests/modules/local/grohmm/**

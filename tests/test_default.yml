@@ -1,0 +1,10 @@
+- name: Run test for everything
+  command: nextflow run main.nf -profile docker,test
+  files:
+    - path: output/multiqc_report.html
+    - path: output/test_grohmm/test.transcripts.txt
+    - path: output/test_grohmm/test.eval.txt
+    - path: output/test_grohmm/test.fwd.wig
+    - path: output/test_grohmm/test.rev.wig
+    - path: output/test_grohmm/test.fwd.normalized.wig
+    - path: output/test_grohmm/test.rev.normalized.wig
