@@ -3,9 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v2.0.0 - 2022-10-20
+## Unreleased
 
-### `Added`
+### Added
+
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+## v2.0.0 - 2022-10-24
+
+### Added
 
 - DSL2 conversion
 - [[#28](https://github.com/nf-core/nascent/issues/28)] - Added DRAGMAP alignment
@@ -14,11 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#71](https://github.com/nf-core/nascent/issues/71)] - Add FASTP for adapter trimming
 - [[#77](https://github.com/nf-core/nascent/issues/77)] - Add dedup subworkflow
 
-### `Fixed`
+### Fixed
 
 - [[#33](https://github.com/nf-core/nascent/issues/33)] - groHMM works on full runs. Added the keep standard chromosomes function to standardize bam files.
 
-### `Dependencies`
+### Dependencies
 
 - Updated Nextflow version to `v21.10.6`
 
