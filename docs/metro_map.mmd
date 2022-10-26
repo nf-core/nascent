@@ -1,0 +1,45 @@
+graph LR
+    subgraph one
+        %% Pre-processing
+        A[FASTQ] --> B(FASTQC)
+        A --> C(FASTP)
+    end
+    subgraph two
+        %% Genome Alignment
+        C --> D(bwa)
+        C --> E(bwamem2)
+        C --> F(DRAGMAP)
+    end
+    subgraph four
+        %% Post Processing
+        D & E & F --> G(SAMtools sort, index, stats)
+        G --> H(UMI-tools dedup) --> I(picard MarkDuplicates)
+    end
+    subgraph five
+        %% Final QC
+        I --> J(RSeQC, multiple modules)
+        I --> K(Preseq)
+        I --> L(bbmap)
+    end
+    subgraph six
+        %% Coverage Graph
+        I --> M(BEDTools genomecov)
+        I --> N(Deeptools bamcoverage)
+    end
+    subgraph seven
+        %% Transcript Identification
+        I --> O(Grouping of replicates to increase signal)
+        subgraph groseq
+            O --> P(GroHMM)
+            O --> Q(HOMER GroSeq)
+        end
+        O --> R(PINTS)
+        bed[filter BED file] --> S(BEDTools intersect)
+        P & Q & R --> S --> T[Transcripts and TSS]
+    end
+    subgraph eight
+        %% Quantification
+        I & T --> U(featureCounts)
+        I & genes(GTF) --> U(featureCounts)
+    end
+    %% B & G & J & K & L & P & Q & U --> Z(MultiQC)
