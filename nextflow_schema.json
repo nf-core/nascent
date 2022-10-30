@@ -137,13 +137,16 @@
                 "filter_bed": {
                     "type": "string",
                     "fa_icon": "fas fa-filter",
-                    "pattern": "^\\S+\\.bed(\\.gz)?$"
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Undesired regions, that transcripts should not overlap with",
+                    "help_text": "Promoter regions, or gene regions are a good example"
                 },
-                "no_overlap": {
-                    "type": "boolean",
-                    "default": true,
-                    "fa_icon": "far fa-chart-bar",
-                    "description": "Only report those entries in A that have no overlap in B"
+                "intersect_bed": {
+                    "type": "string",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Desired regions, that transcripts should overlap with",
+                    "help_text": "Histone Modifications(H3K4me1 and H3K27ac), or known TREs from the PINTS element matrix are examples"
                 }
             },
             "required": ["assay_type"],
