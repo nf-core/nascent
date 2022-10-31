@@ -107,7 +107,8 @@
                     },
                     "pints/caller": {
                         "branch": "master",
-                        "git_sha": "ad1e966b5123a2af6be786f35628c40f64771097"
+                        "git_sha": "ad1e966b5123a2af6be786f35628c40f64771097",
+                        "patch": "modules/nf-core/pints/caller/pints-caller.diff"
                     },
                     "preseq/ccurve": {
                         "branch": "master",
