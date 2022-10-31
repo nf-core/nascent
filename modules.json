@@ -107,7 +107,7 @@
                     },
                     "pints/caller": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "a8c6d338a76df3736215c93c27d9ccc7b88e9cf4"
                     },
                     "preseq/ccurve": {
                         "branch": "master",

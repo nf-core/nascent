@@ -9,6 +9,7 @@ include { CAT_CAT } from '../../modules/nf-core/cat/cat/main'
 include { BEDTOOLS_MERGE } from '../../modules/nf-core/bedtools/merge/main'
 include { BEDTOOLS_SORT } from '../../modules/nf-core/bedtools/sort/main'
 include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER } from '../../modules/nf-core/bedtools/intersect/main'
+include { BEDTOOLS_INTERSECT } from '../../modules/nf-core/bedtools/intersect/main'
 
 include { HOMER_GROSEQ } from '../nf-core/homer/groseq/main'
 
@@ -58,12 +59,14 @@ workflow TRANSCRIPT_INDENTIFICATION {
     if(params.filter_bed) {
         ch_filter_bed = Channel.from(params.filter_bed)
         BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), "bed" )
+        ch_identification_bed = BEDTOOLS_INTERSECT_FILTER.out.intersect
         ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
     }
-
-    // Use non-filtered bed files if we skip filtering
-    if(!params.filter_bed) {
-        ch_identification_bed = BEDTOOLS_INTERSECT_FILTER.out.intersect
+    if(params.intersect_bed) {
+        ch_intersect_bed = Channel.from(params.intersect_bed)
+        BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed), "bed" )
+        ch_identification_bed = BEDTOOLS_INTERSECT.out.intersect
+        ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
     }
 
     ch_identification_bed

@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
+
 ### Changed
 
 ### Fixed
+
+- Updated PINTS version from 1.1.6 to 1.1.8 ([Fixes an issue where PINTS fails if one of the predictions was empty](https://github.com/hyulab/PINTS/issues/12))
 
 ### Deprecated
 
