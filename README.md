@@ -46,6 +46,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 10. Quantification of Genes and Nascent Transcripts ([`featureCounts`](https://subread.sourceforge.net/featureCounts.html))
 11. Aggregate report describing results and QC from the whole pipeline ([`MultiQC`](http://multiqc.info/))
 
+<p align="center">
+    <img title="Nascent Workflow" src="docs/images/nascent_subway.png" width=60%>
+</p>
+
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.6`)
