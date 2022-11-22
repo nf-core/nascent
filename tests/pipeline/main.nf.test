@@ -21,7 +21,8 @@ nextflow_pipeline {
                 path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
                 // path("$outputDir/bwa/featurecounts/gene").list(),
-                path("$outputDir/bwa/featurecounts/predicted").list(),
+                // FIXME cd4 isn't deterministic
+                // path("$outputDir/bwa/featurecounts/predicted").list(),
                 // path("$outputDir/deeptools").list(),
                 // path("$outputDir/fastp/*.json").list(),
                 // FIXME gtf2bed isn't deterministic

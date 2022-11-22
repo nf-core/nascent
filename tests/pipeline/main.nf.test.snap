@@ -35,17 +35,6 @@
                 "jurkat_REP2_T1.plus.bedGraph:md5,569e8a25c9cf48d1ef953f3da77c48a1",
                 "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e"
             ],
-            [
-                "cd4-group_cd4-transcripts.featureCounts.txt:md5,8ca04e68865156f1fddebae8649e135f",
-                "cd4-group_cd4-transcripts.featureCounts.txt.summary:md5,990709587073dcea4bec6c318b2d4081",
-                "cd4-group_jurkat-transcripts.featureCounts.txt:md5,c51b23855a3844367749489bb67341ee",
-                "cd4-group_jurkat-transcripts.featureCounts.txt.summary:md5,3528e863ef9af5b6a3a1f5206fcca7f5",
-                "jurkat-group_cd4-transcripts.featureCounts.txt:md5,881272b7053c737a55698e7bcef16b85",
-                "jurkat-group_cd4-transcripts.featureCounts.txt.summary:md5,e03801a977101cd3d4893f3d3da055ec",
-                "jurkat-group_jurkat-transcripts.featureCounts.txt:md5,54507dca2e47de6d81def6fb09b5eb0f",
-                "jurkat-group_jurkat-transcripts.featureCounts.txt.summary:md5,24b00ae7ebc4000fd2a425126630119e",
-                "versions.yml:md5,bbcce99a5bfc13d8ff05cf8de9b8a81e"
-            ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
             [
@@ -102,6 +91,6 @@
                 "jurkat_REP2_T1.stats:md5,b54ad94f373efafae76141c103a5dd1c"
             ]
         ],
-        "timestamp": "2022-11-22T18:15:22+0000"
+        "timestamp": "2022-11-22T18:54:01+0000"
     }
 }
