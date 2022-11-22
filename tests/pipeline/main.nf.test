@@ -1,0 +1,36 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "main.nf"
+
+    test("Should run without failures with bwa (default)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                // aligner = "bwa"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.tasks().size() == 133
+            assert snapshot(
+                path("$outputDir/bbmap").list(),
+                path("$outputDir/bed2saf").list(),
+                path("$outputDir/bedtools").list(),
+                path("$outputDir/bwa/featurecounts").list(),
+                // path("$outputDir/deeptools").list(),
+                // path("$outputDir/fastp/*.json").list(),
+                path("$outputDir/gtf2bed").list(),
+                path("$outputDir/homer/cd4.bed"),
+                path("$outputDir/homer/jurkat.bed"),
+                path("$outputDir/preseq").list(),
+                // path("$outputDir/rseqc").list(),
+                path("$outputDir/samtools").list(),
+            ).match()
+        }
+
+    }
+
+}
