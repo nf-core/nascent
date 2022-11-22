@@ -36,27 +36,15 @@
                 "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e"
             ],
             [
-                [
-                    "cd4.featureCounts.txt:md5,1c253ef47c7625aea4d4d61c28fa1832",
-                    "cd4.featureCounts.txt.summary:md5,94fafe1c88532354e3ad58cf04dbf5cd",
-                    "jurkat.featureCounts.txt:md5,8f3ed17ac469fafd1c3e7f292d8ccad8",
-                    "jurkat.featureCounts.txt.summary:md5,6f2bb8f68c0cedc7e0be194a73254c48",
-                    "versions.yml:md5,b7940aefcd0cbf3c382c0ccb02932c0b"
-                ],
-                [
-                    "cd4-group_cd4-transcripts.featureCounts.txt:md5,5a4c021240a969457e3033392022e21f",
-                    "cd4-group_cd4-transcripts.featureCounts.txt.summary:md5,de0fc0a4093448aa9ebb663fcfc3f011",
-                    "cd4-group_jurkat-transcripts.featureCounts.txt:md5,ca51aada9a1b5cb5390acffac9bc6c5f",
-                    "cd4-group_jurkat-transcripts.featureCounts.txt.summary:md5,5e2c91a80bad2b3857bbc54023847564",
-                    "jurkat-group_cd4-transcripts.featureCounts.txt:md5,3be49bdb64c8a4cb94402248a5796c64",
-                    "jurkat-group_cd4-transcripts.featureCounts.txt.summary:md5,af44117d69488b12970240eeceaffeb9",
-                    "jurkat-group_jurkat-transcripts.featureCounts.txt:md5,b9fc46c2b6a8066a9ccf51f0a8bc9cdd",
-                    "jurkat-group_jurkat-transcripts.featureCounts.txt.summary:md5,e8cb9c947c88365be0692c977c685942",
-                    "versions.yml:md5,bbcce99a5bfc13d8ff05cf8de9b8a81e"
-                ]
-            ],
-            [
-                "genes.bed:md5,02c98d813af4d78a3483d87bad4d77ad"
+                "cd4-group_cd4-transcripts.featureCounts.txt:md5,8ca04e68865156f1fddebae8649e135f",
+                "cd4-group_cd4-transcripts.featureCounts.txt.summary:md5,990709587073dcea4bec6c318b2d4081",
+                "cd4-group_jurkat-transcripts.featureCounts.txt:md5,c51b23855a3844367749489bb67341ee",
+                "cd4-group_jurkat-transcripts.featureCounts.txt.summary:md5,3528e863ef9af5b6a3a1f5206fcca7f5",
+                "jurkat-group_cd4-transcripts.featureCounts.txt:md5,881272b7053c737a55698e7bcef16b85",
+                "jurkat-group_cd4-transcripts.featureCounts.txt.summary:md5,e03801a977101cd3d4893f3d3da055ec",
+                "jurkat-group_jurkat-transcripts.featureCounts.txt:md5,54507dca2e47de6d81def6fb09b5eb0f",
+                "jurkat-group_jurkat-transcripts.featureCounts.txt.summary:md5,24b00ae7ebc4000fd2a425126630119e",
+                "versions.yml:md5,bbcce99a5bfc13d8ff05cf8de9b8a81e"
             ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
@@ -114,6 +102,6 @@
                 "jurkat_REP2_T1.stats:md5,b54ad94f373efafae76141c103a5dd1c"
             ]
         ],
-        "timestamp": "2022-11-22T17:51:38+0000"
+        "timestamp": "2022-11-22T18:15:22+0000"
     }
 }

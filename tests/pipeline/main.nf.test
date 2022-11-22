@@ -19,10 +19,13 @@ nextflow_pipeline {
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
                 path("$outputDir/bedtools").list(),
-                path("$outputDir/bwa/featurecounts").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/bwa/featurecounts/gene").list(),
+                path("$outputDir/bwa/featurecounts/predicted").list(),
                 // path("$outputDir/deeptools").list(),
                 // path("$outputDir/fastp/*.json").list(),
-                path("$outputDir/gtf2bed").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/gtf2bed").list(),
                 path("$outputDir/homer/cd4.bed"),
                 path("$outputDir/homer/jurkat.bed"),
                 path("$outputDir/preseq").list(),
