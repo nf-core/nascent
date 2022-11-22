@@ -3,7 +3,7 @@ nextflow_pipeline {
     name "Test Workflow main.nf"
     script "main.nf"
 
-    test("Should run without failures with bwa (default)") {
+    test("Should run with bwa (default)") {
 
         when {
             params {
@@ -32,6 +32,75 @@ nextflow_pipeline {
                 path("$outputDir/preseq").list(),
                 // path("$outputDir/rseqc").list(),
                 path("$outputDir/samtools").list(),
+            ).match()
+        }
+
+    }
+
+    test("Should run with bwamem2") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwamem2"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.tasks().size() == 133
+            assert snapshot(
+                path("$outputDir/bbmap").list(),
+                path("$outputDir/bed2saf").list(),
+                path("$outputDir/bedtools").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/bwa/featurecounts/gene").list(),
+                // FIXME cd4 isn't deterministic
+                // path("$outputDir/bwa/featurecounts/predicted").list(),
+                // path("$outputDir/deeptools").list(),
+                // path("$outputDir/fastp/*.json").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/gtf2bed").list(),
+                path("$outputDir/homer/cd4.bed"),
+                path("$outputDir/homer/jurkat.bed"),
+                path("$outputDir/preseq").list(),
+                // path("$outputDir/rseqc").list(),
+                path("$outputDir/samtools").list(),
+            ).match()
+        }
+
+    }
+
+    test("Should run with dragmap") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "dragmap"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.tasks().size() == 133
+            assert snapshot(
+                path("$outputDir/bbmap").list(),
+                path("$outputDir/bed2saf").list(),
+                path("$outputDir/bedtools").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/bwa/featurecounts/gene").list(),
+                // FIXME cd4 isn't deterministic
+                // path("$outputDir/bwa/featurecounts/predicted").list(),
+                // path("$outputDir/deeptools").list(),
+                // path("$outputDir/fastp/*.json").list(),
+                // FIXME gtf2bed isn't deterministic
+                // path("$outputDir/gtf2bed").list(),
+                path("$outputDir/homer/cd4.bed"),
+                path("$outputDir/homer/jurkat.bed"),
+                path("$outputDir/preseq").list(),
+                // path("$outputDir/rseqc").list(),
+                // FIXME Not deterministic
+                // path("$outputDir/samtools").list(),
             ).match()
         }
 
