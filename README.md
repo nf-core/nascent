@@ -84,13 +84,13 @@ The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@Emiller88](http
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-[@apeltzer](https://github.com/apeltzer)
-[@ewels](https://github.com/ewels)
-[@drpatelh](https://github.com/drpatelh)
-[@pditommaso](https://github.com/pditommaso)
-[@FriederikeHanssen](https://github.com/FriederikeHanssen)
-[Tae Hoon Kim](https://github.com/taehoonkim-phd)
-[@easterwoods](https://github.com/easterwoods)
+- [@apeltzer](https://github.com/apeltzer)
+- [@ewels](https://github.com/ewels)
+- [@drpatelh](https://github.com/drpatelh)
+- [@pditommaso](https://github.com/pditommaso)
+- [@FriederikeHanssen](https://github.com/FriederikeHanssen)
+- [Tae Hoon Kim](https://github.com/taehoonkim-phd)
+- [@easterwoods](https://github.com/easterwoods)
 
 ## Contributions and Support
 
