@@ -19,26 +19,6 @@
             [
                 "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
             ],
-            [
-                "cd4_REP1_T1.minus.bedGraph:md5,2a1c34f9d9ef9ff1b9da7874b9e3aaad",
-                "cd4_REP1_T1.plus.bedGraph:md5,1509ec3a921e3109c5914e1bcef8cf33",
-                "cd4_REP2_T1.minus.bedGraph:md5,c530bc34fa3ec7ac49e88ff65f9c2f92",
-                "cd4_REP2_T1.plus.bedGraph:md5,a675141da2874ec08d91591e5ea8242b",
-                "cd4_REP3_T1.minus.bedGraph:md5,1c44c165f663d08c869a013b78f051b0",
-                "cd4_REP3_T1.plus.bedGraph:md5,a475098ed14da6f3242c4cfdf3abb713",
-                "cd4_REP4_T1.minus.bedGraph:md5,b7a3d3c822155dfd8052c67a330fd6d5",
-                "cd4_REP4_T1.plus.bedGraph:md5,5623367b681562a2567afc62a8da4151",
-                "cd4_filtered.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_intersect.bed:md5,aaf7c781cf12b6b8470ff0ec929e0ed6",
-                "cd4_merged.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_sorted.bed:md5,33b70eb2df331569385feaf981e0aa4c",
-                "jurkat_REP1_T1.minus.bedGraph:md5,8d5d9a41df6eb6c56b1bfd3f39dc1fc6",
-                "jurkat_REP1_T1.plus.bedGraph:md5,6ed63e5983edaa74fb3965676efdb674",
-                "jurkat_REP2_T1.minus.bedGraph:md5,cd83486cb6bb71e6b6e31a69c94d0d85",
-                "jurkat_REP2_T1.plus.bedGraph:md5,569e8a25c9cf48d1ef953f3da77c48a1",
-                "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e",
-                "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
-            ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
             [
@@ -95,7 +75,7 @@
                 "jurkat_REP2_T1.stats:md5,b54ad94f373efafae76141c103a5dd1c"
             ]
         ],
-        "timestamp": "2023-01-19T19:24:45+0000"
+        "timestamp": "2023-01-19T22:01:00+0000"
     },
     "Should run with bwamem2": {
         "content": [
@@ -116,26 +96,6 @@
             ],
             [
                 "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
-            ],
-            [
-                "cd4_REP1_T1.minus.bedGraph:md5,2a1c34f9d9ef9ff1b9da7874b9e3aaad",
-                "cd4_REP1_T1.plus.bedGraph:md5,1509ec3a921e3109c5914e1bcef8cf33",
-                "cd4_REP2_T1.minus.bedGraph:md5,c530bc34fa3ec7ac49e88ff65f9c2f92",
-                "cd4_REP2_T1.plus.bedGraph:md5,a675141da2874ec08d91591e5ea8242b",
-                "cd4_REP3_T1.minus.bedGraph:md5,1c44c165f663d08c869a013b78f051b0",
-                "cd4_REP3_T1.plus.bedGraph:md5,a475098ed14da6f3242c4cfdf3abb713",
-                "cd4_REP4_T1.minus.bedGraph:md5,b7a3d3c822155dfd8052c67a330fd6d5",
-                "cd4_REP4_T1.plus.bedGraph:md5,5623367b681562a2567afc62a8da4151",
-                "cd4_filtered.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_intersect.bed:md5,aaf7c781cf12b6b8470ff0ec929e0ed6",
-                "cd4_merged.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_sorted.bed:md5,501076f77b156bd8d6398ee03b0839c7",
-                "jurkat_REP1_T1.minus.bedGraph:md5,8d5d9a41df6eb6c56b1bfd3f39dc1fc6",
-                "jurkat_REP1_T1.plus.bedGraph:md5,6ed63e5983edaa74fb3965676efdb674",
-                "jurkat_REP2_T1.minus.bedGraph:md5,cd83486cb6bb71e6b6e31a69c94d0d85",
-                "jurkat_REP2_T1.plus.bedGraph:md5,569e8a25c9cf48d1ef953f3da77c48a1",
-                "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e",
-                "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
@@ -193,7 +153,7 @@
                 "jurkat_REP2_T1.stats:md5,b54ad94f373efafae76141c103a5dd1c"
             ]
         ],
-        "timestamp": "2023-01-19T19:24:45+0000"
+        "timestamp": "2023-01-19T22:01:00+0000"
     },
     "Should run with dragmap": {
         "content": [
@@ -214,26 +174,6 @@
             ],
             [
                 "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
-            ],
-            [
-                "cd4_REP1_T1.minus.bedGraph:md5,d4ddabe2599211e89c0eeb07544a2bf2",
-                "cd4_REP1_T1.plus.bedGraph:md5,2ebf9f9cf845e8403cceda70e254be03",
-                "cd4_REP2_T1.minus.bedGraph:md5,96876aaaca35003be86a25c78733c8f9",
-                "cd4_REP2_T1.plus.bedGraph:md5,a6f04b8484428786a3e089ea5509240b",
-                "cd4_REP3_T1.minus.bedGraph:md5,491ac2fd208fd8bf26fa6b7dceb5fd14",
-                "cd4_REP3_T1.plus.bedGraph:md5,c17274d1df2135ed5d9df39fecb65033",
-                "cd4_REP4_T1.minus.bedGraph:md5,b41294817e7d26905e03fe8137606018",
-                "cd4_REP4_T1.plus.bedGraph:md5,cbf6c84289965e87590fb647365504bc",
-                "cd4_filtered.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_intersect.bed:md5,aaf7c781cf12b6b8470ff0ec929e0ed6",
-                "cd4_merged.bed:md5,72751b419d26fc00d965902d8540b91a",
-                "cd4_sorted.bed:md5,501076f77b156bd8d6398ee03b0839c7",
-                "jurkat_REP1_T1.minus.bedGraph:md5,c57d91865736e23f13660f9d7ecb6e5d",
-                "jurkat_REP1_T1.plus.bedGraph:md5,ddabf19e2172df4b80b7ce434035403e",
-                "jurkat_REP2_T1.minus.bedGraph:md5,895fa3846fece5497517467ec2f86a6e",
-                "jurkat_REP2_T1.plus.bedGraph:md5,9045bee9e98b2b9c2ce96232246d412e",
-                "jurkat_filtered.bed:md5,1fed9c948e5b295cf26affe1e4c81556",
-                "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "cd4.bed:md5,e9380700e48c1e52f76a2bb3fa4f59d9",
             "jurkat.bed:md5,fe88d4dc3c100262d7aec484e15b1c73",
@@ -258,6 +198,6 @@
                 "jurkat_REP2_T1.lc_extrap.txt:md5,33bdd91e7df616988c1ec043818b346b"
             ]
         ],
-        "timestamp": "2023-01-19T19:24:45+0000"
+        "timestamp": "2023-01-19T22:01:00+0000"
     }
 }

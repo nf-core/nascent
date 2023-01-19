@@ -18,7 +18,8 @@ nextflow_pipeline {
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
-                path("$outputDir/bedtools").list(),
+                // BUG https://github.com/nf-core/nascent/issues/102
+                // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
                 // path("$outputDir/bwa/featurecounts/gene").list(),
                 // FIXME cd4 isn't deterministic
@@ -52,7 +53,8 @@ nextflow_pipeline {
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
-                path("$outputDir/bedtools").list(),
+                // BUG https://github.com/nf-core/nascent/issues/102
+                // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
                 // path("$outputDir/bwa/featurecounts/gene").list(),
                 // FIXME cd4 isn't deterministic
@@ -86,7 +88,8 @@ nextflow_pipeline {
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
-                path("$outputDir/bedtools").list(),
+                // BUG https://github.com/nf-core/nascent/issues/102
+                // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
                 // path("$outputDir/bwa/featurecounts/gene").list(),
                 // FIXME cd4 isn't deterministic
