@@ -14,8 +14,8 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            assert workflow.trace.tasks().size() == 133
             assert snapshot(
+                workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
                 path("$outputDir/bedtools").list(),
@@ -48,8 +48,8 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            assert workflow.trace.tasks().size() == 133
             assert snapshot(
+                workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
                 path("$outputDir/bedtools").list(),
@@ -82,8 +82,8 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            assert workflow.trace.tasks().size() == 133
             assert snapshot(
+                workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
                 path("$outputDir/bed2saf").list(),
                 path("$outputDir/bedtools").list(),
