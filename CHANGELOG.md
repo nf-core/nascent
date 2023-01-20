@@ -7,18 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
-
-### Changed
+- [[#94](https://github.com/nf-core/nascent/pull/94)] - Added a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
+- [[#101](https://github.com/nf-core/nascent/pull/101)] - Initialized nf-test
 
 ### Fixed
 
-- Updated PINTS version from 1.1.6 to 1.1.8 ([Fixes an issue where PINTS fails if one of the predictions was empty](https://github.com/hyulab/PINTS/issues/12))
-- Add HOMER channels to fix error about "Missing workflow output parameter: homer_peaks" when homer is skipped
-
-### Deprecated
-
-### Removed
+- [[841ae62](https://github.com/nf-core/nascent/commit/841ae62)] - Updated PINTS version from 1.1.6 to 1.1.8 ([Fixes an issue where PINTS fails if one of the predictions was empty](https://github.com/hyulab/PINTS/issues/12))
+- [[#97](https://github.com/nf-core/nascent/pull/97)] - Add HOMER channels to fix error about "Missing workflow output parameter: homer_peaks" when homer is skipped
+- Add missing DOIs
 
 ## v2.0.0 - 2022-10-24
 
