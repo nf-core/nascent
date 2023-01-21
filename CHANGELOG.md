@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#94](https://github.com/nf-core/nascent/pull/94)] - Added a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
 - [[#101](https://github.com/nf-core/nascent/pull/101)] - Initialized nf-test
 
+### Changed
+
+- [[#103](https://github.com/nf-core/nascent/pull/103)] - Updated Modules
+
 ### Fixed
 
 - [[841ae62](https://github.com/nf-core/nascent/commit/841ae62)] - Updated PINTS version from 1.1.6 to 1.1.8 ([Fixes an issue where PINTS fails if one of the predictions was empty](https://github.com/hyulab/PINTS/issues/12))
