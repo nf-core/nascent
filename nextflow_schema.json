@@ -96,6 +96,7 @@
                 "assay_type": {
                     "type": "string",
                     "fa_icon": "fas fa-vial",
+                    "description": "What type of nascent or TSS assay the sample is.",
                     "enum": [
                         "CoPRO",
                         "GROcap",
@@ -117,12 +118,13 @@
                 },
                 "skip_tuning": {
                     "type": "boolean",
-                    "description": "Skip grohmm tuning step as it can take a long time.",
+                    "description": "Skip groHMM tuning step as it can take a long time.",
                     "fa_icon": "fas fa-wrench",
                     "hidden": true
                 },
                 "skip_grohmm": {
                     "type": "boolean",
+                    "description": "Skip groHMM all together",
                     "fa_icon": "fas fa-eye-slash"
                 },
                 "tuning_file": {
