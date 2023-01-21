@@ -52,7 +52,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     // reduce the overall noise.
     CAT_CAT ( PINTS_CALLER.out.bidirectional_TREs )
     ch_versions = ch_versions.mix(CAT_CAT.out.versions.first())
-    BEDTOOLS_SORT ( CAT_CAT.out.file_out, "bed" )
+    BEDTOOLS_SORT ( CAT_CAT.out.file_out, [] )
     ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions.first())
     BEDTOOLS_MERGE ( BEDTOOLS_SORT.out.sorted )
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
