@@ -128,7 +128,7 @@ workflow NASCENT {
 
     ch_reads = Channel.empty()
     if(!params.skip_trimming) {
-        FASTP ( INPUT_CHECK.out.reads, [], [] )
+        FASTP ( INPUT_CHECK.out.reads, [], false, false )
         ch_reads = FASTP.out.reads
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
