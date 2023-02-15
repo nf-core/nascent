@@ -97,7 +97,7 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = file(params.bwa_index)
             }
         } else {
-            ch_bwa_index = BWA_INDEX ( ch_fasta ).index
+            ch_bwa_index = BWA_INDEX ( [ [:], ch_fasta ] ).index
             ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
         }
     } else if ('bwamem2' in prepare_tool_indices) {
@@ -121,7 +121,7 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = file(params.dragmap)
             }
         } else {
-            ch_dragmap = DRAGMAP_HASHTABLE( ch_fasta ).hashmap
+            ch_dragmap = DRAGMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
             ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
         }
     }

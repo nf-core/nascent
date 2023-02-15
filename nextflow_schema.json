@@ -96,6 +96,7 @@
                 "assay_type": {
                     "type": "string",
                     "fa_icon": "fas fa-vial",
+                    "description": "What type of nascent or TSS assay the sample is.",
                     "enum": [
                         "CoPRO",
                         "GROcap",
@@ -117,12 +118,13 @@
                 },
                 "skip_tuning": {
                     "type": "boolean",
-                    "description": "Skip grohmm tuning step as it can take a long time.",
+                    "description": "Skip groHMM tuning step as it can take a long time.",
                     "fa_icon": "fas fa-wrench",
                     "hidden": true
                 },
                 "skip_grohmm": {
                     "type": "boolean",
+                    "description": "Skip groHMM all together",
                     "fa_icon": "fas fa-eye-slash"
                 },
                 "tuning_file": {
@@ -137,13 +139,16 @@
                 "filter_bed": {
                     "type": "string",
                     "fa_icon": "fas fa-filter",
-                    "pattern": "^\\S+\\.bed(\\.gz)?$"
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Undesired regions, that transcripts should not overlap with",
+                    "help_text": "Promoter regions, or gene regions are a good example"
                 },
-                "no_overlap": {
-                    "type": "boolean",
-                    "default": true,
-                    "fa_icon": "far fa-chart-bar",
-                    "description": "Only report those entries in A that have no overlap in B"
+                "intersect_bed": {
+                    "type": "string",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Desired regions, that transcripts should overlap with",
+                    "help_text": "Histone Modifications(H3K4me1 and H3K27ac), or known TREs from the PINTS element matrix are examples"
                 }
             },
             "required": ["assay_type"],
@@ -335,6 +340,12 @@
                     "fa_icon": "fas fa-question-circle",
                     "hidden": true
                 },
+                "version": {
+                    "type": "boolean",
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
                 "publish_dir_mode": {
                     "type": "string",
                     "default": "copy",
@@ -376,7 +387,7 @@
                     "type": "string",
                     "description": "Incoming hook URL for messaging service",
                     "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, only MS Teams is supported.",
+                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
                 "multiqc_config": {
@@ -416,12 +427,6 @@
                     "description": "Show all params when using `--help`",
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                },
-                "enable_conda": {
-                    "type": "boolean",
-                    "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-bacon"
                 }
             }
         }
