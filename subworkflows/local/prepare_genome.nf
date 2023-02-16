@@ -115,10 +115,10 @@ workflow PREPARE_GENOME {
     } else if ('dragmap' in prepare_tool_indices) {
         if (params.dragmap) {
             if (params.dragmap.endsWith('.tar.gz')) {
-                ch_bwa_index = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
+                ch_dragmap = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
                 ch_versions = ch_versions.mix(UNTAR_DRAGMAP_INDEX.out.versions)
             } else {
-                ch_bwa_index = file(params.dragmap)
+                ch_dragmap = file(params.dragmap)
             }
         } else {
             ch_dragmap = DRAGMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
