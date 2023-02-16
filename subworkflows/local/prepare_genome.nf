@@ -88,13 +88,15 @@ workflow PREPARE_GENOME {
     //
     ch_bwa_index = Channel.empty()
     ch_dragmap = Channel.empty()
+    // TODO Turn this into a switch
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
             if (params.bwa_index.endsWith('.tar.gz')) {
                 ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
                 ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
-                ch_bwa_index = file(params.bwa_index)
+                // TODO Give the meta from basename or genome?
+                ch_bwa_index = [ [meta: "Genome"], file(params.bwa_index) ]
             }
         } else {
             ch_bwa_index = BWA_INDEX ( [ [:], ch_fasta ] ).index
@@ -106,7 +108,8 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], params.bwamem2_index ] ).untar
                 ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
-                ch_bwa_index = file(params.bwamem2_index)
+                // TODO Give the meta from basename or genome?
+                ch_bwa_index = [ [meta: "Genome"], file(params.bwamem2_index) ]
             }
         } else {
             ch_bwa_index = BWAMEM2_INDEX ( [ [:], ch_fasta ] ).index
@@ -118,7 +121,8 @@ workflow PREPARE_GENOME {
                 ch_dragmap = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
                 ch_versions = ch_versions.mix(UNTAR_DRAGMAP_INDEX.out.versions)
             } else {
-                ch_dragmap = file(params.dragmap)
+                // TODO Give the meta from basename or genome?
+                ch_dragmap = [ [meta: "Genome"], file(params.dragmap) ]
             }
         } else {
             ch_dragmap = DRAGMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
