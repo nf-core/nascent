@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [dev]
 
+### Fixed
+
+- [[#109](https://github.com/nf-core/nascent/pull/109)] - Fixed bug where using AWS igenomes or passing a pre-made index fails because of an update to the module expects them to have a metamap. Generation was still working.
+
 ## v2.1.0 - 2023-02-15
 
 ### Added
