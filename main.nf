@@ -4,7 +4,6 @@
     nf-core/nascent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/nascent
-
     Website: https://nf-co.re/nascent
     Slack  : https://nfcore.slack.com/channels/nascent
 ----------------------------------------------------------------------------------------
