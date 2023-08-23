@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -38,7 +38,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { BED2SAF } from '../modules/local/bed2saf'
 
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 include { ALIGN_BWA } from '../subworkflows/local/align_bwa/main'
 include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
@@ -91,31 +90,43 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
 
     //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
+    // Create input channel from input file provided through params.input
     //
-    INPUT_CHECK (
-        file(params.input)
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-    // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
-    // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
-    // ! There is currently no tooling to help you write a sample sheet schema
+    Channel
+        .fromSamplesheet("input")
+        .map {
+            meta, fastq_1, fastq_2 ->
+            if (!fastq_2) {
+                return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+            } else {
+                return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+            }
+        }
+        .groupTuple()
+        .map {
+            WorkflowNascent.validateInput(it)
+        }
+        .map {
+            meta, fastqs ->
+            return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_fastq }
 
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        INPUT_CHECK.out.reads
+        ch_fastq
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     ch_reads = Channel.empty()
     if(!params.skip_trimming) {
-        FASTP ( INPUT_CHECK.out.reads, [], false, false )
+        FASTP ( ch_fastq, [], false, false )
         ch_reads = FASTP.out.reads
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
-        ch_reads = INPUT_CHECK.out.reads
+        ch_reads = ch_fastq
     }
 
     //
@@ -202,7 +213,9 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        fmeta.id = fmeta.id.split('_')[0..-3].join('_')
+        println fmeta
+        // Split and take the first element
+        fmeta.id = fmeta.id.split('_')[0]
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
