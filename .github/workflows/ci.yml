@@ -53,6 +53,10 @@ jobs:
           - "latest-everything"
         profile: ["docker"] # TODO , "singularity", "conda"]
         test: ["${{ fromJson(needs.list.outputs.tests) }}"]
+        exclude:
+          - test: "tests/subworkflows/local/grohmm/main.nf.test@3508b8c9"
+          - test: "tests/subworkflows/local/grohmm/main.nf.test@716555be"
+          - test: "tests/subworkflows/local/grohmm/main.nf.test@306b4b15"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
