@@ -100,9 +100,9 @@ jobs:
           nf-test test \
             --profile=${{ matrix.profile }} \
             ${{ matrix.test }} \
-            --tap=test.tap
-
-      - uses: pcolby/tap-summary@v1
+            --junitxml=${{ matrix.test }}-${{ matrix.profile }}.xml
+      - uses: actions/upload-artifact@v3 # upload test results
+        if: success() || failure() # run this step even if previous step failed
         with:
-          path: >-
-            test.tap
+          name: test-results
+          path: ${{ matrix.test }}-${{ matrix.profile }}.xml
