@@ -16,10 +16,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  list:
+    name: List Tests
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/nascent') }}"
+    outputs:
+      # Expose matched filters as job 'modules' output variable
+      tests: ${{ steps.list.outputs.tests }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Nextflow
+        uses: nf-core/setup-nextflow@v1
+
+      - name: Install nf-test
+        if: steps.cache-software.outputs.cache-hit != 'true'
+        run: |
+          wget -qO- https://code.askimed.com/install/nf-test | bash
+          sudo mv nf-test /usr/local/bin/
+
+      - name: List nf-test
+        id: list
+        run: |
+          echo "tests=$(nf-test list --silent --format=json)" >> "$GITHUB_OUTPUT"
+
   test:
     name: nf-test ${{ matrix.profile }}-${{ matrix.NXF_VER }}
     # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/nascent') }}"
+    if: needs.list.outputs.tests != '[]'
+    needs: [list]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,6 +52,7 @@ jobs:
           - "23.04.0"
           - "latest-everything"
         profile: ["docker"] # TODO , "singularity", "conda"]
+        test: ["${{ fromJson(needs.list.outputs.tests) }}"]
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
@@ -73,7 +99,7 @@ jobs:
         run: |
           nf-test test \
             --profile=${{ matrix.profile }} \
-            tests/pipeline/*.nf.test \
+            ${{ matrix.test }} \
             --tap=test.tap
 
       - uses: pcolby/tap-summary@v1
