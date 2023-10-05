@@ -98,7 +98,7 @@ jobs:
       - name: Run nf-test
         run: |
           nf-test test \
-            --profile=${{ matrix.profile }} \
+            --profile="test,${{ matrix.profile }}" \
             ${{ matrix.test }} \
             --junitxml=${{ matrix.test }}-${{ matrix.profile }}.xml
       - uses: actions/upload-artifact@v3 # upload test results
