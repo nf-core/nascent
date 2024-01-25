@@ -41,7 +41,7 @@ include { BED2SAF } from '../modules/local/bed2saf'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 include { ALIGN_BWA } from '../subworkflows/local/align_bwa/main'
 include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
-include { ALIGN_DRAGMAP } from '../subworkflows/local/align_dragmap/main'
+include { ALIGN_NARFMAP } from '../subworkflows/local/align_narfmap/main'
 include { QUALITY_CONTROL } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS } from '../subworkflows/local/coverage_graphs.nf'
 include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
@@ -164,18 +164,18 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
-    } else if (!params.skip_alignment && params.aligner == 'dragmap') {
-        ALIGN_DRAGMAP(
+    } else if (!params.skip_alignment && params.aligner == 'narfmap') {
+        ALIGN_NARFMAP(
             ch_reads,
-            PREPARE_GENOME.out.dragmap
+            PREPARE_GENOME.out.narfmap
         )
-        ch_genome_bam = ALIGN_DRAGMAP.out.bam
-        ch_genome_bai = ALIGN_DRAGMAP.out.bai
-        ch_samtools_stats = ALIGN_DRAGMAP.out.stats
-        ch_samtools_flagstat = ALIGN_DRAGMAP.out.flagstat
-        ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
+        ch_genome_bam = ALIGN_NARFMAP.out.bam
+        ch_genome_bai = ALIGN_NARFMAP.out.bai
+        ch_samtools_stats = ALIGN_NARFMAP.out.stats
+        ch_samtools_flagstat = ALIGN_NARFMAP.out.flagstat
+        ch_samtools_idxstats = ALIGN_NARFMAP.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
+        ch_versions = ch_versions.mix(ALIGN_NARFMAP.out.versions)
     }
 
     if(params.with_umi) {

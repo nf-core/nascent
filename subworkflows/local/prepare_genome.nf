@@ -11,12 +11,12 @@ include {
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED } from '../../modules/nf-core/gunzip/main'
 include { UNTAR as UNTAR_BWA_INDEX
-          UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
+          UNTAR as UNTAR_NARFMAP } from '../../modules/nf-core/untar/main'
 include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
 include { GFFREAD } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX } from '../../modules/nf-core/bwamem2/index/main'
-include { DRAGMAP_HASHTABLE } from '../../modules/nf-core/dragmap/hashtable/main'
+include { NARFMAP_HASHTABLE } from '../../modules/nf-core/narfmap/hashtable/main'
 include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
 
 workflow PREPARE_GENOME {
@@ -87,7 +87,7 @@ workflow PREPARE_GENOME {
     // Uncompress BWA index or generate from scratch if required
     //
     ch_bwa_index = Channel.empty()
-    ch_dragmap = Channel.empty()
+    ch_narfmap = Channel.empty()
     // TODO Turn this into a switch
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
@@ -115,18 +115,18 @@ workflow PREPARE_GENOME {
             ch_bwa_index = BWAMEM2_INDEX ( [ [:], ch_fasta ] ).index
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
-    } else if ('dragmap' in prepare_tool_indices) {
-        if (params.dragmap) {
-            if (params.dragmap.endsWith('.tar.gz')) {
-                ch_dragmap = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
-                ch_versions = ch_versions.mix(UNTAR_DRAGMAP_INDEX.out.versions)
+    } else if ('narfmap' in prepare_tool_indices) {
+        if (params.narfmap) {
+            if (params.narfmap.endsWith('.tar.gz')) {
+                ch_narfmap = UNTAR_NARFMAP_INDEX ( params.narfmap ).untar
+                ch_versions = ch_versions.mix(UNTAR_NARFMAP_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
-                ch_dragmap = [ [meta: "Genome"], file(params.dragmap) ]
+                ch_narfmap = [ [meta: "Genome"], file(params.narfmap) ]
             }
         } else {
-            ch_dragmap = DRAGMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
-            ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
+            ch_narfmap = NARFMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
+            ch_versions = ch_versions.mix(NARFMAP_HASHTABLE.out.versions)
         }
     }
 
@@ -137,7 +137,7 @@ workflow PREPARE_GENOME {
     gene_bed = ch_gene_bed
     chrom_sizes = ch_chrom_sizes
     bwa_index = ch_bwa_index
-    dragmap = ch_dragmap
+    narfmap = ch_narfmap
 
     versions = ch_versions.ifEmpty(null)
 }

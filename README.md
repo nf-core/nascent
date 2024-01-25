@@ -29,7 +29,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Alignment
    1. [`bwa`](https://bio-bwa.sourceforge.net/)
    2. [`bwamem2`](https://github.com/bwa-mem2/bwa-mem2)
-   3. [`DRAGMAP`](https://github.com/Illumina/DRAGMAP)
+   3. [`NARFMAP`](https://github.com/edmundmiller/NARFMAP)
 4. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))
 5. UMI-based deduplication ([`UMI-tools`](https://github.com/CGATOxford/UMI-tools))
 6. Duplicate read marking ([`picard MarkDuplicates`](https://broadinstitute.github.io/picard/))

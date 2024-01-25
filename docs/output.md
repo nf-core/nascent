@@ -16,7 +16,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Alignment](#alignment)
   - [bwa](#bwa) - Mapping low-divergent sequences against a large reference genome
   - [bwa-mem2](#bwa-mem2) - The next version of bwa-mem
-  - [DRAGMAP](#dragmap) - Open-source software implementation of the DRAGEN mapper
+  - [NARFMAP](#narfmap) - Fork of the Open-source software implementation of the DRAGEN mapper
 - [Alignment post-processing](#alignment-post-processing)
   - [SAMtools](#samtools) - Sort and index alignments
   - [UMI-tools dedup](#umi-tools-dedup) - UMI-based deduplication
@@ -105,7 +105,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 
 [BWA-mem2](https://github.com/bwa-mem2/bwa-mem2) is a software package for mapping low-divergent sequences against a large reference genome.The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
-### DRAGMAP
+### NARFMAP
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -353,7 +353,7 @@ They've also created some bed files that might be useful for analysis.
 - `genome/index/`
   - `bwa/`: Directory containing bwa indices.
   - `bwa-mem2/`: Directory containing bwa-mem2 indices.
-  - `dragmap/`: Directory containing DRAGMAP indices.
+  - `dragmap/`: Directory containing NARFMAP indices.
 
 </details>
 

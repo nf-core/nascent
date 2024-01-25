@@ -73,12 +73,12 @@ nextflow_pipeline {
 
     }
 
-    test("Should run with dragmap") {
+    test("Should run with NARFMAP") {
 
         when {
             params {
                 outdir = "$outputDir"
-                aligner = "dragmap"
+                aligner = "narfmap"
             }
         }
 

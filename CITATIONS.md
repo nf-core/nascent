@@ -28,7 +28,7 @@
 
   > Ramírez, Fidel, Devon P. Ryan, Björn Grüning, Vivek Bhardwaj, Fabian Kilpert, Andreas S. Richter, Steffen Heyne, Friederike Dündar, and Thomas Manke. deepTools2: A next Generation Web Server for Deep-Sequencing Data Analysis. Nucleic Acids Research (2016). doi:10.1093/nar/gkw257.
 
-- [DragMap](https://github.com/Illumina/DRAGMAP)
+- [NARFMMAP](https://github.com/edmundmiller/NARFMAP)
 
 - [FastP](https://academic.oup.com/bioinformatics/article/34/17/i884/5093234)
 
