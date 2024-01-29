@@ -39,7 +39,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 include { BED2SAF } from '../modules/local/bed2saf'
 
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
-include { ALIGN_BWA } from '../subworkflows/local/align_bwa/main'
 include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
 include { ALIGN_DRAGMAP } from '../subworkflows/local/align_dragmap/main'
 include { QUALITY_CONTROL } from '../subworkflows/local/quality_control.nf'
@@ -65,6 +64,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
+include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -88,6 +88,7 @@ workflow NASCENT {
         prepareToolIndices
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
+    ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
 
     //
     // Create input channel from input file provided through params.input
@@ -141,17 +142,19 @@ workflow NASCENT {
     ch_aligner_pca_multiqc = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
-        ALIGN_BWA(
+        FASTQ_ALIGN_BWA (
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
+            false,
+            ch_fasta,
         )
-        ch_genome_bam = ALIGN_BWA.out.bam
-        ch_genome_bai = ALIGN_BWA.out.bai
-        ch_samtools_stats = ALIGN_BWA.out.stats
-        ch_samtools_flagstat = ALIGN_BWA.out.flagstat
-        ch_samtools_idxstats = ALIGN_BWA.out.idxstats
+        ch_genome_bam = FASTQ_ALIGN_BWA.out.bam
+        ch_genome_bai = FASTQ_ALIGN_BWA.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_BWA.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_BWA.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_BWA.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2(
             ch_reads,
