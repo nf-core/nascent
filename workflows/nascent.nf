@@ -156,9 +156,11 @@ workflow NASCENT {
 
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2(
+        ALIGN_BWAMEM2 (
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
+            false,
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_BWAMEM2.out.bam
         ch_genome_bai = ALIGN_BWAMEM2.out.bai
@@ -168,9 +170,11 @@ workflow NASCENT {
 
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
-        ALIGN_DRAGMAP(
+        ALIGN_DRAGMAP (
             ch_reads,
-            PREPARE_GENOME.out.dragmap
+            PREPARE_GENOME.out.dragmap,
+            false,
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_DRAGMAP.out.bam
         ch_genome_bai = ALIGN_DRAGMAP.out.bai
