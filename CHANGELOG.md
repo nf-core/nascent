@@ -7,19 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [9712163](https://github.com/nf-core/nascent/commit/97121638eb77e175b912ff45a669426e532c5d7f) - Updated pipeline template to [nf-core/tools 2.10](https://github.com/nf-core/tools/releases/tag/2.10)
+- [ec24cfb](https://github.com/nf-core/nascent/commit/ec24cfb2646904bcc78379a071b50b53a855b9a9) - Update pipeline template to [nf-core/tools 2.11.1](https://github.com/nf-core/tools/releases/tag/2.11.1)
+- [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
+- [9712163](https://github.com/nf-core/nascent/commit/97121638eb77e175b912ff45a669426e532c5d7f) - Update pipeline template to [nf-core/tools 2.10](https://github.com/nf-core/tools/releases/tag/2.10)
 
 ## v2.1.1 - 2023-02-17
 
 ### Fixed
 
-- [[#109](https://github.com/nf-core/nascent/pull/109)] - Fixed bug where using AWS igenomes or passing a pre-made index fails because of an update to the module expects them to have a metamap. Generation was still working.
+- [[#109](https://github.com/nf-core/nascent/pull/109)] - Using AWS igenomes or passing a pre-made index fails because of an update to the module expects them to have a metamap. Generation was still working.
 
 ## v2.1.0 - 2023-02-15
 
 ### Added
 
-- [[#94](https://github.com/nf-core/nascent/pull/94)] - Added a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
+- [[#94](https://github.com/nf-core/nascent/pull/94)] - Add a second BEDTools intersect step to allow filtering and overlapping in the same workflow.
 - [[#101](https://github.com/nf-core/nascent/pull/101)] - Initialized nf-test
 
 ### Changed
@@ -37,8 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - DSL2 conversion
-- [[#28](https://github.com/nf-core/nascent/issues/28)] - Added DRAGMAP alignment
-- [[#64](https://github.com/nf-core/nascent/pull/64)] - Added CHM13 igenomes config
+- [[#28](https://github.com/nf-core/nascent/issues/28)] - Add DRAGMAP alignment
+- [[#64](https://github.com/nf-core/nascent/pull/64)] - Add CHM13 igenomes config
 - [[#39](https://github.com/nf-core/nascent/issues/39)] - Add PINTS for TSS identification
 - [[#71](https://github.com/nf-core/nascent/issues/71)] - Add FASTP for adapter trimming
 - [[#77](https://github.com/nf-core/nascent/issues/77)] - Add dedup subworkflow
