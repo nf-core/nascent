@@ -30,6 +30,11 @@
                         "git_sha": "f1f473b21811b958d1317c4a97c56e16d3ee40f9",
                         "installed_by": ["modules"]
                     },
+                    "bowtie2/align": {
+                        "branch": "master",
+                        "git_sha": "3c77ca9aac783e76c3614a06db3bfe4fef619bde",
+                        "installed_by": ["fastq_align_bowtie2", "modules"]
+                    },
                     "bwa/index": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -213,12 +218,17 @@
                     "bam_sort_stats_samtools": {
                         "branch": "master",
                         "git_sha": "0c38be7e652a0b2f3a37681ee4c0dbdf85677647",
-                        "installed_by": ["fastq_align_bwa", "subworkflows"]
+                        "installed_by": ["fastq_align_bowtie2", "fastq_align_bwa", "subworkflows"]
                     },
                     "bam_stats_samtools": {
                         "branch": "master",
                         "git_sha": "0c38be7e652a0b2f3a37681ee4c0dbdf85677647",
                         "installed_by": ["bam_dedup_stats_samtools_umitools", "bam_sort_stats_samtools", "subworkflows"]
+                    },
+                    "fastq_align_bowtie2": {
+                        "branch": "master",
+                        "git_sha": "cfd937a668919d948f6fcbf4218e79de50c2f36f",
+                        "installed_by": ["subworkflows"]
                     },
                     "fastq_align_bwa": {
                         "branch": "master",
