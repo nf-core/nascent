@@ -53,7 +53,7 @@
                     "type": "string",
                     "default": "bwa",
                     "fa_icon": "fas fa-puzzle-piece",
-                    "enum": ["bwa", "bwamem2", "dragmap"],
+                    "enum": ["bwa", "bwamem2", "dragmap", "bowtie2"],
                     "description": "Specify aligner to be used to map reads to reference genome."
                 },
                 "skip_alignment": {
@@ -221,6 +221,13 @@
                     "fa_icon": "fas fa-copy",
                     "description": "Path to dragmap indices.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\nIf you wish to recompute indices available on igenomes, set `--dragmap false`.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference, if `--aligner dragmap` is specified. Combine with `--save_reference` to save for future runs.",
+                    "hidden": true
+                },
+                "bowtie2_index": {
+                    "type": "string",
+                    "fa_icon": "fas fa-copy",
+                    "description": "Path to bowtie2 indices.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\nIf you wish to recompute indices available on igenomes, set `--dragmap false`.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference, if `--aligner bowtie2` is specified. Combine with `--save_reference` to save for future runs.",
                     "hidden": true
                 },
                 "save_reference": {

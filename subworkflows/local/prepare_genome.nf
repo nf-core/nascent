@@ -17,6 +17,7 @@ include { GFFREAD } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX } from '../../modules/nf-core/bwamem2/index/main'
 include { DRAGMAP_HASHTABLE } from '../../modules/nf-core/dragmap/hashtable/main'
+include { BOWTIE2_BUILD } from '../../modules/nf-core/bowtie2/build/main'
 include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
 
 workflow PREPARE_GENOME {
@@ -91,6 +92,7 @@ workflow PREPARE_GENOME {
     //
     ch_bwa_index = Channel.empty()
     ch_dragmap = Channel.empty()
+    ch_bowtie2_index = Channel.empty()
     // TODO Turn this into a switch
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
@@ -131,6 +133,19 @@ workflow PREPARE_GENOME {
             ch_dragmap = DRAGMAP_HASHTABLE( ch_fasta.map { [ [:], it ] } ).hashmap
             ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
         }
+    } else if ('bowtie2' in prepare_tool_indices) {
+        if (params.bowtie2_index) {
+            if (params.bowtie2_index.endsWith('.tar.gz')) {
+                ch_bowtie2_index = UNTAR_BOWTIE2_INDEX ( params.bowtie2_index ).untar
+                ch_versions = ch_versions.mix(UNTAR_BOWTIE2_INDEX.out.versions)
+            } else {
+                // TODO Give the meta from basename or genome?
+                ch_bowtie2_index = [ [meta: "Genome"], file(params.bowtie2_index) ]
+            }
+        } else {
+            ch_bowtie2_index = BOWTIE2_BUILD ( ch_fasta.map { [ [:], it ] } ).index
+            ch_versions = ch_versions.mix(BOWTIE2_BUILD.out.versions)
+        }
     }
 
     emit:
@@ -141,6 +156,7 @@ workflow PREPARE_GENOME {
     chrom_sizes = ch_chrom_sizes
     bwa_index = ch_bwa_index
     dragmap = ch_dragmap
+    bowtie2_index = ch_bowtie2_index
 
     versions = ch_versions.ifEmpty(null)
 }

@@ -65,6 +65,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
 include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
+include { FASTQ_ALIGN_BOWTIE2 } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -186,6 +187,22 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
+    } else if (!params.skip_alignment && params.aligner == 'bowtie2') {
+        FASTQ_ALIGN_BOWTIE2 (
+            ch_reads,
+            PREPARE_GENOME.out.bowtie2_index,
+            false,
+            false,
+            ch_fasta,
+        )
+        ch_genome_bam = FASTQ_ALIGN_BOWTIE2.out.bam
+        ch_genome_bai = FASTQ_ALIGN_BOWTIE2.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_BOWTIE2.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_BOWTIE2.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_BOWTIE2.out.idxstats
+
+        // TODO Add to MultiQC Report
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     }
 
     if(params.with_umi) {
