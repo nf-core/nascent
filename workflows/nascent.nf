@@ -240,7 +240,6 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        println fmeta
         // Split and take the first element
         fmeta.id = fmeta.id.split('_')[0]
         [ fmeta, bam ] }
