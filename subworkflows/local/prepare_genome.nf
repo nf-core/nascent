@@ -10,8 +10,9 @@ include {
     GUNZIP as GUNZIP_GTF
     GUNZIP as GUNZIP_GFF
     GUNZIP as GUNZIP_GENE_BED } from '../../modules/nf-core/gunzip/main'
-include { UNTAR as UNTAR_BWA_INDEX
-          UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
+include {
+    UNTAR as UNTAR_BWA_INDEX
+    UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
 include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
 include { GFFREAD } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
