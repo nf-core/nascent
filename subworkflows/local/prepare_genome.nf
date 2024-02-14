@@ -13,7 +13,6 @@ include {
 include {
     UNTAR as UNTAR_BWA_INDEX
     UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
 include { GFFREAD } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX } from '../../modules/nf-core/bwamem2/index/main'
@@ -37,10 +36,6 @@ workflow PREPARE_GENOME {
     } else {
         ch_fasta = file(params.fasta)
     }
-
-    // Create Fai file
-    ch_fai = SAMTOOLS_FAIDX( [ [:], ch_fasta ] ).fai.map { it[1] }
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     //
     // Uncompress GTF annotation file or create from GFF3 if required
@@ -81,8 +76,10 @@ workflow PREPARE_GENOME {
     //
     // Create chromosome sizes file
     //
-    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( [ [:], ch_fasta ] ).sizes
-    ch_versions = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
+    CUSTOM_GETCHROMSIZES ( ch_fasta.map { [ [:], it ] } )
+    ch_fai         = CUSTOM_GETCHROMSIZES.out.fai.map { it[1] }
+    ch_chrom_sizes = CUSTOM_GETCHROMSIZES.out.sizes.map { it[1] }
+    ch_versions    = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
 
     //
     // Uncompress BWA index or generate from scratch if required
