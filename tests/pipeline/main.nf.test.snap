@@ -47,35 +47,39 @@
                 "cd4_REP1.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
                 "cd4_REP1.sorted.bam:md5,22e9e4ede572d35363dc3ec23eb9c79b",
                 "cd4_REP1.sorted.bam.bai:md5,c5e37e318050b43fb6692cd86491d4b0",
-                "cd4_REP1.stats:md5,c79d90093754dc7ce517906321d2970a",
+                "cd4_REP1.stats:md5,f4aa5b8d3fea2797724bf2fa12961036",
                 "cd4_REP2.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
                 "cd4_REP2.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
                 "cd4_REP2.sorted.bam:md5,fb718ea76a1e22bda674e23a92662531",
                 "cd4_REP2.sorted.bam.bai:md5,7f9d67f8572c50bddc57f8296b811fd8",
-                "cd4_REP2.stats:md5,2e408207632150b3c0a81da516106bd0",
+                "cd4_REP2.stats:md5,9952636336505197c44c9ce1f7314096",
                 "cd4_REP3.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
                 "cd4_REP3.idxstats:md5,42de227ff397013cf288759871b0e938",
                 "cd4_REP3.sorted.bam:md5,6043c68b66e294d4be039bd6c8390ed5",
                 "cd4_REP3.sorted.bam.bai:md5,bb66de0f0efc0231d8252754cf8dc5c5",
-                "cd4_REP3.stats:md5,df54484f9f9d3f206e7b6d38ef796323",
+                "cd4_REP3.stats:md5,4f63629b6850326e1dbf449732bc7bf3",
                 "cd4_REP4.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
                 "cd4_REP4.idxstats:md5,959dc185ae59de4cebe374026711a55e",
                 "cd4_REP4.sorted.bam:md5,d1d055ab384159184f6abf2b23cf8c9e",
                 "cd4_REP4.sorted.bam.bai:md5,c70457bfeb054ab60e673aee4a247331",
-                "cd4_REP4.stats:md5,8291b3978fcab50f3cb3f24ae7e4831f",
+                "cd4_REP4.stats:md5,87c41cda4168ed794b640bfbd0e99d45",
                 "jurkat_REP1.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
                 "jurkat_REP1.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
                 "jurkat_REP1.sorted.bam:md5,558e3948f1d263113d86f13dadead6a4",
                 "jurkat_REP1.sorted.bam.bai:md5,62956925d0600af04cd40dc1c57fd110",
-                "jurkat_REP1.stats:md5,3dbf9a360d4c5fb1c924e1fc96270b03",
+                "jurkat_REP1.stats:md5,677f4ec974fed98323ec41ab2f96049d",
                 "jurkat_REP2.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
                 "jurkat_REP2.sorted.bam:md5,f27e3736718fec53c189f7866932d28d",
                 "jurkat_REP2.sorted.bam.bai:md5,a2f3e49a63c02bde49c24c56a1050606",
-                "jurkat_REP2.stats:md5,4301b92c81d0ecc9d8ee5d42199b367b"
+                "jurkat_REP2.stats:md5,f3be1f30d42067a85b0487bec047c49b"
             ]
         ],
-        "timestamp": "2024-01-29T13:49:14.595161469"
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-02-13T22:00:59.731946823"
     },
     "Should run with bwamem2": {
         "content": [
@@ -125,35 +129,39 @@
                 "cd4_REP1.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
                 "cd4_REP1.sorted.bam:md5,588def280611859a2b9c43c564975dc3",
                 "cd4_REP1.sorted.bam.bai:md5,18d34e747d0986c043a6f0d14dee456b",
-                "cd4_REP1.stats:md5,c79d90093754dc7ce517906321d2970a",
+                "cd4_REP1.stats:md5,f4aa5b8d3fea2797724bf2fa12961036",
                 "cd4_REP2.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
                 "cd4_REP2.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
                 "cd4_REP2.sorted.bam:md5,0b67045362a25692019cb9fd57bb2df5",
                 "cd4_REP2.sorted.bam.bai:md5,b03b5ced803ae927ab5a2f601abd3dcc",
-                "cd4_REP2.stats:md5,2e408207632150b3c0a81da516106bd0",
+                "cd4_REP2.stats:md5,9952636336505197c44c9ce1f7314096",
                 "cd4_REP3.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
                 "cd4_REP3.idxstats:md5,42de227ff397013cf288759871b0e938",
                 "cd4_REP3.sorted.bam:md5,7596ac9246a703dc8bce2cc1ae2b99d6",
                 "cd4_REP3.sorted.bam.bai:md5,2a5802af6f299dd0f7ab8eee9552100a",
-                "cd4_REP3.stats:md5,df54484f9f9d3f206e7b6d38ef796323",
+                "cd4_REP3.stats:md5,4f63629b6850326e1dbf449732bc7bf3",
                 "cd4_REP4.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
                 "cd4_REP4.idxstats:md5,959dc185ae59de4cebe374026711a55e",
                 "cd4_REP4.sorted.bam:md5,f63e2cdb10fa5b28acc564fb2f99ef3a",
                 "cd4_REP4.sorted.bam.bai:md5,13d7de8a2c84b23998d59e41f78dc79c",
-                "cd4_REP4.stats:md5,8291b3978fcab50f3cb3f24ae7e4831f",
+                "cd4_REP4.stats:md5,87c41cda4168ed794b640bfbd0e99d45",
                 "jurkat_REP1.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
                 "jurkat_REP1.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
                 "jurkat_REP1.sorted.bam:md5,f1d8db3612bf8917f723162f9ae07226",
                 "jurkat_REP1.sorted.bam.bai:md5,19066b9272a3e73f9fc853be05f21220",
-                "jurkat_REP1.stats:md5,3dbf9a360d4c5fb1c924e1fc96270b03",
+                "jurkat_REP1.stats:md5,677f4ec974fed98323ec41ab2f96049d",
                 "jurkat_REP2.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
                 "jurkat_REP2.sorted.bam:md5,a2c15ebbc6d24e0dabaa15b57a900248",
                 "jurkat_REP2.sorted.bam.bai:md5,ae37c8fe3e780d068f5e32310bbcf387",
-                "jurkat_REP2.stats:md5,4301b92c81d0ecc9d8ee5d42199b367b"
+                "jurkat_REP2.stats:md5,f3be1f30d42067a85b0487bec047c49b"
             ]
         ],
-        "timestamp": "2024-01-29T16:08:44.305044131"
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-02-13T22:02:42.148478009"
     },
     "Should run with dragmap": {
         "content": [
@@ -198,6 +206,10 @@
                 "jurkat_REP2.lc_extrap.txt:md5,33bdd91e7df616988c1ec043818b346b"
             ]
         ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
         "timestamp": "2023-08-25T01:46:44+0000"
     }
 }
