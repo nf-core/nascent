@@ -30,8 +30,7 @@ nextflow_pipeline {
 
     // https://github.com/nf-core/nascent/issues/119
     test("Should work with gzipped references") {
-        // PINTS Fails because it doesn't find anything.
-        config 'tests/pipeline/skip_pints.config'
+        config 'tests/pipeline/skip_gzip.config'
         when {
             params {
                 outdir = "$outputDir"
@@ -42,7 +41,7 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.failed
+            assert workflow.success
             assert snapshot(
                 workflow.trace.tasks().size(),
             ).match()
