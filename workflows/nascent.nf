@@ -145,6 +145,7 @@ workflow NASCENT {
     ch_star_multiqc = Channel.empty()
     ch_aligner_pca_multiqc = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
+    ch_bowtie2_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         FASTQ_ALIGN_BWA (
             ch_reads,
@@ -201,7 +202,7 @@ workflow NASCENT {
         ch_samtools_flagstat = FASTQ_ALIGN_BOWTIE2.out.flagstat
         ch_samtools_idxstats = FASTQ_ALIGN_BOWTIE2.out.idxstats
 
-        // TODO Add to MultiQC Report
+        ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     }
 
@@ -289,6 +290,7 @@ workflow NASCENT {
         .mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
         .mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
         .mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+        .mix(ch_bowtie2_multiqc.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_stats.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_flagstat.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_idxstats.collect{it[1]}.ifEmpty([]))
