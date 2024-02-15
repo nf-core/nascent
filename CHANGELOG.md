@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
 - [9712163](https://github.com/nf-core/nascent/commit/97121638eb77e175b912ff45a669426e532c5d7f) - Update pipeline template to [nf-core/tools 2.10](https://github.com/nf-core/tools/releases/tag/2.10)
 - [[#130](https://github.com/nf-core/nascent/pull/130)] - AWS Mega Tests
+- [[#132](https://github.com/nf-core/nascent/pull/132)] - Add Bowtie 2 as an aligner option
 
 ## v2.1.1 - 2023-02-17
 

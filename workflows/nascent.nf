@@ -65,6 +65,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
 include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
+include { FASTQ_ALIGN_BOWTIE2 } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -144,6 +145,7 @@ workflow NASCENT {
     ch_star_multiqc = Channel.empty()
     ch_aligner_pca_multiqc = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
+    ch_bowtie2_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
         FASTQ_ALIGN_BWA (
             ch_reads,
@@ -186,6 +188,22 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
+    } else if (!params.skip_alignment && params.aligner == 'bowtie2') {
+        FASTQ_ALIGN_BOWTIE2 (
+            ch_reads,
+            PREPARE_GENOME.out.bowtie2_index,
+            false,
+            false,
+            ch_fasta,
+        )
+        ch_genome_bam = FASTQ_ALIGN_BOWTIE2.out.bam
+        ch_genome_bai = FASTQ_ALIGN_BOWTIE2.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_BOWTIE2.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_BOWTIE2.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_BOWTIE2.out.idxstats
+
+        ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     }
 
     if(params.with_umi) {
@@ -223,7 +241,6 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        println fmeta
         // Split and take the first element
         fmeta.id = fmeta.id.split('_')[0]
         [ fmeta, bam ] }
@@ -273,6 +290,7 @@ workflow NASCENT {
         .mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
         .mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
         .mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+        .mix(ch_bowtie2_multiqc.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_stats.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_flagstat.collect{it[1]}.ifEmpty([]))
         .mix(ch_samtools_idxstats.collect{it[1]}.ifEmpty([]))
