@@ -85,7 +85,10 @@ workflow NASCENT {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (
-        prepareToolIndices
+        prepareToolIndices,
+        params.fasta,
+        params.gtf,
+        params.gff,
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
     ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }

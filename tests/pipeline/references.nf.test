@@ -26,6 +26,26 @@ nextflow_pipeline {
                 workflow.trace.tasks().size(),
             ).match()
         }
+    }
+
+    // https://github.com/nf-core/nascent/issues/119
+    test("Should work with gzipped references") {
+        config 'tests/pipeline/skip_gzip.config'
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/reference/genome.fasta.gz'
+                gtf = 'https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/reference/genes.gtf.gz'
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
 
     }
 

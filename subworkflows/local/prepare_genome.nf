@@ -13,7 +13,6 @@ include {
 include {
     UNTAR as UNTAR_BWA_INDEX
     UNTAR as UNTAR_DRAGMAP } from '../../modules/nf-core/untar/main'
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/samtools/faidx/main'
 include { GFFREAD } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX } from '../../modules/nf-core/bwamem2/index/main'
@@ -23,6 +22,9 @@ include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsize
 workflow PREPARE_GENOME {
     take:
     prepare_tool_indices
+    fasta
+    gtf
+    gff
 
     main:
 
@@ -31,36 +33,34 @@ workflow PREPARE_GENOME {
     //
     // Uncompress genome fasta file if required
     //
-    if (params.fasta.endsWith('.gz')) {
-        ch_fasta = GUNZIP_FASTA ( [ [:], params.fasta ] ).gunzip.map { it[1] }
+    if (fasta.endsWith('.gz')) {
+        ch_fasta    = GUNZIP_FASTA ( [ [:], fasta ] ).gunzip.map { it[1] }
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
-        ch_fasta = file(params.fasta)
+        ch_fasta = Channel.value(file(fasta))
     }
-
-    // Create Fai file
-    ch_fai = SAMTOOLS_FAIDX( [ [:], ch_fasta ] ).fai.map { it[1] }
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     //
     // Uncompress GTF annotation file or create from GFF3 if required
     //
-    if (params.gtf) {
-        if (params.gtf.endsWith('.gz')) {
-            ch_gtf = GUNZIP_GTF ( [ [:], params.gtf ] ).gunzip.map { it[1] }
-            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-        } else {
-            ch_gtf = file(params.gtf)
+    if (gtf || gff) {
+        if (gtf) {
+            if (gtf.endsWith('.gz')) {
+                ch_gtf      = GUNZIP_GTF ( [ [:], gtf ] ).gunzip.map { it[1] }
+                ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+            } else {
+                ch_gtf = Channel.value(file(gtf))
+            }
+        } else if (gff) {
+            if (gff.endsWith('.gz')) {
+                ch_gff      = GUNZIP_GFF ( [ [:], gff ] ).gunzip.map { it[1] }
+                ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
+            } else {
+                ch_gff = Channel.value(file(gff))
+            }
+            ch_gtf      = GFFREAD ( ch_gff ).gtf
+            ch_versions = ch_versions.mix(GFFREAD.out.versions)
         }
-    } else if (params.gff) {
-        if (params.gff.endsWith('.gz')) {
-            ch_gff = GUNZIP_GFF ( [ [:], params.gff ] ).gunzip.map { it[1] }
-            ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
-        } else {
-            ch_gff = file(params.gff)
-        }
-        ch_gtf = GFFREAD ( ch_gff ).gtf
-        ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
 
     //
@@ -81,8 +81,10 @@ workflow PREPARE_GENOME {
     //
     // Create chromosome sizes file
     //
-    ch_chrom_sizes = CUSTOM_GETCHROMSIZES ( [ [:], ch_fasta ] ).sizes
-    ch_versions = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
+    CUSTOM_GETCHROMSIZES ( ch_fasta.map { [ [:], it ] } )
+    ch_fai         = CUSTOM_GETCHROMSIZES.out.fai.map { it[1] }
+    ch_chrom_sizes = CUSTOM_GETCHROMSIZES.out.sizes.map { it[1] }
+    ch_versions    = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
 
     //
     // Uncompress BWA index or generate from scratch if required
@@ -100,7 +102,7 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = [ [meta: "Genome"], file(params.bwa_index) ]
             }
         } else {
-            ch_bwa_index = BWA_INDEX ( [ [:], ch_fasta ] ).index
+            ch_bwa_index = BWA_INDEX ( ch_fasta.map { [ [:], it ] } ).index
             ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
         }
     } else if ('bwamem2' in prepare_tool_indices) {
@@ -113,7 +115,7 @@ workflow PREPARE_GENOME {
                 ch_bwa_index = [ [meta: "Genome"], file(params.bwamem2_index) ]
             }
         } else {
-            ch_bwa_index = BWAMEM2_INDEX ( [ [:], ch_fasta ] ).index
+            ch_bwa_index = BWAMEM2_INDEX ( ch_fasta.map { [ [:], it ] } ).index
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
     } else if ('dragmap' in prepare_tool_indices) {
@@ -126,7 +128,7 @@ workflow PREPARE_GENOME {
                 ch_dragmap = [ [meta: "Genome"], file(params.dragmap) ]
             }
         } else {
-            ch_dragmap = DRAGMAP_HASHTABLE( [ [:], ch_fasta ] ).hashmap
+            ch_dragmap = DRAGMAP_HASHTABLE( ch_fasta.map { [ [:], it ] } ).hashmap
             ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
         }
     }
