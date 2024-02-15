@@ -3,12 +3,12 @@ def igenomes_base = 's3://ngi-igenomes/igenomes'
 nextflow_pipeline {
 
     name "Test passing references"
-    script "main.nf"
+    script "../../main.nf"
 
     // https://github.com/nf-core/nascent/issues/106
     test("Should work with BWA Index") {
         // FIXME PINTS Fails because it doesn't find anything.
-        config 'tests/pipeline/skip_pints.config'
+        config './skip_pints.config'
         when {
             params {
                 outdir = "$outputDir"
@@ -30,7 +30,7 @@ nextflow_pipeline {
 
     // https://github.com/nf-core/nascent/issues/119
     test("Should work with gzipped references") {
-        config 'tests/pipeline/skip_gzip.config'
+        config './skip_gzip.config'
         when {
             params {
                 outdir = "$outputDir"

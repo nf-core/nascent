@@ -1,7 +1,7 @@
 nextflow_pipeline {
 
     name "Test Workflow main.nf"
-    script "main.nf"
+    script "../../main.nf"
     tag "aligner"
     tag "bowtie2"
 

@@ -1,7 +1,7 @@
 nextflow_workflow {
 
     name "Test Workflow GROHMM"
-    script "subworkflows/local/grohmm.nf"
+    script "../main.nf"
     workflow "GROHMM"
 
     test("Should run without a tuning file") {

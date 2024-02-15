@@ -73,7 +73,7 @@ jobs:
         run: |
           nf-test test \
             --profile=${{ matrix.profile }} \
-            tests/pipeline/*.nf.test \
+            workflows/tests/*.nf.test \
             --tap=test.tap
 
       - uses: pcolby/tap-summary@v1
