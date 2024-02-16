@@ -16,6 +16,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     group_bams
     gtf
     fasta
+    chrom_sizes
 
     main:
 
@@ -58,13 +59,13 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
     if(params.filter_bed) {
         ch_filter_bed = Channel.from(params.filter_bed)
-        BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), "bed" )
+        BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), chrom_sizes.map { [ [:], it ] } )
         ch_identification_bed = BEDTOOLS_INTERSECT_FILTER.out.intersect
         ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
     }
     if(params.intersect_bed) {
         ch_intersect_bed = Channel.from(params.intersect_bed)
-        BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed), "bed" )
+        BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed), chrom_sizes.map { [ [:], it ] } )
         ch_identification_bed = BEDTOOLS_INTERSECT.out.intersect
         ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
     }
