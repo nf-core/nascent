@@ -14,6 +14,7 @@ include { COVERAGE_GRAPHS } from '../subworkflows/local/coverage_graphs.nf'
 include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
 
 include { FASTP } from '../modules/nf-core/fastp/main'
+include { UNTAR as UNTAR_HISAT2_INDEX } from '../modules/nf-core/untar/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -30,6 +31,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nasc
 //
 include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
 include { FASTQ_ALIGN_BOWTIE2 } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
+include { FASTQ_ALIGN_HISAT2 } from '../subworkflows/nf-core/fastq_align_hisat2/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -167,6 +169,29 @@ workflow NASCENT {
 
         ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
+    } else if (!params.skip_alignment && params.aligner == 'hisat2') {
+        if (params.hisat2_index.endsWith('.tar.gz')) {
+            ch_hisat2_index = UNTAR_HISAT2_INDEX ( [ [:], params.hisat2_index ] ).untar
+            ch_versions = ch_versions.mix(UNTAR_HISAT2_INDEX.out.versions)
+        } else {
+            // TODO Give the meta from basename or genome?
+            ch_hisat2_index = [ [meta: "Genome"], file(params.hisat2_index) ]
+        }
+
+        FASTQ_ALIGN_HISAT2 (
+            ch_reads,
+            ch_hisat2_index,
+            [[:],[]],
+            ch_fasta,
+        )
+        ch_genome_bam = FASTQ_ALIGN_HISAT2.out.bam
+        ch_genome_bai = FASTQ_ALIGN_HISAT2.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_HISAT2.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_HISAT2.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_HISAT2.out.idxstats
+
+        ch_HISAT2_multiqc = FASTQ_ALIGN_HISAT2.out.summary
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
     }
 
     if(params.with_umi) {

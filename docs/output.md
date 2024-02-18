@@ -18,6 +18,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [bwa-mem2](#bwa-mem2) - The next version of bwa-mem
   - [DRAGMAP](#dragmap) - Open-source software implementation of the DRAGEN mapper
   - [Bowtie 2](#bowtie-2) - A fast and sensitive gapped read aligner
+  - [HISAT2](#hisat2) - A fast and sensitive gapped read aligner
 - [Alignment post-processing](#alignment-post-processing)
   - [SAMtools](#samtools) - Sort and index alignments
   - [UMI-tools dedup](#umi-tools-dedup) - UMI-based deduplication
@@ -133,6 +134,24 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 [Bowtie 2](https://github.com/BenLangmead/bowtie2) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of about 50 up to 100s or 1,000s of characters, and particularly good at aligning to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index to keep its memory footprint small: for the human genome, its memory footprint is typically around 3.2 GB. Bowtie 2 supports gapped, local, and paired-end alignment modes.
 
 The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
+
+### HISAT2
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `hisat2/`
+  - `<SAMPLE>.bam`: The original BAM file containing read alignments to the reference genome.
+- `hisat2/log/`
+  - `*.log`: HISAT2 alignment report containing the mapping results summary.
+- `hisat2/unmapped/`
+  - `*.fastq.gz`: FastQ files containing unmapped reads will be placed in this directory.
+
+</details>
+
+[HISAT2](http://daehwankimlab.github.io/hisat2/) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes as well as to a single reference genome. It introduced a new indexing scheme called a Hierarchical Graph FM index (HGFM) which when combined with several alignment strategies, enable rapid and accurate alignment of sequencing reads. The HISAT2 route through the pipeline is a good option if you have memory limitations on your compute. However, quantification isn't performed if using `--aligner hisat2` due to the lack of an appropriate option to calculate accurate expression estimates from HISAT2 derived genomic alignments. However, you can use this route if you have a preference for the alignment, QC and other types of downstream analysis compatible with the output of HISAT2.
+
+You can choose to align your data with HISAT2 by providing the `--aligner hisat2` parameter.
 
 ## Alignment post-processing
 
