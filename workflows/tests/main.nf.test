@@ -17,7 +17,6 @@ nextflow_pipeline {
             assert snapshot(
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
-                path("$outputDir/bed2saf").list(),
                 // BUG https://github.com/nf-core/nascent/issues/102
                 // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
@@ -52,7 +51,6 @@ nextflow_pipeline {
             assert snapshot(
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
-                path("$outputDir/bed2saf").list(),
                 // BUG https://github.com/nf-core/nascent/issues/102
                 // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic
@@ -87,7 +85,6 @@ nextflow_pipeline {
             assert snapshot(
                 workflow.trace.tasks().size(),
                 path("$outputDir/bbmap").list(),
-                path("$outputDir/bed2saf").list(),
                 // BUG https://github.com/nf-core/nascent/issues/102
                 // path("$outputDir/bedtools").list(),
                 // FIXME gtf2bed isn't deterministic

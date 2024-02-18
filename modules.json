@@ -144,7 +144,8 @@
                     "pints/caller": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/pints/caller/pints-caller.diff"
                     },
                     "preseq/ccurve": {
                         "branch": "master",

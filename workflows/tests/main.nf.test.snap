@@ -1,7 +1,7 @@
 {
     "Should run with bwa (default)": {
         "content": [
-            137,
+            129,
             [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
@@ -15,9 +15,6 @@
                 "jurkat_REP1.coverage.stats.txt:md5,381c69a30099d82066a959deab1a2569",
                 "jurkat_REP2.coverage.hist.txt:md5,d124bdadaf2dc5cdd9e3db5a1ab4c588",
                 "jurkat_REP2.coverage.stats.txt:md5,b1940346719e4070091f2eef6e508f49"
-            ],
-            [
-                "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
             ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
@@ -44,45 +41,45 @@
             [
                 "cd4_REP1.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
                 "cd4_REP1.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
-                "cd4_REP1.sorted.bam:md5,22e9e4ede572d35363dc3ec23eb9c79b",
-                "cd4_REP1.sorted.bam.bai:md5,c5e37e318050b43fb6692cd86491d4b0",
-                "cd4_REP1.stats:md5,f4aa5b8d3fea2797724bf2fa12961036",
+                "cd4_REP1.sorted.bam:md5,bcf7172fc9681b8a4d6da53dc885d369",
+                "cd4_REP1.sorted.bam.bai:md5,81a74745a7b117da0c8d7f7f95b352d0",
+                "cd4_REP1.stats:md5,1a937e63fb7b1f8063121d8f14f4e918",
                 "cd4_REP2.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
                 "cd4_REP2.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
-                "cd4_REP2.sorted.bam:md5,fb718ea76a1e22bda674e23a92662531",
-                "cd4_REP2.sorted.bam.bai:md5,7f9d67f8572c50bddc57f8296b811fd8",
-                "cd4_REP2.stats:md5,9952636336505197c44c9ce1f7314096",
+                "cd4_REP2.sorted.bam:md5,58402e4242c81af27c031907abd7bf49",
+                "cd4_REP2.sorted.bam.bai:md5,f75a9e0ac39ca322f1d084f968d67fe3",
+                "cd4_REP2.stats:md5,6ac59691b72f0ccbe2dfa4408586a39b",
                 "cd4_REP3.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
                 "cd4_REP3.idxstats:md5,42de227ff397013cf288759871b0e938",
-                "cd4_REP3.sorted.bam:md5,6043c68b66e294d4be039bd6c8390ed5",
-                "cd4_REP3.sorted.bam.bai:md5,bb66de0f0efc0231d8252754cf8dc5c5",
-                "cd4_REP3.stats:md5,4f63629b6850326e1dbf449732bc7bf3",
+                "cd4_REP3.sorted.bam:md5,7ecd4f4eafc7551a0d37cfbd690005d2",
+                "cd4_REP3.sorted.bam.bai:md5,64cb3302603284eb4cc6a66c1bcbe857",
+                "cd4_REP3.stats:md5,43cfc143cb086a7fa22a0c8d9d1fc9bb",
                 "cd4_REP4.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
                 "cd4_REP4.idxstats:md5,959dc185ae59de4cebe374026711a55e",
-                "cd4_REP4.sorted.bam:md5,d1d055ab384159184f6abf2b23cf8c9e",
-                "cd4_REP4.sorted.bam.bai:md5,c70457bfeb054ab60e673aee4a247331",
-                "cd4_REP4.stats:md5,87c41cda4168ed794b640bfbd0e99d45",
+                "cd4_REP4.sorted.bam:md5,401da47cbdf9c262f6c84017efedd567",
+                "cd4_REP4.sorted.bam.bai:md5,901fadf09dcd111606522766123fba07",
+                "cd4_REP4.stats:md5,e91a8bd8d0918555892235999ff15b1e",
                 "jurkat_REP1.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
                 "jurkat_REP1.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
-                "jurkat_REP1.sorted.bam:md5,558e3948f1d263113d86f13dadead6a4",
-                "jurkat_REP1.sorted.bam.bai:md5,62956925d0600af04cd40dc1c57fd110",
-                "jurkat_REP1.stats:md5,677f4ec974fed98323ec41ab2f96049d",
+                "jurkat_REP1.sorted.bam:md5,a3178b414156d28cf22b98fd9d742392",
+                "jurkat_REP1.sorted.bam.bai:md5,67c37ae4d072ebbf2cc15999d8e18e41",
+                "jurkat_REP1.stats:md5,895eddd56d3fc3487f54649dcf063fc7",
                 "jurkat_REP2.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
-                "jurkat_REP2.sorted.bam:md5,f27e3736718fec53c189f7866932d28d",
+                "jurkat_REP2.sorted.bam:md5,175cf112edf380e1e0cab23a818b6ab0",
                 "jurkat_REP2.sorted.bam.bai:md5,a2f3e49a63c02bde49c24c56a1050606",
-                "jurkat_REP2.stats:md5,f3be1f30d42067a85b0487bec047c49b"
+                "jurkat_REP2.stats:md5,9466c2094bb843e845d1c15d25aec2ab"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-15T09:34:19.555866199"
+        "timestamp": "2024-02-17T22:45:14.737941295"
     },
     "Should run with bwamem2": {
         "content": [
-            137,
+            129,
             [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
@@ -96,9 +93,6 @@
                 "jurkat_REP1.coverage.stats.txt:md5,381c69a30099d82066a959deab1a2569",
                 "jurkat_REP2.coverage.hist.txt:md5,d124bdadaf2dc5cdd9e3db5a1ab4c588",
                 "jurkat_REP2.coverage.stats.txt:md5,b1940346719e4070091f2eef6e508f49"
-            ],
-            [
-                "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
             ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
@@ -125,45 +119,45 @@
             [
                 "cd4_REP1.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
                 "cd4_REP1.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
-                "cd4_REP1.sorted.bam:md5,588def280611859a2b9c43c564975dc3",
-                "cd4_REP1.sorted.bam.bai:md5,18d34e747d0986c043a6f0d14dee456b",
-                "cd4_REP1.stats:md5,f4aa5b8d3fea2797724bf2fa12961036",
+                "cd4_REP1.sorted.bam:md5,8ba4050082d4c90f6aab1dbdfc10750d",
+                "cd4_REP1.sorted.bam.bai:md5,a8d78c0a98c7d984cfd15c180cca3dfe",
+                "cd4_REP1.stats:md5,1a937e63fb7b1f8063121d8f14f4e918",
                 "cd4_REP2.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
                 "cd4_REP2.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
-                "cd4_REP2.sorted.bam:md5,0b67045362a25692019cb9fd57bb2df5",
-                "cd4_REP2.sorted.bam.bai:md5,b03b5ced803ae927ab5a2f601abd3dcc",
-                "cd4_REP2.stats:md5,9952636336505197c44c9ce1f7314096",
+                "cd4_REP2.sorted.bam:md5,daa348ffd92d1b7bd9461b630fe0cadd",
+                "cd4_REP2.sorted.bam.bai:md5,512539251014f664aa66d1ca091914d5",
+                "cd4_REP2.stats:md5,6ac59691b72f0ccbe2dfa4408586a39b",
                 "cd4_REP3.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
                 "cd4_REP3.idxstats:md5,42de227ff397013cf288759871b0e938",
-                "cd4_REP3.sorted.bam:md5,7596ac9246a703dc8bce2cc1ae2b99d6",
-                "cd4_REP3.sorted.bam.bai:md5,2a5802af6f299dd0f7ab8eee9552100a",
-                "cd4_REP3.stats:md5,4f63629b6850326e1dbf449732bc7bf3",
+                "cd4_REP3.sorted.bam:md5,54401355efd28816d914e1528d10ca56",
+                "cd4_REP3.sorted.bam.bai:md5,e48a3892b710d2de5878cad3cf83d711",
+                "cd4_REP3.stats:md5,43cfc143cb086a7fa22a0c8d9d1fc9bb",
                 "cd4_REP4.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
                 "cd4_REP4.idxstats:md5,959dc185ae59de4cebe374026711a55e",
-                "cd4_REP4.sorted.bam:md5,f63e2cdb10fa5b28acc564fb2f99ef3a",
-                "cd4_REP4.sorted.bam.bai:md5,13d7de8a2c84b23998d59e41f78dc79c",
-                "cd4_REP4.stats:md5,87c41cda4168ed794b640bfbd0e99d45",
+                "cd4_REP4.sorted.bam:md5,faa381807425a2b5822380391fb25d30",
+                "cd4_REP4.sorted.bam.bai:md5,30eae2c6d450930679e7680cdfa3f98a",
+                "cd4_REP4.stats:md5,e91a8bd8d0918555892235999ff15b1e",
                 "jurkat_REP1.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
                 "jurkat_REP1.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
-                "jurkat_REP1.sorted.bam:md5,f1d8db3612bf8917f723162f9ae07226",
-                "jurkat_REP1.sorted.bam.bai:md5,19066b9272a3e73f9fc853be05f21220",
-                "jurkat_REP1.stats:md5,677f4ec974fed98323ec41ab2f96049d",
+                "jurkat_REP1.sorted.bam:md5,755d348bae58bdb87483a11932cfe2c6",
+                "jurkat_REP1.sorted.bam.bai:md5,af8e82924f430046f8f16f8d87cd26d8",
+                "jurkat_REP1.stats:md5,895eddd56d3fc3487f54649dcf063fc7",
                 "jurkat_REP2.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
-                "jurkat_REP2.sorted.bam:md5,a2c15ebbc6d24e0dabaa15b57a900248",
-                "jurkat_REP2.sorted.bam.bai:md5,ae37c8fe3e780d068f5e32310bbcf387",
-                "jurkat_REP2.stats:md5,f3be1f30d42067a85b0487bec047c49b"
+                "jurkat_REP2.sorted.bam:md5,eb6ff38a542eb6ed99dfdbf97dce5507",
+                "jurkat_REP2.sorted.bam.bai:md5,69795a27982c966af95a398fea7d60e9",
+                "jurkat_REP2.stats:md5,9466c2094bb843e845d1c15d25aec2ab"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-15T09:36:07.9443109"
+        "timestamp": "2024-02-17T22:47:07.961805653"
     },
     "Should run with dragmap": {
         "content": [
-            137,
+            129,
             [
                 "cd4_REP1.coverage.hist.txt:md5,bff6862bc8e2015eef927b40671dec1b",
                 "cd4_REP1.coverage.stats.txt:md5,c1e912cd0bebc51b289160ff7ab3365a",
@@ -177,9 +171,6 @@
                 "jurkat_REP1.coverage.stats.txt:md5,338f3095395c8d8f172e0e27f9a5a60a",
                 "jurkat_REP2.coverage.hist.txt:md5,03301957b2f29c43cb8ea3462998c315",
                 "jurkat_REP2.coverage.stats.txt:md5,c3fc3f11e84f4d075ba95adbdbb2ee29"
-            ],
-            [
-                "cd4_intersect.saf:md5,149347636622d571c3c3ef762c1698ea"
             ],
             "cd4.bed:md5,e9380700e48c1e52f76a2bb3fa4f59d9",
             "jurkat.bed:md5,fe88d4dc3c100262d7aec484e15b1c73",
@@ -208,6 +199,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-15T09:47:03.567466371"
+        "timestamp": "2024-02-17T22:49:01.647145296"
     }
 }

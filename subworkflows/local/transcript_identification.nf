@@ -45,7 +45,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
 
     // TODO https://github.com/hyulab/PINTS/issues/15
-    PINTS_CALLER ( group_bams )
+    PINTS_CALLER ( group_bams, params.assay_type )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.
