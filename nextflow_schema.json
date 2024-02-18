@@ -53,7 +53,7 @@
                     "type": "string",
                     "default": "bwa",
                     "fa_icon": "fas fa-puzzle-piece",
-                    "enum": ["bwa", "bwamem2", "dragmap", "bowtie2"],
+                    "enum": ["bwa", "bwamem2", "dragmap", "bowtie2", "hisat2"],
                     "description": "Specify aligner to be used to map reads to reference genome."
                 },
                 "skip_alignment": {
@@ -229,6 +229,12 @@
                     "description": "Path to bowtie2 indices.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\nIf you wish to recompute indices available on igenomes, set `--dragmap false`.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference, if `--aligner bowtie2` is specified. Combine with `--save_reference` to save for future runs.",
                     "hidden": true
+                },
+                "hisat2_index": {
+                    "type": "string",
+                    "description": "Path to HISAT2 indices.",
+                    "fa_icon": "fas fa-copy",
+                    "help_text": "> **NB** If none provided, index will **NOT** be generated automatically from the FASTA reference. See nf-core/references if a custom index is needed."
                 },
                 "save_reference": {
                     "type": "boolean",

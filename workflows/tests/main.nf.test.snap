@@ -200,5 +200,51 @@
             "nextflow": "23.10.1"
         },
         "timestamp": "2024-03-05T15:58:59.071139821"
+    },
+    "Should run with HISAT2": {
+        "content": [
+            128,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,dff9783a6054f490bd106a5ea59ff323",
+                "cd4_REP1.coverage.stats.txt:md5,bd2ae14e43e59332d62af60601f95368",
+                "cd4_REP2.coverage.hist.txt:md5,ca9e862c16d556b3f1baa230d565e0a7",
+                "cd4_REP2.coverage.stats.txt:md5,14d8e9d53e129de3caf98fe6c8f52ace",
+                "cd4_REP3.coverage.hist.txt:md5,411058935790bff32f9e6d9b7d136597",
+                "cd4_REP3.coverage.stats.txt:md5,46bcbba43196873e663d3fa8ca381917",
+                "cd4_REP4.coverage.hist.txt:md5,5888d0a421c07cd417e18b09b25b68ab",
+                "cd4_REP4.coverage.stats.txt:md5,611d637d4bbdd0d96071cd1e291be5dd",
+                "jurkat_REP1.coverage.hist.txt:md5,25ff1313ce15f2332b3b9ac5e440ad76",
+                "jurkat_REP1.coverage.stats.txt:md5,e27a85bf418ceec8205c3ed4c9e9c0e4",
+                "jurkat_REP2.coverage.hist.txt:md5,aba00d7a48866322ce46c9427023fd36",
+                "jurkat_REP2.coverage.stats.txt:md5,4a5f9c89f04b4792669ca4d23bcfb66e"
+            ],
+            "cd4.bed:md5,74d4739278c1d8af17a5f9d3296325da",
+            "jurkat.bed:md5,6d3edfc671c1bed970ca5934edc60756",
+            [
+                "cd4_REP1.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP1.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_REP1.lc_extrap.txt:md5,81f27f75f082bca4eeeaed416a484429",
+                "cd4_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP2.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_REP2.lc_extrap.txt:md5,7c95f712b396568825145383cea0c525",
+                "cd4_REP3.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP3.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_REP3.lc_extrap.txt:md5,e83ef4e546a1d66ec5cc5e84a9766c33",
+                "cd4_REP4.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP4.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_REP4.lc_extrap.txt:md5,728975500782651e233de6705a044e8b",
+                "jurkat_REP1.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "jurkat_REP1.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "jurkat_REP1.lc_extrap.txt:md5,04931737e170ed1764125f940684983e",
+                "jurkat_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "jurkat_REP2.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "jurkat_REP2.lc_extrap.txt:md5,157f7f7532f865226da4fb460c2ff7da"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-03-18T19:39:47.797490045"
     }
 }
