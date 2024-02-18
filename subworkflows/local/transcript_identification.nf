@@ -67,7 +67,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
         ch_intersect_bed = Channel.from(params.intersect_bed)
         BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed), chrom_sizes.map { [ [:], it ] } )
         ch_identification_bed = BEDTOOLS_INTERSECT.out.intersect
-        ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
+        ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT.out.versions.first())
     }
 
     ch_identification_bed
