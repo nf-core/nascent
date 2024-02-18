@@ -37,6 +37,7 @@ params.bwa_index = getGenomeAttribute('bwa')
 params.bwamem2_index = getGenomeAttribute('bwamem2')
 params.dragmap = getGenomeAttribute('dragmap')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
+params.hisat2_index = getGenomeAttribute('hisat2')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

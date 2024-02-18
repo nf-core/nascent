@@ -96,7 +96,7 @@ workflow PREPARE_GENOME {
     if ('bwa' in prepare_tool_indices) {
         if (params.bwa_index) {
             if (params.bwa_index.endsWith('.tar.gz')) {
-                ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
+                ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], params.bwa_index ] ).untar
                 ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
