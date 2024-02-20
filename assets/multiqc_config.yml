@@ -38,3 +38,5 @@ sp:
 ignore_images: false
 
 export_plots: true
+
+disable_version_detection: true

@@ -1,7 +1,7 @@
 {
     "Should run with bwa (default)": {
         "content": [
-            129,
+            128,
             [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
@@ -75,11 +75,11 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-17T22:45:14.737941295"
+        "timestamp": "2024-03-05T15:54:18.985765284"
     },
     "Should run with bwamem2": {
         "content": [
-            129,
+            128,
             [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
@@ -153,11 +153,11 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-17T22:47:07.961805653"
+        "timestamp": "2024-03-05T15:56:25.053122616"
     },
     "Should run with dragmap": {
         "content": [
-            129,
+            128,
             [
                 "cd4_REP1.coverage.hist.txt:md5,bff6862bc8e2015eef927b40671dec1b",
                 "cd4_REP1.coverage.stats.txt:md5,c1e912cd0bebc51b289160ff7ab3365a",
@@ -199,6 +199,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-02-17T22:49:01.647145296"
+        "timestamp": "2024-03-05T15:58:59.071139821"
     }
 }
