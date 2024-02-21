@@ -251,7 +251,8 @@ workflow NASCENT {
     TRANSCRIPT_INDENTIFICATION (
         ch_sort_bam,
         PREPARE_GENOME.out.gtf,
-        PREPARE_GENOME.out.fasta
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.chrom_sizes,
     )
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks

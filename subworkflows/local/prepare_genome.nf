@@ -3,7 +3,6 @@
 //
 
 include { GTF2BED } from '../../modules/local/gtf2bed'
-include { GTF_GENE_FILTER } from '../../modules/local/gtf_gene_filter'
 
 include {
     GUNZIP as GUNZIP_FASTA
