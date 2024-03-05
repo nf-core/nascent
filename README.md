@@ -58,9 +58,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 First, prepare a samplesheet with your input data that looks as follows:
 
-`samplesheet.csv`:
 
-```csv
+```csv title="samplesheet.csv
 sample,fastq_1,fastq_2
 CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
 ```

@@ -370,7 +370,7 @@ They've also created some bed files that might be useful for analysis.
   - `bwa/`: Directory containing bwa indices.
   - `bwa-mem2/`: Directory containing bwa-mem2 indices.
   - `dragmap/`: Directory containing DRAGMAP indices.
-  - `bowtie2/`: Directory containing DRAGMAP indices.
+  - `bowtie2/`: Directory containing bowtie2 indices.
 
 </details>
 
