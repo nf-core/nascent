@@ -5,14 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [5bcfe4f](https://github.com/nf-core/nascent/commit/5bcfe4ff1729b89e9e5741c473d32168b836a57f) - Update pipeline template to [nf-core/tools 2.13](https://github.com/nf-core/tools/releases/tag/2.13)
+- [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
+
 ## v2.2.0 - 2024-03-05
 
 ### Added
 
-- [1494fff](https://github.com/nf-core/nascent/commit/1494fff2ecd8b498e19d7d0fa3f7ee0f71088ab4) - Update pipeline template to [nf-core/tools 2.12](https://github.com/nf-core/tools/releases/tag/2.12)
-- [ec24cfb](https://github.com/nf-core/nascent/commit/ec24cfb2646904bcc78379a071b50b53a855b9a9) - Update pipeline template to [nf-core/tools 2.11.1](https://github.com/nf-core/tools/releases/tag/2.11.1)
-- [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
 - [9712163](https://github.com/nf-core/nascent/commit/97121638eb77e175b912ff45a669426e532c5d7f) - Update pipeline template to [nf-core/tools 2.10](https://github.com/nf-core/tools/releases/tag/2.10)
+- [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
+- [ec24cfb](https://github.com/nf-core/nascent/commit/ec24cfb2646904bcc78379a071b50b53a855b9a9) - Update pipeline template to [nf-core/tools 2.11.1](https://github.com/nf-core/tools/releases/tag/2.11.1)
+- [1494fff](https://github.com/nf-core/nascent/commit/1494fff2ecd8b498e19d7d0fa3f7ee0f71088ab4) - Update pipeline template to [nf-core/tools 2.12](https://github.com/nf-core/tools/releases/tag/2.12)
 - [[#130](https://github.com/nf-core/nascent/pull/130)] - AWS Mega Tests
 - [[#132](https://github.com/nf-core/nascent/pull/132)] - Add Bowtie 2 as an aligner option
 
