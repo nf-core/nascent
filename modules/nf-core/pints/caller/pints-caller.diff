@@ -1,0 +1,21 @@
+Changes in module 'nf-core/pints/caller'
+--- modules/nf-core/pints/caller/main.nf
++++ modules/nf-core/pints/caller/main.nf
+@@ -9,6 +9,7 @@
+ 
+     input:
+     tuple val(meta), path(bams)
++    val assay_type
+ 
+     output:
+     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
+@@ -34,6 +35,7 @@
+         --file-prefix $prefix \\
+         --thread $task.cpus \\
+         --dont-check-updates \\
++        --exp-type $assay_type \\
+         $args
+ 
+     cat <<-END_VERSIONS > versions.yml
+
+************************************************************

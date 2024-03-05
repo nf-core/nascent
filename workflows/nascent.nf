@@ -1,43 +1,23 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE INPUTS
+    PRINT PARAMS SUMMARY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def valid_params = [
-    aligners : ['bwa', 'bwamem2', 'dragmap']
-]
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
-def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
+def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
+def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
+def summary_params = paramsSummaryMap(workflow)
 
-// Validate input parameters
+// Print parameter summary log to screen
+log.info logo + paramsSummaryLog(workflow) + citation
+
 WorkflowNascent.initialise(params, log)
 
-// Check input path parameters to see if they exist
-def checkPathParamList = [
-    params.input,
-    params.multiqc_config,
-    params.fasta,
-    params.gtf,
-    params.gff,
-    params.gene_bed,
-    params.bwa_index,
-    params.bwamem2_index,
-    params.dragmap
-]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
-// Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
-// Check alignment parameters
+// HACK Rework this because of nf-validation
 def prepareToolIndices = []
 if (!params.skip_alignment) { prepareToolIndices << params.aligner        }
-
-if (params.filter_bed) {
-    ch_filter_bed = file(params.filter_bed, checkIfExists: true)
-    // if (ch_ribo_db.isEmpty()) {exit 1, "File provided with --ribo_database_manifest is empty: ${ch_ribo_db.getName()}!"}
-}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,9 +38,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { BED2SAF } from '../modules/local/bed2saf'
 
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
-include { ALIGN_BWA } from '../subworkflows/local/align_bwa/main'
 include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
 include { ALIGN_DRAGMAP } from '../subworkflows/local/align_dragmap/main'
 include { QUALITY_CONTROL } from '../subworkflows/local/quality_control.nf'
@@ -86,6 +64,8 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 //
 // SUBWORKFLOW: Consisting entirely of nf-core/modules
 //
+include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
+include { FASTQ_ALIGN_BOWTIE2 } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -106,33 +86,52 @@ workflow NASCENT {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (
-        prepareToolIndices
+        prepareToolIndices,
+        params.fasta,
+        params.gtf,
+        params.gff,
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
+    ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
 
     //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
+    // Create input channel from input file provided through params.input
     //
-    INPUT_CHECK (
-        ch_input
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    Channel
+        .fromSamplesheet("input")
+        .map {
+            meta, fastq_1, fastq_2 ->
+            if (!fastq_2) {
+                return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+            } else {
+                return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+            }
+        }
+        .groupTuple()
+        .map {
+            WorkflowNascent.validateInput(it)
+        }
+        .map {
+            meta, fastqs ->
+            return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_fastq }
 
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        INPUT_CHECK.out.reads
+        ch_fastq
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     ch_reads = Channel.empty()
     if(!params.skip_trimming) {
-        FASTP ( INPUT_CHECK.out.reads, [], false, false )
+        FASTP ( ch_fastq, [], false, false )
         ch_reads = FASTP.out.reads
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
-        ch_reads = INPUT_CHECK.out.reads
+        ch_reads = ch_fastq
     }
 
     //
@@ -146,22 +145,27 @@ workflow NASCENT {
     ch_star_multiqc = Channel.empty()
     ch_aligner_pca_multiqc = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
+    ch_bowtie2_multiqc = Channel.empty()
     if (!params.skip_alignment && params.aligner == 'bwa') {
-        ALIGN_BWA(
+        FASTQ_ALIGN_BWA (
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
+            false,
+            ch_fasta,
         )
-        ch_genome_bam = ALIGN_BWA.out.bam
-        ch_genome_bai = ALIGN_BWA.out.bai
-        ch_samtools_stats = ALIGN_BWA.out.stats
-        ch_samtools_flagstat = ALIGN_BWA.out.flagstat
-        ch_samtools_idxstats = ALIGN_BWA.out.idxstats
+        ch_genome_bam = FASTQ_ALIGN_BWA.out.bam
+        ch_genome_bai = FASTQ_ALIGN_BWA.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_BWA.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_BWA.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_BWA.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_BWA.out.versions.first())
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2(
+        ALIGN_BWAMEM2 (
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
+            false,
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_BWAMEM2.out.bam
         ch_genome_bai = ALIGN_BWAMEM2.out.bai
@@ -171,9 +175,11 @@ workflow NASCENT {
 
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
-        ALIGN_DRAGMAP(
+        ALIGN_DRAGMAP (
             ch_reads,
-            PREPARE_GENOME.out.dragmap
+            PREPARE_GENOME.out.dragmap,
+            false,
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_DRAGMAP.out.bam
         ch_genome_bai = ALIGN_DRAGMAP.out.bai
@@ -182,6 +188,22 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
+    } else if (!params.skip_alignment && params.aligner == 'bowtie2') {
+        FASTQ_ALIGN_BOWTIE2 (
+            ch_reads,
+            PREPARE_GENOME.out.bowtie2_index,
+            false,
+            false,
+            ch_fasta,
+        )
+        ch_genome_bam = FASTQ_ALIGN_BOWTIE2.out.bam
+        ch_genome_bai = FASTQ_ALIGN_BOWTIE2.out.bai
+        ch_samtools_stats = FASTQ_ALIGN_BOWTIE2.out.stats
+        ch_samtools_flagstat = FASTQ_ALIGN_BOWTIE2.out.flagstat
+        ch_samtools_idxstats = FASTQ_ALIGN_BOWTIE2.out.idxstats
+
+        ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     }
 
     if(params.with_umi) {
@@ -219,7 +241,8 @@ workflow NASCENT {
     ch_genome_bam.map {
         meta, bam ->
         fmeta = meta.findAll { it.key != 'read_group' }
-        fmeta.id = fmeta.id.split('_')[0..-3].join('_')
+        // Split and take the first element
+        fmeta.id = fmeta.id.split('_')[0]
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
@@ -228,7 +251,8 @@ workflow NASCENT {
     TRANSCRIPT_INDENTIFICATION (
         ch_sort_bam,
         PREPARE_GENOME.out.gtf,
-        PREPARE_GENOME.out.fasta
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.chrom_sizes,
     )
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
@@ -259,27 +283,28 @@ workflow NASCENT {
     workflow_summary = WorkflowNascent.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
-    methods_description = WorkflowNascent.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+    methods_description    = WorkflowNascent.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
     ch_methods_description = Channel.value(methods_description)
 
     ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_samtools_stats.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_samtools_flagstat.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_samtools_idxstats.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.preseq_ccurve.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.preseq_lcextrap.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readdistribution_txt.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_seq_xls.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.readduplication_pos_xls.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_grohmm_multiqc.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_GENE.out.summary.collect{it[1]}.ifEmpty([]))
+        .mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        .mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
+        .mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+        .mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+        .mix(ch_bowtie2_multiqc.collect{it[1]}.ifEmpty([]))
+        .mix(ch_samtools_stats.collect{it[1]}.ifEmpty([]))
+        .mix(ch_samtools_flagstat.collect{it[1]}.ifEmpty([]))
+        .mix(ch_samtools_idxstats.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.preseq_ccurve.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.preseq_lcextrap.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.readdistribution_txt.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.readduplication_seq_xls.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.readduplication_pos_xls.collect{it[1]}.ifEmpty([]))
+        .mix(QUALITY_CONTROL.out.inferexperiment_txt.collect{it[1]}.ifEmpty([]))
+        .mix(ch_grohmm_multiqc.collect{it[1]}.ifEmpty([]))
+        .mix(ch_homer_multiqc.collect{it[1]}.ifEmpty([]))
+        .mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect{it[1]}.ifEmpty([]))
+        .mix(SUBREAD_FEATURECOUNTS_GENE.out.summary.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
@@ -300,9 +325,17 @@ workflow.onComplete {
     if (params.email || params.email_on_fail) {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
+    NfcoreTemplate.dump_parameters(workflow, params)
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
+    }
+}
+
+workflow.onError {
+    if (workflow.errorReport.contains("Process requirement exceeds available memory")) {
+        println("🛑 Default resources exceed availability 🛑 ")
+        println("💡 See here on how to configure pipeline: https://nf-co.re/docs/usage/configuration#tuning-workflow-resources 💡")
     }
 }
 

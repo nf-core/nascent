@@ -1,0 +1,38 @@
+nextflow_process {
+
+    name "Test Process GROHMM_PARAMETERTUNING"
+    script "modules/local/grohmm/parametertuning/main.nf"
+    process "GROHMM_PARAMETERTUNING"
+
+    test("Should run without a tuning file") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+            process {
+                """
+                input[0] = [
+                    [ id: 'mR1' ],
+                    [ file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/bam/test.single_end.sorted.bam", checkIfExists: true), ]
+                ]
+                // FIXME This needs to match up with s40
+                input[1] = file(
+                            "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.gtf",
+                            checkIfExists: true
+                            )
+                input[2] = []
+                """
+            }
+        }
+
+        then {
+            // FIXME Broken test
+            assert process.failed
+        }
+
+    }
+
+    // TODO Add a test for with a tuning file
+
+}

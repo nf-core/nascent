@@ -2,13 +2,14 @@ process PINTS_CALLER {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "bioconda::pypints=1.1.8"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/pypints:1.1.8--pyh7cba7a3_0' :
-        'quay.io/biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
+        'biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
 
     input:
     tuple val(meta), path(bams)
+    val assay_type
 
     output:
     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
@@ -34,6 +35,7 @@ process PINTS_CALLER {
         --file-prefix $prefix \\
         --thread $task.cpus \\
         --dont-check-updates \\
+        --exp-type $assay_type \\
         $args
 
     cat <<-END_VERSIONS > versions.yml

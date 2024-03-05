@@ -24,12 +24,12 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "22.10.1"
+          - "23.04.0"
           - "latest-everything"
         profile: ["docker"] # TODO , "singularity", "conda"]
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache Nextflow installation
         id: cache-software
@@ -73,7 +73,7 @@ jobs:
         run: |
           nf-test test \
             --profile=${{ matrix.profile }} \
-            tests/pipeline/*.nf.test \
+            workflows/tests/*.nf.test \
             --tap=test.tap
 
       - uses: pcolby/tap-summary@v1
