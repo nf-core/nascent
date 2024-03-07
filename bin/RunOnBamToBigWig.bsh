@@ -1,5 +1,14 @@
 #!/usr/bin/bash
 #
+#########################################
+# Author: [shaopei](https://github.com/shaopei)
+# File: RunOnBamToBigWig.bsh
+# Source: https://github.com/Danko-Lab/RunOnBamToBigWig/blob/master/RunOnBamToBigWig.bsh
+# Source+commit: https://github.com/Danko-Lab/RunOnBamToBigWig/blob/e34f72bf749f711b24010c5019ae5d6314eb443f/RunOnBamToBigWig.bsh
+# Download Date: 2024-03-07, commit: 34ac31d
+# This source code is licensed under the BSD 2-Clause "Simplified" License
+#########################################
+
 while test $# -gt 0; do
         case "$1" in
                 -h|--help)
