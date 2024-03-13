@@ -10,6 +10,8 @@ include {
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/deeptools/bamcoverage/main'
 
+include { DREG_PREP } from '../../modules/local/dreg_prep/main'
+
 workflow COVERAGE_GRAPHS {
     take:
     bam
@@ -56,6 +58,11 @@ workflow COVERAGE_GRAPHS {
     ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_MINUS.out.versions.first())
 
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
+
+    DREG_PREP (
+        ch_bam_bai,
+        sizes
+    )
 
     emit:
     plus_bedGraph = BEDTOOLS_GENOMECOV_PLUS.out.genomecov
