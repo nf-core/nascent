@@ -44,6 +44,15 @@ workflow NASCENT {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_fasta
+    ch_gtf
+    ch_gff
+    ch_gene_bed
+    ch_bwa_index
+    ch_bwamem2_index
+    ch_dragmap
+    ch_bowtie2_index
+    ch_hisat2_index
 
     main:
 
@@ -59,9 +68,15 @@ workflow NASCENT {
     if (!params.skip_alignment) { prepareToolIndices << params.aligner }
     PREPARE_GENOME (
         prepareToolIndices,
-        params.fasta,
-        params.gtf,
-        params.gff,
+        ch_fasta,
+        ch_gtf,
+        ch_gff,
+        ch_gene_bed,
+        ch_bwa_index,
+        ch_bwamem2_index,
+        ch_dragmap,
+        ch_bowtie2_index,
+        ch_hisat2_index,
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
     ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
@@ -155,12 +170,12 @@ workflow NASCENT {
         ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'hisat2') {
-        if (params.hisat2_index.endsWith('.tar.gz')) {
-            ch_hisat2_index = UNTAR_HISAT2_INDEX ( [ [:], params.hisat2_index ] ).untar
+        if (ch_hisat2_index.endsWith('.tar.gz')) {
+            ch_hisat2_index = UNTAR_HISAT2_INDEX ( [ [:], ch_hisat2_index ] ).untar
             ch_versions = ch_versions.mix(UNTAR_HISAT2_INDEX.out.versions)
         } else {
             // TODO Give the meta from basename or genome?
-            ch_hisat2_index = [ [meta: "Genome"], file(params.hisat2_index) ]
+            ch_hisat2_index = [ [meta: "Genome"], file(ch_hisat2_index) ]
         }
 
         FASTQ_ALIGN_HISAT2 (
