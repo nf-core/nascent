@@ -58,7 +58,16 @@ workflow NFCORE_NASCENT {
     // WORKFLOW: Run pipeline
     //
     NASCENT (
-        samplesheet
+        samplesheet,
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.gene_bed,
+        params.bwa_index,
+        params.bwamem2_index,
+        params.dragmap,
+        params.bowtie2_index,
+        params.hisat2_index,
     )
 
     emit:

@@ -25,6 +25,12 @@ workflow PREPARE_GENOME {
     fasta
     gtf
     gff
+    gene_bed
+    bwa_index
+    bwamem2_index
+    dragmap
+    bowtie2_index
+    hisat2_index
 
     main:
 
@@ -66,12 +72,12 @@ workflow PREPARE_GENOME {
     //
     // Uncompress gene BED annotation file or create from GTF if required
     //
-    if (params.gene_bed) {
-        if (params.gene_bed.endsWith('.gz')) {
-            ch_gene_bed = GUNZIP_GENE_BED ( [ [:], params.gene_bed ] ).gunzip.map { it[1] }
+    if (gene_bed) {
+        if (gene_bed.endsWith('.gz')) {
+            ch_gene_bed = GUNZIP_GENE_BED ( [ [:], gene_bed ] ).gunzip.map { it[1] }
             ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
-            ch_gene_bed = file(params.gene_bed)
+            ch_gene_bed = file(gene_bed)
         }
     } else {
         ch_gene_bed = GTF2BED ( ch_gtf ).bed
@@ -94,52 +100,52 @@ workflow PREPARE_GENOME {
     ch_bowtie2_index = Channel.empty()
     // TODO Turn this into a switch
     if ('bwa' in prepare_tool_indices) {
-        if (params.bwa_index) {
-            if (params.bwa_index.endsWith('.tar.gz')) {
-                ch_bwa_index = UNTAR_BWA_INDEX ( params.bwa_index ).untar
+        if (bwa_index) {
+            if (bwa_index.endsWith('.tar.gz')) {
+                ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], bwa_index ] ).untar
                 ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
-                ch_bwa_index = [ [meta: "Genome"], file(params.bwa_index) ]
+                ch_bwa_index = [ [meta: "Genome"], file(bwa_index) ]
             }
         } else {
             ch_bwa_index = BWA_INDEX ( ch_fasta.map { [ [:], it ] } ).index
             ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
         }
     } else if ('bwamem2' in prepare_tool_indices) {
-        if (params.bwamem2_index) {
-            if (params.bwamem2_index.endsWith('.tar.gz') || params.bwamem2_index.endsWith('.tgz')) {
-                ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], params.bwamem2_index ] ).untar
+        if (bwamem2_index) {
+            if (bwamem2_index.endsWith('.tar.gz') || bwamem2_index.endsWith('.tgz')) {
+                ch_bwa_index = UNTAR_BWA_INDEX ( [ [:], bwamem2_index ] ).untar
                 ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
-                ch_bwa_index = [ [meta: "Genome"], file(params.bwamem2_index) ]
+                ch_bwa_index = [ [meta: "Genome"], file(bwamem2_index) ]
             }
         } else {
             ch_bwa_index = BWAMEM2_INDEX ( ch_fasta.map { [ [:], it ] } ).index
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
     } else if ('dragmap' in prepare_tool_indices) {
-        if (params.dragmap) {
-            if (params.dragmap.endsWith('.tar.gz')) {
-                ch_dragmap = UNTAR_DRAGMAP_INDEX ( params.dragmap ).untar
+        if (dragmap) {
+            if (dragmap.endsWith('.tar.gz')) {
+                ch_dragmap = UNTAR_DRAGMAP_INDEX ( dragmap ).untar
                 ch_versions = ch_versions.mix(UNTAR_DRAGMAP_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
-                ch_dragmap = [ [meta: "Genome"], file(params.dragmap) ]
+                ch_dragmap = [ [meta: "Genome"], file(dragmap) ]
             }
         } else {
             ch_dragmap = DRAGMAP_HASHTABLE( ch_fasta.map { [ [:], it ] } ).hashmap
             ch_versions = ch_versions.mix(DRAGMAP_HASHTABLE.out.versions)
         }
     } else if ('bowtie2' in prepare_tool_indices) {
-        if (params.bowtie2_index) {
-            if (params.bowtie2_index.endsWith('.tar.gz')) {
-                ch_bowtie2_index = UNTAR_BOWTIE2_INDEX ( params.bowtie2_index ).untar
+        if (bowtie2_index) {
+            if (bowtie2_index.endsWith('.tar.gz')) {
+                ch_bowtie2_index = UNTAR_BOWTIE2_INDEX ( bowtie2_index ).untar
                 ch_versions = ch_versions.mix(UNTAR_BOWTIE2_INDEX.out.versions)
             } else {
                 // TODO Give the meta from basename or genome?
-                ch_bowtie2_index = [ [meta: "Genome"], file(params.bowtie2_index) ]
+                ch_bowtie2_index = [ [meta: "Genome"], file(bowtie2_index) ]
             }
         } else {
             ch_bowtie2_index = BOWTIE2_BUILD ( ch_fasta.map { [ [:], it ] } ).index
