@@ -4,9 +4,7 @@ process DREG_PREP {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'nf-core/nascent/dreg_prep:dreg_prep--18e6e4570a433d65' :
-        'nf-core/nascent/dreg_prep:b6f1c5d2a964415f' }"
+    container 'nf-core/nascent/dreg_prep:b6f1c5d2a964415f'
 
     input:
     tuple val(meta), path(bam_file), val(index)
