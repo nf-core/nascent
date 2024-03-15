@@ -42,6 +42,15 @@ workflow NASCENT {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_fasta
+    ch_gtf
+    ch_gff
+    ch_gene_bed
+    ch_bwa_index
+    ch_bwamem2_index
+    ch_dragmap
+    ch_bowtie2_index
+    ch_hisat2_index
 
     main:
 
@@ -57,9 +66,15 @@ workflow NASCENT {
     if (!params.skip_alignment) { prepareToolIndices << params.aligner }
     PREPARE_GENOME (
         prepareToolIndices,
-        params.fasta,
-        params.gtf,
-        params.gff,
+        ch_fasta,
+        ch_gtf,
+        ch_gff,
+        ch_gene_bed,
+        ch_bwa_index,
+        ch_bwamem2_index,
+        ch_dragmap,
+        ch_bowtie2_index,
+        ch_hisat2_index,
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
     ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
