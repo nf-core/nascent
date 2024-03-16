@@ -73,7 +73,7 @@ process DREG_PREP {
     } else {
         if (params.forwardStranded) {
             """
-            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \\
+            samtools view -@ $task.cpus -bf 0x2 ${bam_file} | samtools sort -n -@ $task.cpus \\
                 > ${prefix}.dreg.bam
 
             bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\
@@ -112,7 +112,7 @@ process DREG_PREP {
             """
         } else {
             """
-            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \\
+            samtools view -@ $task.cpus -bf 0x2 ${bam_file} | samtools sort -n -@ $task.cpus \\
                 > ${prefix}.dreg.bam
 
             bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\
