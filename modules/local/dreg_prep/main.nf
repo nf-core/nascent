@@ -25,33 +25,34 @@ process DREG_PREP {
         """
         echo "Creating BigWigs suitable as inputs to dREG"
 
-        bamToBed -i ${bam_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
-            awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \
+        bamToBed -i ${bam_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \\
+            awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \\
             > ${prefix}.dreg.bed
+
         sortBed -i ${prefix}.dreg.bed > ${prefix}.dreg.sort.bed
 
         echo "positive strand processed to bedGraph"
 
-        bedtools genomecov \
-            -bg \
-            -i ${prefix}.dreg.sort.bed \
-            -g ${sizes} \
-            -strand + \
+        bedtools genomecov \\
+            -bg \\
+            -i ${prefix}.dreg.sort.bed \\
+            -g ${sizes} \\
+            -strand + \\
             > ${prefix}.pos.bedGraph
 
-        sortBed \
-            -i ${prefix}.pos.bedGraph \
+        sortBed \\
+            -i ${prefix}.pos.bedGraph \\
             > ${prefix}.pos.sort.bedGraph
 
-        bedtools genomecov \
-            -bg \
-            -i ${prefix}.dreg.sort.bed \
-            -g ${sizes} \
-            -strand - \
+        bedtools genomecov \\
+            -bg \\
+            -i ${prefix}.dreg.sort.bed \\
+            -g ${sizes} \\
+            -strand - \\
             | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' > ${prefix}.neg.bedGraph
 
-        sortBed \
-            -i ${prefix}.neg.bedGraph \
+        sortBed \\
+            -i ${prefix}.neg.bedGraph \\
             > ${prefix}.neg.sort.bedGraph
 
         echo "negative strand processed to bedGraph"
@@ -59,12 +60,12 @@ process DREG_PREP {
         bedGraphToBigWig ${prefix}.pos.sort.bedGraph ${sizes} ${prefix}.pos.bw
         bedGraphToBigWig ${prefix}.neg.sort.bedGraph ${sizes} ${prefix}.neg.bw
 
-        cat ${prefix}.pos.bedGraph \
-            ${prefix}.neg.bedGraph \
+        cat ${prefix}.pos.bedGraph \\
+            ${prefix}.neg.bedGraph \\
             > ${prefix}.unsorted.bedGraph
 
-        sortBed \
-            -i ${prefix}.unsorted.bedGraph \
+        sortBed \\
+            -i ${prefix}.unsorted.bedGraph \\
             > ${prefix}.bedGraph
 
         echo "bedGraph to bigwig done"
@@ -72,80 +73,80 @@ process DREG_PREP {
     } else {
         if (params.forwardStranded) {
             """
-            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \
+            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \\
                 > ${prefix}.dreg.bam
 
-            bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \
-                | awk 'BEGIN{OFS="\t"} (\$9 == "+") {print \$1,\$2,\$2+1,\$7,\$8,\$9}; (\$9 == "-") {print \$1,\$3-1,\$3,\$7,\$8,\$9}' \
+            bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\
+                | awk 'BEGIN{OFS="\t"} (\$9 == "+") {print \$1,\$2,\$2+1,\$7,\$8,\$9}; (\$9 == "-") {print \$1,\$3-1,\$3,\$7,\$8,\$9}' \\
                 | sort -k 1,1 -k 2,2n > ${prefix}.dreg.sort.bed
 
-            bedtools genomecov -bg \
-                -i ${prefix}.dreg.sort.bed \
-                -g ${sizes} \
-                -strand + \
+            bedtools genomecov -bg \\
+                -i ${prefix}.dreg.sort.bed \\
+                -g ${sizes} \\
+                -strand + \\
                 > ${prefix}.pos.bedGraph
 
-            bedtools genomecov -bg \
-                -i ${prefix}.dreg.sort.bed \
-                -g ${sizes} \
-                -strand - \
+            bedtools genomecov -bg \\
+                -i ${prefix}.dreg.sort.bed \\
+                -g ${sizes} \\
+                -strand - \\
                 > ${prefix}.neg.noinv.bedGraph
 
-            cat ${prefix}.neg.noinv.bedGraph \
-                | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' \
+            cat ${prefix}.neg.noinv.bedGraph \\
+                | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' \\
                 > ${prefix}.neg.bedGraph
 
-            bedGraphToBigWig ${prefix}.pos.bedGraph \
+            bedGraphToBigWig ${prefix}.pos.bedGraph \\
                 ${sizes} ${prefix}.pos.bw
 
-            bedGraphToBigWig ${prefix}.neg.bedGraph \
+            bedGraphToBigWig ${prefix}.neg.bedGraph \\
                 ${sizes} ${prefix}.neg.bw
 
-            cat ${prefix}.pos.bedGraph \
-                ${prefix}.neg.bedGraph \
+            cat ${prefix}.pos.bedGraph \\
+                ${prefix}.neg.bedGraph \\
                 > ${prefix}.unsorted.bedGraph
 
-            sortBed \
-                -i ${prefix}.unsorted.bedGraph \
+            sortBed \\
+                -i ${prefix}.unsorted.bedGraph \\
                 > ${prefix}.bedGraph
             """
         } else {
             """
-            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \
+            samtools view -@ 16 -bf 0x2 ${bam_file} | samtools sort -n -@ 16 \\
                 > ${prefix}.dreg.bam
 
-            bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \
-                | awk 'BEGIN{OFS="\t"} (\$10 == "+") {print \$1,\$5,\$5+1,\$7,\$8,\$10}; (\$10 == "-") {print \$1,\$6-1,\$6,\$7,\$8,\$10}' \
+            bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\
+                | awk 'BEGIN{OFS="\t"} (\$10 == "+") {print \$1,\$5,\$5+1,\$7,\$8,\$10}; (\$10 == "-") {print \$1,\$6-1,\$6,\$7,\$8,\$10}' \\
                 | sort -k 1,1 -k 2,2n > ${prefix}.dreg.sort.bed
 
-            bedtools genomecov -bg \
-                -i ${prefix}.dreg.sort.bed \
-                -g ${sizes} \
-                -strand + \
+            bedtools genomecov -bg \\
+                -i ${prefix}.dreg.sort.bed \\
+                -g ${sizes} \\
+                -strand + \\
                 > ${prefix}.pos.bedGraph
 
-            bedtools genomecov -bg \
-                -i ${prefix}.dreg.sort.bed \
-                -g ${sizes} \
-                -strand - \
+            bedtools genomecov -bg \\
+                -i ${prefix}.dreg.sort.bed \\
+                -g ${sizes} \\
+                -strand - \\
                 > ${prefix}.neg.noinv.bedGraph
 
-            cat ${prefix}.neg.noinv.bedGraph \
-                | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' \
+            cat ${prefix}.neg.noinv.bedGraph \\
+                | awk 'BEGIN{OFS="\t"} {print \$1,\$2,\$3,-1*\$4}' \\
                 > ${prefix}.neg.bedGraph
 
-            bedGraphToBigWig ${prefix}.pos.bedGraph \
+            bedGraphToBigWig ${prefix}.pos.bedGraph \\
                 ${sizes} ${prefix}.pos.bw
 
-            bedGraphToBigWig ${prefix}.neg.bedGraph \
+            bedGraphToBigWig ${prefix}.neg.bedGraph \\
                 ${sizes} ${prefix}.neg.bw
 
-            cat ${prefix}.pos.bedGraph \
-                ${prefix}.neg.bedGraph \
+            cat ${prefix}.pos.bedGraph \\
+                ${prefix}.neg.bedGraph \\
                 > ${prefix}.unsorted.bedGraph
 
-            sortBed \
-                -i ${prefix}.unsorted.bedGraph \
+            sortBed \\
+                -i ${prefix}.unsorted.bedGraph \\
                 > ${prefix}.bedGraph
             """
         }
