@@ -29,7 +29,9 @@ process DREG_PREP {
             awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \\
             > ${prefix}.dreg.bed
 
-        sortBed -i ${prefix}.dreg.bed > ${prefix}.dreg.sort.bed
+        sort -k 1,1 -k2,2n \\
+            ${prefix}.dreg.bed \\
+            > ${prefix}.dreg.sort.bed
 
         echo "positive strand processed to bedGraph"
 
@@ -40,8 +42,8 @@ process DREG_PREP {
             -strand + \\
             > ${prefix}.pos.bedGraph
 
-        sortBed \\
-            -i ${prefix}.pos.bedGraph \\
+        sort -k 1,1 -k2,2n \\
+            ${prefix}.pos.bedGraph \\
             > ${prefix}.pos.sort.bedGraph
 
         bedtools genomecov \\
@@ -51,8 +53,9 @@ process DREG_PREP {
             -strand - \\
             | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' > ${prefix}.neg.bedGraph
 
-        sortBed \\
-            -i ${prefix}.neg.bedGraph \\
+
+        sort -k 1,1 -k2,2n \\
+            ${prefix}.neg.bedGraph \\
             > ${prefix}.neg.sort.bedGraph
 
         echo "negative strand processed to bedGraph"
@@ -64,8 +67,8 @@ process DREG_PREP {
             ${prefix}.neg.bedGraph \\
             > ${prefix}.unsorted.bedGraph
 
-        sortBed \\
-            -i ${prefix}.unsorted.bedGraph \\
+        sort -k 1,1 -k2,2n \\
+            ${prefix}.unsorted.bedGraph \\
             > ${prefix}.bedGraph
 
         echo "bedGraph to bigwig done"
@@ -106,8 +109,8 @@ process DREG_PREP {
                 ${prefix}.neg.bedGraph \\
                 > ${prefix}.unsorted.bedGraph
 
-            sortBed \\
-                -i ${prefix}.unsorted.bedGraph \\
+            sort -k 1,1 -k2,2n \\
+                ${prefix}.unsorted.bedGraph \\
                 > ${prefix}.bedGraph
             """
         } else {
@@ -145,8 +148,9 @@ process DREG_PREP {
                 ${prefix}.neg.bedGraph \\
                 > ${prefix}.unsorted.bedGraph
 
-            sortBed \\
-                -i ${prefix}.unsorted.bedGraph \\
+
+            sort -k 1,1 -k2,2n \\
+                ${prefix}.unsorted.bedGraph \\
                 > ${prefix}.bedGraph
             """
         }
