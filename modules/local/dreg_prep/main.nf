@@ -4,7 +4,9 @@ process DREG_PREP {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container 'nf-core/nascent/dreg_prep:b6f1c5d2a964415f'
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0' :
+        'biocontainers/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0' }"
 
     input:
     tuple val(meta), path(bam_file), val(index)
