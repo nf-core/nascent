@@ -32,8 +32,8 @@
                     },
                     "bowtie2/align": {
                         "branch": "master",
-                        "git_sha": "3c77ca9aac783e76c3614a06db3bfe4fef619bde",
-                        "installed_by": ["fastq_align_bowtie2", "modules"]
+                        "git_sha": "0fe30831abbc2ed115e46e92330edf38f56edc3d",
+                        "installed_by": ["fastq_align_bowtie2"]
                     },
                     "bowtie2/build": {
                         "branch": "master",
@@ -47,8 +47,8 @@
                     },
                     "bwa/mem": {
                         "branch": "master",
-                        "git_sha": "1e2b7fb7106852388610c0360d234b0829eb980e",
-                        "installed_by": ["fastq_align_bwa", "modules"]
+                        "git_sha": "b97197968ac12dde2463fa54541f6350c46f2035",
+                        "installed_by": ["fastq_align_bwa"]
                     },
                     "bwamem2/index": {
                         "branch": "master",
@@ -68,11 +68,6 @@
                     "cat/fastq": {
                         "branch": "master",
                         "git_sha": "02fd5bd7275abad27aad32d5c852e0a9b1b98882",
-                        "installed_by": ["modules"]
-                    },
-                    "custom/dumpsoftwareversions": {
-                        "branch": "master",
-                        "git_sha": "de45447d060b8c8b98575bc637a4a575fd0638e1",
                         "installed_by": ["modules"]
                     },
                     "custom/getchromsizes": {
@@ -119,27 +114,27 @@
                     "hisat2/align": {
                         "branch": "master",
                         "git_sha": "400037f54de4b0c42712ec5a499d9fd9e66250d1",
-                        "installed_by": ["fastq_align_hisat2", "modules"]
+                        "installed_by": ["fastq_align_hisat2"]
                     },
                     "homer/findpeaks": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["homer/groseq"]
+                        "installed_by": ["groseq", "homer/groseq"]
                     },
                     "homer/maketagdirectory": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["homer/groseq"]
+                        "installed_by": ["groseq", "homer/groseq"]
                     },
                     "homer/makeucscfile": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["homer/groseq"]
+                        "installed_by": ["groseq", "homer/groseq"]
                     },
                     "homer/pos2bed": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["homer/groseq"]
+                        "installed_by": ["groseq", "homer/groseq"]
                     },
                     "multiqc": {
                         "branch": "master",
@@ -194,7 +189,7 @@
                     },
                     "samtools/sort": {
                         "branch": "master",
-                        "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
+                        "git_sha": "4352dbdb09ec40db71e9b172b97a01dcf5622c26",
                         "installed_by": ["bam_sort_stats_samtools"]
                     },
                     "samtools/stats": {
@@ -209,7 +204,7 @@
                     },
                     "umitools/dedup": {
                         "branch": "master",
-                        "git_sha": "ff7e93715a2acecf3f143ec78c9858deba2984d0",
+                        "git_sha": "3bd4f34e3093c2a16e6a8eefc22242b9b94641db",
                         "installed_by": ["bam_dedup_stats_samtools_umitools"]
                     },
                     "untar": {
@@ -228,38 +223,34 @@
                     },
                     "bam_sort_stats_samtools": {
                         "branch": "master",
-                        "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
-                        "installed_by": ["fastq_align_bowtie2", "fastq_align_bwa", "fastq_align_hisat2", "subworkflows"]
+                        "git_sha": "4352dbdb09ec40db71e9b172b97a01dcf5622c26",
+                        "installed_by": ["fastq_align_bowtie2", "fastq_align_bwa", "fastq_align_hisat2"]
                     },
                     "bam_stats_samtools": {
                         "branch": "master",
                         "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
-                        "installed_by": ["bam_dedup_stats_samtools_umitools", "bam_sort_stats_samtools", "subworkflows"]
+                        "installed_by": ["bam_dedup_stats_samtools_umitools", "bam_sort_stats_samtools"]
                     },
                     "fastq_align_bowtie2": {
                         "branch": "master",
-                        "git_sha": "cfd937a668919d948f6fcbf4218e79de50c2f36f",
+                        "git_sha": "0fe30831abbc2ed115e46e92330edf38f56edc3d",
                         "installed_by": ["subworkflows"]
                     },
                     "fastq_align_bwa": {
                         "branch": "master",
-                        "git_sha": "cfd937a668919d948f6fcbf4218e79de50c2f36f",
+                        "git_sha": "b97197968ac12dde2463fa54541f6350c46f2035",
                         "installed_by": ["subworkflows"]
                     },
                     "fastq_align_hisat2": {
                         "branch": "master",
-                        "git_sha": "cfd937a668919d948f6fcbf4218e79de50c2f36f",
+                        "git_sha": "701ae347c4508fba1b7d65262596f278b6a11cb6",
                         "installed_by": ["subworkflows"]
                     },
                     "homer/groseq": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
                         "installed_by": ["subworkflows"]
-                    }
-                }
-            },
-            "subworkflows": {
-                "nf-core": {
+                    },
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
