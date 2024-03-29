@@ -13,26 +13,25 @@
 ## Write out the bigWigs.
 echo "SE"
 echo "Writing bigWigs:"
-echo ${prefix} >${prefix}.align.log
 
 # in SE, MAP5 alwasys TRUE
 
 #if [[ "\${RNA5}" == "R1_5prime" && "\${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
 if [[ "$assay_type" == "GROseq" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f ${moduleDir}/bin/se_1.awk | gzip >${prefix}.bed.gz
+    bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/bin/se_1.awk | gzip >${prefix}.bed.gz
     #elif [[ "\${RNA3}" == "R1_5prime" && "\${OPP}" == "TRUE" ]] ; then  #like PRO-seq
 elif [[ "$assay_type" == "PROseq" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f ${moduleDir}/bin/se_2.awk | gzip >${prefix}.bed.gz
+    bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/bin/se_2.awk | gzip >${prefix}.bed.gz
 fi
 
-echo 'Number of mappable reads:' >>${prefix}.align.log
+echo 'Number of mappable reads:'
 readCount=`zcat ${prefix}.bed.gz | wc -l`
-echo \${readCount} >>${prefix}.align.log
+echo \${readCount}
 
 ## Remove rRNA and reverse the strand (PRO-seq).
 zcat ${prefix}.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
-echo 'Number of mappable reads (excluding rRNA):' >>${prefix}.align.log
-echo `zcat ${prefix}.nr.rs.bed.gz | wc -l` >>${prefix}.align.log
+echo 'Number of mappable reads (excluding rRNA):'
+echo `zcat ${prefix}.nr.rs.bed.gz | wc -l`
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
 bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix}_plus.bedGraph
