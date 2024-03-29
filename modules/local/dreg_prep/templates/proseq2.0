@@ -19,10 +19,10 @@ echo "Writing bigWigs:"
 if [[ "$meta.single_end" == "true" ]]; then
     echo "SE"
     if [[ "$assay_type" == "GROseq" ]]; then
-        bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/bin/se_1.awk | gzip >${prefix}.bed.gz
+        bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/scripts/se_1.awk | gzip >${prefix}.bed.gz
         #elif [[ "\${RNA3}" == "R1_5prime" && "\${OPP}" == "TRUE" ]] ; then  #like PRO-seq
     elif [[ "$assay_type" == "PROseq" ]]; then
-        bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/bin/se_2.awk | gzip >${prefix}.bed.gz
+        bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/scripts/se_2.awk | gzip >${prefix}.bed.gz
     fi
 else
     echo "PE"
@@ -31,17 +31,17 @@ else
         if true; then
             # HACK Map5 not supported for now
             if true; then ## report The 5' end of the RNA. Danko lab leChRO-Seq protocol is on the 5' of _R1 readl, same strand of R1 (\$9)
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_1.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_1.awk | gzip >${prefix}.bed.gz
             else ## report The 3' end of the RNA.  Danko lab leChRO-Seq protocol is on the 5 prime of _R2 read, opposite strand of R2 (R2 strand \$10, R1 strand \$9)
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_2.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_2.awk | gzip >${prefix}.bed.gz
             fi
         # HACK Opposite-strand not supported for now
         elif false; then
             # HACK Map5 not supported for now
             if true; then ## report The 5' end of the RNA.
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_4.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_4.awk | gzip >${prefix}.bed.gz
             else ## report The 3' end of the RNA.
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_5.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_5.awk | gzip >${prefix}.bed.gz
             fi
         fi
     elif [ "$assay_type" == "R2_5" ]; then
@@ -49,17 +49,17 @@ else
         if true; then
             # HACK Map5 not supported for now
             if true; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_6.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_6.awk | gzip >${prefix}.bed.gz
             else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_7.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_7.awk | gzip >${prefix}.bed.gz
             fi
         # HACK Opposite-strand not supported for now
         elif false; then
             # HACK Map5 not supported for now
             if true; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_8.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_8.awk | gzip >${prefix}.bed.gz
             else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_8.awk | gzip >${prefix}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/scripts/pe_8.awk | gzip >${prefix}.bed.gz
             fi
         fi
     fi
@@ -79,11 +79,11 @@ bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix
 bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix}_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat ${prefix}_minus.noinv.bedGraph | awk -f ${moduleDir}/bin/se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
+cat ${prefix}_minus.noinv.bedGraph | awk -f ${moduleDir}/scripts/se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat ${prefix}_plus.bedGraph | awk -f ${moduleDir}/bin/se_4.awk -v readCount="\$readCount" >${prefix}_plus.rpm.bedGraph
-cat ${prefix}_minus.bedGraph | awk -f ${moduleDir}/bin/se_4.awk -v readCount="\$readCount" >${prefix}_minus.rpm.bedGraph
+cat ${prefix}_plus.bedGraph | awk -f ${moduleDir}/scripts/se_4.awk -v readCount="\$readCount" >${prefix}_plus.rpm.bedGraph
+cat ${prefix}_minus.bedGraph | awk -f ${moduleDir}/scripts/se_4.awk -v readCount="\$readCount" >${prefix}_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
 bedGraphToBigWig ${prefix}_plus.rpm.bedGraph ${sizes} ${prefix}_plus.rpm.bw
 bedGraphToBigWig ${prefix}_minus.rpm.bedGraph ${sizes} ${prefix}_minus.rpm.bw
