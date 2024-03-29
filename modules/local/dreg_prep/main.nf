@@ -25,8 +25,8 @@ process DREG_PREP {
         """
         echo "Creating BigWigs suitable as inputs to dREG"
 
-        bamToBed -i ${bam_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \\
-            awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \\
+        bamToBed -i ${bam_file} | awk 'BEGIN{OFS="\\t"} (\$5 > 0){print \$0}' | \\
+            awk 'BEGIN{OFS="\\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \\
             > ${prefix}.dreg.bed
 
         sort -k 1,1 -k2,2n \\
