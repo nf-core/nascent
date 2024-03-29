@@ -14,58 +14,58 @@
 echo "PE"
 echo "Writing bigWigs:"
 j=$(echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev)
-echo $j >${OUTPUT}/${j}.align.log
+echo $j >${j}.align.log
 if [ "${RNA5}" == "R1_5prime" ]; then
     if [ "${OPP}" == "FALSE" ]; then
         if [ "${MAP5}" == "TRUE" ]; then ## report The 5' end of the RNA. Danko lab leChRO-Seq protocol is on the 5' of _R1 readl, same strand of R1 ($9)
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >${TMPDIR}/$j.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >$j.bed.gz
         else ## report The 3' end of the RNA.  Danko lab leChRO-Seq protocol is on the 5 prime of _R2 read, opposite strand of R2 (R2 strand $10, R1 strand $9)
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}' | gzip >${TMPDIR}/$j.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}' | gzip >$j.bed.gz
         fi
     elif [ "${OPP}" == "TRUE" ]; then
         if [ "${MAP5}" == "TRUE" ]; then ## report The 5' end of the RNA.
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >${TMPDIR}/$j.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >$j.bed.gz
         else ## report The 3' end of the RNA.
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}' | gzip >${TMPDIR}/$j.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}' | gzip >$j.bed.gz
         fi
     fi
 elif [ "${RNA5}" == "R2_5prime" ]; then
     if [ "${OPP}" == "FALSE" ]; then
         if [ "${MAP5}" == "TRUE" ]; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}' | gzip >${TMPDIR}/${j}.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}' | gzip >${j}.bed.gz
         else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >${TMPDIR}/${j}.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >${j}.bed.gz
         fi
     elif [ "${OPP}" == "TRUE" ]; then
         if [ "${MAP5}" == "TRUE" ]; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}' | gzip >${TMPDIR}/${j}.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}' | gzip >${j}.bed.gz
         else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${TMPDIR}/${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >${TMPDIR}/${j}.bed.gz
+            bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >${j}.bed.gz
         fi
     fi
 fi
 
-echo 'Number of mappable reads:' >>${OUTPUT}/${j}.align.log
-readCount=$(zcat ${TMPDIR}/$j.bed.gz | grep "" -c)
-echo ${readCount} >>${OUTPUT}/${j}.align.log
+echo 'Number of mappable reads:' >>${j}.align.log
+readCount=$(zcat $j.bed.gz | grep "" -c)
+echo ${readCount} >>${j}.align.log
 
 ## Remove rRNA and reverse the strand (PRO-seq).
-zcat ${TMPDIR}/$j.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${TMPDIR}/$j.nr.rs.bed.gz
-echo 'Number of mappable reads (excluding rRNA):' >>${OUTPUT}/${j}.align.log
-echo $(zcat ${TMPDIR}/$j.nr.rs.bed.gz | grep "" -c) >>${OUTPUT}/${j}.align.log
+zcat $j.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >$j.nr.rs.bed.gz
+echo 'Number of mappable reads (excluding rRNA):' >>${j}.align.log
+echo $(zcat $j.nr.rs.bed.gz | grep "" -c) >>${j}.align.log
 
 ## Convert to bedGraph ... Can't gzip these, unfortunately.
-bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${sizes} -strand + >${TMPDIR}/$j\_plus.bedGraph
-bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${sizes} -strand - >${TMPDIR}/$j\_minus.noinv.bedGraph
+bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand + >$j\_plus.bedGraph
+bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand - >$j\_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat ${TMPDIR}/$j\_minus.noinv.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,-1*$4}' >${TMPDIR}/$j\_minus.bedGraph ## Invert read counts on the minus strand.
+cat $j\_minus.noinv.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,-1*$4}' >$j\_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat ${TMPDIR}/$j\_plus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >${TMPDIR}/$j\_plus.rpm.bedGraph
-cat ${TMPDIR}/$j\_minus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >${TMPDIR}/$j\_minus.rpm.bedGraph
+cat $j\_plus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >$j\_plus.rpm.bedGraph
+cat $j\_minus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >$j\_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
-bedGraphToBigWig ${TMPDIR}/$j\_plus.rpm.bedGraph ${sizes} ${OUTPUT}/$j\_plus.rpm.bw
-bedGraphToBigWig ${TMPDIR}/$j\_minus.rpm.bedGraph ${sizes} ${OUTPUT}/$j\_minus.rpm.bw
-bedGraphToBigWig ${TMPDIR}/$j\_plus.bedGraph ${sizes} ${OUTPUT}/$j\_plus.bw
-bedGraphToBigWig ${TMPDIR}/$j\_minus.bedGraph ${sizes} ${OUTPUT}/$j\_minus.bw
+bedGraphToBigWig $j\_plus.rpm.bedGraph ${sizes} $j\_plus.rpm.bw
+bedGraphToBigWig $j\_minus.rpm.bedGraph ${sizes} $j\_minus.rpm.bw
+bedGraphToBigWig $j\_plus.bedGraph ${sizes} $j\_plus.bw
+bedGraphToBigWig $j\_minus.bedGraph ${sizes} $j\_minus.bw
