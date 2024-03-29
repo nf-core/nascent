@@ -26,13 +26,13 @@ elif [[ "$assay_type" == "PROseq" ]]; then
 fi
 
 echo 'Number of mappable reads:' >>${prefix}.align.log
-readCount=`zcat ${prefix}.bed.gz | grep "" -c`
+readCount=`zcat ${prefix}.bed.gz | wc -l`
 echo \${readCount} >>${prefix}.align.log
 
 ## Remove rRNA and reverse the strand (PRO-seq).
 zcat ${prefix}.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
 echo 'Number of mappable reads (excluding rRNA):' >>${prefix}.align.log
-echo `zcat ${prefix}.nr.rs.bed.gz | grep "" -c` >>${prefix}.align.log
+echo `zcat ${prefix}.nr.rs.bed.gz | wc -l` >>${prefix}.align.log
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
 bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix}_plus.bedGraph
