@@ -13,7 +13,7 @@
 ## Write out the bigWigs.
 echo "SE"
 echo "Writing bigWigs:"
-j=$(echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev)
+j=`echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev`
 echo $j >${j}.align.log
 
 # in SE, MAP5 alwasys TRUE
@@ -29,13 +29,13 @@ elif [[ "$SE_OUTPUT" == "P" ]]; then
 fi
 
 echo 'Number of mappable reads:' >>${j}.align.log
-readCount=$(zcat $j.bed.gz | grep "" -c)
+readCount=`zcat $j.bed.gz | grep "" -c`
 echo ${readCount} >>${j}.align.log
 
 ## Remove rRNA and reverse the strand (PRO-seq).
 zcat $j.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >$j.nr.rs.bed.gz
 echo 'Number of mappable reads (excluding rRNA):' >>${j}.align.log
-echo $(zcat $j.nr.rs.bed.gz | grep "" -c) >>${j}.align.log
+echo `zcat $j.nr.rs.bed.gz | grep "" -c` >>${j}.align.log
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
 bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand + >$j\_plus.bedGraph
