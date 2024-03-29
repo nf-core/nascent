@@ -29,7 +29,7 @@ readCount=`zcat ${prefix}.bed.gz | wc -l`
 echo \${readCount}
 
 ## Remove rRNA and reverse the strand (PRO-seq).
-zcat ${prefix}.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
+zcat ${prefix}.bed.gz | grep "rRNA\\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
 echo 'Number of mappable reads (excluding rRNA):'
 echo `zcat ${prefix}.nr.rs.bed.gz | wc -l`
 
