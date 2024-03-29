@@ -61,7 +61,8 @@ workflow COVERAGE_GRAPHS {
 
     DREG_PREP (
         ch_bam_bai,
-        sizes
+        sizes,
+        params.assay_type
     )
 
     emit:

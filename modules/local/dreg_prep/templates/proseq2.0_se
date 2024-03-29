@@ -17,11 +17,11 @@ echo ${prefix} >${prefix}.align.log
 
 # in SE, MAP5 alwasys TRUE
 
-#if [[ "${RNA5}" == "R1_5prime" && "${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
-if [[ "$SE_OUTPUT" == "G" ]]; then
+#if [[ "\${RNA5}" == "R1_5prime" && "\${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
+if [[ "$assay_type" == "GROseq" ]]; then
     bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_1.awk | gzip >${prefix}.bed.gz
-    #elif [[ "${RNA3}" == "R1_5prime" && "${OPP}" == "TRUE" ]] ; then  #like PRO-seq
-elif [[ "$SE_OUTPUT" == "P" ]]; then
+    #elif [[ "\${RNA3}" == "R1_5prime" && "\${OPP}" == "TRUE" ]] ; then  #like PRO-seq
+elif [[ "$assay_type" == "PROseq" ]]; then
     bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_2.awk | gzip >${prefix}.bed.gz
 fi
 

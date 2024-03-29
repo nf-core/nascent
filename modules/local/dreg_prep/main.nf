@@ -11,6 +11,7 @@ process DREG_PREP {
     input:
     tuple val(meta), path(bam_file), val(index)
     path  sizes
+    val assay_type
 
     output:
     tuple val(meta), path("${prefix}.pos.bw"), path("${prefix}.neg.bw"), emit: dreg_bigwig
