@@ -14,8 +14,10 @@ process DREG_PREP {
     val assay_type
 
     output:
-    tuple val(meta), path("${prefix}.pos.bw"), path("${prefix}.neg.bw"), emit: dreg_bigwig
-    tuple val(meta), path("${prefix}.bedGraph"), emit: dreg_bg
+    tuple val(meta), path("${prefix}_plus.rpm.bw"), emit: plus_rpm_bigwig
+    tuple val(meta), path("${prefix}_minus.rpm.bw"), emit: minus_rpm_bigwig
+    tuple val(meta), path("${prefix}_plus.bw"), emit: plus_bigwig
+    tuple val(meta), path("${prefix}_minus.bw"), emit: minus_bigwig
 
     when:
     task.ext.when == null || task.ext.when

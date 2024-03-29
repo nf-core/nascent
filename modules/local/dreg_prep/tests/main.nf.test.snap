@@ -1,0 +1,72 @@
+{
+    "single-end": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
+                "minus_bigwig": [
+                    
+                ],
+                "minus_rpm_bigwig": [
+                    
+                ],
+                "plus_bigwig": [
+                    
+                ],
+                "plus_rpm_bigwig": [
+                    
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-03-30T14:10:02.23320779"
+    },
+    "paired-end": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
+                "minus_bigwig": [
+                    
+                ],
+                "minus_rpm_bigwig": [
+                    
+                ],
+                "plus_bigwig": [
+                    
+                ],
+                "plus_rpm_bigwig": [
+                    
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-03-30T14:09:52.151543045"
+    }
+}
