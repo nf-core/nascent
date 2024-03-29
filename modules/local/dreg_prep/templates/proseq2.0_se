@@ -13,40 +13,39 @@
 ## Write out the bigWigs.
 echo "SE"
 echo "Writing bigWigs:"
-j=`echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev`
-echo $j >${OUTPUT}/${j}.align.log
+echo ${prefix} >${prefix}.align.log
 
 # in SE, MAP5 alwasys TRUE
 
 #if [[ "${RNA5}" == "R1_5prime" && "${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
 if [[ "$SE_OUTPUT" == "G" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_1.awk | gzip >$j.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_1.awk | gzip >${prefix}.bed.gz
     #elif [[ "${RNA3}" == "R1_5prime" && "${OPP}" == "TRUE" ]] ; then  #like PRO-seq
 elif [[ "$SE_OUTPUT" == "P" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_2.awk | gzip >$j.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_2.awk | gzip >${prefix}.bed.gz
 fi
 
-echo 'Number of mappable reads:' >>${j}.align.log
-readCount=`zcat $j.bed.gz | grep "" -c`
-echo ${readCount} >>${j}.align.log
+echo 'Number of mappable reads:' >>${prefix}.align.log
+readCount=`zcat ${prefix}.bed.gz | grep "" -c`
+echo ${readCount} >>${prefix}.align.log
 
 ## Remove rRNA and reverse the strand (PRO-seq).
-zcat $j.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >$j.nr.rs.bed.gz
-echo 'Number of mappable reads (excluding rRNA):' >>${j}.align.log
-echo `zcat $j.nr.rs.bed.gz | grep "" -c` >>${j}.align.log
+zcat ${prefix}.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
+echo 'Number of mappable reads (excluding rRNA):' >>${prefix}.align.log
+echo `zcat ${prefix}.nr.rs.bed.gz | grep "" -c` >>${prefix}.align.log
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
-bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand + >$j\_plus.bedGraph
-bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand - >$j\_minus.noinv.bedGraph
+bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix}\_plus.bedGraph
+bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix}\_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat $j\_minus.noinv.bedGraph | awk -f se_3.awk >$j\_minus.bedGraph ## Invert read counts on the minus strand.
+cat ${prefix}\_minus.noinv.bedGraph | awk -f se_3.awk >${prefix}\_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat $j\_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >$j\_plus.rpm.bedGraph
-cat $j\_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >$j\_minus.rpm.bedGraph
+cat ${prefix}\_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}\_plus.rpm.bedGraph
+cat ${prefix}\_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}\_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
-bedGraphToBigWig $j\_plus.rpm.bedGraph ${sizes} $j\_plus.rpm.bw
-bedGraphToBigWig $j\_minus.rpm.bedGraph ${sizes} $j\_minus.rpm.bw
-bedGraphToBigWig $j\_plus.bedGraph ${sizes} $j\_plus.bw
-bedGraphToBigWig $j\_minus.bedGraph ${sizes} $j\_minus.bw
+bedGraphToBigWig ${prefix}\_plus.rpm.bedGraph ${sizes} ${prefix}\_plus.rpm.bw
+bedGraphToBigWig ${prefix}\_minus.rpm.bedGraph ${sizes} ${prefix}\_minus.rpm.bw
+bedGraphToBigWig ${prefix}\_plus.bedGraph ${sizes} ${prefix}\_plus.bw
+bedGraphToBigWig ${prefix}\_minus.bedGraph ${sizes} ${prefix}\_minus.bw
