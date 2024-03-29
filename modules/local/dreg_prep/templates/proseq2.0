@@ -24,35 +24,42 @@ if [[ "$meta.single_end" == "true" ]]; then
     elif [[ "$assay_type" == "PROseq" ]]; then
         bedtools bamtobed -i $bam_file | awk -f ${moduleDir}/bin/se_2.awk | gzip >${prefix}.bed.gz
     fi
-
 else
     echo "PE"
     if [ "$assay_type" == "R1_5" ]; then
-        if [ "${OPP}" == "FALSE" ]; then
-            if [ "${MAP5}" == "TRUE" ]; then ## report The 5' end of the RNA. Danko lab leChRO-Seq protocol is on the 5' of _R1 readl, same strand of R1 ($9)
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >$j.bed.gz
-            else ## report The 3' end of the RNA.  Danko lab leChRO-Seq protocol is on the 5 prime of _R2 read, opposite strand of R2 (R2 strand $10, R1 strand $9)
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}' | gzip >$j.bed.gz
+        # HACK Opposite-strand not supported for now
+        if true; then
+            # HACK Map5 not supported for now
+            if true; then ## report The 5' end of the RNA. Danko lab leChRO-Seq protocol is on the 5' of _R1 readl, same strand of R1 (\$9)
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_1.awk | gzip >${prefix}.bed.gz
+            else ## report The 3' end of the RNA.  Danko lab leChRO-Seq protocol is on the 5 prime of _R2 read, opposite strand of R2 (R2 strand \$10, R1 strand \$9)
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_2.awk | gzip >${prefix}.bed.gz
             fi
-        elif [ "${OPP}" == "TRUE" ]; then
-            if [ "${MAP5}" == "TRUE" ]; then ## report The 5' end of the RNA.
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >$j.bed.gz
+        # HACK Opposite-strand not supported for now
+        elif false; then
+            # HACK Map5 not supported for now
+            if true; then ## report The 5' end of the RNA.
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_4.awk | gzip >${prefix}.bed.gz
             else ## report The 3' end of the RNA.
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}; ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}' | gzip >$j.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_5.awk | gzip >${prefix}.bed.gz
             fi
         fi
-    elif [ "${RNA5}" == "R2_5prime" ]; then
-        if [ "${OPP}" == "FALSE" ]; then
-            if [ "${MAP5}" == "TRUE" ]; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$10}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$10}' | gzip >${j}.bed.gz
+    elif [ "$assay_type" == "R2_5" ]; then
+        # HACK Opposite-strand not supported for now
+        if true; then
+            # HACK Map5 not supported for now
+            if true; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_6.awk | gzip >${prefix}.bed.gz
             else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$10}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$10}' | gzip >${j}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_7.awk | gzip >${prefix}.bed.gz
             fi
-        elif [ "${OPP}" == "TRUE" ]; then
-            if [ "${MAP5}" == "TRUE" ]; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($10 == "+") {print $1,$5,$5+1,$7,$8,$9}; ($10 == "-") {print $1,$6-1,$6,$7,$8,$9}' | gzip >${j}.bed.gz
+        # HACK Opposite-strand not supported for now
+        elif false; then
+            # HACK Map5 not supported for now
+            if true; then #report the 5 prime end of RNA, in Engreitz data is 5 prime end of R2, same strand
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_8.awk | gzip >${prefix}.bed.gz
             else ## report the 3-prime end of the RNA, in Engreitz data is the 5' end of R1 read, but opposite strand
-                bedtools bamtobed -bedpe -mate1 -i $bam_file 2>${j}.kill.warnings | awk 'BEGIN{OFS="\t"} ($9 == "+") {print $1,$2,$2+1,$7,$8,$9}; ($9 == "-") {print $1,$3-1,$3,$7,$8,$9}' | gzip >${j}.bed.gz
+                bedtools bamtobed -bedpe -mate1 -i $bam_file | awk -f ${moduleDir}/bin/pe_8.awk | gzip >${prefix}.bed.gz
             fi
         fi
     fi
