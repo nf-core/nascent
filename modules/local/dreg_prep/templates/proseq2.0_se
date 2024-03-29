@@ -53,4 +53,3 @@ bedGraphToBigWig ${TMPDIR}/$j\_plus.rpm.bedGraph ${CHINFO} ${OUTPUT}/$j\_plus.rp
 bedGraphToBigWig ${TMPDIR}/$j\_minus.rpm.bedGraph ${CHINFO} ${OUTPUT}/$j\_minus.rpm.bw
 bedGraphToBigWig ${TMPDIR}/$j\_plus.bedGraph ${CHINFO} ${OUTPUT}/$j\_plus.bw
 bedGraphToBigWig ${TMPDIR}/$j\_minus.bedGraph ${CHINFO} ${OUTPUT}/$j\_minus.bw
-#   rm ${TMPDIR}/$j.nr.rs.bed.gz ${TMPDIR}/$j.bed.gz ${TMPDIR}/$j*.bedGraph
