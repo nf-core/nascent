@@ -10,7 +10,7 @@ include {
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS
     DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/deeptools/bamcoverage/main'
 
-include { DREG_PREP } from './dreg_prep/main'
+include { DREG_PREP } from '../../modules/local/dreg_prep/main'
 
 workflow COVERAGE_GRAPHS {
     take:
@@ -60,8 +60,7 @@ workflow COVERAGE_GRAPHS {
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
     DREG_PREP (
-        bam,
-        bai,
+        ch_bam_bai,
         sizes
     )
 
