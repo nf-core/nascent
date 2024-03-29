@@ -14,18 +14,16 @@
 echo "SE"
 echo "Writing bigWigs:"
 j=`echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev`
-echo $j >${j}.align.log
+echo $j >${OUTPUT}/${j}.align.log
 
 # in SE, MAP5 alwasys TRUE
 
 #if [[ "${RNA5}" == "R1_5prime" && "${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
 if [[ "$SE_OUTPUT" == "G" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
-        awk 'BEGIN{OFS="\t"} ($6 == "+") {print $1,$2,$2+1,$4,$5,$6}; ($6 == "-") {print $1,$3-1,$3,$4,$5,$6}' | gzip >$j.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_1.awk | gzip >$j.bed.gz
     #elif [[ "${RNA3}" == "R1_5prime" && "${OPP}" == "TRUE" ]] ; then  #like PRO-seq
 elif [[ "$SE_OUTPUT" == "P" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
-        awk 'BEGIN{OFS="\t"} ($6 == "+") {print $1,$2,$2+1,$4,$5,"-"}; ($6 == "-") {print $1,$3-1,$3,$4,$5,"+"}' | gzip >$j.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_2.awk | gzip >$j.bed.gz
 fi
 
 echo 'Number of mappable reads:' >>${j}.align.log
@@ -42,11 +40,11 @@ bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand + >$j\_plus.bedGra
 bedtools genomecov -bg -i $j.nr.rs.bed.gz -g ${sizes} -strand - >$j\_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat $j\_minus.noinv.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,-1*$4}' >$j\_minus.bedGraph ## Invert read counts on the minus strand.
+cat $j\_minus.noinv.bedGraph | awk -f se_3.awk >$j\_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat $j\_plus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >$j\_plus.rpm.bedGraph
-cat $j\_minus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >$j\_minus.rpm.bedGraph
+cat $j\_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >$j\_plus.rpm.bedGraph
+cat $j\_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >$j\_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
 bedGraphToBigWig $j\_plus.rpm.bedGraph ${sizes} $j\_plus.rpm.bw
 bedGraphToBigWig $j\_minus.rpm.bedGraph ${sizes} $j\_minus.rpm.bw
