@@ -13,19 +13,18 @@
 ## Write out the bigWigs.
 echo "SE"
 echo "Writing bigWigs:"
-#*/
-j=$(echo $f | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev)
+j=$(echo $bam_file | awk -F"/" '{print $NF}' | rev | cut -d \. -f 3- | rev)
 echo $j >${OUTPUT}/${j}.align.log
 
 # in SE, MAP5 alwasys TRUE
 
 #if [[ "${RNA5}" == "R1_5prime" && "${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
 if [[ "$SE_OUTPUT" == "G" ]]; then
-    bedtools bamtobed -i $f 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
+    bedtools bamtobed -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
         awk 'BEGIN{OFS="\t"} ($6 == "+") {print $1,$2,$2+1,$4,$5,$6}; ($6 == "-") {print $1,$3-1,$3,$4,$5,$6}' | gzip >${TMPDIR}/$j.bed.gz
     #elif [[ "${RNA3}" == "R1_5prime" && "${OPP}" == "TRUE" ]] ; then  #like PRO-seq
 elif [[ "$SE_OUTPUT" == "P" ]]; then
-    bedtools bamtobed -i $f 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
+    bedtools bamtobed -i $bam_file 2>${TMPDIR}/kill.warnings | awk 'BEGIN{OFS="\t"} ($5 > 0){print $0}' |
         awk 'BEGIN{OFS="\t"} ($6 == "+") {print $1,$2,$2+1,$4,$5,"-"}; ($6 == "-") {print $1,$3-1,$3,$4,$5,"+"}' | gzip >${TMPDIR}/$j.bed.gz
 fi
 
@@ -39,8 +38,8 @@ echo 'Number of mappable reads (excluding rRNA):' >>${OUTPUT}/${j}.align.log
 echo $(zcat ${TMPDIR}/$j.nr.rs.bed.gz | grep "" -c) >>${OUTPUT}/${j}.align.log
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
-bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${CHINFO} -strand + >${TMPDIR}/$j\_plus.bedGraph
-bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${CHINFO} -strand - >${TMPDIR}/$j\_minus.noinv.bedGraph
+bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${sizes} -strand + >${TMPDIR}/$j\_plus.bedGraph
+bedtools genomecov -bg -i ${TMPDIR}/$j.nr.rs.bed.gz -g ${sizes} -strand - >${TMPDIR}/$j\_minus.noinv.bedGraph
 
 ## Invert minus strand.
 cat ${TMPDIR}/$j\_minus.noinv.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,-1*$4}' >${TMPDIR}/$j\_minus.bedGraph ## Invert read counts on the minus strand.
@@ -49,7 +48,7 @@ cat ${TMPDIR}/$j\_minus.noinv.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,-1
 cat ${TMPDIR}/$j\_plus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >${TMPDIR}/$j\_plus.rpm.bedGraph
 cat ${TMPDIR}/$j\_minus.bedGraph | awk 'BEGIN{OFS="\t"} {print $1,$2,$3,$4*1000*1000/'$readCount'/1}' >${TMPDIR}/$j\_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
-bedGraphToBigWig ${TMPDIR}/$j\_plus.rpm.bedGraph ${CHINFO} ${OUTPUT}/$j\_plus.rpm.bw
-bedGraphToBigWig ${TMPDIR}/$j\_minus.rpm.bedGraph ${CHINFO} ${OUTPUT}/$j\_minus.rpm.bw
-bedGraphToBigWig ${TMPDIR}/$j\_plus.bedGraph ${CHINFO} ${OUTPUT}/$j\_plus.bw
-bedGraphToBigWig ${TMPDIR}/$j\_minus.bedGraph ${CHINFO} ${OUTPUT}/$j\_minus.bw
+bedGraphToBigWig ${TMPDIR}/$j\_plus.rpm.bedGraph ${sizes} ${OUTPUT}/$j\_plus.rpm.bw
+bedGraphToBigWig ${TMPDIR}/$j\_minus.rpm.bedGraph ${sizes} ${OUTPUT}/$j\_minus.rpm.bw
+bedGraphToBigWig ${TMPDIR}/$j\_plus.bedGraph ${sizes} ${OUTPUT}/$j\_plus.bw
+bedGraphToBigWig ${TMPDIR}/$j\_minus.bedGraph ${sizes} ${OUTPUT}/$j\_minus.bw
