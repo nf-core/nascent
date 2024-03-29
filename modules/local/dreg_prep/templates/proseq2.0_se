@@ -27,7 +27,7 @@ fi
 
 echo 'Number of mappable reads:' >>${prefix}.align.log
 readCount=`zcat ${prefix}.bed.gz | grep "" -c`
-echo ${readCount} >>${prefix}.align.log
+echo \${readCount} >>${prefix}.align.log
 
 ## Remove rRNA and reverse the strand (PRO-seq).
 zcat ${prefix}.bed.gz | grep "rRNA\|chrM" -v | grep "_" -v | sort-bed - | gzip >${prefix}.nr.rs.bed.gz
@@ -42,8 +42,8 @@ bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix
 cat ${prefix}_minus.noinv.bedGraph | awk -f se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat ${prefix}_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}_plus.rpm.bedGraph
-cat ${prefix}_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}_minus.rpm.bedGraph
+cat ${prefix}_plus.bedGraph | awk -f se_4.awk -v readCount="\$readCount" >${prefix}_plus.rpm.bedGraph
+cat ${prefix}_minus.bedGraph | awk -f se_4.awk -v readCount="\$readCount" >${prefix}_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
 bedGraphToBigWig ${prefix}_plus.rpm.bedGraph ${sizes} ${prefix}_plus.rpm.bw
 bedGraphToBigWig ${prefix}_minus.rpm.bedGraph ${sizes} ${prefix}_minus.rpm.bw
