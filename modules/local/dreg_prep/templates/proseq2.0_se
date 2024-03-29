@@ -35,17 +35,17 @@ echo 'Number of mappable reads (excluding rRNA):' >>${prefix}.align.log
 echo `zcat ${prefix}.nr.rs.bed.gz | grep "" -c` >>${prefix}.align.log
 
 ## Convert to bedGraph ... Cannot gzip these, unfortunately.
-bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix}\_plus.bedGraph
-bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix}\_minus.noinv.bedGraph
+bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix}_plus.bedGraph
+bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix}_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat ${prefix}\_minus.noinv.bedGraph | awk -f se_3.awk >${prefix}\_minus.bedGraph ## Invert read counts on the minus strand.
+cat ${prefix}_minus.noinv.bedGraph | awk -f se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat ${prefix}\_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}\_plus.rpm.bedGraph
-cat ${prefix}\_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}\_minus.rpm.bedGraph
+cat ${prefix}_plus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}_plus.rpm.bedGraph
+cat ${prefix}_minus.bedGraph | awk -f se_4.awk -v readCount="$readCount" >${prefix}_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
-bedGraphToBigWig ${prefix}\_plus.rpm.bedGraph ${sizes} ${prefix}\_plus.rpm.bw
-bedGraphToBigWig ${prefix}\_minus.rpm.bedGraph ${sizes} ${prefix}\_minus.rpm.bw
-bedGraphToBigWig ${prefix}\_plus.bedGraph ${sizes} ${prefix}\_plus.bw
-bedGraphToBigWig ${prefix}\_minus.bedGraph ${sizes} ${prefix}\_minus.bw
+bedGraphToBigWig ${prefix}_plus.rpm.bedGraph ${sizes} ${prefix}_plus.rpm.bw
+bedGraphToBigWig ${prefix}_minus.rpm.bedGraph ${sizes} ${prefix}_minus.rpm.bw
+bedGraphToBigWig ${prefix}_plus.bedGraph ${sizes} ${prefix}_plus.bw
+bedGraphToBigWig ${prefix}_minus.bedGraph ${sizes} ${prefix}_minus.bw
