@@ -19,10 +19,10 @@ echo ${prefix} >${prefix}.align.log
 
 #if [[ "\${RNA5}" == "R1_5prime" && "\${OPP}" == "FALSE" ]] ; then ## report The 5 prime end of the RNA.   #like GRO-seq
 if [[ "$assay_type" == "GROseq" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_1.awk | gzip >${prefix}.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f ${moduleDir}/bin/se_1.awk | gzip >${prefix}.bed.gz
     #elif [[ "\${RNA3}" == "R1_5prime" && "\${OPP}" == "TRUE" ]] ; then  #like PRO-seq
 elif [[ "$assay_type" == "PROseq" ]]; then
-    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f se_2.awk | gzip >${prefix}.bed.gz
+    bedtools bamtobed -i $bam_file 2>kill.warnings | awk -f ${moduleDir}/bin/se_2.awk | gzip >${prefix}.bed.gz
 fi
 
 echo 'Number of mappable reads:' >>${prefix}.align.log
@@ -39,11 +39,11 @@ bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand + >${prefix
 bedtools genomecov -bg -i ${prefix}.nr.rs.bed.gz -g ${sizes} -strand - >${prefix}_minus.noinv.bedGraph
 
 ## Invert minus strand.
-cat ${prefix}_minus.noinv.bedGraph | awk -f se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
+cat ${prefix}_minus.noinv.bedGraph | awk -f ${moduleDir}/bin/se_3.awk >${prefix}_minus.bedGraph ## Invert read counts on the minus strand.
 
 ## normalized by RPM
-cat ${prefix}_plus.bedGraph | awk -f se_4.awk -v readCount="\$readCount" >${prefix}_plus.rpm.bedGraph
-cat ${prefix}_minus.bedGraph | awk -f se_4.awk -v readCount="\$readCount" >${prefix}_minus.rpm.bedGraph
+cat ${prefix}_plus.bedGraph | awk -f ${moduleDir}/bin/se_4.awk -v readCount="\$readCount" >${prefix}_plus.rpm.bedGraph
+cat ${prefix}_minus.bedGraph | awk -f ${moduleDir}/bin/se_4.awk -v readCount="\$readCount" >${prefix}_minus.rpm.bedGraph
 ## Then to bigWig (nomalized and non-nomrmalized ones)
 bedGraphToBigWig ${prefix}_plus.rpm.bedGraph ${sizes} ${prefix}_plus.rpm.bw
 bedGraphToBigWig ${prefix}_minus.rpm.bedGraph ${sizes} ${prefix}_minus.rpm.bw
