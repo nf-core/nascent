@@ -24,9 +24,5 @@ process DREG_PREP {
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"
-    if (meta.single_end) {
-        template "proseq2.0_se"
-    } else {
-        template "proseq2.0_pe"
-    }
+    template "proseq2.0"
 }
