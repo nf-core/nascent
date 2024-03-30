@@ -1,3 +1,4 @@
+#!/bin/awk -f
 BEGIN {
 	OFS = "\t"
 }
@@ -5,3 +6,4 @@ BEGIN {
 {
 	print $1, $2, $3, -1 * $4
 }
+

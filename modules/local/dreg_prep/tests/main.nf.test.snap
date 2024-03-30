@@ -3,28 +3,76 @@
         "content": [
             {
                 "0": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_plus.rpm.bw:md5,c723fc5bdb582655ea1aa1f324cb71b4"
+                    ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_minus.rpm.bw:md5,2c78d94d8abc4a2bad792fd597d434be"
+                    ]
                 ],
                 "2": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_plus.bw:md5,fd77f4d72b9f77ed71166d21de1b48bd"
+                    ]
                 ],
                 "3": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_minus.bw:md5,92c7a60a606a1668a388c3f45d8f07f0"
+                    ]
                 ],
                 "minus_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_minus.bw:md5,92c7a60a606a1668a388c3f45d8f07f0"
+                    ]
                 ],
                 "minus_rpm_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_minus.rpm.bw:md5,2c78d94d8abc4a2bad792fd597d434be"
+                    ]
                 ],
                 "plus_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_plus.bw:md5,fd77f4d72b9f77ed71166d21de1b48bd"
+                    ]
                 ],
                 "plus_rpm_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.dreg_plus.rpm.bw:md5,c723fc5bdb582655ea1aa1f324cb71b4"
+                    ]
                 ]
             }
         ],
@@ -32,34 +80,82 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-03-30T14:10:02.23320779"
+        "timestamp": "2024-03-30T14:19:05.327654675"
     },
     "paired-end": {
         "content": [
             {
                 "0": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_plus.rpm.bw:md5,289652b9b07dec1d0c402e0de9001d9b"
+                    ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_minus.rpm.bw:md5,5c7c70cecb2ff37236dffa8cd6e64e8f"
+                    ]
                 ],
                 "2": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_plus.bw:md5,7098afd4d0a3927a97bca0f390318ef0"
+                    ]
                 ],
                 "3": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_minus.bw:md5,6fc8a8d47c17b9c3e9fa00302cf4b388"
+                    ]
                 ],
                 "minus_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_minus.bw:md5,6fc8a8d47c17b9c3e9fa00302cf4b388"
+                    ]
                 ],
                 "minus_rpm_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_minus.rpm.bw:md5,5c7c70cecb2ff37236dffa8cd6e64e8f"
+                    ]
                 ],
                 "plus_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_plus.bw:md5,7098afd4d0a3927a97bca0f390318ef0"
+                    ]
                 ],
                 "plus_rpm_bigwig": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.dreg_plus.rpm.bw:md5,289652b9b07dec1d0c402e0de9001d9b"
+                    ]
                 ]
             }
         ],
@@ -67,6 +163,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-03-30T14:09:52.151543045"
+        "timestamp": "2024-03-30T14:18:55.16822952"
     }
 }

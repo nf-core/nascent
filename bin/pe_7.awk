@@ -1,3 +1,4 @@
+#!/bin/awk -f
 BEGIN {
 	OFS = "\t"
 }
