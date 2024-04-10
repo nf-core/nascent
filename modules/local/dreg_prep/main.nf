@@ -26,11 +26,12 @@ process DREG_PREP {
     prefix = task.ext.prefix ?: "${meta.id}"
     // template "proseq2.0"
     """
-    bamToBed -i ${bamfile} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
+    bamToBed -i ${bam_file} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
         awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \
         > ${prefix}.dreg.bed
-
     sortBed -i ${prefix}.dreg.bed > ${prefix}.dreg.sort.bed
+
+    echo "positive strand processed to bedGraph"
 
     bedtools genomecov \
         -bg \
@@ -53,6 +54,8 @@ process DREG_PREP {
     sortBed \
         -i ${prefix}.neg.bedGraph \
         > ${prefix}.neg.sort.bedGraph
+
+    echo "negative strand processed to bedGraph"
 
     ${params.bedGraphToBigWig} ${prefix}.pos.sort.bedGraph ${params.chrom_sizes} ${prefix}.pos.bw
     ${params.bedGraphToBigWig} ${prefix}.neg.sort.bedGraph ${params.chrom_sizes} ${prefix}.neg.bw
