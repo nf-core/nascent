@@ -24,5 +24,45 @@ process DREG_PREP {
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"
-    template "proseq2.0"
+    // template "proseq2.0"
+    """
+    bamToBed -i ${bamfile} | awk 'BEGIN{OFS="\t"} (\$5 > 0){print \$0}' | \
+        awk 'BEGIN{OFS="\t"} (\$6 == "+") {print \$1,\$2,\$2+1,\$4,\$5,\$6}; (\$6 == "-") {print \$1, \$3-1,\$3,\$4,\$5,\$6}' \
+        > ${prefix}.dreg.bed
+
+    sortBed -i ${prefix}.dreg.bed > ${prefix}.dreg.sort.bed
+
+    bedtools genomecov \
+        -bg \
+        -i ${prefix}.dreg.sort.bed \
+        -g ${params.chrom_sizes} \
+        -strand + \
+        > ${prefix}.pos.bedGraph
+
+    sortBed \
+        -i ${prefix}.pos.bedGraph \
+        > ${prefix}.pos.sort.bedGraph
+
+    bedtools genomecov \
+        -bg \
+        -i ${prefix}.dreg.sort.bed \
+        -g ${params.chrom_sizes} \
+        -strand - \
+        | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' > ${prefix}.neg.bedGraph
+
+    sortBed \
+        -i ${prefix}.neg.bedGraph \
+        > ${prefix}.neg.sort.bedGraph
+
+    ${params.bedGraphToBigWig} ${prefix}.pos.sort.bedGraph ${params.chrom_sizes} ${prefix}.pos.bw
+    ${params.bedGraphToBigWig} ${prefix}.neg.sort.bedGraph ${params.chrom_sizes} ${prefix}.neg.bw
+
+    cat ${prefix}.pos.bedGraph \
+        ${prefix}.neg.bedGraph \
+        > ${prefix}.unsorted.bedGraph
+
+    sortBed \
+        -i ${prefix}.unsorted.bedGraph \
+        > ${prefix}.bedGraph
+    """
 }
