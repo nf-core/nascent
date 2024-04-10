@@ -36,7 +36,7 @@ process DREG_PREP {
     bedtools genomecov \
         -bg \
         -i ${prefix}.dreg.sort.bed \
-        -g ${params.chrom_sizes} \
+        -g ${sizes} \
         -strand + \
         > ${prefix}.pos.bedGraph
 
@@ -47,7 +47,7 @@ process DREG_PREP {
     bedtools genomecov \
         -bg \
         -i ${prefix}.dreg.sort.bed \
-        -g ${params.chrom_sizes} \
+        -g ${sizes} \
         -strand - \
         | awk 'BEGIN{FS=OFS="\t"} {\$4=-\$4}1' > ${prefix}.neg.bedGraph
 
@@ -57,8 +57,8 @@ process DREG_PREP {
 
     echo "negative strand processed to bedGraph"
 
-    ${params.bedGraphToBigWig} ${prefix}.pos.sort.bedGraph ${params.chrom_sizes} ${prefix}.pos.bw
-    ${params.bedGraphToBigWig} ${prefix}.neg.sort.bedGraph ${params.chrom_sizes} ${prefix}.neg.bw
+    bedGraphToBigWig ${prefix}.pos.sort.bedGraph ${sizes} ${prefix}.pos.bw
+    bedGraphToBigWig ${prefix}.neg.sort.bedGraph ${sizes} ${prefix}.neg.bw
 
     cat ${prefix}.pos.bedGraph \
         ${prefix}.neg.bedGraph \
