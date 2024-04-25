@@ -1,0 +1,12 @@
+{
+    "Should run with STAR (default)": {
+        "content": [
+            139
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "24.03.0"
+        },
+        "timestamp": "2024-04-25T17:27:56.772645664"
+    }
+}

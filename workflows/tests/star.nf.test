@@ -1,0 +1,24 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf with STAR"
+    script "../../main.nf"
+    tag "aligner"
+    tag "star"
+
+    test("Should run with STAR (default)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "star"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
+    }
+}
