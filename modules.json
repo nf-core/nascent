@@ -207,6 +207,11 @@
                         "git_sha": "a21faa6a3481af92a343a10926f59c189a2c16c9",
                         "installed_by": ["fastq_align_star", "modules"]
                     },
+                    "star/genomegenerate": {
+                        "branch": "master",
+                        "git_sha": "a21faa6a3481af92a343a10926f59c189a2c16c9",
+                        "installed_by": ["modules"]
+                    },
                     "subread/featurecounts": {
                         "branch": "master",
                         "git_sha": "f6bba1a67cdbb605f24d7a4e8dd383b0eec45b52",
