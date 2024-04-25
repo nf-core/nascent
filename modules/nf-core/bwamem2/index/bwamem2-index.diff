@@ -1,0 +1,13 @@
+Changes in module 'nf-core/bwamem2/index'
+--- modules/nf-core/bwamem2/index/main.nf
++++ modules/nf-core/bwamem2/index/main.nf
+@@ -1,6 +1,7 @@
+ process BWAMEM2_INDEX {
+     tag "$fasta"
+     label 'process_single'
++    label 'process_long'
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+
+************************************************************
