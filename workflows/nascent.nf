@@ -212,12 +212,12 @@ workflow NASCENT {
         FASTQ_ALIGN_STAR (
             ch_reads,
             ch_star_index,
-            PREPARE_GENOME.out.gtf,
+            PREPARE_GENOME.out.gtf.map { [ [:], it ] },
             false,
             '',
             '', // TODO params.seq_center ?:
             ch_fasta,
-            []
+            Channel.of([[:], []]),
         )
         ch_genome_bam        = FASTQ_ALIGN_STAR.out.bam
         ch_genome_bai        = FASTQ_ALIGN_STAR.out.bai
