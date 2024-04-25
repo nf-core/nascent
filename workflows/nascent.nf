@@ -18,6 +18,7 @@ include {
     UNTAR as UNTAR_HISAT2_INDEX
     UNTAR as UNTAR_STAR_INDEX
 } from '../modules/nf-core/untar/main'
+include { STAR_GENOMEGENERATE } from '../modules/nf-core/star/genomegenerate/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -198,7 +199,9 @@ workflow NASCENT {
         ch_HISAT2_multiqc = FASTQ_ALIGN_HISAT2.out.summary
         ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'star') {
-        if (ch_star_index.endsWith('.tar.gz')) {
+        if(!ch_star_index) {
+            ch_star_index = STAR_GENOMEGENERATE ( ch_fasta, [ [:], ch_gtf ] ).index
+        } else if (ch_star_index.endsWith('.tar.gz')) {
             ch_star_index = UNTAR_STAR_INDEX ( [ [:], ch_star_index ] ).untar
             ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
         } else {
