@@ -200,7 +200,10 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'star') {
         if(!ch_star_index) {
-            ch_star_index = STAR_GENOMEGENERATE ( ch_fasta, [ [:], ch_gtf ] ).index
+            ch_star_index = STAR_GENOMEGENERATE (
+                ch_fasta,
+                PREPARE_GENOME.out.gtf.map { [[:], it] }
+            ).index
         } else if (ch_star_index.endsWith('.tar.gz')) {
             ch_star_index = UNTAR_STAR_INDEX ( [ [:], ch_star_index ] ).untar
             ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
