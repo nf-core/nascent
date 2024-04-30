@@ -37,6 +37,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 */
 
 include { BED2SAF } from '../modules/local/bed2saf'
+include { SUBREAD2BED } from '../modules/local/subread2bed'
 
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 include { ALIGN_BWAMEM2 } from '../subworkflows/local/align_bwamem2/main'
@@ -267,6 +268,9 @@ workflow NASCENT {
         )
     )
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
+
+    SUBREAD2BED(SUBREAD_FEATURECOUNTS_PREDICTED.out.counts)
+    ch_versions = ch_versions.mix(SUBREAD2BED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
         ch_sort_bam.combine(PREPARE_GENOME.out.gtf)
