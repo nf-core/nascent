@@ -50,6 +50,12 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
+:::info
+The sample column is essentially a concatenation of the group and replicate columns. If all values of sample have the same number of underscores, fields defined by these underscore-separated names may be used in the transcript identification produced by the pipeline, to regain the ability to represent different groupings.
+
+`GM_0h` and `GM_1h` would be grouped for example but `GM0h` and `GM1h` would go through individual transcript identification
+:::
+
 ## Alignment Options
 
 By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (i.e. `--aligner bwa`) to map the raw FastQ reads to the reference genome. Research as to which aligner works best with Nascent Transcript and Transcription Start Site assays is pending.
