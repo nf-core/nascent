@@ -272,10 +272,22 @@ workflow NASCENT {
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
-        .set { ch_sort_bam }
+        .set { ch_group_bam }
+    // Group the index files with bams
+    ch_genome_bai.map {
+        meta, bai ->
+        fmeta = meta.findAll { it.key != 'read_group' }
+        // Split and take the first element
+        fmeta.id = fmeta.id.split('_')[0]
+        [ fmeta, bai ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { ch_group_bai }
+
+    ch_group_bam_bai = ch_group_bam.join(ch_group_bai, by: [0])
 
     TRANSCRIPT_INDENTIFICATION (
-        ch_sort_bam,
+        ch_group_bam_bai,
         PREPARE_GENOME.out.gtf,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.chrom_sizes,
@@ -286,7 +298,7 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions)
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_sort_bam.combine(
+        ch_group_bam.combine(
             BED2SAF (
                 TRANSCRIPT_INDENTIFICATION.out.transcript_beds
             ).saf.map { it[1] }
@@ -295,7 +307,7 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
-        ch_sort_bam.combine(PREPARE_GENOME.out.gtf)
+        ch_group_bam.combine(PREPARE_GENOME.out.gtf)
     )
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 

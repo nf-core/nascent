@@ -9,7 +9,7 @@ process GROHMM_PARAMETERTUNING {
         'quay.io/biocontainers/mulled-v2-e9a6cb7894dd2753aff7d9446ea95c962cce8c46:0a46dae3241b1c4f02e46468f5d54eadcf64beca-0' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bams), path(bais)
     path gtf
     path tune_parameter_file
 
