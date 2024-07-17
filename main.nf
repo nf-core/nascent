@@ -38,6 +38,7 @@ params.bwamem2_index = getGenomeAttribute('bwamem2')
 params.dragmap = getGenomeAttribute('dragmap')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
 params.hisat2_index = getGenomeAttribute('hisat2')
+params.star_index = null
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,6 +70,7 @@ workflow NFCORE_NASCENT {
         params.dragmap,
         params.bowtie2_index,
         params.hisat2_index,
+        params.star_index,
     )
 
     emit:

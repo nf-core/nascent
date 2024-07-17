@@ -13,7 +13,7 @@ include { BEDTOOLS_INTERSECT } from '../../modules/nf-core/bedtools/intersect/ma
 
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
-    group_bams
+    group_bam_bai
     gtf
     fasta
     chrom_sizes
@@ -26,7 +26,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
     grohmm_td_plot = Channel.empty()
     if(!params.skip_grohmm && params.assay_type == "GROseq") {
-        GROHMM ( group_bams, gtf, ch_tuning_file )
+        GROHMM ( group_bam_bai, gtf, ch_tuning_file )
         ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
         grohmm_td_plot = GROHMM.out.td_plot
         ch_versions = ch_versions.mix(GROHMM.out.versions.first())
@@ -36,7 +36,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     homer_peaks = Channel.empty()
     homer_tagdir = Channel.empty()
     if(params.assay_type == "GROseq") {
-        HOMER_GROSEQ ( group_bams, fasta )
+        HOMER_GROSEQ ( group_bam_bai, fasta )
         ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
         homer_peaks = HOMER_GROSEQ.out.peaks
         homer_tagdir = HOMER_GROSEQ.out.tagdir
@@ -45,7 +45,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
 
     // TODO https://github.com/hyulab/PINTS/issues/15
-    PINTS_CALLER ( group_bams, params.assay_type )
+    PINTS_CALLER ( group_bam_bai, params.assay_type )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.

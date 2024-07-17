@@ -9,7 +9,7 @@ include { HOMER_POS2BED          } from '../../../../modules/nf-core/homer/pos2b
 
 workflow HOMER_GROSEQ {
     take:
-    bam   // channel: [ val(meta), [ reads ] ]
+    bam   // channel: [ val(meta), [ bams ], [ bai ] ]
     fasta //    file: /path/to/bwa/index/
 
     main:

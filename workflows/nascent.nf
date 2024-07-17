@@ -14,7 +14,11 @@ include { COVERAGE_GRAPHS } from '../subworkflows/local/coverage_graphs.nf'
 include { TRANSCRIPT_INDENTIFICATION } from '../subworkflows/local/transcript_identification.nf'
 
 include { FASTP } from '../modules/nf-core/fastp/main'
-include { UNTAR as UNTAR_HISAT2_INDEX } from '../modules/nf-core/untar/main'
+include {
+    UNTAR as UNTAR_HISAT2_INDEX
+    UNTAR as UNTAR_STAR_INDEX
+} from '../modules/nf-core/untar/main'
+include { STAR_GENOMEGENERATE } from '../modules/nf-core/star/genomegenerate/main'
 include {
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE
     SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
@@ -32,6 +36,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nasc
 include { FASTQ_ALIGN_BWA } from '../subworkflows/nf-core/fastq_align_bwa/main'
 include { FASTQ_ALIGN_BOWTIE2 } from '../subworkflows/nf-core/fastq_align_bowtie2/main'
 include { FASTQ_ALIGN_HISAT2 } from '../subworkflows/nf-core/fastq_align_hisat2/main'
+include { FASTQ_ALIGN_STAR } from '../subworkflows/nf-core/fastq_align_star/main'
 include { BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS } from '../subworkflows/nf-core/bam_dedup_stats_samtools_umitools/main'
 
 /*
@@ -53,6 +58,7 @@ workflow NASCENT {
     ch_dragmap
     ch_bowtie2_index
     ch_hisat2_index
+    ch_star_index
 
     main:
 
@@ -192,6 +198,38 @@ workflow NASCENT {
 
         ch_HISAT2_multiqc = FASTQ_ALIGN_HISAT2.out.summary
         ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
+    } else if (!params.skip_alignment && params.aligner == 'star') {
+        if(!ch_star_index) {
+            ch_star_index = STAR_GENOMEGENERATE (
+                ch_fasta,
+                PREPARE_GENOME.out.gtf.map { [[:], it] }
+            ).index
+        } else if (ch_star_index.endsWith('.tar.gz')) {
+            ch_star_index = UNTAR_STAR_INDEX ( [ [:], ch_star_index ] ).untar
+            ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
+        } else {
+            // TODO Give the meta from basename or genome?
+            ch_star_index = [ [meta: "Genome"], file(ch_star_index) ]
+        }
+
+        FASTQ_ALIGN_STAR (
+            ch_reads,
+            ch_star_index,
+            PREPARE_GENOME.out.gtf.map { [ [:], it ] },
+            false,
+            '',
+            '', // TODO params.seq_center ?:
+            ch_fasta,
+            Channel.of([[:], []]),
+        )
+        ch_genome_bam        = FASTQ_ALIGN_STAR.out.bam
+        ch_genome_bai        = FASTQ_ALIGN_STAR.out.bai
+        ch_transcriptome_bam = FASTQ_ALIGN_STAR.out.bam_transcript
+        ch_star_log          = FASTQ_ALIGN_STAR.out.log_final
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_STAR.out.stats.collect{it[1]})
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_STAR.out.flagstat.collect{it[1]})
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_STAR.out.idxstats.collect{it[1]})
+        ch_multiqc_files = ch_multiqc_files.mix(ch_star_log.collect{it[1]})
     }
 
     if(params.with_umi) {
@@ -234,10 +272,22 @@ workflow NASCENT {
         [ fmeta, bam ] }
         .groupTuple(by: [0])
         .map { it ->  [ it[0], it[1].flatten() ] }
-        .set { ch_sort_bam }
+        .set { ch_group_bam }
+    // Group the index files with bams
+    ch_genome_bai.map {
+        meta, bai ->
+        fmeta = meta.findAll { it.key != 'read_group' }
+        // Split and take the first element
+        fmeta.id = fmeta.id.split('_')[0]
+        [ fmeta, bai ] }
+        .groupTuple(by: [0])
+        .map { it ->  [ it[0], it[1].flatten() ] }
+        .set { ch_group_bai }
+
+    ch_group_bam_bai = ch_group_bam.join(ch_group_bai, by: [0])
 
     TRANSCRIPT_INDENTIFICATION (
-        ch_sort_bam,
+        ch_group_bam_bai,
         PREPARE_GENOME.out.gtf,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.chrom_sizes,
@@ -248,7 +298,7 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions)
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
-        ch_sort_bam.combine(
+        ch_group_bam.combine(
             BED2SAF (
                 TRANSCRIPT_INDENTIFICATION.out.transcript_beds
             ).saf.map { it[1] }
@@ -257,7 +307,7 @@ workflow NASCENT {
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
-        ch_sort_bam.combine(PREPARE_GENOME.out.gtf)
+        ch_group_bam.combine(PREPARE_GENOME.out.gtf)
     )
     ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 

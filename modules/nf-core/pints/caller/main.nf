@@ -8,7 +8,7 @@ process PINTS_CALLER {
         'biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
 
     input:
-    tuple val(meta), path(bams)
+    tuple val(meta), path(bams), path(bais)
     val assay_type
 
     output:

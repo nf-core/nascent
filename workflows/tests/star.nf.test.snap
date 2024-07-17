@@ -1,0 +1,22 @@
+{
+    "Should run with gzipped gtf": {
+        "content": [
+            140
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "24.03.0"
+        },
+        "timestamp": "2024-04-27T12:40:13.788464472"
+    },
+    "Should run with STAR (default)": {
+        "content": [
+            139
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "24.03.0"
+        },
+        "timestamp": "2024-04-25T17:27:56.772645664"
+    }
+}
