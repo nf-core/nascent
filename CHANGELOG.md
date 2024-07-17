@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [5bcfe4f](https://github.com/nf-core/nascent/commit/5bcfe4ff1729b89e9e5741c473d32168b836a57f) - Update pipeline template to [nf-core/tools 2.13](https://github.com/nf-core/tools/releases/tag/2.13)
 - [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
-- [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2
+- [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2 aligner
+- [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
 
 ### Changed
 
-- [[#137](https://github.com/nf-core/nascent/pull/137)] - Use singularity containers for PINTS
+- [#137](https://github.com/nf-core/nascent/pull/137) - Use singularity containers for PINTS
+- [#142](https://github.com/nf-core/nascent/pull/142) - Updated CHM13 references
 
 ## v2.2.0 - 2024-03-05
 
