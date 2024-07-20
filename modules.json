@@ -124,22 +124,22 @@
                     "homer/findpeaks": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["groseq", "homer/groseq"]
+                        "installed_by": ["homer/groseq"]
                     },
                     "homer/maketagdirectory": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["groseq", "homer/groseq"]
+                        "installed_by": ["homer/groseq"]
                     },
                     "homer/makeucscfile": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["groseq", "homer/groseq"]
+                        "installed_by": ["homer/groseq"]
                     },
                     "homer/pos2bed": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
-                        "installed_by": ["groseq", "homer/groseq"]
+                        "installed_by": ["homer/groseq"]
                     },
                     "multiqc": {
                         "branch": "master",
