@@ -268,7 +268,7 @@
                     },
                     "fastq_align_star": {
                         "branch": "master",
-                        "git_sha": "1d1d7df613ff53223259c14185858cd742cd4743",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
                         "installed_by": ["subworkflows"]
                     },
                     "homer/groseq": {
