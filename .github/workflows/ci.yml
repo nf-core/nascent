@@ -35,11 +35,12 @@ jobs:
 
       - name: List nf-test files
         id: list
-        uses: adamrtalbot/detect-nf-test-changes@v0.0.2
+        uses: adamrtalbot/detect-nf-test-changes@v0.0.3
         with:
           head: ${{ github.sha }}
           base: origin/${{ github.base_ref }}
-          include: .github/include.yaml
+          types: "pipeline"
+          ignored: ".git/* .gitpod.yml .prettierignore .prettierrc.yml *.md *.png modules.json pyproject.toml tower.yml"
 
       - name: print list of nf-test files
         run: |
