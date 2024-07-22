@@ -19,7 +19,7 @@ workflow ALIGN_DRAGMAP {
     // Map reads with dragmap
     //
 
-    DRAGMAP_ALIGN ( ch_reads, ch_index, val_sort_bam )
+    DRAGMAP_ALIGN ( ch_reads, ch_index, ch_fasta, val_sort_bam )
     ch_versions = ch_versions.mix(DRAGMAP_ALIGN.out.versions.first())
 
     //

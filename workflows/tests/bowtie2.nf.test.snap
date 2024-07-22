@@ -1,12 +1,12 @@
 {
     "Should run with bowtie2 (default)": {
         "content": [
-            126
+            132
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nextflow": "24.04.3"
         },
-        "timestamp": "2024-03-05T16:05:54.646114124"
+        "timestamp": "2024-07-20T11:38:39.368341091"
     }
 }

@@ -1,15 +1,12 @@
-# This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 name: nf-core CI
+# This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
+  push:
+    branches:
+      - dev
   pull_request:
   release:
     types: [published]
-  merge_group:
-    types:
-      - checks_requested
-    branches:
-      - master
-      - dev
 
 env:
   NXF_ANSI_LOG: false
@@ -35,11 +32,12 @@ jobs:
 
       - name: List nf-test files
         id: list
-        uses: adamrtalbot/detect-nf-test-changes@v0.0.2
+        uses: adamrtalbot/detect-nf-test-changes@v0.0.3
         with:
           head: ${{ github.sha }}
           base: origin/${{ github.base_ref }}
-          include: .github/include.yaml
+          types: "pipeline"
+          ignored: ".git/* .gitpod.yml .prettierignore .prettierrc.yml *.md *.png modules.json pyproject.toml tower.yml"
 
       - name: print list of nf-test files
         run: |
@@ -53,9 +51,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        NXF_VER:
-          - "latest-everything"
-          - "23.04"
+        # Nextflow versions: check pipeline minimum and current latest
+        NXF_VER: ["23.04.0", ""]
         nf_test_files: ["${{ fromJson(needs.changes.outputs.nf_test_files) }}"]
         profile:
           - "docker"

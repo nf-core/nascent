@@ -98,7 +98,7 @@ workflow NASCENT {
 
     ch_reads = Channel.empty()
     if(!params.skip_trimming) {
-        FASTP ( ch_samplesheet, [], false, false )
+        FASTP ( ch_samplesheet, [], false, false, false )
         ch_reads = FASTP.out.reads
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
@@ -374,7 +374,9 @@ workflow NASCENT {
         ch_multiqc_files.collect(),
         ch_multiqc_config.toList(),
         ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList()
+        ch_multiqc_logo.toList(),
+        [],
+        [],
     )
 
     emit:

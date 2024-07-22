@@ -29,14 +29,16 @@ workflow COVERAGE_GRAPHS {
     BEDTOOLS_GENOMECOV_PLUS (
         ch_genomecov_bam,
         sizes,
-        'bedGraph'
+        'bedGraph',
+        true
     )
     ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_PLUS.out.versions.first())
 
     BEDTOOLS_GENOMECOV_MINUS (
         ch_genomecov_bam,
         sizes,
-        'bedGraph'
+        'bedGraph',
+        true
     )
     ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_MINUS.out.versions.first())
 
