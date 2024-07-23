@@ -121,10 +121,14 @@ def workflowVersionToYAML() {
 //
 // Get channel of software versions used in pipeline in YAML format
 //
-def softwareVersionsToYAML(ch_versions) {
+def softwareVersionsToYAML(ch_versions, ch_topic_version) {
+    topic_versions = ch_topic_version.map { k, v -> [ k.tokenize(':')[-1], v ] }
+    topic_versions.view{"Topic clean: $it"}
+
+
     return ch_versions
                 .unique()
-                .map { processVersionsFromYAML(it) }
+                .map { processVersionsFromYAML(it) }.view{"yaml clean: $it"}
                 .unique()
                 .mix(Channel.of(workflowVersionToYAML()))
 }
