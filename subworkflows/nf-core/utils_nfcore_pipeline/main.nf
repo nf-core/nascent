@@ -108,6 +108,17 @@ def processVersionsFromYAML(yaml_file) {
 }
 
 //
+// Get topic version for make it a YAML
+// Expects: tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")
+//
+def topicVersionToYAML(taskProcess, tool, version) {
+    return """
+    ${taskProcess.tokenize(':')[-1]}:
+        $tool: $version
+    """.stripIndent().trim()
+}
+
+//
 // Get workflow version for pipeline
 //
 def workflowVersionToYAML() {
@@ -122,14 +133,17 @@ def workflowVersionToYAML() {
 // Get channel of software versions used in pipeline in YAML format
 //
 def softwareVersionsToYAML(ch_versions, ch_topic_version) {
-    topic_versions = ch_topic_version.map { k, v -> [ k.tokenize(':')[-1], v ] }
-    topic_versions.view{"Topic clean: $it"}
-
+    channel.topic('version').dump(pretty: true, tag: "Original Topics")
+    topic_versions = ch_topic_version
+        .unique()
+        .map { topicVersionToYAML(it[0], it[1], it[2]) }
+        .dump(tag: "topic_versions clean")
 
     return ch_versions
                 .unique()
-                .map { processVersionsFromYAML(it) }.view{"yaml clean: $it"}
-                .unique()
+                .map { processVersionsFromYAML(it) }.dump(tag: "YAML Versions")
+                .mix(topic_versions).dump(tag: "2-yaml-clean-unique")
+                .unique().dump(tag: "3-yaml-clean-unique")
                 .mix(Channel.of(workflowVersionToYAML()))
 }
 
