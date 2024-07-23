@@ -16,9 +16,9 @@ process PINTS_CALLER {
     tuple val(meta), path("*_bidirectional_peaks.bed") , optional:true, emit: bidirectional_TREs
     tuple val(meta), path("*_unidirectional_peaks.bed"), optional:true, emit: unidirectional_TREs
     tuple val(meta), path("peakcalling_*.log")                        , emit: peakcalling_log
-    path  "versions.yml"                                              , emit: versions
-    eval("pints_caller --version"), topic: pints_version
-    // TODO Python version
+
+    eval("pints_caller --version")               , topic: version
+    eval("python --version | sed 's/Python //g'"), topic: version
 
     when:
     task.ext.when == null || task.ext.when
@@ -39,10 +39,5 @@ process PINTS_CALLER {
         --dont-check-updates \\
         --exp-type $assay_type \\
         $args
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
-    """
+   """
 }
