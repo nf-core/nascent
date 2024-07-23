@@ -1,7 +1,7 @@
 Changes in module 'nf-core/pints/caller'
 --- modules/nf-core/pints/caller/main.nf
 +++ modules/nf-core/pints/caller/main.nf
-@@ -8,7 +8,8 @@
+@@ -8,14 +8,17 @@
          'biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
  
      input:
@@ -11,28 +11,30 @@ Changes in module 'nf-core/pints/caller'
  
      output:
      tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
-@@ -16,6 +17,8 @@
+     tuple val(meta), path("*_bidirectional_peaks.bed") , optional:true, emit: bidirectional_TREs
      tuple val(meta), path("*_unidirectional_peaks.bed"), optional:true, emit: unidirectional_TREs
      tuple val(meta), path("peakcalling_*.log")                        , emit: peakcalling_log
-     path  "versions.yml"                                              , emit: versions
-+    eval("pints_caller --version"), topic: pints_version
-+    // TODO Python version
+-    path  "versions.yml"                                              , emit: versions
++
++    eval("pints_caller --version")               , topic: version
++    eval("python --version | sed 's/Python //g'"), topic: version
  
      when:
      task.ext.when == null || task.ext.when
-@@ -34,12 +37,12 @@
+@@ -34,12 +37,7 @@
          --file-prefix $prefix \\
          --thread $task.cpus \\
          --dont-check-updates \\
 +        --exp-type $assay_type \\
          $args
- 
-     cat <<-END_VERSIONS > versions.yml
-     "${task.process}":
-         python: \$(python --version | sed 's/Python //g')
+-
+-    cat <<-END_VERSIONS > versions.yml
+-    "${task.process}":
+-        python: \$(python --version | sed 's/Python //g')
 -        pints: \$(pints_caller --version)
-     END_VERSIONS
-     """
+-    END_VERSIONS
+-    """
++   """
  }
 
 ************************************************************
