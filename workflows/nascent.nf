@@ -314,6 +314,8 @@ workflow NASCENT {
     //
     // Collate and save software versions
     //
+    channel.topic('version').view()
+    // ch_versions = ch_versions.mix(channel.topic('version'))
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
