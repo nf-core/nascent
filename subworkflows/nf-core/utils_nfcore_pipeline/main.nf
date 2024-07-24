@@ -137,18 +137,17 @@ def workflowVersionToYAML() {
 // Get channel of software versions used in pipeline in YAML format
 //
 def softwareVersionsToYAML(ch_versions, ch_topic_version) {
-    channel.topic('version').dump(pretty: true, tag: "Original Topics")
+    channel.topic('version')
     topic_versions = ch_topic_version
-        .unique().dump(tag: "topic_versions grouped")
-        .groupTuple(by: 0).dump(tag: "topic_versions grouped")
+        .unique()
+        .groupTuple(by: 0)
         .map { topicVersionToYAML(it[0], it[1], it[2]) }
-        .dump(tag: "topic_versions clean")
 
     return ch_versions
                 .unique()
-                .map { processVersionsFromYAML(it) }.dump(tag: "YAML Versions")
-                .mix(topic_versions).dump(tag: "2-yaml-clean-unique")
-                .unique().dump(tag: "3-yaml-clean-unique")
+                .map { processVersionsFromYAML(it) }
+                .mix(topic_versions)
+                .unique()
                 .mix(Channel.of(workflowVersionToYAML()))
 }
 
