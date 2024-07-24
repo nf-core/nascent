@@ -111,18 +111,21 @@ def processVersionsFromYAML(yaml_file) {
 // Get topic version for make it a YAML
 // Expects: tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")
 //
-def topicVersionToYAML(taskProcess, tool, version) {
-    // FIXME for tool in tools
+def topicVersionToYAML(taskProcess, tools, versions) {
+    def toolsVersions = [tools, versions]
+        .transpose()
+        .collect { k, v -> "${k}: ${v}" }
     return """
-    ${taskProcess.tokenize(':')[-1]}:
-        $tool: $version
-    """.stripIndent().trim()
+    |${taskProcess.tokenize(':').last()}:
+    |  ${toolsVersions.join('\n|  ')}
+    """.stripMargin().trim()
 }
 
 //
 // Get workflow version for pipeline
 //
 def workflowVersionToYAML() {
+    // FIXME Use stripMargin
     return """
     Workflow:
         $workflow.manifest.name: ${getWorkflowVersion()}
