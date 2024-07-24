@@ -41,7 +41,7 @@ process PINTS_CALLER {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')
-        pints: \$(pints_caller --version)
+        PINTS: \$(pints_caller --version)
     END_VERSIONS
     """
 }
