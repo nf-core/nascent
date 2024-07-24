@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
 - [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2 aligner
 - [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
+- [#149](https://github.com/nf-core/nascent/pull/149) - Add Software citations to MultiQC
 
 ### Changed
 
