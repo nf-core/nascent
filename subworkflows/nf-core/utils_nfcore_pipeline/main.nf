@@ -112,6 +112,7 @@ def processVersionsFromYAML(yaml_file) {
 // Expects: tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")
 //
 def topicVersionToYAML(taskProcess, tool, version) {
+    // FIXME for tool in tools
     return """
     ${taskProcess.tokenize(':')[-1]}:
         $tool: $version
@@ -135,7 +136,8 @@ def workflowVersionToYAML() {
 def softwareVersionsToYAML(ch_versions, ch_topic_version) {
     channel.topic('version').dump(pretty: true, tag: "Original Topics")
     topic_versions = ch_topic_version
-        .unique()
+        .unique().dump(tag: "topic_versions grouped")
+        .groupTuple(by: 0).dump(tag: "topic_versions grouped")
         .map { topicVersionToYAML(it[0], it[1], it[2]) }
         .dump(tag: "topic_versions clean")
 
