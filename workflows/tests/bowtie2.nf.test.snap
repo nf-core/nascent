@@ -1,12 +1,13 @@
 {
     "Should run with bowtie2 (default)": {
         "content": [
-            132
+            132,
+            "nf_core_pipeline_software_mqc_versions.yml:md5,e2cdc0726e6fdad87fd4e382a6e88f00"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "24.04.3"
         },
-        "timestamp": "2024-07-20T11:38:39.368341091"
+        "timestamp": "2024-07-24T09:42:37.288588269"
     }
 }

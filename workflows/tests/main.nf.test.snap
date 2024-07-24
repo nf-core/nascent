@@ -49,13 +49,14 @@
                 "jurkat_REP2.sorted.bam:md5,ece1ae4ce266a64a4d27aa12b4bb630e",
                 "jurkat_REP2.sorted.bam.bai:md5,eff0f3690baa030685f76a0687301827",
                 "jurkat_REP2.stats:md5,026c558e8c36136ef19bfbef6b12ce2b"
-            ]
+            ],
+            "nf_core_pipeline_software_mqc_versions.yml:md5,7ff2eca77685dda9b3a803a07a383bba"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "24.04.3"
         },
-        "timestamp": "2024-07-20T11:42:20.240672824"
+        "timestamp": "2024-07-24T14:26:08.246146808"
     },
     "Should run with bwamem2": {
         "content": [
@@ -127,13 +128,14 @@
                 "jurkat_REP2.sorted.bam:md5,47f65dea0ad16d3e62205a5ba900297d",
                 "jurkat_REP2.sorted.bam.bai:md5,6cf4f5945f99f94c762c3e8cc7bd8fb0",
                 "jurkat_REP2.stats:md5,026c558e8c36136ef19bfbef6b12ce2b"
-            ]
+            ],
+            "nf_core_pipeline_software_mqc_versions.yml:md5,d401d88d71d7d431c19526613d005c17"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "24.04.3"
         },
-        "timestamp": "2024-07-20T16:46:41.867831982"
+        "timestamp": "2024-07-24T14:30:08.144264532"
     },
     "Should run with dragmap": {
         "content": [
@@ -219,12 +221,13 @@
                 "jurkat_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
                 "jurkat_REP2.command.log:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "jurkat_REP2.lc_extrap.txt:md5,157f7f7532f865226da4fb460c2ff7da"
-            ]
+            ],
+            "nf_core_pipeline_software_mqc_versions.yml:md5,c8b993bc05c78f9de1d8e1763b48e7ea"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "24.04.3"
         },
-        "timestamp": "2024-07-20T11:46:32.845750064"
+        "timestamp": "2024-07-24T14:38:08.168577852"
     }
 }

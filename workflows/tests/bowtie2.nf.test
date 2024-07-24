@@ -18,6 +18,7 @@ nextflow_pipeline {
             assert workflow.success
             assert snapshot(
                 workflow.trace.tasks().size(),
+                path("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
             ).match()
         }
     }

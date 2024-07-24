@@ -33,6 +33,7 @@ nextflow_pipeline {
                 // path("$outputDir/preseq").list(),
                 // path("$outputDir/rseqc").list(),
                 path("$outputDir/samtools").list(),
+                path("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
             ).match()
         }
 
@@ -67,6 +68,7 @@ nextflow_pipeline {
                 path("$outputDir/preseq").list(),
                 // path("$outputDir/rseqc").list(),
                 path("$outputDir/samtools").list(),
+                path("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
             ).match()
         }
 
@@ -139,6 +141,7 @@ nextflow_pipeline {
                 // path("$outputDir/rseqc").list(),
                 // FIXME Not deterministic
                 // path("$outputDir/samtools").list(),
+                path("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
             ).match()
         }
     }

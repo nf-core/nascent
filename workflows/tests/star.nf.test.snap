@@ -1,22 +1,24 @@
 {
     "Should run with gzipped gtf": {
         "content": [
-            140
+            140,
+            "nf_core_pipeline_software_mqc_versions.yml:md5,1323c6b73ecf5ff2138a7c8f75057dcc"
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "24.03.0"
+            "nextflow": "24.04.3"
         },
-        "timestamp": "2024-04-27T12:40:13.788464472"
+        "timestamp": "2024-07-24T14:56:15.647490899"
     },
     "Should run with STAR (default)": {
         "content": [
-            139
+            139,
+            "nf_core_pipeline_software_mqc_versions.yml:md5,77bba8552beb07432d5143a30991993e"
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "24.03.0"
+            "nextflow": "24.04.3"
         },
-        "timestamp": "2024-04-25T17:27:56.772645664"
+        "timestamp": "2024-07-24T14:50:14.45809525"
     }
 }
