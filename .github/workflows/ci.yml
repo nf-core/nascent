@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         # Nextflow versions: check pipeline minimum and current latest
-        NXF_VER: ["23.04.0", ""]
+        NXF_VER: ["24.04.3", "latest"]
         nf_test_files: ["${{ fromJson(needs.changes.outputs.nf_test_files) }}"]
         profile:
           - "docker"
