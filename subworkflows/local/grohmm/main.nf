@@ -10,7 +10,7 @@ include { GROHMM_PARAMETERTUNING } from '../../../modules/local/grohmm/parameter
  */
 workflow GROHMM {
     take:
-    bams
+    bams_bais
     gtf
     tuning_file
 
@@ -22,7 +22,7 @@ workflow GROHMM {
 
     if(!params.skip_tuning) {
         GROHMM_PARAMETERTUNING (
-            bams,
+            bams_bais,
             gtf,
             tuning_file
         )
@@ -31,7 +31,7 @@ workflow GROHMM {
     }
 
     GROHMM_TRANSCRIPTCALLING (
-        bams,
+        bams_bais,
         gtf,
         ch_tuning
     )
