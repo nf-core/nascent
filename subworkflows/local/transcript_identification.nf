@@ -36,7 +36,8 @@ workflow TRANSCRIPT_INDENTIFICATION {
     homer_peaks = Channel.empty()
     homer_tagdir = Channel.empty()
     if(params.assay_type == "GROseq") {
-        HOMER_GROSEQ ( group_bam_bai, fasta )
+        group_bam = group_bam_bai.map { meta, bam, bai -> [meta, bam] }
+        HOMER_GROSEQ ( group_bam, fasta )
         ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
         homer_peaks = HOMER_GROSEQ.out.peaks
         homer_tagdir = HOMER_GROSEQ.out.tagdir
