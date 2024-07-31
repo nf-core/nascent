@@ -1,0 +1,50 @@
+nextflow_pipeline {
+
+    name "Bowtie2"
+    script "../../../main.nf"
+    tag "aligner"
+    tag "bowtie2"
+
+    test("Should run with defaults") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bowtie2"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                    path("$outputDir/bbmap").list(),
+                    // BUG https://github.com/nf-core/nascent/issues/102
+                    // path("$outputDir/bedtools").list(),
+                    // FIXME gtf2bed isn't deterministic
+                    // path("$outputDir/bwa/featurecounts/gene").list(),
+                    // FIXME cd4 isn't deterministic
+                    // path("$outputDir/bwa/featurecounts/predicted").list(),
+                    // path("$outputDir/deeptools").list(),
+                    // path("$outputDir/fastp/*.json").list(),
+                    // FIXME gtf2bed isn't deterministic
+                    // path("$outputDir/gtf2bed").list(),
+                    path("$outputDir/homer/cd4.bed"),
+                    path("$outputDir/homer/jurkat.bed"),
+                    // FIXME https://github.com/nf-core/nascent/issues/148
+                    // path("$outputDir/preseq").list(),
+                    // path("$outputDir/rseqc").list(),
+                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/cd4_REP3.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/cd4_REP4.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getReadsMD5(),
+                ).match("output_files")
+                }
+            )
+        }
+    }
+}

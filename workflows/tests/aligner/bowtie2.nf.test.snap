@@ -1,0 +1,44 @@
+{
+    "output_files": {
+        "content": [
+            132,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,ffd8c0a94869dd782779fc871a9b781a",
+                "cd4_REP1.coverage.stats.txt:md5,bebdef1adcce4296878f8699a0f5cb32",
+                "cd4_REP2.coverage.hist.txt:md5,6e0ca13df7b06ff6a81fb21596df4ca4",
+                "cd4_REP2.coverage.stats.txt:md5,ffb701c2be33360a96ce85b1330b13f8",
+                "cd4_REP3.coverage.hist.txt:md5,f602c7b2b7c125938cd8f1cafdfede5b",
+                "cd4_REP3.coverage.stats.txt:md5,90152fc99f072e654427864f28c198ee",
+                "cd4_REP4.coverage.hist.txt:md5,2b50c34a6e046b24a47b0c428e9d25b1",
+                "cd4_REP4.coverage.stats.txt:md5,ac9ceffc7e75db10d30c3809f16f83fb",
+                "jurkat_REP1.coverage.hist.txt:md5,656e30e8c4bd12e45a036c62c18730c1",
+                "jurkat_REP1.coverage.stats.txt:md5,627f0ec96ea9bdbd7f41b09b64c389d6",
+                "jurkat_REP2.coverage.hist.txt:md5,d6fa988165cadf5c852ea9b83c57f6c8",
+                "jurkat_REP2.coverage.stats.txt:md5,92ad48418a85e844bb62b0392397bb84"
+            ],
+            "cd4.bed:md5,eae2a0135e62184e6117ced483b9cd9a",
+            "jurkat.bed:md5,9255e426e272a406b3507847d4a57d5c",
+            "900325c1ad109ee12fa5f12c52f95b3f",
+            "c4e464e4c5f299c0fcb92d3e3ad856c1",
+            "35d5b2fbc71152546e7b6869986a3727",
+            "83171d18926d770e7accb0be6812a517",
+            "9b2f44262beeebcff3ccc103bb619894",
+            "4ccb14286f06945d7779e08b911501bd"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-01T19:48:16.280408015"
+    },
+    "software_versions": {
+        "content": [
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BOWTIE2_ALIGN={bowtie2=2.5.2, samtools=1.18, pigz=2.6}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SAMTOOLS_FLAGSTAT={samtools=1.2}, SAMTOOLS_IDXSTATS={samtools=1.2}, SAMTOOLS_INDEX={samtools=1.2}, SAMTOOLS_SORT={samtools=1.2}, SAMTOOLS_STATS={samtools=1.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-01T19:48:15.403043368"
+    }
+}
