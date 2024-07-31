@@ -49,13 +49,19 @@
                 "jurkat_REP2.sorted.bam:md5,ece1ae4ce266a64a4d27aa12b4bb630e",
                 "jurkat_REP2.sorted.bam.bai:md5,eff0f3690baa030685f76a0687301827",
                 "jurkat_REP2.stats:md5,026c558e8c36136ef19bfbef6b12ce2b"
-            ]
+            ],
+            "366dda72360cb6fef08914f246c23fe0",
+            "7ff8b1c06b1d47b26062624d2baf83a5",
+            "281fcd74eeaea3ccf15b864e60c70006",
+            "1401ddb7b887f1b81644c516bfde7e88",
+            "4a679dc8ae1fd96bed9da1e3f772daaa",
+            "21970a646ce32e2ccb2aa3d99dc0ebc"
         ],
         "meta": {
-            "nf-test": "0.8.4",
+            "nf-test": "0.9.0",
             "nextflow": "24.04.3"
         },
-        "timestamp": "2024-07-20T11:42:20.240672824"
+        "timestamp": "2024-07-31T13:12:47.453894174"
     },
     "Should run with bwamem2": {
         "content": [

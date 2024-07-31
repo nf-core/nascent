@@ -33,6 +33,12 @@ nextflow_pipeline {
                 // path("$outputDir/preseq").list(),
                 // path("$outputDir/rseqc").list(),
                 path("$outputDir/samtools").list(),
+                bam("$outputDir/samtools/cd4_REP1.sorted.bam").getReadsMD5(),
+                bam("$outputDir/samtools/cd4_REP2.sorted.bam").getReadsMD5(),
+                bam("$outputDir/samtools/cd4_REP3.sorted.bam").getReadsMD5(),
+                bam("$outputDir/samtools/cd4_REP4.sorted.bam").getReadsMD5(),
+                bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getReadsMD5(),
+                bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getReadsMD5(),
             ).match()
         }
 
