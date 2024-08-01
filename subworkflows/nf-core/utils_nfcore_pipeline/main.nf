@@ -111,10 +111,8 @@ def processVersionsFromYAML(yaml_file) {
 // Get topic version for make it a YAML
 // Expects: tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")
 //
-def topicVersionToYAML(ch_topic_version) {
-    [taskProcess, tools, versions] = ch_topic_version
-        .unique()
-        .groupTuple(by: 0)
+def topicVersionToYAML(topic_version) {
+    def (taskProcess, tools, versions) = topic_version
 
     def toolsVersions = [tools, versions]
         .transpose()
@@ -143,8 +141,12 @@ def softwareVersionsToYAML(ch_versions) {
     return ch_versions
                 .unique()
                 .map { processVersionsFromYAML(it) }
-                .mix(topicVersionToYAML(Channel.topic('version')))
-                .unique()
+                .mix(
+                    Channel.topic('version')
+                        .unique()
+                        .groupTuple(by: 0)
+                        .map { topicVersionToYAML(it) }
+                )
                 .mix(
                     Channel.topic('version_yaml')
                         .unique()
