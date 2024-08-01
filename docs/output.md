@@ -283,7 +283,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `homer/`
+- `transcript_identification/homer/`
   - `*.bed`: HOMER Nascent RNA (GroSeq) transcripts after pos2bed
   - `*.peaks.txt`: HOMER Nascent RNA (GroSeq) transcripts
   - `*.bedGraph.gz`: UCSC bedGraph
@@ -306,7 +306,7 @@ The pipeline will pool the reads if they are in the same group. See [#153](https
 <details markdown="1">
 <summary>Output files</summary>
 
-- `pints/`
+- `transcript_identification/pints/`
   - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent)
   - `*_divergent_peaks.bed`: Divergent TREs
   - `*_unidirectional_peaks.bed`: Unidirectional TREs, maybe lncRNAs transcribed from enhancers (e-lncRNAs)
@@ -322,11 +322,11 @@ For more information about how PINTS works, see the paper [A comparison of exper
 <details markdown="1">
 <summary>Output files</summary>
 
-- `grohmm/`
+- `transcript_identification/grohmm/`
   - `*.eval.txt`: Evaluation of HMM Annotations
   - `*.final.transcripts.bed`: Predicted transcripts
   - `*.tdFinal.txt`: Final quality metrics
-  - `*.tdplot_mqc.jpg`: TD plot included in multiqc
+  - `*.tdplot_mqc.jpg`: TD plot included in MultiQC
   - `*.transcripts.txt`: Predicted transcripts in txt form
   - `*.tuning.csv`: The tuning csv that was used
 
