@@ -111,7 +111,11 @@ def processVersionsFromYAML(yaml_file) {
 // Get topic version for make it a YAML
 // Expects: tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")
 //
-def topicVersionToYAML(taskProcess, tools, versions) {
+def topicVersionToYAML(ch_topic_version) {
+    [taskProcess, tools, versions] = ch_topic_version
+        .unique()
+        .groupTuple(by: 0)
+
     def toolsVersions = [tools, versions]
         .transpose()
         .collect { k, v -> "${k}: ${v}" }
@@ -125,28 +129,27 @@ def topicVersionToYAML(taskProcess, tools, versions) {
 // Get workflow version for pipeline
 //
 def workflowVersionToYAML() {
-    // FIXME Use stripMargin
     return """
-    Workflow:
-        $workflow.manifest.name: ${getWorkflowVersion()}
-        Nextflow: $workflow.nextflow.version
-    """.stripIndent().trim()
+    |Workflow:
+    |  $workflow.manifest.name: ${getWorkflowVersion()}
+    |  Nextflow: $workflow.nextflow.version
+    """.stripMargin().trim()
 }
 
 //
 // Get channel of software versions used in pipeline in YAML format
 //
-def softwareVersionsToYAML(ch_versions, ch_topic_version) {
-    channel.topic('version')
-    topic_versions = ch_topic_version
-        .unique()
-        .groupTuple(by: 0)
-        .map { topicVersionToYAML(it[0], it[1], it[2]) }
-
+def softwareVersionsToYAML(ch_versions) {
     return ch_versions
                 .unique()
                 .map { processVersionsFromYAML(it) }
-                .mix(topic_versions)
+                .mix(topicVersionToYAML(Channel.topic('version')))
+                .unique()
+                .mix(
+                    Channel.topic('version_yaml')
+                        .unique()
+                        .map {processVersionsFromYAML(it)}
+                )
                 .unique()
                 .mix(Channel.of(workflowVersionToYAML()))
 }
