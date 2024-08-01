@@ -228,9 +228,9 @@ The majority of RSeQC scripts generate output files which can be plotted and sum
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/preseq/`
+- `quality_control/preseq/`
   - `*.lc_extrap.txt`: Preseq expected future yield file.
-- `<ALIGNER>/preseq/log/`
+- `quality_control/preseq/log/`
   - `*.command.log`: Standard error output from command.
 
 </details>
@@ -244,7 +244,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bbmap/`
+- `quality_control/bbmap/`
   - `*.coverage.hist.txt`: Histogram of read coverage over each chromosome
   - `*.coverage.stats.txt`: Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
 
