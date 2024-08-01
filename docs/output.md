@@ -47,7 +47,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `fastqc/`
+- `preprocessing/fastqc`
   - `*_fastqc.html`: FastQC report containing quality metrics.
   - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
@@ -70,7 +70,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<flowcell_id>/`
+- `preprocessing/fastp`
   - `*.fastp.html`: Trimming report in html format.
   - `*.fastp.json`: Trimming report in json format.
   - `*.fastp.log`: Trimming log file.
@@ -389,9 +389,8 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `genome/`
+- `reference/`
   - `*.fa`, `*.gtf`, `*.gff`, `*.bed`, `.tsv`: If the `--save_reference` parameter is provided then all of the genome reference files will be placed in this directory.
-- `genome/index/`
   - `bwa/`: Directory containing bwa indices.
   - `bwa-mem2/`: Directory containing bwa-mem2 indices.
   - `dragmap/`: Directory containing DRAGMAP indices.
