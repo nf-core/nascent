@@ -371,7 +371,7 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/featurecounts/`
+- `quantification/featurecounts/`
   - `*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
   - `*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
   - `*_mqc.tsv`: MultiQC custom content files used to plot biotypes in report.
