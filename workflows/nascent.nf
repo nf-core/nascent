@@ -246,15 +246,16 @@ workflow NASCENT {
         ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions)
     }
 
+    ch_genome_bam_bai = ch_genome_bam.join(ch_genome_bai, by: [0], remainder: true)
+
     QUALITY_CONTROL (
-        ch_genome_bam,
+        ch_genome_bam_bai,
         PREPARE_GENOME.out.gene_bed
     )
     ch_versions = ch_versions.mix(QUALITY_CONTROL.out.versions)
 
     COVERAGE_GRAPHS (
-        ch_genome_bam,
-        ch_genome_bai,
+        ch_genome_bam_bai,
         PREPARE_GENOME.out.chrom_sizes,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai

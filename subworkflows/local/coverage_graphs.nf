@@ -14,13 +14,14 @@ include { DREG_PREP } from '../../modules/local/dreg_prep/main'
 
 workflow COVERAGE_GRAPHS {
     take:
-    bam
-    bai
+    bam_bai
     sizes
     fasta
     fai
 
     main:
+
+    bam = bam_bai.map{ [ it[0], it[1] ] }
 
     ch_versions = Channel.empty()
 
@@ -42,18 +43,15 @@ workflow COVERAGE_GRAPHS {
     )
     ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_MINUS.out.versions.first())
 
-
-    bam.join(bai, by: [0], remainder: true).set { ch_bam_bai }
-
     DEEPTOOLS_BAMCOVERAGE_PLUS (
-        ch_bam_bai,
+        bam_bai,
         fasta,
         fai
     )
     ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_PLUS.out.versions.first())
 
     DEEPTOOLS_BAMCOVERAGE_MINUS (
-        ch_bam_bai,
+        bam_bai,
         fasta,
         fai
     )
@@ -62,7 +60,7 @@ workflow COVERAGE_GRAPHS {
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
     DREG_PREP (
-        ch_bam_bai,
+        bam_bai,
         sizes
     )
 
