@@ -259,7 +259,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bedtools/`
+- `coverage_graphs/`
   - `*.minus.bedGraph`: Sample coverage file (negative strand only) in bedGraph format
   - `*.plus.bedGraph`: Sample coverage file (positive strand only) in bedGraph format
 
@@ -270,7 +270,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `deeptools/`
+- `coverage_graphs/`
   - `*.minus.bigWig`: Sample coverage file (negative strand only) in bigWig format
   - `*.plus.bigWig`: Sample coverage file (positive strand only) in bigWig format
 
