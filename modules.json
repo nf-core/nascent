@@ -162,20 +162,45 @@
                         "git_sha": "2c6b1144ed58b6184ad58fc4e6b6a90219b4bf4f",
                         "installed_by": ["modules"]
                     },
+                    "rseqc/bamstat": {
+                        "branch": "master",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
+                        "installed_by": ["bam_rseqc"]
+                    },
                     "rseqc/inferexperiment": {
                         "branch": "master",
                         "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["bam_rseqc", "modules"]
+                    },
+                    "rseqc/innerdistance": {
+                        "branch": "master",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
+                        "installed_by": ["bam_rseqc"]
+                    },
+                    "rseqc/junctionannotation": {
+                        "branch": "master",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
+                        "installed_by": ["bam_rseqc"]
+                    },
+                    "rseqc/junctionsaturation": {
+                        "branch": "master",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
+                        "installed_by": ["bam_rseqc"]
                     },
                     "rseqc/readdistribution": {
                         "branch": "master",
                         "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["bam_rseqc", "modules"]
                     },
                     "rseqc/readduplication": {
                         "branch": "master",
                         "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["bam_rseqc", "modules"]
+                    },
+                    "rseqc/tin": {
+                        "branch": "master",
+                        "git_sha": "b4919e9a2b4d8b71061e601633db4600a3858fa1",
+                        "installed_by": ["bam_rseqc"]
                     },
                     "samtools/flagstat": {
                         "branch": "master",
@@ -234,6 +259,11 @@
                     "bam_dedup_stats_samtools_umitools": {
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "bam_rseqc": {
+                        "branch": "master",
+                        "git_sha": "0eacd714effe5aac1c1de26593873960b3346cab",
                         "installed_by": ["subworkflows"]
                     },
                     "bam_sort_stats_samtools": {
