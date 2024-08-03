@@ -18,47 +18,47 @@
             ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
-            "366dda72360cb6fef08914f246c23fe0",
-            "7ff8b1c06b1d47b26062624d2baf83a5",
-            "281fcd74eeaea3ccf15b864e60c70006",
-            "1401ddb7b887f1b81644c516bfde7e88",
-            "4a679dc8ae1fd96bed9da1e3f772daaa",
-            "21970a646ce32e2ccb2aa3d99dc0ebc"
+            "c529a16c839e85e119b98354f109352d",
+            "9e63b682af88fa902cf92b5c485845b1",
+            "2aa200bbbce374ec7dedb9b46ce4aae1",
+            "122274730dd5386e1b26c174df886a8b",
+            "c2adf5327ff6d4edda2fdad00c7cb9bf",
+            "63fea3b1e2e08e5f6fdf3f7ba0aa7818"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T19:52:23.111205909"
+        "timestamp": "2024-08-03T08:58:17.037588077"
     },
     "Should work with gzipped references": {
         "content": [
-            98
+            53
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T19:56:52.636381287"
+        "timestamp": "2024-08-03T07:39:38.160960801"
     },
     "software_versions": {
         "content": [
-            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BWA_MEM={bwa=0.7.18-r1243-dirty, samtools=1.2}, CUSTOM_GETCHROMSIZES={getchromsizes=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BWA_MEM={bwa=0.7.18-r1243-dirty, samtools=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T19:52:22.661915581"
+        "timestamp": "2024-08-03T07:37:00.256122533"
     },
     "Should work with BWA Index": {
         "content": [
-            113
+            59
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T19:54:47.955825977"
+        "timestamp": "2024-08-03T07:38:19.100788775"
     }
 }

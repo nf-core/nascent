@@ -34,12 +34,9 @@ nextflow_pipeline {
                     // FIXME https://github.com/nf-core/nascent/issues/148
                     // path("$outputDir/preseq").list(),
                     // path("$outputDir/rseqc").list(),
-                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getReadsMD5(),
-                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getReadsMD5(),
-                    bam("$outputDir/samtools/cd4_REP3.sorted.bam").getReadsMD5(),
-                    bam("$outputDir/samtools/cd4_REP4.sorted.bam").getReadsMD5(),
-                    bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getReadsMD5(),
-                    bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getReadsMD5(),
+                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/jurkat.sorted.bam").getSamLinesMD5(),
                 ).match("output_files")
                 }
             )

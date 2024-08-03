@@ -1,67 +1,47 @@
 {
     "Should run with gzipped gtf": {
         "content": [
-            140,
+            83,
             [
                 "cd4_REP1.coverage.hist.txt:md5,40fa11763ddc9cdfb2ab7d1e355a68aa",
                 "cd4_REP1.coverage.stats.txt:md5,3a9e49ac63d4322e6bc5e38af1cb0e7f",
                 "cd4_REP2.coverage.hist.txt:md5,d3ba6b2e1cfa9fec1e41fc9b35bf1613",
                 "cd4_REP2.coverage.stats.txt:md5,bdfddb88605ba9dfcdb35988d6a8f55e",
-                "cd4_REP3.coverage.hist.txt:md5,b428396f5f411d41f153baf8e044396d",
-                "cd4_REP3.coverage.stats.txt:md5,09ec44c74a750ea8a4ae37906895fcd0",
-                "cd4_REP4.coverage.hist.txt:md5,d782368a31301073527fdfc2276c89be",
-                "cd4_REP4.coverage.stats.txt:md5,18e7b11cb37d4df1c6a5b3af3b99007d",
-                "jurkat_REP1.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
-                "jurkat_REP1.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee",
-                "jurkat_REP2.coverage.hist.txt:md5,ebccbb8fd619fc8a448df316552ba50d",
-                "jurkat_REP2.coverage.stats.txt:md5,7a9e5b7261a10f71fc6d6dab004a2ddb"
+                "jurkat.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
+                "jurkat.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee"
             ],
-            "cd4.bed:md5,13c33dccb65a27f6b917e7114b5860a5",
-            "jurkat.bed:md5,72972c1f13c66195d59e5382bc73ca5a",
-            "d46f82aca0d563ac1d4ec5e92a3dd751",
-            "3f3233a2b9f9d23531e0e08f31f11af2",
-            "f2fa95f4588815951eb244aad98ff6e1",
-            "1d2e67cf8d09204b26d46a16fb858704",
-            "fa22f29727ce9c1a50cec37049d65fb5",
-            "1c5257c54cab2c8197a06a0f522649cf"
+            "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
+            "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
+            "4df1ea73be642288f18fa0d84f2f2820"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T20:22:39.260502556"
+        "timestamp": "2024-08-03T10:38:18.050552995"
     },
     "output_files": {
         "content": [
-            139,
+            82,
             [
                 "cd4_REP1.coverage.hist.txt:md5,40fa11763ddc9cdfb2ab7d1e355a68aa",
                 "cd4_REP1.coverage.stats.txt:md5,3a9e49ac63d4322e6bc5e38af1cb0e7f",
                 "cd4_REP2.coverage.hist.txt:md5,d3ba6b2e1cfa9fec1e41fc9b35bf1613",
                 "cd4_REP2.coverage.stats.txt:md5,bdfddb88605ba9dfcdb35988d6a8f55e",
-                "cd4_REP3.coverage.hist.txt:md5,b428396f5f411d41f153baf8e044396d",
-                "cd4_REP3.coverage.stats.txt:md5,09ec44c74a750ea8a4ae37906895fcd0",
-                "cd4_REP4.coverage.hist.txt:md5,d782368a31301073527fdfc2276c89be",
-                "cd4_REP4.coverage.stats.txt:md5,18e7b11cb37d4df1c6a5b3af3b99007d",
-                "jurkat_REP1.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
-                "jurkat_REP1.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee",
-                "jurkat_REP2.coverage.hist.txt:md5,ebccbb8fd619fc8a448df316552ba50d",
-                "jurkat_REP2.coverage.stats.txt:md5,7a9e5b7261a10f71fc6d6dab004a2ddb"
+                "jurkat.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
+                "jurkat.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee"
             ],
-            "cd4.bed:md5,13c33dccb65a27f6b917e7114b5860a5",
-            "jurkat.bed:md5,72972c1f13c66195d59e5382bc73ca5a",
-            "d46f82aca0d563ac1d4ec5e92a3dd751",
-            "3f3233a2b9f9d23531e0e08f31f11af2",
-            "f2fa95f4588815951eb244aad98ff6e1",
-            "1d2e67cf8d09204b26d46a16fb858704",
-            "fa22f29727ce9c1a50cec37049d65fb5",
-            "1c5257c54cab2c8197a06a0f522649cf"
+            "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
+            "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
+            "4df1ea73be642288f18fa0d84f2f2820",
+            "32b824f32b196761243365d93065a0da",
+            "519b0eb7154a059df04f6a74e01c0578"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-01T20:15:19.31686282"
+        "timestamp": "2024-08-03T10:35:05.994986959"
     },
     "software_versions": {
         "content": [
