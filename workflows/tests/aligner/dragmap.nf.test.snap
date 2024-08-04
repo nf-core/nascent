@@ -12,15 +12,15 @@
             ],
             "cd4.bed:md5,96b0e0bf77f3a04efcbfaf0fcdae926a",
             "jurkat.bed:md5,31454804c53975171a763d3049406598",
-            "a509da4f94dd9d58a5cd0a71f1fab606",
-            "b8dbf259d852dac0adab5af10bfc7d27",
-            "da11a883b278853d7be1393c7273b343"
+            "9294458e8828aa4446fc6ea24f828d11",
+            "767cae9340255d914b40f5f0a76f9d65",
+            "b47414b7dada10ad11535d36af2e2cb"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-03T10:30:20.34120051"
+        "timestamp": "2024-08-03T21:25:35.878072689"
     },
     "software_versions": {
         "content": [
