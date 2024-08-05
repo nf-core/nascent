@@ -1,0 +1,35 @@
+{
+    "output_files": {
+        "content": [
+            75,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,ffd8c0a94869dd782779fc871a9b781a",
+                "cd4_REP1.coverage.stats.txt:md5,bebdef1adcce4296878f8699a0f5cb32",
+                "cd4_REP2.coverage.hist.txt:md5,6e0ca13df7b06ff6a81fb21596df4ca4",
+                "cd4_REP2.coverage.stats.txt:md5,ffb701c2be33360a96ce85b1330b13f8",
+                "jurkat.coverage.hist.txt:md5,656e30e8c4bd12e45a036c62c18730c1",
+                "jurkat.coverage.stats.txt:md5,627f0ec96ea9bdbd7f41b09b64c389d6"
+            ],
+            "cd4.bed:md5,c311e32ebdca7f3e978a271407de7241",
+            "jurkat.bed:md5,5e170e72c4e2b27a7bb0a6de7b735c1c",
+            "7945f971cd63ad99ff2d9cc81e19ea39",
+            "43982cec9077e7030428267841cf04ef",
+            "8813c6dd42cabd94042f4f9e4aee3560"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-03T22:17:27.92555495"
+    },
+    "software_versions": {
+        "content": [
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BOWTIE2_ALIGN={bowtie2=2.5.2, samtools=1.18, pigz=2.6}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SAMTOOLS_FLAGSTAT={samtools=1.2}, SAMTOOLS_IDXSTATS={samtools=1.2}, SAMTOOLS_INDEX={samtools=1.2}, SAMTOOLS_SORT={samtools=1.2}, SAMTOOLS_STATS={samtools=1.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-03T21:20:15.261777672"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "Should run with gzipped gtf": {
+        "content": [
+            83,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,40fa11763ddc9cdfb2ab7d1e355a68aa",
+                "cd4_REP1.coverage.stats.txt:md5,3a9e49ac63d4322e6bc5e38af1cb0e7f",
+                "cd4_REP2.coverage.hist.txt:md5,d3ba6b2e1cfa9fec1e41fc9b35bf1613",
+                "cd4_REP2.coverage.stats.txt:md5,bdfddb88605ba9dfcdb35988d6a8f55e",
+                "jurkat.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
+                "jurkat.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee"
+            ],
+            "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
+            "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
+            "4df1ea73be642288f18fa0d84f2f2820"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-03T10:38:18.050552995"
+    },
+    "output_files": {
+        "content": [
+            82,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,40fa11763ddc9cdfb2ab7d1e355a68aa",
+                "cd4_REP1.coverage.stats.txt:md5,3a9e49ac63d4322e6bc5e38af1cb0e7f",
+                "cd4_REP2.coverage.hist.txt:md5,d3ba6b2e1cfa9fec1e41fc9b35bf1613",
+                "cd4_REP2.coverage.stats.txt:md5,bdfddb88605ba9dfcdb35988d6a8f55e",
+                "jurkat.coverage.hist.txt:md5,0a5b27499261b4bb70fb30aa9187802f",
+                "jurkat.coverage.stats.txt:md5,6969d93dd3f46379662382d77448c0ee"
+            ],
+            "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
+            "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
+            "4df1ea73be642288f18fa0d84f2f2820",
+            "32b824f32b196761243365d93065a0da",
+            "519b0eb7154a059df04f6a74e01c0578"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-03T10:35:05.994986959"
+    },
+    "software_versions": {
+        "content": [
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-01T20:15:17.868733535"
+    }
+}

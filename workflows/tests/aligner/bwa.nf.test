@@ -1,0 +1,97 @@
+nextflow_pipeline {
+
+    name "BWA"
+    script "../../../main.nf"
+    tag "aligner"
+    tag "bwa"
+
+    test("Should run with defaults") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+                input = "${projectDir}/assets/samplesheet.csv"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                    path("$outputDir/bbmap").list(),
+                    // BUG https://github.com/nf-core/nascent/issues/102
+                    // path("$outputDir/bedtools").list(),
+                    // FIXME gtf2bed isn't deterministic
+                    // path("$outputDir/bwa/featurecounts/gene").list(),
+                    // FIXME cd4 isn't deterministic
+                    // path("$outputDir/bwa/featurecounts/predicted").list(),
+                    // path("$outputDir/deeptools").list(),
+                    // path("$outputDir/fastp/*.json").list(),
+                    // FIXME gtf2bed isn't deterministic
+                    // path("$outputDir/gtf2bed").list(),
+                    path("$outputDir/homer/cd4.bed"),
+                    path("$outputDir/homer/jurkat.bed"),
+                    // FIXME https://github.com/nf-core/nascent/issues/148
+                    // path("$outputDir/preseq").list(),
+                    // path("$outputDir/rseqc").list(),
+                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/cd4_REP3.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/cd4_REP4.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getSamLinesMD5(),
+                ).match("output_files")
+                }
+            )
+        }
+    }
+
+    def igenomes_base = 's3://ngi-igenomes/igenomes'
+
+    // https://github.com/nf-core/nascent/issues/106
+    test("Should work with BWA Index") {
+        // FIXME PINTS Fails because it doesn't find anything.
+        config '../skip_pints.config'
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+                // TODO Update these to human
+                bwa_index = "${igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/BWAIndex/version0.6.0/"
+                fasta = "${igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa"
+                gtf = "${igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Annotation/Genes/genes.gtf"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
+    }
+
+    // https://github.com/nf-core/nascent/issues/119
+    test("Should work with gzipped references") {
+        config '../skip_gzip.config'
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/reference/genome.fasta.gz'
+                gtf = 'https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/reference/genes.gtf.gz'
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
+
+    }
+}

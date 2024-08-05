@@ -1,0 +1,35 @@
+{
+    "output_files": {
+        "content": [
+            77,
+            [
+                "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
+                "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
+                "cd4_REP2.coverage.hist.txt:md5,8d5258a0882494bc4e3f1aa6aa5ed685",
+                "cd4_REP2.coverage.stats.txt:md5,3cdb4473211f9da44166ffa6aaa5b602",
+                "jurkat.coverage.hist.txt:md5,71a893d9d1d55fd47399f6d47b628d6e",
+                "jurkat.coverage.stats.txt:md5,381c69a30099d82066a959deab1a2569"
+            ],
+            "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
+            "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
+            "c529a16c839e85e119b98354f109352d",
+            "9e63b682af88fa902cf92b5c485845b1",
+            "c2adf5327ff6d4edda2fdad00c7cb9bf"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-03T10:28:23.205786296"
+    },
+    "software_versions": {
+        "content": [
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BWAMEM2_MEM={bwamem2=2.2.1, samtools=1.19.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SAMTOOLS_FLAGSTAT={samtools=1.2}, SAMTOOLS_IDXSTATS={samtools=1.2}, SAMTOOLS_INDEX={samtools=1.2}, SAMTOOLS_SORT={samtools=1.2}, SAMTOOLS_STATS={samtools=1.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-01T19:59:55.332896924"
+    }
+}
