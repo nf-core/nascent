@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         shard: [1, 2, 3, 4]
-        NXF_VER: ["23.04.0", ""]
+        NXF_VER: ["latest-stable"] # TODO Test minimum version on release
         profile: ["docker"]
     steps:
       - name: Check out pipeline code
