@@ -295,6 +295,12 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 For now the pipeline only supports the HOMER groseq workflow, feel free to open an issue or PR if you'd like to see others. For more information about how to use HOMER, see the [GRO-Seq Analysis Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
 
+Per the [HOMER GRO-Seq Analysis Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html):
+
+> In the case of technical replicates (i.e. runs from the same sequencing library), it is advisable to always "pool" the data. If they are biological replicates, it is often a good idea to keep them separate for and take advantage of their variability to refine your analysis. For some types of analysis, such as transcript identification, it is a good idea to create a single META-experiment that contains all of the GRO-Seq reads for a given cell type. This will provide increased power for identifying transcripts de novo.
+
+The pipeline will pool the reads if they are in the same group. See [#153](https://github.com/nf-core/nascent/issues/153) for the status of supporting other methods.
+
 ### PINTS
 
 <details markdown="1">
