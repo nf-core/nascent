@@ -55,7 +55,7 @@ jobs:
 
       - uses: nf-core/setup-nf-test@v1
         with:
-          version: ${{ NFT_VER }}
+          version: ${{ env.NFT_VER }}
 
       - name: Run Tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
         run: |
