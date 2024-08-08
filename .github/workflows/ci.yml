@@ -23,6 +23,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
         NXF_VER: ["latest-stable"] # TODO Test minimum version on release
