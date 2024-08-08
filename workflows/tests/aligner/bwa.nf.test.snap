@@ -3,6 +3,29 @@
         "content": [
             134,
             [
+                
+            ],
+            [
+                "cd4_REP1.sorted.bam.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
+                "cd4_REP1.sorted.bam.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
+                "cd4_REP1.sorted.bam.stats:md5,ba177ae2d9a5ab5a972bc056df28acc1",
+                "cd4_REP2.sorted.bam.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
+                "cd4_REP2.sorted.bam.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
+                "cd4_REP2.sorted.bam.stats:md5,8c8fc51169528132b1cca54d3689e3c0",
+                "cd4_REP3.sorted.bam.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
+                "cd4_REP3.sorted.bam.idxstats:md5,42de227ff397013cf288759871b0e938",
+                "cd4_REP3.sorted.bam.stats:md5,fe5be813bf2d55fd0e4877c650a0b266",
+                "cd4_REP4.sorted.bam.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
+                "cd4_REP4.sorted.bam.idxstats:md5,959dc185ae59de4cebe374026711a55e",
+                "cd4_REP4.sorted.bam.stats:md5,46bf6f2b140d369986027bc2f588b440",
+                "jurkat_REP1.sorted.bam.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
+                "jurkat_REP1.sorted.bam.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
+                "jurkat_REP1.sorted.bam.stats:md5,3f1b0a4214daa368a307f856f7a809dc",
+                "jurkat_REP2.sorted.bam.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
+                "jurkat_REP2.sorted.bam.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
+                "jurkat_REP2.sorted.bam.stats:md5,48732cff30d5a9a272f68fc850b0eb84"
+            ],
+            [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
                 "cd4_REP2.coverage.hist.txt:md5,8d5258a0882494bc4e3f1aa6aa5ed685",
@@ -16,20 +39,99 @@
                 "jurkat_REP2.coverage.hist.txt:md5,d124bdadaf2dc5cdd9e3db5a1ab4c588",
                 "jurkat_REP2.coverage.stats.txt:md5,b1940346719e4070091f2eef6e508f49"
             ],
+            [
+                
+            ],
+            [
+                "cd4_REP1.pos.DupRate.xls:md5,a80db2d20096ca839a7847ec5b11bf75",
+                "cd4_REP1.seq.DupRate.xls:md5,c34531fd7578c6f62cbad53b96a7feb9",
+                "cd4_REP2.pos.DupRate.xls:md5,06200ab67a60bee71fd168de88c15369",
+                "cd4_REP2.seq.DupRate.xls:md5,c82f6d687eacabbab045db34647c3254",
+                "cd4_REP3.pos.DupRate.xls:md5,fd3e91bfe070deccef65b265957cb733",
+                "cd4_REP3.seq.DupRate.xls:md5,f4c9f61081e6ef309abe82bb34aa4bd0",
+                "cd4_REP4.pos.DupRate.xls:md5,7fb8a7e96fd521561f62ccf7bf490212",
+                "cd4_REP4.seq.DupRate.xls:md5,8c671e5b0029d396a666839029298828",
+                "jurkat_REP1.pos.DupRate.xls:md5,0721c91ab7c640b046689095047657f8",
+                "jurkat_REP1.seq.DupRate.xls:md5,aba941b1bf0e93f99e39bd507d1c02de",
+                "jurkat_REP2.pos.DupRate.xls:md5,253ec69be4f5322dc92f6cb3fb41f7e0",
+                "jurkat_REP2.seq.DupRate.xls:md5,c7c83a29e6dfd49ff17858fe83dc07c8"
+            ],
+            [
+                "cd4_REP1.DupRate_plot.r:md5,a6f96b5b87a142dca2e09868deb8222b",
+                "cd4_REP2.DupRate_plot.r:md5,a0686d22ba07f33a627c1a106d442a03",
+                "cd4_REP3.DupRate_plot.r:md5,5b37293c52beaecc5980aa2b9bafd82c",
+                "cd4_REP4.DupRate_plot.r:md5,ffa0f611b7f86d36134f9d80c3e1c9de",
+                "jurkat_REP1.DupRate_plot.r:md5,8e4dc99cae73c94eda275aeee08a5390",
+                "jurkat_REP2.DupRate_plot.r:md5,3507444f5965ca98a448ab15659ba34f"
+            ],
+            [
+                "cd4_REP1.infer_experiment.txt:md5,2d8f31fe48cfc1db9d4c46ba59c2c7f3",
+                "cd4_REP2.infer_experiment.txt:md5,70ac3bf0d0c50d644ab97e1698021e55",
+                "cd4_REP3.infer_experiment.txt:md5,b0157d081d0ba0c27b370915f13c8c8a",
+                "cd4_REP4.infer_experiment.txt:md5,37ec4ee4ed5f707f073be5a7d4c9acfb",
+                "jurkat_REP1.infer_experiment.txt:md5,3ec36bed252146eb9cdb68db30c1855e",
+                "jurkat_REP2.infer_experiment.txt:md5,cde67a32fc922fb61fe5c5ea4b0e5c92"
+            ],
+            [
+                "cd4_REP1.read_distribution.txt:md5,1fcc6afbb63242818d446b877a832c3a",
+                "cd4_REP2.read_distribution.txt:md5,c2762d927c1c12d520ebee8160561189",
+                "cd4_REP3.read_distribution.txt:md5,2f05c4cc866b4f8068e02008cad20cb3",
+                "cd4_REP4.read_distribution.txt:md5,ececae7f535b4fd5606bf763fdba7a34",
+                "jurkat_REP1.read_distribution.txt:md5,6c02a757ed379a6c19f6855e38b5d909",
+                "jurkat_REP2.read_distribution.txt:md5,a5f8bed2cff9d780a31c3ce43e289d9e"
+            ],
+            [
+                "cd4_REP1.dreg.bedGraph:md5,8948a8fa86d8f6d413b77983189ff56e",
+                "cd4_REP1.minus.bedGraph:md5,2a1c34f9d9ef9ff1b9da7874b9e3aaad",
+                "cd4_REP1.minus.bigWig:md5,5280319275c98dcce023779fa389884d",
+                "cd4_REP1.plus.bedGraph:md5,1509ec3a921e3109c5914e1bcef8cf33",
+                "cd4_REP1.plus.bigWig:md5,72ccab3173f2018a22a4b36841247ba2",
+                "cd4_REP2.dreg.bedGraph:md5,29f865a5668fae4a52a41589ac2b3179",
+                "cd4_REP2.minus.bedGraph:md5,c530bc34fa3ec7ac49e88ff65f9c2f92",
+                "cd4_REP2.minus.bigWig:md5,5e748c794e037f441741f7f409c8c5ad",
+                "cd4_REP2.plus.bedGraph:md5,a675141da2874ec08d91591e5ea8242b",
+                "cd4_REP2.plus.bigWig:md5,08674d52e9eeb08807c33ed3e4b3d504",
+                "cd4_REP3.dreg.bedGraph:md5,201e690c619ee231416b643740141588",
+                "cd4_REP3.minus.bedGraph:md5,1c44c165f663d08c869a013b78f051b0",
+                "cd4_REP3.minus.bigWig:md5,aa3f5e86c635e182f9173543751cfbfd",
+                "cd4_REP3.plus.bedGraph:md5,a475098ed14da6f3242c4cfdf3abb713",
+                "cd4_REP3.plus.bigWig:md5,b255ae7c47424c223c537d00ecc025b5",
+                "cd4_REP4.dreg.bedGraph:md5,dfcfce7df666c0e24a3d0d4e21447a0b",
+                "cd4_REP4.minus.bedGraph:md5,b7a3d3c822155dfd8052c67a330fd6d5",
+                "cd4_REP4.minus.bigWig:md5,fc61c62613dc0f74a65c32419aba8f76",
+                "cd4_REP4.plus.bedGraph:md5,5623367b681562a2567afc62a8da4151",
+                "cd4_REP4.plus.bigWig:md5,ed00ad7a22c49860debc86cfa7ffb457",
+                "jurkat_REP1.dreg.bedGraph:md5,c25a4fb095e9f7d6766a3ce33e08f7d8",
+                "jurkat_REP1.minus.bedGraph:md5,8d5d9a41df6eb6c56b1bfd3f39dc1fc6",
+                "jurkat_REP1.minus.bigWig:md5,d06c8015c996bf520fff17266fd01f84",
+                "jurkat_REP1.plus.bedGraph:md5,6ed63e5983edaa74fb3965676efdb674",
+                "jurkat_REP1.plus.bigWig:md5,7a02334f2c7300ffdb5a2253c0937390",
+                "jurkat_REP2.dreg.bedGraph:md5,aad861b6fd8d296fe6bb4bc82d5eeeed",
+                "jurkat_REP2.minus.bedGraph:md5,cd83486cb6bb71e6b6e31a69c94d0d85",
+                "jurkat_REP2.minus.bigWig:md5,686f719978de948f7045acc95f9d1c82",
+                "jurkat_REP2.plus.bedGraph:md5,569e8a25c9cf48d1ef953f3da77c48a1",
+                "jurkat_REP2.plus.bigWig:md5,cbe3fd38fe8f9508645bbfad83924212"
+            ],
+            [
+                
+            ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
-            "c529a16c839e85e119b98354f109352d",
-            "9e63b682af88fa902cf92b5c485845b1",
-            "2aa200bbbce374ec7dedb9b46ce4aae1",
-            "122274730dd5386e1b26c174df886a8b",
-            "c2adf5327ff6d4edda2fdad00c7cb9bf",
-            "63fea3b1e2e08e5f6fdf3f7ba0aa7818"
+            [
+                "cd4_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+            ],
+            [
+                "cd4_filtered.bed:md5,22a41b0aef6da7f4fa0f0644cc60ef32",
+                "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e"
+            ],
+            true
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-03T08:58:17.037588077"
+        "timestamp": "2024-08-09T17:35:32.797123474"
     },
     "Should work with gzipped references": {
         "content": [
@@ -49,7 +151,7 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-04T20:12:41.277553487"
+        "timestamp": "2024-08-09T13:24:17.114505802"
     },
     "Should work with BWA Index": {
         "content": [

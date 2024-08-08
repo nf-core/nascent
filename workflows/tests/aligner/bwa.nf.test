@@ -21,28 +21,34 @@ nextflow_pipeline {
                 { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
                     workflow.trace.tasks().size(),
-                    path("$outputDir/bbmap").list(),
-                    // BUG https://github.com/nf-core/nascent/issues/102
-                    // path("$outputDir/bedtools").list(),
-                    // FIXME gtf2bed isn't deterministic
-                    // path("$outputDir/bwa/featurecounts/gene").list(),
-                    // FIXME cd4 isn't deterministic
-                    // path("$outputDir/bwa/featurecounts/predicted").list(),
-                    // path("$outputDir/deeptools").list(),
-                    // path("$outputDir/fastp/*.json").list(),
-                    // FIXME gtf2bed isn't deterministic
-                    // path("$outputDir/gtf2bed").list(),
-                    path("$outputDir/homer/cd4.bed"),
-                    path("$outputDir/homer/jurkat.bed"),
-                    // FIXME https://github.com/nf-core/nascent/issues/148
-                    // path("$outputDir/preseq").list(),
-                    // path("$outputDir/rseqc").list(),
-                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/samtools/cd4_REP3.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/samtools/cd4_REP4.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getSamLinesMD5(),
+                    // TODO path("$outputDir/preprocessing/fastp/*.json").list(),
+                    path("$outputDir/bwa/log").list(),
+                    path("$outputDir/bwa/samtools_stats").list(),
+                    path("$outputDir/quality_control/bbsplit").list(),
+                    // FIXME Empty
+                    path("$outputDir/quality_control/preseq").list().findAll { it.contains(".txt") },
+                    // process.out.outs[0][1].findAll {  file(it).name.contains('.pb')  },
+                    path("$outputDir/quality_control/rseqc/read_duplication/xls").list(),
+                    path("$outputDir/quality_control/rseqc/read_duplication/rscript").list(),
+                    path("$outputDir/quality_control/rseqc/infer_experiment").list(),
+                    path("$outputDir/quality_control/rseqc/read_distribution").list(),
+                    path("$outputDir/coverage_graphs/").list(),
+                    // FIXME Empty
+                    path("$outputDir/transcript_identification/").list().findAll { file(it.toString()).name.contains('.bed') },
+                    path("$outputDir/transcript_identification/homer/cd4.bed"),
+                    path("$outputDir/transcript_identification/homer/jurkat.bed"),
+                    // FIXME path("$outputDir/transcript_identification/pints/").list().findAll(),
+                    path("$outputDir/transcript_identification/intersect/").list(),
+                    path("$outputDir/transcript_identification/filtered/").list(),
+                    // FIXME path("$outputDir/quantification/").list(),
+                    path("$outputDir/multiqc/multiqc_report.html").exists(),
+                    // TODO
+                    // bam("$outputDir/samtools/cd4_REP1.sorted.bam").getSamLinesMD5(),
+                    // bam("$outputDir/samtools/cd4_REP2.sorted.bam").getSamLinesMD5(),
+                    // bam("$outputDir/samtools/cd4_REP3.sorted.bam").getSamLinesMD5(),
+                    // bam("$outputDir/samtools/cd4_REP4.sorted.bam").getSamLinesMD5(),
+                    // bam("$outputDir/samtools/jurkat_REP1.sorted.bam").getSamLinesMD5(),
+                    // bam("$outputDir/samtools/jurkat_REP2.sorted.bam").getSamLinesMD5(),
                 ).match("output_files")
                 }
             )
