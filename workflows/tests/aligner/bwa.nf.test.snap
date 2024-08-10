@@ -3,6 +3,14 @@
         "content": [
             134,
             [
+                "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
+                "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
+                "cd4_REP3.trimmed.fastp.json:md5,c9c3a1dd0a2ebac77c9d7c3b0daf3790",
+                "cd4_REP4.trimmed.fastp.json:md5,c073bd26609ddca91396d0f374ec5b80",
+                "jurkat_REP1.trimmed.fastp.json:md5,329fd8e56421a196fc2ebd37ab3bc22d",
+                "jurkat_REP2.trimmed.fastp.json:md5,8bad5b02a27e5386255b998a6a69db15"
+            ],
+            [
                 
             ],
             [
@@ -40,7 +48,18 @@
                 "jurkat_REP2.coverage.stats.txt:md5,b1940346719e4070091f2eef6e508f49"
             ],
             [
-                
+                "cd4_REP1.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP1.lc_extrap.txt:md5,8633f84ccd5cc725db9af4b33edd63b0",
+                "cd4_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP2.lc_extrap.txt:md5,3ad9e4028c3711e6d46831c10ed04200",
+                "cd4_REP3.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP3.lc_extrap.txt:md5,25ebbeabee46caa86a4d6d82dd0091f1",
+                "cd4_REP4.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP4.lc_extrap.txt:md5,d0df86774dd54421fd362d46faa3f937",
+                "jurkat_REP1.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "jurkat_REP1.lc_extrap.txt:md5,84faa937faa88476c942f330c5762cb5",
+                "jurkat_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "jurkat_REP2.lc_extrap.txt:md5,8ae0a77bcc59da38ec2da0fc1f973227"
             ],
             [
                 "cd4_REP1.pos.DupRate.xls:md5,a80db2d20096ca839a7847ec5b11bf75",
@@ -112,9 +131,6 @@
                 "jurkat_REP2.plus.bedGraph:md5,569e8a25c9cf48d1ef953f3da77c48a1",
                 "jurkat_REP2.plus.bigWig:md5,cbe3fd38fe8f9508645bbfad83924212"
             ],
-            [
-                
-            ],
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
             [
@@ -131,7 +147,7 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-09T17:35:32.797123474"
+        "timestamp": "2024-08-10T12:48:55.984269469"
     },
     "Should work with gzipped references": {
         "content": [
