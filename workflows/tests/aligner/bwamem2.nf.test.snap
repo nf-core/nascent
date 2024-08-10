@@ -3,6 +3,25 @@
         "content": [
             77,
             [
+                "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
+                "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
+                "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2"
+            ],
+            "c529a16c839e85e119b98354f109352d",
+            "9e63b682af88fa902cf92b5c485845b1",
+            "c2adf5327ff6d4edda2fdad00c7cb9bf",
+            [
+                "cd4_REP1.sorted.bam.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
+                "cd4_REP1.sorted.bam.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
+                "cd4_REP1.sorted.bam.stats:md5,1536c80bae78b2062508e1de210f6387",
+                "cd4_REP2.sorted.bam.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
+                "cd4_REP2.sorted.bam.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
+                "cd4_REP2.sorted.bam.stats:md5,561610e53fb676ac83252712dcac30d4",
+                "jurkat.sorted.bam.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
+                "jurkat.sorted.bam.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
+                "jurkat.sorted.bam.stats:md5,898c6b259ef686bf797ef15646faf29d"
+            ],
+            [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
                 "cd4_REP1.coverage.stats.txt:md5,f1471b61ac17dba283d80e08450c7e55",
                 "cd4_REP2.coverage.hist.txt:md5,8d5258a0882494bc4e3f1aa6aa5ed685",
@@ -10,17 +29,71 @@
                 "jurkat.coverage.hist.txt:md5,71a893d9d1d55fd47399f6d47b628d6e",
                 "jurkat.coverage.stats.txt:md5,381c69a30099d82066a959deab1a2569"
             ],
+            [
+                "cd4_REP1.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP1.lc_extrap.txt:md5,8633f84ccd5cc725db9af4b33edd63b0",
+                "cd4_REP2.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "cd4_REP2.lc_extrap.txt:md5,3ad9e4028c3711e6d46831c10ed04200",
+                "jurkat.c_curve.txt:md5,cf4743abdd355595d6ec1fb3f38e66e5",
+                "jurkat.lc_extrap.txt:md5,84faa937faa88476c942f330c5762cb5"
+            ],
+            [
+                "cd4_REP1.pos.DupRate.xls:md5,a80db2d20096ca839a7847ec5b11bf75",
+                "cd4_REP1.seq.DupRate.xls:md5,c34531fd7578c6f62cbad53b96a7feb9",
+                "cd4_REP2.pos.DupRate.xls:md5,06200ab67a60bee71fd168de88c15369",
+                "cd4_REP2.seq.DupRate.xls:md5,c82f6d687eacabbab045db34647c3254",
+                "jurkat.pos.DupRate.xls:md5,0721c91ab7c640b046689095047657f8",
+                "jurkat.seq.DupRate.xls:md5,aba941b1bf0e93f99e39bd507d1c02de"
+            ],
+            [
+                "cd4_REP1.DupRate_plot.r:md5,a6f96b5b87a142dca2e09868deb8222b",
+                "cd4_REP2.DupRate_plot.r:md5,a0686d22ba07f33a627c1a106d442a03",
+                "jurkat.DupRate_plot.r:md5,acb2fdffc578643503503bf0081eb7ae"
+            ],
+            [
+                "cd4_REP1.infer_experiment.txt:md5,2d8f31fe48cfc1db9d4c46ba59c2c7f3",
+                "cd4_REP2.infer_experiment.txt:md5,70ac3bf0d0c50d644ab97e1698021e55",
+                "jurkat.infer_experiment.txt:md5,3ec36bed252146eb9cdb68db30c1855e"
+            ],
+            [
+                "cd4_REP1.read_distribution.txt:md5,1fcc6afbb63242818d446b877a832c3a",
+                "cd4_REP2.read_distribution.txt:md5,c2762d927c1c12d520ebee8160561189",
+                "jurkat.read_distribution.txt:md5,6c02a757ed379a6c19f6855e38b5d909"
+            ],
+            [
+                "cd4_REP1.dreg.bedGraph:md5,8948a8fa86d8f6d413b77983189ff56e",
+                "cd4_REP1.minus.bedGraph:md5,2a1c34f9d9ef9ff1b9da7874b9e3aaad",
+                "cd4_REP1.minus.bigWig:md5,5280319275c98dcce023779fa389884d",
+                "cd4_REP1.plus.bedGraph:md5,1509ec3a921e3109c5914e1bcef8cf33",
+                "cd4_REP1.plus.bigWig:md5,72ccab3173f2018a22a4b36841247ba2",
+                "cd4_REP2.dreg.bedGraph:md5,29f865a5668fae4a52a41589ac2b3179",
+                "cd4_REP2.minus.bedGraph:md5,c530bc34fa3ec7ac49e88ff65f9c2f92",
+                "cd4_REP2.minus.bigWig:md5,5e748c794e037f441741f7f409c8c5ad",
+                "cd4_REP2.plus.bedGraph:md5,a675141da2874ec08d91591e5ea8242b",
+                "cd4_REP2.plus.bigWig:md5,08674d52e9eeb08807c33ed3e4b3d504",
+                "jurkat.dreg.bedGraph:md5,c25a4fb095e9f7d6766a3ce33e08f7d8",
+                "jurkat.minus.bedGraph:md5,8d5d9a41df6eb6c56b1bfd3f39dc1fc6",
+                "jurkat.minus.bigWig:md5,d06c8015c996bf520fff17266fd01f84",
+                "jurkat.plus.bedGraph:md5,6ed63e5983edaa74fb3965676efdb674",
+                "jurkat.plus.bigWig:md5,7a02334f2c7300ffdb5a2253c0937390"
+            ],
             "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
             "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
-            "c529a16c839e85e119b98354f109352d",
-            "9e63b682af88fa902cf92b5c485845b1",
-            "c2adf5327ff6d4edda2fdad00c7cb9bf"
+            [
+                "cd4_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+            ],
+            [
+                "cd4_filtered.bed:md5,7596b9c555cf05614153ee4b539f6b2e",
+                "jurkat_filtered.bed:md5,5cc005df15b1f03d21191f0f5d37f0e1"
+            ],
+            true
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-03T10:28:23.205786296"
+        "timestamp": "2024-08-11T12:45:38.504730102"
     },
     "software_versions": {
         "content": [

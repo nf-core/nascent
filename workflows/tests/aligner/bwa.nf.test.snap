@@ -10,28 +10,31 @@
                 "jurkat_REP1.trimmed.fastp.json:md5,329fd8e56421a196fc2ebd37ab3bc22d",
                 "jurkat_REP2.trimmed.fastp.json:md5,8bad5b02a27e5386255b998a6a69db15"
             ],
-            [
-                
-            ],
+            "c529a16c839e85e119b98354f109352d",
+            "9e63b682af88fa902cf92b5c485845b1",
+            "2aa200bbbce374ec7dedb9b46ce4aae1",
+            "122274730dd5386e1b26c174df886a8b",
+            "c2adf5327ff6d4edda2fdad00c7cb9bf",
+            "63fea3b1e2e08e5f6fdf3f7ba0aa7818",
             [
                 "cd4_REP1.sorted.bam.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
                 "cd4_REP1.sorted.bam.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
-                "cd4_REP1.sorted.bam.stats:md5,ba177ae2d9a5ab5a972bc056df28acc1",
+                "cd4_REP1.sorted.bam.stats:md5,1536c80bae78b2062508e1de210f6387",
                 "cd4_REP2.sorted.bam.flagstat:md5,0fd86dbf8f799fad49ba471702979bdc",
                 "cd4_REP2.sorted.bam.idxstats:md5,53204e4c6a9f68664087e4a8123be46a",
-                "cd4_REP2.sorted.bam.stats:md5,8c8fc51169528132b1cca54d3689e3c0",
+                "cd4_REP2.sorted.bam.stats:md5,561610e53fb676ac83252712dcac30d4",
                 "cd4_REP3.sorted.bam.flagstat:md5,793c9cadbf80e35dbae3774e9b5bd93f",
                 "cd4_REP3.sorted.bam.idxstats:md5,42de227ff397013cf288759871b0e938",
-                "cd4_REP3.sorted.bam.stats:md5,fe5be813bf2d55fd0e4877c650a0b266",
+                "cd4_REP3.sorted.bam.stats:md5,9c8a44ba139ce9a24449779f5d3c9228",
                 "cd4_REP4.sorted.bam.flagstat:md5,ed6c609505097f3cc9d9902d69e016f8",
                 "cd4_REP4.sorted.bam.idxstats:md5,959dc185ae59de4cebe374026711a55e",
-                "cd4_REP4.sorted.bam.stats:md5,46bf6f2b140d369986027bc2f588b440",
+                "cd4_REP4.sorted.bam.stats:md5,edc57478278aa35b7376cee9afd634a7",
                 "jurkat_REP1.sorted.bam.flagstat:md5,fd5f02b0f02a407447b804b1d80f5421",
                 "jurkat_REP1.sorted.bam.idxstats:md5,c61af0847c1ad76c06a8de2815975b32",
-                "jurkat_REP1.sorted.bam.stats:md5,3f1b0a4214daa368a307f856f7a809dc",
+                "jurkat_REP1.sorted.bam.stats:md5,ce9ff516908d86fb6db6ce44d5a3904b",
                 "jurkat_REP2.sorted.bam.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.sorted.bam.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
-                "jurkat_REP2.sorted.bam.stats:md5,48732cff30d5a9a272f68fc850b0eb84"
+                "jurkat_REP2.sorted.bam.stats:md5,026c558e8c36136ef19bfbef6b12ce2b"
             ],
             [
                 "cd4_REP1.coverage.hist.txt:md5,7cbb473be8d3b32ff2e52fdf4e5d10d2",
@@ -147,7 +150,7 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-10T12:48:55.984269469"
+        "timestamp": "2024-08-11T14:09:09.905409258"
     },
     "Should work with gzipped references": {
         "content": [

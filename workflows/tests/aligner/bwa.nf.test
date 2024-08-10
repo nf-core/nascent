@@ -28,7 +28,6 @@ nextflow_pipeline {
                     bam("$outputDir/bwa/cd4_REP4.sorted.bam").getSamLinesMD5(),
                     bam("$outputDir/bwa/jurkat_REP1.sorted.bam").getSamLinesMD5(),
                     bam("$outputDir/bwa/jurkat_REP2.sorted.bam").getSamLinesMD5(),
-                    path("$outputDir/bwa/log").list(),
                     path("$outputDir/bwa/samtools_stats").list(),
                     path("$outputDir/quality_control/bbsplit").list(),
                     UTILS.getAllFilesFromDir("$outputDir/quality_control/preseq", ".txt"),
@@ -39,10 +38,14 @@ nextflow_pipeline {
                     path("$outputDir/coverage_graphs/").list(),
                     path("$outputDir/transcript_identification/homer/cd4.bed"),
                     path("$outputDir/transcript_identification/homer/jurkat.bed"),
-                    // FIXME UTILS.getAllFilesFromDir("$outputDir/transcript_identification/pints/", ".bed"),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // UTILS.getAllFilesFromDir("$outputDir/transcript_identification/pints/", ".bed"),
                     path("$outputDir/transcript_identification/intersect/").list(),
                     path("$outputDir/transcript_identification/filtered/").list(),
-                    // FIXME path("$outputDir/quantification/").list(),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // path("$outputDir/quantification/").list(),
                     path("$outputDir/multiqc/multiqc_report.html").exists(),
                 ).match("output_files")
                 }

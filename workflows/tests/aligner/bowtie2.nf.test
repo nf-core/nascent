@@ -20,26 +20,25 @@ nextflow_pipeline {
                 { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
                     workflow.trace.tasks().size(),
-                    path("$outputDir/bbmap").list(),
-                    // BUG https://github.com/nf-core/nascent/issues/102
-                    // path("$outputDir/bedtools").list(),
-                    // FIXME gtf2bed isn't deterministic
-                    // path("$outputDir/bwa/featurecounts/gene").list(),
-                    // FIXME cd4 isn't deterministic
-                    // path("$outputDir/bwa/featurecounts/predicted").list(),
-                    // path("$outputDir/deeptools").list(),
-                    // path("$outputDir/fastp/*.json").list(),
-                    // FIXME gtf2bed isn't deterministic
-                    // path("$outputDir/gtf2bed").list(),
-                    path("$outputDir/homer/cd4.bed"),
-                    path("$outputDir/homer/jurkat.bed"),
-                    // FIXME https://github.com/nf-core/nascent/issues/148
-                    // path("$outputDir/preseq").list(),
-                    // path("$outputDir/rseqc").list(),
-                    // FIXME Bowtie2 isn't deterministic
-                    bam("$outputDir/samtools/cd4_REP1.sorted.bam").getHeaderMD5(),
-                    bam("$outputDir/samtools/cd4_REP2.sorted.bam").getHeaderMD5(),
-                    bam("$outputDir/samtools/jurkat.sorted.bam").getHeaderMD5(),
+                    UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),
+                    // NOTE Not deterministic
+                    path("$outputDir/bowtie2/cd4_REP1.sorted.bam").exists(),
+                    path("$outputDir/bowtie2/cd4_REP2.sorted.bam").exists(),
+                    path("$outputDir/bowtie2/jurkat.sorted.bam").exists(),
+                    path("$outputDir/bowtie2/log").list(),
+                    path("$outputDir/bowtie2/samtools_stats").list(),
+                    path("$outputDir/quality_control/bbsplit").list(),
+                    UTILS.getAllFilesFromDir("$outputDir/quality_control/preseq", ".txt"),
+                    path("$outputDir/quality_control/rseqc/read_duplication/xls").list(),
+                    path("$outputDir/quality_control/rseqc/read_duplication/rscript").list(),
+                    path("$outputDir/quality_control/rseqc/infer_experiment").list(),
+                    path("$outputDir/quality_control/rseqc/read_distribution").list(),
+                    path("$outputDir/coverage_graphs/").list(),
+                    path("$outputDir/transcript_identification/homer/cd4.bed"),
+                    path("$outputDir/transcript_identification/homer/jurkat.bed"),
+                    path("$outputDir/transcript_identification/intersect/").list(),
+                    path("$outputDir/transcript_identification/filtered/").list(),
+                    path("$outputDir/multiqc/multiqc_report.html").exists(),
                 ).match("output_files")
                 }
             )
