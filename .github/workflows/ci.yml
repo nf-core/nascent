@@ -23,6 +23,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
         NXF_VER: ["latest-stable"] # TODO Test minimum version on release
@@ -55,7 +56,7 @@ jobs:
 
       - uses: nf-core/setup-nf-test@v1
         with:
-          version: ${{ NFT_VER }}
+          version: ${{ env.NFT_VER }}
 
       - name: Run Tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
         run: |

@@ -47,7 +47,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `fastqc/`
+- `preprocessing/fastqc`
   - `*_fastqc.html`: FastQC report containing quality metrics.
   - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
@@ -70,7 +70,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<flowcell_id>/`
+- `preprocessing/fastp`
   - `*.fastp.html`: Trimming report in html format.
   - `*.fastp.json`: Trimming report in json format.
   - `*.fastp.log`: Trimming log file.
@@ -228,9 +228,9 @@ The majority of RSeQC scripts generate output files which can be plotted and sum
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/preseq/`
+- `quality_control/preseq/`
   - `*.lc_extrap.txt`: Preseq expected future yield file.
-- `<ALIGNER>/preseq/log/`
+- `quality_control/preseq/log/`
   - `*.command.log`: Standard error output from command.
 
 </details>
@@ -244,7 +244,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bbmap/`
+- `quality_control/bbmap/`
   - `*.coverage.hist.txt`: Histogram of read coverage over each chromosome
   - `*.coverage.stats.txt`: Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
 
@@ -259,7 +259,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bedtools/`
+- `coverage_graphs/`
   - `*.minus.bedGraph`: Sample coverage file (negative strand only) in bedGraph format
   - `*.plus.bedGraph`: Sample coverage file (positive strand only) in bedGraph format
 
@@ -270,7 +270,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `deeptools/`
+- `coverage_graphs/`
   - `*.minus.bigWig`: Sample coverage file (negative strand only) in bigWig format
   - `*.plus.bigWig`: Sample coverage file (positive strand only) in bigWig format
 
@@ -283,7 +283,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `homer/`
+- `transcript_identification/homer/`
   - `*.bed`: HOMER Nascent RNA (GroSeq) transcripts after pos2bed
   - `*.peaks.txt`: HOMER Nascent RNA (GroSeq) transcripts
   - `*.bedGraph.gz`: UCSC bedGraph
@@ -306,7 +306,7 @@ The pipeline will pool the reads if they are in the same group. See [#153](https
 <details markdown="1">
 <summary>Output files</summary>
 
-- `pints/`
+- `transcript_identification/pints/`
   - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent)
   - `*_divergent_peaks.bed`: Divergent TREs
   - `*_unidirectional_peaks.bed`: Unidirectional TREs, maybe lncRNAs transcribed from enhancers (e-lncRNAs)
@@ -322,11 +322,11 @@ For more information about how PINTS works, see the paper [A comparison of exper
 <details markdown="1">
 <summary>Output files</summary>
 
-- `grohmm/`
+- `transcript_identification/grohmm/`
   - `*.eval.txt`: Evaluation of HMM Annotations
   - `*.final.transcripts.bed`: Predicted transcripts
   - `*.tdFinal.txt`: Final quality metrics
-  - `*.tdplot_mqc.jpg`: TD plot included in multiqc
+  - `*.tdplot_mqc.jpg`: TD plot included in MultiQC
   - `*.transcripts.txt`: Predicted transcripts in txt form
   - `*.tuning.csv`: The tuning csv that was used
 
@@ -371,7 +371,7 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/featurecounts/`
+- `quantification/featurecounts/`
   - `*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
   - `*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
   - `*_mqc.tsv`: MultiQC custom content files used to plot biotypes in report.
@@ -389,9 +389,8 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `genome/`
+- `reference/`
   - `*.fa`, `*.gtf`, `*.gff`, `*.bed`, `.tsv`: If the `--save_reference` parameter is provided then all of the genome reference files will be placed in this directory.
-- `genome/index/`
   - `bwa/`: Directory containing bwa indices.
   - `bwa-mem2/`: Directory containing bwa-mem2 indices.
   - `dragmap/`: Directory containing DRAGMAP indices.
