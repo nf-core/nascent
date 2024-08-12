@@ -7,9 +7,9 @@
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
                 "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2"
             ],
-            true,
-            true,
-            true,
+            "7945f971cd63ad99ff2d9cc81e19ea39",
+            "43982cec9077e7030428267841cf04ef",
+            "8813c6dd42cabd94042f4f9e4aee3560",
             [
                 "cd4_REP1.bowtie2.log:md5,024c3b6bca27f3836cdd86c0287d2971",
                 "cd4_REP2.bowtie2.log:md5,089af358aad637ec94c10172eb024773",
@@ -98,16 +98,16 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-11T13:47:28.150239282"
+        "timestamp": "2024-08-11T20:03:14.305867126"
     },
     "software_versions": {
         "content": [
-            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BOWTIE2_ALIGN={bowtie2=2.5.2, samtools=1.18, pigz=2.6}, CUSTOM_GETCHROMSIZES={getchromsizes=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SAMTOOLS_FLAGSTAT={samtools=1.2}, SAMTOOLS_IDXSTATS={samtools=1.2}, SAMTOOLS_INDEX={samtools=1.2}, SAMTOOLS_SORT={samtools=1.2}, SAMTOOLS_STATS={samtools=1.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BEDTOOLS_INTERSECT={bedtools=2.31.1}, BEDTOOLS_INTERSECT_FILTER={bedtools=2.31.1}, BOWTIE2_ALIGN={bowtie2=2.5.2, samtools=1.18, pigz=2.6}, BOWTIE2_BUILD={bowtie2=2.5.2}, CUSTOM_GETCHROMSIZES={getchromsizes=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SAMTOOLS_FLAGSTAT={samtools=1.2}, SAMTOOLS_IDXSTATS={samtools=1.2}, SAMTOOLS_INDEX={samtools=1.2}, SAMTOOLS_SORT={samtools=1.2}, SAMTOOLS_STATS={samtools=1.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-08-11T13:47:28.018231429"
+        "timestamp": "2024-08-11T20:03:14.17485497"
     }
 }

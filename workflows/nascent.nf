@@ -84,7 +84,7 @@ workflow NASCENT {
         ch_bowtie2_index,
         ch_hisat2_index,
     )
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions.first())
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
     ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
 
     //
