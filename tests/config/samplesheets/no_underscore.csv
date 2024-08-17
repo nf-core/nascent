@@ -1,0 +1,4 @@
+sample,fastq_1,fastq_2
+cd4,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,
+cd4,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,
+jurkat,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T1.fastq.gz,
