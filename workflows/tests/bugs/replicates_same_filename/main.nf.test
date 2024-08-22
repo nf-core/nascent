@@ -4,7 +4,7 @@ nextflow_pipeline {
     script "../../../../main.nf"
     tag "bug"
 
-    // https://github.com/nf-core/nascent/issues/159
+    // BUG https://github.com/nf-core/nascent/issues/159
     test("Should fail with replicates that have the same filename") {
         when {
             params {
@@ -20,6 +20,26 @@ nextflow_pipeline {
             assert snapshot(
                 workflow.trace.tasks().size(),
             ).match()
+        }
+    }
+
+    // BUG https://github.com/nf-core/nascent/issues/159
+    test("Should work with replicates that have the same id and different file names") {
+        when {
+            params {
+                outdir = "$outputDir"
+                input = "${projectDir}/workflows/tests/bugs/replicates_same_filename/same_id.csv"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                ).match()
+                }
+            )
         }
     }
 }
