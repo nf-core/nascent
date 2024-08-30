@@ -1,0 +1,49 @@
+nextflow_pipeline {
+
+    name "GFF"
+    script "../../../../main.nf"
+
+    test("Should run with an unzipped GFF file") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                gff = 'https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/genes_chr21.gff'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                    UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),
+                    bam("$outputDir/bwa/cd4_REP1.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/bwa/cd4_REP2.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/bwa/jurkat.sorted.bam").getSamLinesMD5(),
+                    path("$outputDir/bwa/samtools_stats").list(),
+                    path("$outputDir/quality_control/bbsplit").list(),
+                    UTILS.getAllFilesFromDir("$outputDir/quality_control/preseq", ".txt"),
+                    path("$outputDir/quality_control/rseqc/read_duplication/xls").list(),
+                    path("$outputDir/quality_control/rseqc/read_duplication/rscript").list(),
+                    path("$outputDir/quality_control/rseqc/infer_experiment").list(),
+                    path("$outputDir/quality_control/rseqc/read_distribution").list(),
+                    path("$outputDir/coverage_graphs/").list(),
+                    path("$outputDir/transcript_identification/homer/cd4.bed"),
+                    path("$outputDir/transcript_identification/homer/jurkat.bed"),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // UTILS.getAllFilesFromDir("$outputDir/transcript_identification/pints/", ".bed"),
+                    path("$outputDir/transcript_identification/intersect/").list(),
+                    path("$outputDir/transcript_identification/filtered/").list(),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // path("$outputDir/quantification/").list(),
+                    path("$outputDir/multiqc/multiqc_report.html").exists(),
+                ).match("output_files")
+                }
+            )
+        }
+    }
+}
