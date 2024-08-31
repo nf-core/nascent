@@ -2,6 +2,8 @@ nextflow_pipeline {
 
     name "GFF"
     script "../../../../main.nf"
+    tag "input"
+    tag "gff"
 
     test("Should run with an unzipped GFF file") {
 
