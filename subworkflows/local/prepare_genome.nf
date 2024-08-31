@@ -64,7 +64,7 @@ workflow PREPARE_GENOME {
             } else {
                 ch_gff = [ [:], file(gff)]
             }
-            ch_gtf      = GFFREAD ( ch_gff, ch_fasta ).gtf
+            ch_gtf      = GFFREAD ( ch_gff, ch_fasta ).gtf.map { it[1] }
             ch_versions = ch_versions.mix(GFFREAD.out.versions)
         }
     }
