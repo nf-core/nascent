@@ -48,7 +48,8 @@
                     "bwa/index": {
                         "branch": "master",
                         "git_sha": "e0ff65e1fb313677de09f5f477ae3da30ce19b7b",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/bwa/index/bwa-index.diff"
                     },
                     "bwa/mem": {
                         "branch": "master",
