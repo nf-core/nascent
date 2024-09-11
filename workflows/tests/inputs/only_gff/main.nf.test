@@ -1,17 +1,18 @@
 nextflow_pipeline {
 
-    name "HISAT2"
-    script "../../../main.nf"
+    name "GFF"
+    script "../../../../main.nf"
+    tag "input"
+    tag "gff"
 
-    test("Should run with defaults") {
-
-        tag "HISAT2"
+    test("Should run with only a GFF file") {
 
         when {
             params {
                 outdir = "$outputDir"
-                aligner = "hisat2"
-                hisat2_index = 'https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/GRCh38_chr21_hisat2.tar.gz'
+                gff = 'https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/genes_chr21.gff'
+                gtf = null
+                bed = null
             }
         }
 
@@ -22,12 +23,10 @@ nextflow_pipeline {
                 { assert snapshot(
                     workflow.trace.tasks().size(),
                     UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),
-                    bam("$outputDir/hisat2/cd4_REP1.sorted.bam").getSamLinesMD5(),
-                    // NOTE Flaky test
-                    bam("$outputDir/hisat2/cd4_REP2.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/hisat2/jurkat.sorted.bam").getSamLinesMD5(),
-                    path("$outputDir/hisat2/log").list(),
-                    path("$outputDir/hisat2/samtools_stats").list(),
+                    bam("$outputDir/bwa/cd4_REP1.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/bwa/cd4_REP2.sorted.bam").getSamLinesMD5(),
+                    bam("$outputDir/bwa/jurkat.sorted.bam").getSamLinesMD5(),
+                    path("$outputDir/bwa/samtools_stats").list(),
                     path("$outputDir/quality_control/bbsplit").list(),
                     UTILS.getAllFilesFromDir("$outputDir/quality_control/preseq", ".txt"),
                     path("$outputDir/quality_control/rseqc/read_duplication/xls").list(),
@@ -37,8 +36,14 @@ nextflow_pipeline {
                     path("$outputDir/coverage_graphs/").list(),
                     path("$outputDir/transcript_identification/homer/cd4.bed"),
                     path("$outputDir/transcript_identification/homer/jurkat.bed"),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // UTILS.getAllFilesFromDir("$outputDir/transcript_identification/pints/", ".bed"),
                     path("$outputDir/transcript_identification/intersect/").list(),
                     path("$outputDir/transcript_identification/filtered/").list(),
+                    // FIXME Not determinstic because of the order of files
+                    // Add to the other tests when fixed
+                    // path("$outputDir/quantification/").list(),
                     path("$outputDir/multiqc/multiqc_report.html").exists(),
                 ).match("output_files")
                 }

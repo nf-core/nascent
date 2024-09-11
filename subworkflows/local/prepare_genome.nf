@@ -59,12 +59,12 @@ workflow PREPARE_GENOME {
             }
         } else if (gff) {
             if (gff.endsWith('.gz')) {
-                ch_gff      = GUNZIP_GFF ( [ [:], gff ] ).gunzip.map { it[1] }
+                ch_gff      = GUNZIP_GFF ( [ [:], gff ] ).gunzip
                 ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
             } else {
-                ch_gff = Channel.value(file(gff))
+                ch_gff = [ [:], file(gff)]
             }
-            ch_gtf      = GFFREAD ( ch_gff ).gtf
+            ch_gtf      = GFFREAD ( ch_gff, ch_fasta ).gtf.map { it[1] }
             ch_versions = ch_versions.mix(GFFREAD.out.versions)
         }
     }
