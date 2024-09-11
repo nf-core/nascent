@@ -25,7 +25,7 @@ process GROHMM_PARAMETERTUNING {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     parameter_tuning.R \\
-        --bam_file ${bam} \\
+        --bam_file ${bams} \\
         --tuning_file ${tune_parameter_file} \\
         --outprefix ${prefix} \\
         --gtf $gtf \\
