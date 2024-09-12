@@ -18,7 +18,7 @@ workflow GROHMM {
 
     ch_versions = Channel.empty()
 
-    ch_tuning = []
+    ch_tuning = Channel.empty()
 
     if(!params.skip_tuning) {
         GROHMM_PARAMETERTUNING (
@@ -27,13 +27,15 @@ workflow GROHMM {
             tuning_file
         )
         ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
+        ch_bams_bais_tuning = bams_bais.join(ch_tuning)
         ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
+    } else {
+        ch_bams_bais_tuning = bams_bais.join(ch_tuning)
     }
 
     GROHMM_TRANSCRIPTCALLING (
-        bams_bais,
+        [ch_bams_bais_tuning, []],
         gtf,
-        ch_tuning
     )
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
 
