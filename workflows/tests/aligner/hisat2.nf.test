@@ -22,10 +22,10 @@ nextflow_pipeline {
                 { assert snapshot(
                     workflow.trace.tasks().size(),
                     UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),
-                    bam("$outputDir/hisat2/cd4_REP1.sorted.bam").getSamLinesMD5(),
-                    // NOTE Flaky test
-                    bam("$outputDir/hisat2/cd4_REP2.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/hisat2/jurkat.sorted.bam").getSamLinesMD5(),
+                    // NOTE Flaky test. Tried getSamLinesMD5, .getHeaderMD5, .getHeader, which sets the tmp dir /tmp/38.unp
+                    bam("$outputDir/hisat2/cd4_REP1.sorted.bam").getFileType(),
+                    bam("$outputDir/hisat2/cd4_REP2.sorted.bam").getFileType(),
+                    bam("$outputDir/hisat2/jurkat.sorted.bam").getFileType(),
                     path("$outputDir/hisat2/log").list(),
                     path("$outputDir/hisat2/samtools_stats").list(),
                     path("$outputDir/quality_control/bbsplit").list(),

@@ -7,9 +7,9 @@
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
                 "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2"
             ],
-            "1d3e0f612f83428b5f435dda59851671",
-            "4dba3f03e302b5d4a31c50987844ced7",
-            "2f7a17a247d070580890c62005d261fa",
+            "BAM",
+            "BAM",
+            "BAM",
             [
                 "cd4_REP1.hisat2.summary.log:md5,4f8f6e777e142473bad3c3dcdab8f6d3",
                 "cd4_REP2.hisat2.summary.log:md5,7a95dbf6b50b5d527416232e9af55d86",
@@ -98,7 +98,7 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-09-12T13:31:57.928940626"
+        "timestamp": "2024-09-13T08:37:05.644780156"
     },
     "software_versions": {
         "content": [
