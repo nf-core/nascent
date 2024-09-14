@@ -28,13 +28,13 @@ process GROHMM_TRANSCRIPTCALLING {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def tuning = tuning_file ? "--tuning_file ${tuning_file}" : ""
     """
     transcriptcalling_grohmm.R \\
         --bam_file ${bams} \\
-        $tuning \\
         --outprefix ${prefix} \\
         --gtf $gtf \\
+        --uts $UTS \\
+        --ltprobb $LtProbB \\
         --outdir ./ \\
         --cores $task.cpus \\
         $args

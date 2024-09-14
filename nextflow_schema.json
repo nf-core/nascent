@@ -126,7 +126,34 @@
                 "skip_grohmm": {
                     "type": "boolean",
                     "description": "Skip groHMM all together",
-                    "fa_icon": "fas fa-eye-slash"
+                    "fa_icon": "fas fa-eye-slash",
+                    "default": false
+                },
+                "grohmm_min_uts": {
+                    "type": "integer",
+                    "description": "Minimum number of UTs to use for groHMM.",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "default": 5
+                },
+                "grohmm_max_uts": {
+                    "type": "integer",
+                    "description": "Maximum number of UTs to use for groHMM.",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "default": 45
+                },
+                "grohmm_min_ltprobb": {
+                    "type": "integer",
+                    "description": "Minimum LTProbB value to use for groHMM.",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "help_text": "Depends on how you look at this one, which is the minimum and maximum... But I figured most will ignore the negative, so we went with absolute values.",
+                    "default": -100
+                },
+                "grohmm_max_ltprobb": {
+                    "type": "integer",
+                    "description": "Maximum LTProbB value to use for groHMM.",
+                    "fa_icon": "fas fa-sort-amount-desc",
+                    "help_text": "Depends on how you look at this one, which is the minimum and maximum... But I figured most will ignore the negative, so we went with absolute values.",
+                    "default": -400
                 },
                 "tuning_file": {
                     "type": "string",
