@@ -20,23 +20,25 @@ workflow GROHMM {
     ch_tuning = Channel.empty()
 
     // If a tuning file is provided, run transcriptcalling once
-    if(tuning_file) {
-        // TODO Find minimum
-        // uts <- tune[which.min(tune$errorRate), "UTS"]
-        // lt_probb <- tune[which.min(tune$errorRate), "LtProbB"]
-        GROHMM_TRANSCRIPTCALLING(
-            bam_bais,
-            gtf,
-            minimum_uts,
-            minimum_ltprobb,
-        )
-    } else {
+    // if(tuning_file) {
+    //     TODO Find minimum
+    //     uts <- tune[which.min(tune$errorRate), "UTS"]
+    //     lt_probb <- tune[which.min(tune$errorRate), "LtProbB"]
+    //     GROHMM_TRANSCRIPTCALLING (
+    //         bams_bais,
+    //         gtf,
+    //         minimum_uts,
+    //         minimum_ltprobb,
+    //     )
+    // } else {
         // Run transcriptcalling eval for each tuning param
         // Should avoid a tuning file with a row for everything
         // 5..45 by 5 for UTS is what we had currently
+        ch_uts = channel.of((params.grohmm_min_uts..params.grohmm_max_uts).step(5))
         // -100..-400 by 50 for LtProbB
-        GROHMM_PARAMETERTUNING (
-            bam_bais,
+        ch_ltprobb = channel.of((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50)).view()
+        GROHMM_TRANSCRIPTCALLING (
+            bams_bais,
             gtf,
             ch_uts,
             ch_ltprobb,
@@ -46,27 +48,8 @@ workflow GROHMM {
         // TODO Need to decide if windowAnalysis is important
         // https://github.com/Functional-Genomics-Lab/groseq-analysis/blob/9b69519c41232fd653a2b2726e32d91b49abeb7e/research/groHMM2.R#L62C7-L62C21
         // If it is need to rerun transcriptcalling without it
-    }
+    // }
 
-
-
-    if(!params.skip_tuning) {
-        GROHMM_PARAMETERTUNING (
-            bams_bais,
-            gtf,
-            tuning_file
-        )
-        ch_tuning = GROHMM_PARAMETERTUNING.out.tuning
-        ch_bams_bais_tuning = bams_bais.join(ch_tuning)
-        ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
-    } else {
-        ch_bams_bais_tuning = bams_bais.join(ch_tuning)
-    }
-
-    GROHMM_TRANSCRIPTCALLING (
-        [ch_bams_bais_tuning, []],
-        gtf,
-    )
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
 
     emit:
