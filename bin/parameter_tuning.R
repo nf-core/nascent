@@ -88,19 +88,9 @@ if (is.null(args$bam_files)) {
   print_help(args)
   stop("Please provide a bam file", call. = FALSE)
 }
-if (is.null(args$tuning_file)) {
-  print_help(args)
-  stop("Please provide a tuning file", call. = FALSE)
-}
 
-
-# Read in bam file.
-if (file.exists(args$outdir) == FALSE) {
-  dir.create(args$outdir, recursive = TRUE)
-}
-setwd(args$outdir)
-
-# CHANGE BASED ON PAIRED OR SINGLE END
+# Load alignment files
+# TODO? CHANGE BASED ON PAIRED OR SINGLE END
 alignments <- c()
 for (bam in args$bam_files) {
   alignments <- append(
@@ -121,32 +111,33 @@ kg_consensus <- makeConsensusAnnotations(
 )
 print("Finished consensus annotations")
 
-# TUNING
-tune <- read.csv(args$tuning_file)
+############
+## TUNING ##
+############
+print("Starting tuning run")
+hmm <- detectTranscripts(
+  reads = alignments,
+  LtProbB = args$ltprobb,
+  UTS = args$uts
+)
+print("Evaluating")
+e <- evaluateHMMInAnnotations(hmm$transcripts, kg_consensus)
+print(e)
 
-evals <- mclapply(seq_len(nrow(tune)), function(x) {
-  hmm <- detectTranscripts(
-    reads = alignments,
-    LtProbB = tune$LtProbB[x], UTS = tune$UTS[x]
-  )
-  e <- evaluateHMMInAnnotations(hmm$transcripts, kg_consensus)
-  e$eval
-}, mc.cores = args$cores, mc.silent = TRUE)
+print(e$eval)
+write.csv(e$eval, file = paste0(args$outprefix, ".tuning.csv"))
 
-tune <- cbind(tune, do.call(rbind, evals))
-write.csv(tune, file = paste0(args$outprefix, ".tuning.csv"))
-
-
-# CITE PACKAGES USED
+########################
+## CITE PACKAGES USED ##
+########################
 citation("groHMM")
 citation("GenomicFeatures")
 citation("GenomicAlignments")
 citation("AnnotationDbi")
 
-## R SESSION INFO                             ##
-################################################
-################################################
-
+####################
+## R SESSION INFO ##
+####################
 r_log_file <- "R_sessionInfo.log"
 if (file.exists(r_log_file) == FALSE) {
   sink(r_log_file)
@@ -154,5 +145,3 @@ if (file.exists(r_log_file) == FALSE) {
   print(a)
   sink()
 }
-
-################################################################################
