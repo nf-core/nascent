@@ -37,13 +37,18 @@ workflow GROHMM {
         ch_uts = channel.fromList((params.grohmm_min_uts..params.grohmm_max_uts).step(5))
         // -100..-400 by 50 for LtProbB
         ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50)).view()
-        GROHMM_TRANSCRIPTCALLING (
+        GROHMM_PARAMETERTUNING (
             bams_bais,
             gtf,
             ch_uts,
             ch_ltprobb,
         )
-        // TODO CollectFile the tuning
+        .tuning
+        .collectFile(
+            name: "${params.outdir}/transcript_identification/grohmm/${item[0].id}_tuning.csv",
+            keepHeader: true,
+            skip: 1,
+        )
         // TODO Find the minimum values
         // TODO Need to decide if windowAnalysis is important
         // https://github.com/Functional-Genomics-Lab/groseq-analysis/blob/9b69519c41232fd653a2b2726e32d91b49abeb7e/research/groHMM2.R#L62C7-L62C21
