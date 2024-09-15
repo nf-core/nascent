@@ -115,16 +115,20 @@ print("Finished consensus annotations")
 ## TUNING ##
 ############
 print("Starting tuning run")
+Fp <- windowAnalysis(alignments, strand = "+", windowSize = 50)
+Fm <- windowAnalysis(alignments, strand = "-", windowSize = 50)
 hmm <- detectTranscripts(
+  Fp = Fp,
+  Fm = Fm,
   reads = alignments,
   LtProbB = args$ltprobb,
   UTS = args$uts
 )
 print("Evaluating")
 e <- evaluateHMMInAnnotations(hmm$transcripts, kg_consensus)
+print(e$eval)
 print(e)
 
-print(e$eval)
 write.csv(e$eval, file = paste0(args$outprefix, ".tuning.csv"))
 
 ########################
