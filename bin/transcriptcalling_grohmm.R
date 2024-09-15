@@ -96,13 +96,15 @@ for (bam in args$bam_files) {
 
 # Call annotations > DEFAULT VALUES ASSIGNED
 if (is.null(args$tuning_file)) {
+  # Use user supplied values or defaults
   hmm_result <- detectTranscripts(
     alignments,
     LtProbB = args$ltprobb,
     UTS = args$uts,
     threshold = 1
-  ) # Uses either inputted or default values
+  )
 } else {
+  # Use tuning file and take the minimum values
   tune <- read.csv(args$tuning_file)
   # Minimum error
   uts <- tune[which.min(tune$errorRate), "UTS"]
@@ -114,6 +116,8 @@ if (is.null(args$tuning_file)) {
     threshold = 1
   )
 }
+
+# NOTE TUNING IN A DIFFERENT SCRIPT
 
 tx_hmm <- hmm_result$transcripts
 write.table(
@@ -140,9 +144,8 @@ e <- evaluateHMMInAnnotations(tx_hmm, kg_consensus)
 # Save as txt file
 capture.output(e$eval, file = paste0(args$outprefix, ".eval.txt"))
 
-# TUNING IN A DIFFERENT SCRIPT
 
-# repairing with annotations
+print("repairing with annotations")
 get_expressed_annotations <- function(features, reads) {
   f_limit <- limitToXkb(features)
   count <- countOverlaps(f_limit, reads)
@@ -164,25 +167,25 @@ export(
   con = paste(args$outprefix, ".final.transcripts.bed", sep = "")
 )
 capture.output(td_final, file = paste0(args$outprefix, ".tdFinal.txt"))
-# Output plot
+# 1. Output plot
 jpeg(file = paste0(args$outprefix, ".tdplot_mqc.jpg"))
 # 2. Create the plot
 td_final <- getTxDensity(tx_final, con_expressed, mc.cores = args$cores)
-
 # 3. Close the file
 dev.off()
 
 
-# CITE PACKAGES USED
+########################
+## CITE PACKAGES USED ##
+########################
 citation("groHMM")
 citation("GenomicFeatures")
 citation("GenomicAlignments")
 citation("AnnotationDbi")
 
-## R SESSION INFO                             ##
-################################################
-################################################
-
+####################
+## R SESSION INFO ##
+####################
 r_log_file <- "R_sessionInfo.log"
 if (file.exists(r_log_file) == FALSE) {
   sink(r_log_file)
@@ -190,5 +193,3 @@ if (file.exists(r_log_file) == FALSE) {
   print(a)
   sink()
 }
-
-################################################################################

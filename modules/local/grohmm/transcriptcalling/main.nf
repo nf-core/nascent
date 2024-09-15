@@ -9,10 +9,8 @@ process GROHMM_TRANSCRIPTCALLING {
         'quay.io/biocontainers/mulled-v2-e9a6cb7894dd2753aff7d9446ea95c962cce8c46:0a46dae3241b1c4f02e46468f5d54eadcf64beca-0' }"
 
     input:
-    tuple val(meta), path(bams), path(bais)
+    tuple val(meta), path(bams), path(bais), path(tuning)
     path gtf
-    val UTS
-    val LtProbB
 
     output:
     tuple val(meta), path("*.transcripts.txt"), emit: transcripts
@@ -31,10 +29,9 @@ process GROHMM_TRANSCRIPTCALLING {
     """
     transcriptcalling_grohmm.R \\
         --bam_file ${bams} \\
+        --tuning_file ${tuning_file} \\
         --outprefix ${prefix} \\
         --gtf $gtf \\
-        --uts $UTS \\
-        --ltprobb $LtProbB \\
         --outdir ./ \\
         --cores $task.cpus \\
         $args

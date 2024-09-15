@@ -19,18 +19,7 @@ workflow GROHMM {
 
     ch_tuning = Channel.empty()
 
-    // If a tuning file is provided, run transcriptcalling once
-    // if(tuning_file) {
-    //     TODO Find minimum
-    //     uts <- tune[which.min(tune$errorRate), "UTS"]
-    //     lt_probb <- tune[which.min(tune$errorRate), "LtProbB"]
-    //     GROHMM_TRANSCRIPTCALLING (
-    //         bams_bais,
-    //         gtf,
-    //         minimum_uts,
-    //         minimum_ltprobb,
-    //     )
-    // } else {
+    if(!tuning_file) {
         // Run transcriptcalling eval for each tuning param
         // Should avoid a tuning file with a row for everything
         // 5..45 by 5 for UTS is what we had currently
@@ -43,15 +32,28 @@ workflow GROHMM {
             ch_uts,
             ch_ltprobb,
         )
-        .tuning
-        .collectFile(
-            name: "${params.outdir}/transcript_identification/grohmm/${item[0].id}_tuning.csv",
-            keepHeader: true,
-            skip: 1,
-        )
-        // TODO Find the minimum values
-    // }
+            .tuning
+            .collectFile(
+                name: "${params.outdir}/transcript_identification/grohmm/${item[0].id}_tuning.csv",
+                keepHeader: true,
+                skip: 1,
+                newLine: true,
+            )
+            .set { ch_tuning }
 
+        ch_bams_bais_tuning = bams_bais.join(ch_tuning, by: [0])
+
+        ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
+    } else {
+        // If a tuning file is provided, run transcriptcalling once
+        // NOTE This doesn't really handle multiple "groups well"
+        ch_bams_bais_tuning = bams_bais.join(tuning_file)
+    }
+
+    GROHMM_TRANSCRIPTCALLING (
+        ch_bams_bais_tuning,
+        gtf,
+    )
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
 
     emit:
