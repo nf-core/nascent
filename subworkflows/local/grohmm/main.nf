@@ -50,9 +50,6 @@ workflow GROHMM {
             skip: 1,
         )
         // TODO Find the minimum values
-        // TODO Need to decide if windowAnalysis is important
-        // https://github.com/Functional-Genomics-Lab/groseq-analysis/blob/9b69519c41232fd653a2b2726e32d91b49abeb7e/research/groHMM2.R#L62C7-L62C21
-        // If it is need to rerun transcriptcalling without it
     // }
 
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
