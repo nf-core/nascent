@@ -1,5 +1,5 @@
 process GROHMM_PARAMETERTUNING {
-    tag "$meta.id"
+    tag "$meta.id|$UTS|$LtProbB"
     label 'process_high'
     label 'process_long'
 
@@ -11,7 +11,8 @@ process GROHMM_PARAMETERTUNING {
     input:
     tuple val(meta), path(bams), path(bais)
     path gtf
-    path tune_parameter_file
+    val UTS
+    val LtProbB
 
     output:
     tuple val(meta), path("*.tuning.csv"), emit: tuning
@@ -22,13 +23,14 @@ process GROHMM_PARAMETERTUNING {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}_${UTS}_${LtProbB}"
     """
     parameter_tuning.R \\
         --bam_file ${bams} \\
-        --tuning_file ${tune_parameter_file} \\
         --outprefix ${prefix} \\
         --gtf $gtf \\
+        --uts $UTS \\
+        --ltprobb $LtProbB \\
         --outdir ./ \\
         --cores $task.cpus \\
         $args
