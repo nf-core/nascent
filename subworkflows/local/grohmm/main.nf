@@ -2,6 +2,7 @@
  * Run parametertuning optionally, otherwise just run transcript calling
  */
 
+include { GROHMM_PARAMETERTUNING } from '../../../modules/local/grohmm/parametertuning/main.nf'
 include { GROHMM_TRANSCRIPTCALLING } from '../../../modules/local/grohmm/transcriptcalling/main.nf'
 
 /*
@@ -19,7 +20,7 @@ workflow GROHMM {
 
     ch_tuning = Channel.empty()
 
-    if(!tuning_file) {
+    // if(!tuning_file) {
         // Run transcriptcalling eval for each tuning param
         // Should avoid a tuning file with a row for everything
         // 5..45 by 5 for UTS is what we had currently
@@ -34,21 +35,21 @@ workflow GROHMM {
         )
             .tuning
             .collectFile(
-                name: "${params.outdir}/transcript_identification/grohmm/${item[0].id}_tuning.csv",
+                name: "${params.outdir}/transcript_identification/grohmm/tuning.csv",
                 keepHeader: true,
                 skip: 1,
                 newLine: true,
             )
-            .set { ch_tuning }
+            .set { tuning }
 
-        ch_bams_bais_tuning = bams_bais.join(ch_tuning, by: [0])
+        ch_bams_bais_tuning = bams_bais.join(tuning, by: [0])
 
         ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
-    } else {
+    // } else {
         // If a tuning file is provided, run transcriptcalling once
         // NOTE This doesn't really handle multiple "groups well"
-        ch_bams_bais_tuning = bams_bais.join(tuning_file)
-    }
+        // ch_bams_bais_tuning = bams_bais.join(tuning_file)
+    // }
 
     GROHMM_TRANSCRIPTCALLING (
         ch_bams_bais_tuning,
