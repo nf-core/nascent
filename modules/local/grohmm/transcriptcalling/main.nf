@@ -9,7 +9,7 @@ process GROHMM_TRANSCRIPTCALLING {
     'community.wave.seqera.io/library/grohmm:780b8693bdaa87b9' }"
 
     input:
-    tuple val(meta), path(bams), path(bais), path(tuning)
+    tuple val(meta), path(bams), path(bais), path(tuning_file)
     path gtf
 
     output:

@@ -1,5 +1,6 @@
 process GROHMM_PARAMETERTUNING {
     tag "$meta.id|$UTS|$LtProbB"
+    debug true
     label 'process_high'
     label 'process_long'
 
