@@ -19,7 +19,7 @@ nextflow_process {
                     [],
                 ]
                 input[1] = file(
-                            "${projectDir}/modules/local/grohmm/parametertuning/tests/main.nf.test",
+                            "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/nascent/reference/kgChr7.gtf",
                             checkIfExists: true
                             )
                 """
@@ -50,7 +50,7 @@ nextflow_process {
                     file("${projectDir}/tests/config/tuningparams_small.csv", checkIfExists: true),
                 ]
                 input[1] = file(
-                            "${projectDir}/modules/local/grohmm/parametertuning/tests/hg19.chr7.refGene.gtf",
+                            "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/nascent/reference/kgChr7.gtf",
                             checkIfExists: true
                             )
                 """
