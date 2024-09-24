@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#137](https://github.com/nf-core/nascent/pull/137) - Use singularity containers for PINTS
 - [#142](https://github.com/nf-core/nascent/pull/142) - Updated CHM13 references
 
+### Removed
+
+- Support for groHMM tuning files
+
 ## v2.2.0 - 2024-03-05
 
 ### Added

@@ -12,47 +12,40 @@ workflow GROHMM {
     take:
     bams_bais
     gtf
-    tuning_file
+    // TODO Support rerunning with a tuning file
+    // tuning_file
 
     main:
 
     ch_versions = Channel.empty()
 
-    ch_tuning = Channel.empty()
+    // Run transcriptcalling eval for each tuning param
+    // Should avoid a tuning file with a row for everything
+    // 5..45 by 5 for UTS is what we had currently
+    ch_uts = channel.fromList((params.grohmm_min_uts..params.grohmm_max_uts).step(5))
+    // -100..-400 by 50 for LtProbB
+    ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50))
+    ch_bams_bais_uts_ltprobb =
+        bams_bais
+        .combine(ch_uts)
+        .combine(ch_ltprobb)
 
-    // if(!tuning_file) {
-        // Run transcriptcalling eval for each tuning param
-        // Should avoid a tuning file with a row for everything
-        // 5..45 by 5 for UTS is what we had currently
-        ch_uts = channel.fromList((params.grohmm_min_uts..params.grohmm_max_uts).step(5))
-        // -100..-400 by 50 for LtProbB
-        ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50))
-        ch_bams_bais_uts_ltprobb =
-            bams_bais
-            .combine(ch_uts)
-            .combine(ch_ltprobb)
-
-        GROHMM_PARAMETERTUNING (
-            ch_bams_bais_uts_ltprobb,
-            gtf,
+    GROHMM_PARAMETERTUNING (
+        ch_bams_bais_uts_ltprobb,
+        gtf,
+    )
+        .tuning
+        .collectFile(
+            name: "${params.outdir}/transcript_identification/grohmm/tuning.csv",
+            keepHeader: true,
+            skip: 1,
+            newLine: true,
         )
-            .tuning
-            .collectFile(
-                name: "${params.outdir}/transcript_identification/grohmm/tuning.csv",
-                keepHeader: true,
-                skip: 1,
-                newLine: true,
-            )
-            .set { tuning }
+        .set { ch_tuning }
+    ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
 
-        ch_bams_bais_tuning = bams_bais.join(tuning, by: [0])
+    ch_bams_bais_tuning = bams_bais.join(ch_tuning, by: [0])
 
-        ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
-    // } else {
-        // If a tuning file is provided, run transcriptcalling once
-        // NOTE This doesn't really handle multiple "groups well"
-        // ch_bams_bais_tuning = bams_bais.join(tuning_file)
-    // }
 
     GROHMM_TRANSCRIPTCALLING (
         ch_bams_bais_tuning,

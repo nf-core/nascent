@@ -4,14 +4,14 @@ nextflow_workflow {
     script "../main.nf"
     workflow "GROHMM"
 
-    test("Should run without a tuning file") {
+    test("Should run without a tuning file and multiplex") {
         when {
             params {
                 outdir = "$outputDir"
-                grohmm_min_uts             = 5
-                grohmm_max_uts             = 10
-                grohmm_min_ltprobb         = -100
-                grohmm_max_ltprobb         = -150
+                grohmm_min_uts = 5
+                grohmm_max_uts = 10
+                grohmm_min_ltprobb = -100
+                grohmm_max_ltprobb = -150
             }
             workflow {
                 """
@@ -25,7 +25,6 @@ nextflow_workflow {
                 "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf",
                     checkIfExists: true
                 )])
-                input[2] = Channel.of([])
                 """
             }
         }

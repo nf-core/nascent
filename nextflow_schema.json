@@ -117,25 +117,10 @@
                         "R2_3"
                     ]
                 },
-                "skip_tuning": {
-                    "type": "boolean",
-                    "description": "Skip groHMM tuning step as it can take a long time.",
-                    "fa_icon": "fas fa-wrench",
-                    "hidden": true
-                },
                 "skip_grohmm": {
                     "type": "boolean",
                     "description": "Skip groHMM all together",
                     "fa_icon": "fas fa-eye-slash"
-                },
-                "tuning_file": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "hidden": true,
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "File of parameters to test for groHMM tuning"
                 },
                 "filter_bed": {
                     "type": "string",

@@ -17,14 +17,6 @@ parser$add_argument(
   required = TRUE
 )
 parser$add_argument(
-  "-t",
-  "--tuning_file",
-  type = "character",
-  default = NULL,
-  metavar = "path",
-  help = "File with tuning parameters and error rates."
-)
-parser$add_argument(
   "-o",
   "--outdir",
   type = "character",
