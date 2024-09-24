@@ -1,0 +1,33 @@
+{
+    "versions": {
+        "content": [
+            {
+                "GROHMM:GROHMM_PARAMETERTUNING": {
+                    "r-base": "4.3.3",
+                    "bioconductor-grohmm": "1.39.0"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-24T12:58:04.996402914"
+    },
+    "Should run without a tuning file": {
+        "content": [
+            1,
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-24T12:58:04.685610798"
+    }
+}
