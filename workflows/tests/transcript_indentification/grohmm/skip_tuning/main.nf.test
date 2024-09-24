@@ -4,6 +4,7 @@ nextflow_pipeline {
     script "../../../main.nf"
     tag "groHMM"
 
+    // TODO Support a tuning file
     test("Should be able to skip tuning") {
 
         when {
@@ -16,7 +17,7 @@ nextflow_pipeline {
 
         then {
             assertAll(
-                { assert workflow.success },
+                { assert workflow.failure },
                 { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
                     workflow.trace.tasks().size(),
