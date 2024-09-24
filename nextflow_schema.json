@@ -117,12 +117,6 @@
                         "R2_3"
                     ]
                 },
-                "skip_tuning": {
-                    "type": "boolean",
-                    "description": "Skip groHMM tuning step as it can take a long time.",
-                    "fa_icon": "fas fa-wrench",
-                    "hidden": true
-                },
                 "skip_grohmm": {
                     "type": "boolean",
                     "description": "Skip groHMM all together",
@@ -154,15 +148,6 @@
                     "fa_icon": "fas fa-sort-amount-desc",
                     "help_text": "Depends on how you look at this one, which is the minimum and maximum... But I figured most will ignore the negative, so we went with absolute values.",
                     "default": -400
-                },
-                "tuning_file": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "hidden": true,
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "File of parameters to test for groHMM tuning"
                 },
                 "filter_bed": {
                     "type": "string",

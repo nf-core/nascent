@@ -23,10 +23,9 @@ workflow TRANSCRIPT_INDENTIFICATION {
     ch_versions = Channel.empty()
     ch_identification_bed = Channel.empty()
 
-    ch_tuning_file = params.tuning_file ? file(params.tuning_file, checkIfExists: true) : file("${projectDir}/assets/tuningparamstotest.csv")
     grohmm_td_plot = Channel.empty()
     if(!params.skip_grohmm && params.assay_type == "GROseq") {
-        GROHMM ( group_bam_bai, gtf, ch_tuning_file )
+        GROHMM ( group_bam_bai, gtf )
         ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
         grohmm_td_plot = GROHMM.out.td_plot
         ch_versions = ch_versions.mix(GROHMM.out.versions.first())

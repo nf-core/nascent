@@ -14,7 +14,7 @@
         },
         "timestamp": "2024-09-24T12:58:04.996402914"
     },
-    "Should run without a tuning file": {
+    "Should run without a tuning file and multiplex": {
         "content": [
             1,
             [
@@ -28,6 +28,6 @@
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-09-24T12:58:04.685610798"
+        "timestamp": "2024-09-24T13:38:02.218159522"
     }
 }

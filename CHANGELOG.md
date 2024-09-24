@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#170](https://github.com/nf-core/nascent/pull/170) - Remove "Access to undefined parameter forwardStranded" warnings
 
+### Removed
+
+- Support for groHMM tuning files
+
 ## v2.2.0 - 2024-03-05
 
 ### Added
