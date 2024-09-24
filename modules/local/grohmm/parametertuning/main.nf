@@ -1,13 +1,12 @@
 process GROHMM_PARAMETERTUNING {
     tag "$meta.id|$UTS|$LtProbB"
-    debug true
     label 'process_high'
     label 'process_long'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    'oras://community.wave.seqera.io/library/grohmm:a660d9c3942c9b85' :
-    'community.wave.seqera.io/library/grohmm:780b8693bdaa87b9' }"
+        'oras://community.wave.seqera.io/library/grohmm:a660d9c3942c9b85' :
+        'community.wave.seqera.io/library/grohmm:780b8693bdaa87b9' }"
 
     input:
     tuple val(meta), path(bams), path(bais)
