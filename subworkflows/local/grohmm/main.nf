@@ -26,12 +26,15 @@ workflow GROHMM {
         // 5..45 by 5 for UTS is what we had currently
         ch_uts = channel.fromList((params.grohmm_min_uts..params.grohmm_max_uts).step(5))
         // -100..-400 by 50 for LtProbB
-        ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50)).view()
+        ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50))
+        ch_bams_bais_uts_ltprobb =
+            bams_bais
+            .combine(ch_uts)
+            .combine(ch_ltprobb)
+
         GROHMM_PARAMETERTUNING (
-            bams_bais,
+            ch_bams_bais_uts_ltprobb,
             gtf,
-            ch_uts,
-            ch_ltprobb,
         )
             .tuning
             .collectFile(

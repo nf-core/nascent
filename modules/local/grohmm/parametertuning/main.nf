@@ -1,5 +1,5 @@
 process GROHMM_PARAMETERTUNING {
-    tag "$meta.id|$UTS|$LtProbB"
+    tag "$meta.id|$UTS| $LtProbB"
     label 'process_high'
     label 'process_long'
 
@@ -9,10 +9,8 @@ process GROHMM_PARAMETERTUNING {
         'community.wave.seqera.io/library/grohmm:780b8693bdaa87b9' }"
 
     input:
-    tuple val(meta), path(bams), path(bais)
+    tuple val(meta), path(bams), path(bais), val(UTS), val(LtProbB)
     path gtf
-    val UTS
-    val LtProbB
 
     output:
     tuple val(meta), path("*.tuning.csv"), emit: tuning
