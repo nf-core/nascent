@@ -142,6 +142,7 @@ print("Input transcript annotations")
 kg_db <- makeTxDbFromGFF(args$gtf)
 kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
 # TODO I wonder if I could speed things up by filtering by chromosome at the Nextflow level
+# https://github.com/google/deepvariant/issues/744
 #                         filter=list(tx_chrom="chr7"))
 # exclude any transcripts that are located on chromosomes labeled with "random".
 kg_tx <- kg_tx[grep("random", as.character(seqnames(kg_tx)), invert = TRUE), ]
@@ -150,7 +151,6 @@ print(kg_tx)
 print("Collapse annotations in preparation for overlap")
 kg_consensus <- makeConsensusAnnotations(
   kg_tx,
-  keytype = "gene_id",
   mc.cores = args$cores
 )
 print("Finished consensus annotations")

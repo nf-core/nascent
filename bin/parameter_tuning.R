@@ -116,7 +116,6 @@ kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
 print("Collapse annotations in preparation for overlap")
 kg_consensus <- makeConsensusAnnotations(
   kg_tx,
-  keytype = "gene_id",
   mc.cores = args$cores
 )
 print("Finished consensus annotations")
