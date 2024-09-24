@@ -1,0 +1,58 @@
+{
+    "versions": {
+        "content": [
+            {
+                "GROHMM_TRANSCRIPTCALLING": {
+                    "r-base": "4.3.3",
+                    "bioconductor-grohmm": "1.39.0"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-24T11:27:57.580852329"
+    },
+    "Should run with a tuning file": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "mR1"
+                    },
+                    "mR1.transcripts.txt:md5,06690e4932d6f2d597c2f482fb0848d2"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "mR1"
+                    },
+                    "mR1.eval.txt:md5,4dc82be9170bf40cdb88e187d805f9df"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "mR1"
+                    },
+                    "mR1.final.transcripts.bed:md5,db367d8482ee6b88af176c35e58807d9"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "mR1"
+                    },
+                    "mR1.tdFinal.txt:md5,24d8292ec9f9ab8e2aac99fb6061d26c"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-24T11:27:57.184918004"
+    }
+}
