@@ -57,7 +57,16 @@ nextflow_process {
         }
 
         then {
-            assert process.success
+            assertAll(
+                { assert process.success },
+                { assert snapshot(
+                    process.out.transcripts,
+                    process.out.eval,
+                    process.out.transcripts_bed,
+                    process.out.td,
+                ).match() },
+                { assert snapshot(path(process.out.versions.get(0)).yaml).match("versions") },
+            )
         }
     }
 
