@@ -36,19 +36,28 @@ workflow GROHMM {
     )
         .tuning
         .collectFile(
-            name: "${params.outdir}/transcript_identification/grohmm/tuning.csv",
             keepHeader: true,
             skip: 1,
             newLine: true,
+            storeDir: "${params.outdir}/transcript_identification/grohmm/",
         )
+    { meta, file ->
+        filename = "${meta.id}.${meta.single_end ? 'SE': 'PE' }.tuning.csv"
+        [filename, file.text]
+    }
+        .map { path ->
+            meta = [
+                id:path.getSimpleName(),
+                single_end: path.getName().split("\\.")[1] == 'SE' ? true : false
+            ]
+            [meta, file(path)]
+        }
         .set { ch_tuning }
+
     ch_versions = ch_versions.mix(GROHMM_PARAMETERTUNING.out.versions.first())
 
-    ch_bams_bais_tuning = bams_bais.join(ch_tuning, by: [0])
-
-
     GROHMM_TRANSCRIPTCALLING (
-        ch_bams_bais_tuning,
+        bams_bais.join(ch_tuning, by: [0]),
         gtf,
     )
     ch_versions = ch_versions.mix(GROHMM_TRANSCRIPTCALLING.out.versions.first())
