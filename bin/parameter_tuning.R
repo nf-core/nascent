@@ -79,9 +79,19 @@ parser$add_argument(
   metavar = "integer",
   help = "Number of cores."
 )
+parser$add_argument(
+  "-m",
+  "--memory",
+  type = "integer",
+  default = 56000,
+  metavar = "integer",
+  help = "Amount of memory in MB"
+)
 
 args <- parser$parse_args()
 
+options(mc.cores = getCores(args$cores))
+memory.limit(size = args$memory)
 setwd(args$outdir)
 
 if (is.null(args$bam_files)) {
