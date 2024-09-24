@@ -19,7 +19,7 @@ nextflow_process {
                     [],
                 ]
                 input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/nascent/reference/kgChr7.gtf",
+                            "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf",
                             checkIfExists: true
                             )
                 """
@@ -46,7 +46,7 @@ nextflow_process {
                     file("${projectDir}/tests/config/tuningparams_small.csv", checkIfExists: true),
                 ]
                 input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/nascent/reference/kgChr7.gtf",
+                            "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf",
                             checkIfExists: true
                             )
                 """
