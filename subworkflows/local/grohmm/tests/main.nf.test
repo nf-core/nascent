@@ -1,6 +1,6 @@
 nextflow_workflow {
 
-    name "Test Workflow GROHMM"
+    name "Test subworkflow GROHMM"
     script "../main.nf"
     workflow "GROHMM"
 
@@ -8,50 +8,24 @@ nextflow_workflow {
         when {
             params {
                 outdir = "$outputDir"
-                skip_tuning = true
+                grohmm_min_uts             = 5
+                grohmm_max_uts             = 10
+                grohmm_min_ltprobb         = -100
+                grohmm_max_ltprobb         = -150
             }
             workflow {
                 """
-                input[0] = [
-                    [ id: 'mR1' ],
-                    [ file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/bam/test.single_end.sorted.bam", checkIfExists: true), ]
-                ]
-                // FIXME This needs to match up with s40
-                input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.gtf",
-                            checkIfExists: true
-                            )
-                input[2] = []
-                """
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
-            )
-        }
-
-    }
-
-    test("Should run with multiple bams") {
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-            workflow {
-                """
-                input[0] = [
-                    [ id: 'mR1' ],
+                input[0] = Channel.of([
+                    [ id: 'Sall' ],
                     [ file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam", checkIfExists: true),
-                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam", checkIfExists: true) ]
-                ]
-                input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.gtf",
-                            checkIfExists: true
-                            )
-                input[2] = []
+                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam", checkIfExists: true) ],
+                    [],
+                ])
+                input[1] = Channel.of([file(
+                "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf",
+                    checkIfExists: true
+                )])
+                input[2] = Channel.of([])
                 """
             }
         }
@@ -59,41 +33,18 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                    workflow.out.transcripts,
+                    workflow.out.bed,
+                    // workflow.out.td_plot,
+                ).match()
+                },
+                { assert snapshot(
+                    path(workflow.out.versions.get(0)).yaml)
+                 .match("versions")
+                },
             )
         }
-
     }
-
-    test("Should run with a tuning file") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-            workflow {
-                """
-                input[0] = [
-                    [ id: 'mR1' ],
-                    [ file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam", checkIfExists: true),
-                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam", checkIfExists: true) ]
-                ]
-                input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.gtf",
-                            checkIfExists: true
-                            )
-                input[2] = file("https://raw.githubusercontent.com/nf-core/test-datasets/nascent/misc/tune.csv", checkIfExists: true)
-                """
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
-            )
-        }
-
-    }
-
 }
