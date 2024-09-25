@@ -120,6 +120,9 @@ if (is.null(args$tuning_file)) {
   # Minimum error
   uts <- tune[which.min(tune$errorRate), "UTS"]
   lt_probb <- tune[which.min(tune$errorRate), "LtProbB"]
+  # Print the minimums for debugging
+  cat("minimum uts:", uts)
+  cat("minimum lt_probb:", lt_probb)
   hmm_result <- detectTranscripts(
     alignments,
     LtProbB = lt_probb,

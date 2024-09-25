@@ -11,4 +11,4 @@ dependencies:
   # NOTE Can't use the official package because of
   # https://github.com/dankoc/groHMM/issues/2
   # - bioconda::bioconductor-grohmm=1.28.0
-  - bioinfoorphanage-grohmm
+  - bioinfoorphanage-grohmm=1.36.1
