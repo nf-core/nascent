@@ -1,7 +1,7 @@
 nextflow_pipeline {
 
     name "groHMM"
-    script "../../../main.nf"
+    script "../../../../../main.nf"
     tag "groHMM"
 
     test("Should be able to skip tuning") {
@@ -17,7 +17,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 // TODO Support a tuning file
-                { assert workflow.failure },
+                { assert workflow.failed },
             )
         }
     }

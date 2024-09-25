@@ -1,0 +1,12 @@
+{
+    "software_versions": {
+        "content": [
+            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BWA_INDEX={bwa=0.7.18-r1243-dirty}, BWA_MEM={bwa=0.7.18-r1243-dirty, samtools=1.2}, CUSTOM_GETCHROMSIZES={getchromsizes=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GROHMM_PARAMETERTUNING={r-base=4.3.3, bioconductor-grohmm=1.39.0}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-26T03:52:06.649510139"
+    }
+}

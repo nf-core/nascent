@@ -3,6 +3,7 @@ nextflow_process {
     name "Test Process GROHMM_TRANSCRIPTCALLING"
     script "modules/local/grohmm/transcriptcalling/main.nf"
     process "GROHMM_TRANSCRIPTCALLING"
+    tag "groHMM"
 
     test("Should fail without a tuning file") {
         when {
