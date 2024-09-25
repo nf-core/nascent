@@ -38,7 +38,7 @@ workflow GROHMM {
         .collectFile(
             keepHeader: true,
             skip: 1,
-            newLine: true,
+            newLine: false,
             storeDir: "${params.outdir}/transcript_identification/grohmm/",
         )
     { meta, file ->
