@@ -5,8 +5,8 @@ process GROHMM_PARAMETERTUNING {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/grohmm:a660d9c3942c9b85' :
-        'community.wave.seqera.io/library/grohmm:780b8693bdaa87b9' }"
+        'oras://community.wave.seqera.io/library/grohmm:03357458e0821bcb' :
+        'community.wave.seqera.io/library/grohmm:833aa94cad4202ac' }"
 
     input:
     tuple val(meta), path(bams), path(bais), val(UTS), val(LtProbB)
