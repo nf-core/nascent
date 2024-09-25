@@ -116,6 +116,10 @@ print("Finished consensus annotations")
 ## TUNING ##
 ############
 print("Starting tuning run")
+tune <- data.frame(
+  LtProbB = args$ltprobb,
+  UTS = args$uts
+)
 Fp <- windowAnalysis(alignments, strand = "+", windowSize = 50)
 Fm <- windowAnalysis(alignments, strand = "-", windowSize = 50)
 hmm <- detectTranscripts(
@@ -127,10 +131,23 @@ hmm <- detectTranscripts(
 )
 print("Evaluating")
 e <- evaluateHMMInAnnotations(hmm$transcripts, kg_consensus)
+
+# Extract evaluation metrics and convert to a data frame
+eval_metrics <- as.data.frame(e$eval)
+
+# If eval_metrics is a list of lists, unlist it
+if (is.list(eval_metrics[[1]])) {
+  eval_metrics <- as.data.frame(t(sapply(e$eval, unlist)))
+}
+
+# Combine the tuning parameters with the evaluation metrics
+tune <- cbind(tune, eval_metrics)
+
 print(e$eval)
 print(e)
 
-write.csv(e$eval, file = paste0(args$outprefix, ".tuning.csv"))
+# Write the combined data to a CSV file without row names
+write.csv(tune, file = paste0(args$outprefix, ".tuning.csv"), row.names = FALSE)
 
 ########################
 ## CITE PACKAGES USED ##

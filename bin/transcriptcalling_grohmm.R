@@ -91,6 +91,7 @@ parser$add_argument(
 args <- parser$parse_args()
 
 options(mc.cores = getCores(args$cores))
+## Windows Specific doesn't actually do anything
 memory.limit(size = args$memory)
 setwd(args$outdir)
 
