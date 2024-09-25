@@ -1,6 +1,6 @@
 nextflow_pipeline {
     name "groHMM"
-    script "../../../main.nf"
+    script "../../../../../main.nf"
     tag "groHMM"
 
     test("Should run with defaults") {
