@@ -3,6 +3,7 @@ nextflow_process {
     name "Test Process GROHMM_PARAMETERTUNING"
     script "modules/local/grohmm/parametertuning/main.nf"
     process "GROHMM_PARAMETERTUNING"
+    tag "grohmm"
 
     test("Should run with defaults") {
         when {
