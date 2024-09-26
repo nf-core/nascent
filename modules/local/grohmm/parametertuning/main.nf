@@ -9,8 +9,10 @@ process GROHMM_PARAMETERTUNING {
         'community.wave.seqera.io/library/grohmm:833aa94cad4202ac' }"
 
     input:
-    tuple val(meta), path(bams), path(bais), val(UTS), val(LtProbB)
+    tuple val(meta), path(bams), path(bais)
     path gtf
+    each UTS
+    each LtProbB
 
     output:
     tuple val(meta), path("*.tuning.csv"), emit: tuning
