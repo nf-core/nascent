@@ -181,19 +181,21 @@ b_plus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "+")
 b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
 tx_broken <- c(b_plus, b_minus)
 tx_final <- combineTranscripts(tx_broken, kg_consensus)
-td_final <- getTxDensity(tx_final, con_expressed, mc.cores = args$cores)
 export(
   tx_final,
   con = paste(args$outprefix, ".final.transcripts.bed", sep = "")
 )
-capture.output(td_final, file = paste0(args$outprefix, ".tdFinal.txt"))
 # 1. Output plot
 jpeg(file = paste0(args$outprefix, ".tdplot_mqc.jpg"))
-# 2. Create the plot
+# 2. Create the plot and capture data
 td_final <- getTxDensity(tx_final, con_expressed, mc.cores = args$cores)
 # 3. Close the file
 dev.off()
+capture.output(td_final, file = paste0(args$outprefix, ".tdFinal.txt"))
 
+# Write the data used in the plot to a CSV file
+data_to_write <- data.frame(x = td_final$x, profile = td_final$profile)
+write.csv(data_to_write, file = paste0(args$outprefix, ".tdFinal_mqc.csv"), row.names = FALSE)
 
 ########################
 ## CITE PACKAGES USED ##
