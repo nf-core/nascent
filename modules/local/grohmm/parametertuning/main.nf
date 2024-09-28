@@ -1,7 +1,8 @@
 process GROHMM_PARAMETERTUNING {
     tag "$meta.id|$UTS|$LtProbB"
     label 'process_high'
-    label 'process_long'
+    label 'error_retry'
+    // array 10
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
