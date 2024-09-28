@@ -1,10 +1,20 @@
 Changes in module 'nf-core/pints/caller'
 --- modules/nf-core/pints/caller/main.nf
 +++ modules/nf-core/pints/caller/main.nf
-@@ -9,6 +9,7 @@
+@@ -1,6 +1,6 @@
+ process PINTS_CALLER {
+     tag "$meta.id"
+-    label 'process_medium'
++    label 'process_high'
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+@@ -8,7 +8,8 @@
+         'biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
  
      input:
-     tuple val(meta), path(bams)
+-    tuple val(meta), path(bams)
++    tuple val(meta), path(bams), path(bais)
 +    val assay_type
  
      output:
