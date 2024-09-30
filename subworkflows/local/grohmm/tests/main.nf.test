@@ -3,6 +3,7 @@ nextflow_workflow {
     name "Test subworkflow GROHMM"
     script "../main.nf"
     workflow "GROHMM"
+    tag "grohmm"
 
     test("Should run without a tuning file and multiplex") {
         when {
@@ -32,6 +33,7 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
+                // FIXME this snapshot reports nothing? Probably the test
                 { assert snapshot(
                     workflow.trace.tasks().size(),
                     workflow.out.transcripts,
