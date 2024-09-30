@@ -1,5 +1,5 @@
 process PINTS_CALLER {
-    tag "$meta.id"
+    tag "$meta.id" + "${chr_name ? ' | ' + chr_name : ''}"
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
@@ -10,6 +10,7 @@ process PINTS_CALLER {
     input:
     tuple val(meta), path(bams), path(bais)
     val assay_type
+    each chr_name // optional
 
     output:
     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
@@ -23,7 +24,8 @@ process PINTS_CALLER {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}" + (chr_name ? '_' + chr_name : '_all')
+    def chr = chr_name ? "--chromosome-start-with $chr_name" : ''
     // TODO handle bigwigs
     // def input_type  = ("${input[0]}".endsWith(".bam")) ? "--bam-file $input" :
     //                    ("$input".contains(".bw")) ? "--bw-pl ${input[0]} --bw-mn ${input[1]}" :
@@ -36,6 +38,7 @@ process PINTS_CALLER {
         --thread $task.cpus \\
         --dont-check-updates \\
         --exp-type $assay_type \\
+        $chr \\
         $args
 
     cat <<-END_VERSIONS > versions.yml

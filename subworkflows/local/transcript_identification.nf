@@ -43,13 +43,23 @@ workflow TRANSCRIPT_INDENTIFICATION {
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
     }
 
-
-    // TODO https://github.com/hyulab/PINTS/issues/15
-    PINTS_CALLER ( group_bam_bai, params.assay_type )
+    PINTS_CALLER (
+        group_bam_bai,
+        params.assay_type,
+        // Scatter the chromosomes
+        fasta.splitFasta( record: [id: true] ).map { record -> record.id },
+    )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
+
+    // Gather the chromosomes
+    // TODO Tests don't seem to hit this because there's no bidirectional_TREs
+    ch_bidirectional_TREs = PINTS_CALLER.out.bidirectional_TREs
+        .groupTuple(by: [0])
+        .collect()
+
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.
-    CAT_CAT ( PINTS_CALLER.out.bidirectional_TREs )
+    CAT_CAT ( ch_bidirectional_TREs )
     ch_versions = ch_versions.mix(CAT_CAT.out.versions.first())
     BEDTOOLS_SORT ( CAT_CAT.out.file_out, [] )
     ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions.first())
