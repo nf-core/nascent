@@ -5,7 +5,7 @@ nextflow_process {
     process "GROHMM_PARAMETERTUNING"
     tag "groHMM"
 
-    test("Should fail with overlapping exons in GTF") {
+    test("Should pass with overlapping exons in GTF") {
         when {
             params {
                 outdir = "$outputDir"
@@ -30,7 +30,11 @@ nextflow_process {
 
         then {
             assertAll(
-                { assert process.failed },
+                { assert process.success },
+                { assert snapshot(
+                    path(process.out.tuning[0][1]).readLines(),
+                    path(process.out.bed[0][1]),
+                ).match() },
             )
         }
     }

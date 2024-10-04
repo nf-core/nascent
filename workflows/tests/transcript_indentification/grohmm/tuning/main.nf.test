@@ -2,6 +2,7 @@ nextflow_pipeline {
     name "groHMM"
     script "../../../../../main.nf"
     tag "groHMM"
+    // triggers 'bin/parameter_tuning.R', 'bin/transcriptcalling_grohmm.R'
 
     test("Should run with defaults") {
         when {
