@@ -50,7 +50,7 @@ custom_data:
     plot_type: "image"
 sp:
   grohmm_plot:
-    fn: "*.tdplot_mqc.jpg"
+    fn: "*.tdplot_mqc.png"
 ignore_images: false
 
 export_plots: true
