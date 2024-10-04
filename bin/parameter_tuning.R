@@ -103,11 +103,64 @@ for (bam in args$bam_files) {
 }
 
 print("Input transcript annotations")
-kg_db <- makeTxDbFromGFF(args$gtf)
-kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
+# Import the GTF file using rtracklayer
+gtf <- import(args$gtf)
+
+# Exclude any transcripts located on chromosomes labeled with "random"
+gtf <- gtf[!grepl("random", seqnames(gtf)), ]
+
+# Extract transcript-level features
+transcripts_gtf <- gtf[gtf$type == "transcript", ]
+# Extract exon features
+exons_gtf <- gtf[gtf$type == "exon", ]
+
+# Ensure that the 'transcript_id' and 'gene_id' columns are present
+if (!all(c("transcript_id", "gene_id") %in% names(mcols(exons_gtf)))) {
+  stop("The GTF file lacks 'transcript_id' or 'gene_id' in its attributes.")
+}
+
+# Group exons by transcript_id
+exons_by_transcript <- split(exons_gtf, exons_gtf$transcript_id)
+
+# Diagnostic prints
+print(paste("Number of transcripts:", length(exons_by_transcript)))
+
+# Reduce exons to create transcript ranges
+transcripts_ranges <- GenomicRanges::reduce(exons_by_transcript)
+transcripts_ranges <- unlist(transcripts_ranges, use.names = TRUE)
+
+# Diagnostic prints after reduction
+print(paste("Number of transcripts_ranges after reduction:", length(transcripts_ranges)))
+
+# Create mapping dataframe
+mapping_df <- data.frame(
+  transcript_id = names(transcripts_ranges),
+  gene_id = vapply(exons_by_transcript[names(transcripts_ranges)], function(x) unique(x$gene_id)[1], character(1)),
+  stringsAsFactors = FALSE
+)
+
+# Check for length mismatch
+if (nrow(mapping_df) != length(transcripts_ranges)) {
+  stop(paste("Length mismatch between mapping_df and transcripts_ranges:", nrow(mapping_df), length(transcripts_ranges)))
+}
+
+# Assign metadata
+mcols(transcripts_ranges)$transcript_id <- mapping_df$transcript_id
+mcols(transcripts_ranges)$gene_id <- mapping_df$gene_id
+
+# Assign seqnames and strand from the exons
+seqnames(transcripts_ranges) <- seqnames(exons_gtf[match(names(transcripts_ranges), exons_gtf$transcript_id)])
+strand(transcripts_ranges) <- strand(exons_gtf[match(names(transcripts_ranges), exons_gtf$transcript_id)])
+
+# Ensure that seqlevels are set correctly
+seqlevels(transcripts_ranges) <- seqlevels(gtf)
+
+# Remove any transcripts with NA values
+transcripts_ranges <- transcripts_ranges[!is.na(start(transcripts_ranges)) & !is.na(end(transcripts_ranges))]
+
 print("Collapse annotations in preparation for overlap")
 kg_consensus <- makeConsensusAnnotations(
-  kg_tx,
+  transcripts_ranges,
   mc.cores = args$cores
 )
 print("Finished consensus annotations")

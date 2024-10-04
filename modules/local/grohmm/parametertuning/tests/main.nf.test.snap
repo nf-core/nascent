@@ -17,18 +17,14 @@
     "Should run with defaults": {
         "content": [
             [
-                [
-                    {
-                        "id": "Sall"
-                    },
-                    "Sall_5_-100.tuning.csv:md5,8aa24d2be05aa03dba5b8bc7b465dc68"
-                ]
+                "\"LtProbB\",\"UTS\",\"merged\",\"dissociated\",\"total\",\"errorRate\",\"txSize\"",
+                "-100,5,10,0,10,0.00617665225447807,921"
             ]
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-09-25T21:37:42.807799467"
+        "timestamp": "2024-10-08T23:00:23.053715"
     }
 }
