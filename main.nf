@@ -17,7 +17,7 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { NASCENT  } from './workflows/nascent'
+include { NASCENT } from './workflows/nascent'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nascent_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nascent_pipeline'
 

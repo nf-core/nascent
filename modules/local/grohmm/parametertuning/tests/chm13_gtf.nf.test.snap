@@ -1,0 +1,35 @@
+{
+    "Should fail with overlapping exons in GTF": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "Sall"
+                        },
+                        "Sall_5_-100.tuning.csv:md5,bc885271715f8f905e28b0a191c8fb4f"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,af8c7f00d9ad9c2ff74cfb14d3e0cdc9"
+                ],
+                "tuning": [
+                    [
+                        {
+                            "id": "Sall"
+                        },
+                        "Sall_5_-100.tuning.csv:md5,bc885271715f8f905e28b0a191c8fb4f"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,af8c7f00d9ad9c2ff74cfb14d3e0cdc9"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-07T21:55:32.530478"
+    }
+}
