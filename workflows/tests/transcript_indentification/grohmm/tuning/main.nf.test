@@ -30,12 +30,12 @@ nextflow_pipeline {
                     path("$outputDir/transcript_identification/grohmm/cd4.eval.txt"),
                     path("$outputDir/transcript_identification/grohmm/cd4.final.transcripts.bed"),
                     path("$outputDir/transcript_identification/grohmm/cd4.tdFinal.txt"),
-                    path("$outputDir/transcript_identification/grohmm/cd4.tdplot_mqc.jpg").exists(),
+                    path("$outputDir/transcript_identification/grohmm/cd4.tdplot_mqc.png").exists(),
                     path("$outputDir/transcript_identification/grohmm/cd4.transcripts.txt"),
                     path("$outputDir/transcript_identification/grohmm/jurkat.eval.txt"),
                     path("$outputDir/transcript_identification/grohmm/jurkat.final.transcripts.bed"),
                     path("$outputDir/transcript_identification/grohmm/jurkat.tdFinal.txt"),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.tdplot_mqc.jpg").exists(),
+                    path("$outputDir/transcript_identification/grohmm/jurkat.tdplot_mqc.png").exists(),
                     path("$outputDir/transcript_identification/grohmm/jurkat.transcripts.txt"),
                     // FIXME Not determinstic because of the order of files
                     // Add to the other tests when fixed

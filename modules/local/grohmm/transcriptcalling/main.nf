@@ -17,7 +17,7 @@ process GROHMM_TRANSCRIPTCALLING {
     tuple val(meta), path("*.eval.txt")       , emit: eval
     tuple val(meta), path("*.transcripts.bed"), emit: transcripts_bed
     tuple val(meta), path("*.tdFinal.txt")    , emit: td
-    tuple val(meta), path("*.tdplot_mqc.jpg") , emit: td_plot
+    tuple val(meta), path("*.tdplot_mqc.png") , emit: td_plot
     tuple val(meta), path("*.tdFinal_mqc.csv") , emit: mqc_csv
     path  "versions.yml"     , emit: versions
 
