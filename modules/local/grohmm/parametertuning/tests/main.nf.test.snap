@@ -18,14 +18,14 @@
         "content": [
             [
                 "\"LtProbB\",\"UTS\",\"merged\",\"dissociated\",\"total\",\"errorRate\",\"txSize\"",
-                "-100,5,33,123,156,0.0756180319922443,921"
+                "-100,5,10,0,10,0.00617665225447807,921"
             ],
-            "Sall_5_-100.tuning.consensus.bed:md5,f3144b4ff6493a7ccef422aa4e160d46"
+            "Sall_5_-100.tuning.consensus.bed:md5,013b67a2aef7956b6400a61d413f65a8"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-10-17T19:58:42.34659"
+        "timestamp": "2024-10-17T20:21:05.448531"
     }
 }
