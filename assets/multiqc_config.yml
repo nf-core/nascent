@@ -32,7 +32,7 @@ custom_data:
     section_name: "groHMM TD Plot"
 sp:
   my_custom_content_image:
-    fn: "./grohmm/*.tdplot.jpg"
+    fn: "*.tdplot_mqc.png"
 ignore_images: false
 
 export_plots: true
