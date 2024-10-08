@@ -38,6 +38,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Quantification](#quantification)
   - [featureCounts](#featurecounts) - Read counting relative to gene biotype
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
+
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
 ## Preprocessing
