@@ -1,12 +1,130 @@
 {
-    "software_versions": {
+    "output_files": {
         "content": [
-            "{BBMAP_PILEUP={bbmap=39.01, samtools=1.16.1, pigz=2.6}, BEDTOOLS_GENOMECOV_MINUS={bedtools=2.31.1}, BEDTOOLS_GENOMECOV_PLUS={bedtools=2.31.1}, BWA_INDEX={bwa=0.7.18-r1243-dirty}, BWA_MEM={bwa=0.7.18-r1243-dirty, samtools=1.2}, CUSTOM_GETCHROMSIZES={getchromsizes=1.2}, DEEPTOOLS_BAMCOVERAGE_MINUS={deeptools=3.5.1}, DEEPTOOLS_BAMCOVERAGE_PLUS={deeptools=3.5.1}, FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, GROHMM_PARAMETERTUNING={r-base=4.3.3, bioconductor-grohmm=1.39.0}, GTF2BED={perl=5.26.2}, HOMER_MAKETAGDIRECTORY={homer=4.11, samtools=1.11}, PINTS_CALLER={python=3.10.6, pints=1.1.8}, PRESEQ_CCURVE={preseq=3.1.1}, PRESEQ_LCEXTRAP={preseq=3.1.1}, RSEQC_INFEREXPERIMENT={rseqc=5.0.2}, RSEQC_READDISTRIBUTION={rseqc=5.0.2}, RSEQC_READDUPLICATION={rseqc=5.0.2}, SUBREAD_FEATURECOUNTS_GENE={subread=2.0.1}, Workflow={nf-core/nascent=v2.3.0dev}}"
+            215,
+            "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
+            "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
+            [
+                "cd4_intersect.bed:md5,08e9166b4515fa76c7f624a5377d630f",
+                "jurkat_intersect.bed:md5,3f625c7e363f49f75bcac2d9316af2e0"
+            ],
+            [
+                "cd4_filtered.bed:md5,bafed399a3f4d5d8363f40616bca4824",
+                "jurkat_filtered.bed:md5,ee570f28e2f347b66f085357e8ddba57"
+            ],
+            [
+                "cd4_intersect.bed:md5,08e9166b4515fa76c7f624a5377d630f",
+                "jurkat_intersect.bed:md5,3f625c7e363f49f75bcac2d9316af2e0"
+            ],
+            [
+                "cd4_filtered.bed:md5,bafed399a3f4d5d8363f40616bca4824",
+                "jurkat_filtered.bed:md5,ee570f28e2f347b66f085357e8ddba57"
+            ],
+            "cd4.eval.txt:md5,7f49f3b1211f9a2086a3df3b5932b14e",
+            "cd4.final.transcripts.bed:md5,51089857e6c7c0fa2259c9615e201564",
+            "cd4.tdFinal.txt:md5,4a40e320646af024b151d199fd442380",
+            true,
+            "cd4.transcripts.txt:md5,256b4b93c61506c8470d6c20e7043a85",
+            "jurkat.eval.txt:md5,7168cf089146b0752d6eb87836e91e34",
+            "jurkat.final.transcripts.bed:md5,2d560a6af857d69042e1fba09d8533d1",
+            "jurkat.tdFinal.txt:md5,f65dcec240c6c55f0fb077ed21f17285",
+            true,
+            "jurkat.transcripts.txt:md5,a601a4312e953e1adc05e18b7488c3b0",
+            true
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-09-26T03:52:06.649510139"
+        "timestamp": "2024-10-09T17:31:48.135947809"
+    },
+    "software_versions": {
+        "content": [
+            {
+                "BBMAP_PILEUP": {
+                    "bbmap": 39.01,
+                    "samtools": "1.16.1",
+                    "pigz": 2.6
+                },
+                "BEDTOOLS_GENOMECOV_MINUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_GENOMECOV_PLUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT_FILTER": {
+                    "bedtools": "2.31.1"
+                },
+                "BWA_INDEX": {
+                    "bwa": "0.7.18-r1243-dirty"
+                },
+                "BWA_MEM": {
+                    "bwa": "0.7.18-r1243-dirty",
+                    "samtools": 1.2
+                },
+                "CUSTOM_GETCHROMSIZES": {
+                    "getchromsizes": 1.2
+                },
+                "DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.1"
+                },
+                "DEEPTOOLS_BAMCOVERAGE_PLUS": {
+                    "deeptools": "3.5.1"
+                },
+                "FASTP": {
+                    "fastp": "0.23.4"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GROHMM_PARAMETERTUNING": {
+                    "r-base": "4.3.3",
+                    "bioconductor-grohmm": "1.39.0"
+                },
+                "GTF2BED": {
+                    "perl": "5.26.2"
+                },
+                "HOMER_MAKETAGDIRECTORY": {
+                    "homer": 4.11,
+                    "samtools": 1.11
+                },
+                "PINTS_CALLER": {
+                    "python": "3.10.6",
+                    "pints": "1.1.8"
+                },
+                "PRESEQ_CCURVE": {
+                    "preseq": "3.1.1"
+                },
+                "PRESEQ_LCEXTRAP": {
+                    "preseq": "3.1.1"
+                },
+                "RSEQC_INFEREXPERIMENT": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDISTRIBUTION": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDUPLICATION": {
+                    "rseqc": "5.0.2"
+                },
+                "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
+                    "subread": "2.0.1"
+                },
+                "Workflow": {
+                    "nf-core/nascent": "v2.3.0dev"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-09T17:31:48.111668358"
     }
 }
