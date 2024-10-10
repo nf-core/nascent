@@ -1,0 +1,21 @@
+Changes in module 'nf-core/hisat2/align'
+'modules/nf-core/hisat2/align/environment.yml' is unchanged
+'modules/nf-core/hisat2/align/meta.yml' is unchanged
+Changes in 'hisat2/align/main.nf':
+--- modules/nf-core/hisat2/align/main.nf
++++ modules/nf-core/hisat2/align/main.nf
+@@ -18,6 +18,9 @@
+     tuple val(meta), path("*.log")                   , emit: summary
+     tuple val(meta), path("*fastq.gz"), optional:true, emit: fastq
+     path  "versions.yml"                             , emit: versions
++
++    tuple val("$task.process"), val("hisat2"), eval("hisat2 --version 2>&1 | sed 's/.* //'"), topic: version
++    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/hisat2/align/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/hisat2/align/tests/tags.yml' is unchanged
+'modules/nf-core/hisat2/align/tests/main.nf.test' is unchanged
+************************************************************

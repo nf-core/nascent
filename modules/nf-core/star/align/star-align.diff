@@ -1,0 +1,24 @@
+Changes in module 'nf-core/star/align'
+'modules/nf-core/star/align/environment.yml' is unchanged
+'modules/nf-core/star/align/meta.yml' is unchanged
+Changes in 'star/align/main.nf':
+--- modules/nf-core/star/align/main.nf
++++ modules/nf-core/star/align/main.nf
+@@ -20,6 +20,9 @@
+     tuple val(meta), path('*Log.out')         , emit: log_out
+     tuple val(meta), path('*Log.progress.out'), emit: log_progress
+     path  "versions.yml"                      , emit: versions
++
++    tuple val("$task.process"), val("star"), eval("STAR --version 2>&1 | sed 's/.* //'"), topic: version
++    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+ 
+     tuple val(meta), path('*d.out.bam')              , optional:true, emit: bam
+     tuple val(meta), path('*sortedByCoord.out.bam')  , optional:true, emit: bam_sorted
+
+'modules/nf-core/star/align/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/star/align/tests/nextflow.arriba.config' is unchanged
+'modules/nf-core/star/align/tests/tags.yml' is unchanged
+'modules/nf-core/star/align/tests/nextflow.starfusion.config' is unchanged
+'modules/nf-core/star/align/tests/nextflow.config' is unchanged
+'modules/nf-core/star/align/tests/main.nf.test' is unchanged
+************************************************************

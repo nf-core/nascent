@@ -1,0 +1,23 @@
+Changes in module 'nf-core/bedtools/sort'
+'modules/nf-core/bedtools/sort/environment.yml' is unchanged
+'modules/nf-core/bedtools/sort/meta.yml' is unchanged
+Changes in 'bedtools/sort/main.nf':
+--- modules/nf-core/bedtools/sort/main.nf
++++ modules/nf-core/bedtools/sort/main.nf
+@@ -13,7 +13,9 @@
+ 
+     output:
+     tuple val(meta), path("*.${extension}"), emit: sorted
+-    path  "versions.yml"                   , emit: versions
++    path "versions.yml"                    , emit: versions
++
++    tuple val("$task.process"), val("bedtools"), eval("bedtools --version | sed -e 's/bedtools v//g'"), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/bedtools/sort/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/bedtools/sort/tests/tags.yml' is unchanged
+'modules/nf-core/bedtools/sort/tests/nextflow.config' is unchanged
+'modules/nf-core/bedtools/sort/tests/main.nf.test' is unchanged
+************************************************************

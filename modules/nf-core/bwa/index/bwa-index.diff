@@ -1,16 +1,30 @@
 Changes in module 'nf-core/bwa/index'
+'modules/nf-core/bwa/index/environment.yml' is unchanged
+'modules/nf-core/bwa/index/meta.yml' is unchanged
+Changes in 'bwa/index/main.nf':
 --- modules/nf-core/bwa/index/main.nf
 +++ modules/nf-core/bwa/index/main.nf
-@@ -1,6 +1,9 @@
+@@ -1,6 +1,8 @@
  process BWA_INDEX {
      tag "$fasta"
 -    label 'process_single'
 +    // NOTE https://bio-bwa.sourceforge.net/bwa.shtml#8
 +    // requires 5.37N memory where N is the size of the database
-+    memory { 5.5.B * fasta.size() }
-+
++    memory { 6.B * fasta.size() }
  
      conda "${moduleDir}/environment.yml"
      container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+@@ -13,6 +15,8 @@
+     output:
+     tuple val(meta), path(bwa) , emit: index
+     path "versions.yml"        , emit: versions
++
++    tuple val("$task.process"), val("bwa"), eval("bwa 2>&1 | sed 's/^.*Version: //; s/Contact:.*\$//'"), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
 
+'modules/nf-core/bwa/index/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/bwa/index/tests/tags.yml' is unchanged
+'modules/nf-core/bwa/index/tests/main.nf.test' is unchanged
 ************************************************************

@@ -15,6 +15,10 @@ process STAR_GENOMEGENERATE {
     tuple val(meta), path("star")  , emit: index
     path "versions.yml"            , emit: versions
 
+    tuple val("$task.process"), val("star"), eval("STAR --version 2>&1 | sed 's/.* //'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+    tuple val("$task.process"), val("gawk"), eval("gawk --version 2>&1 | sed 's/^.*GNU Awk //; s/, .*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

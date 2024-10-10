@@ -14,6 +14,8 @@ process CAT_FASTQ {
     tuple val(meta), path("*.merged.fastq.gz"), emit: reads
     path "versions.yml"                       , emit: versions
 
+    tuple val("$task.process"), val("cat"), eval("cat --version 2>&1 | sed 's/^.*coreutils) //; s/ .*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

@@ -14,6 +14,8 @@ process CAT_CAT {
     tuple val(meta), path("${prefix}"), emit: file_out
     path "versions.yml"               , emit: versions
 
+    tuple val("$task.process"), val("pigz"), eval("pigz --version 2>&1 | sed 's/pigz //g'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

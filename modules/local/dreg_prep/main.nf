@@ -15,6 +15,9 @@ process DREG_PREP {
     output:
     tuple val(meta), path("${prefix}.pos.bw"), path("${prefix}.neg.bw"), emit: dreg_bigwig
     tuple val(meta), path("${prefix}.bedGraph"), emit: dreg_bg
+    // path "versions.yml", emit: versions
+
+    tuple val("$task.process"), val("bedtools"), eval("bedtools --version 2>&1 | sed 's/^.*bedtools //'"), topic: version
 
     when:
     task.ext.when == null || task.ext.when

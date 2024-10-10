@@ -1,0 +1,22 @@
+Changes in module 'nf-core/fastp'
+'modules/nf-core/fastp/environment.yml' is unchanged
+'modules/nf-core/fastp/meta.yml' is unchanged
+Changes in 'fastp/main.nf':
+--- modules/nf-core/fastp/main.nf
++++ modules/nf-core/fastp/main.nf
+@@ -22,6 +22,8 @@
+     tuple val(meta), path('*.fail.fastq.gz')  , optional:true, emit: reads_fail
+     tuple val(meta), path('*.merged.fastq.gz'), optional:true, emit: reads_merged
+     path "versions.yml"                       , emit: versions
++
++    tuple val("$task.process"), val("fastp"), eval("fastp --version 2>&1 | sed -e "s/fastp //g""), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/fastp/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/fastp/tests/tags.yml' is unchanged
+'modules/nf-core/fastp/tests/main.nf.test' is unchanged
+'modules/nf-core/fastp/tests/nextflow.save_failed.config' is unchanged
+'modules/nf-core/fastp/tests/nextflow.interleaved.config' is unchanged
+************************************************************

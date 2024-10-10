@@ -15,6 +15,8 @@ process FASTQC {
     tuple val(meta), path("*.zip") , emit: zip
     path  "versions.yml"           , emit: versions
 
+    tuple val("$task.process"), val("fastqc"), eval("fastqc --version 2>&1 | sed -e 's/FastQC v//g'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

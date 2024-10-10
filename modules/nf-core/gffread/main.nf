@@ -17,6 +17,8 @@ process GFFREAD {
     tuple val(meta), path("*.fasta"), emit: gffread_fasta   , optional: true
     path "versions.yml"             , emit: versions
 
+    tuple val("$task.process"), val("gffread"), eval("gffread --version 2>&1 | sed 's/.* //'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

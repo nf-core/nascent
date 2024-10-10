@@ -20,6 +20,8 @@ process MULTIQC {
     path "*_plots"             , optional:true, emit: plots
     path "versions.yml"        , emit: versions
 
+    tuple val("$task.process"), val("multiqc"), eval("multiqc --version 2>&1 | sed 's/^.*multiqc, version //'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

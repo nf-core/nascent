@@ -21,6 +21,9 @@ process GROHMM_TRANSCRIPTCALLING {
     tuple val(meta), path("*.tdFinal_mqc.csv") , emit: mqc_csv
     path  "versions.yml"     , emit: versions
 
+    tuple val("$task.process"), val("r-base"), eval("R --version 2>&1 | sed 's/^.*R version //; s/ .*\$//'"), topic: version
+    tuple val("$task.process"), val("bioconductor-grohmm"), eval("Rscript -e \"library(groHMM); cat(as.character(packageVersion('groHMM')))\""), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

@@ -1,0 +1,20 @@
+Changes in module 'nf-core/cat/fastq'
+'modules/nf-core/cat/fastq/environment.yml' is unchanged
+'modules/nf-core/cat/fastq/meta.yml' is unchanged
+Changes in 'cat/fastq/main.nf':
+--- modules/nf-core/cat/fastq/main.nf
++++ modules/nf-core/cat/fastq/main.nf
+@@ -13,6 +13,8 @@
+     output:
+     tuple val(meta), path("*.merged.fastq.gz"), emit: reads
+     path "versions.yml"                       , emit: versions
++
++    tuple val("$task.process"), val("cat"), eval("cat --version 2>&1 | sed 's/^.*coreutils) //; s/ .*\$//'"), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/cat/fastq/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/cat/fastq/tests/tags.yml' is unchanged
+'modules/nf-core/cat/fastq/tests/main.nf.test' is unchanged
+************************************************************

@@ -15,6 +15,8 @@ process HOMER_MAKEUCSCFILE {
     tuple val(meta), path("*.bedGraph.gz"), emit: bedGraph
     path  "versions.yml"                  , emit: versions
 
+    tuple val("$task.process"), val("homer"), eval("makeUCSCfile 2>&1 | sed 's/.*Version: //'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

@@ -20,6 +20,9 @@ process BWA_MEM {
     tuple val(meta), path("*.crai") , emit: crai,   optional: true
     path  "versions.yml"            , emit: versions
 
+    tuple val("$task.process"), val("bwa"), eval("bwa 2>&1 | sed 's/^.*Version: //; s/Contact:.*\$//'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

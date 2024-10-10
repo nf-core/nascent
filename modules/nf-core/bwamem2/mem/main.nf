@@ -21,6 +21,9 @@ process BWAMEM2_MEM {
     tuple val(meta), path("*.csi")  , emit: csi , optional:true
     path  "versions.yml"            , emit: versions
 
+    tuple val("$task.process"), val("bwamem2"), eval("bwa-mem2 version 2>&1 | sed 's/.* //'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

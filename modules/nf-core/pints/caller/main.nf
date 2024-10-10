@@ -16,8 +16,7 @@ process PINTS_CALLER {
     tuple val(meta), path("*_bidirectional_peaks.bed") , optional:true, emit: bidirectional_TREs
     tuple val(meta), path("*_unidirectional_peaks.bed"), optional:true, emit: unidirectional_TREs
     tuple val(meta), path("peakcalling_*.log")                        , emit: peakcalling_log
-
-    tuple val("$task.process"), val("PINTS"), eval("pints_caller --version")                , topic: version
+    tuple val("$task.process"), val("PINTS"), eval("pints_caller --version"), topic: version
     tuple val("$task.process"), val("Python"), eval("python --version | sed 's/Python //g'"), topic: version
 
     when:

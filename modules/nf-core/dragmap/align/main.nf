@@ -22,6 +22,10 @@ process DRAGMAP_ALIGN {
     tuple val(meta), path('*.log')  , emit: log
     path "versions.yml"           , emit: versions
 
+    tuple val("$task.process"), val("dragmap"), eval("dragen-os --version 2>&1"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+    tuple val("$task.process"), val("pigz"), eval("pigz --version 2>&1 | sed 's/pigz //g'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

@@ -1,0 +1,22 @@
+Changes in module 'nf-core/cat/cat'
+'modules/nf-core/cat/cat/environment.yml' is unchanged
+'modules/nf-core/cat/cat/meta.yml' is unchanged
+Changes in 'cat/cat/main.nf':
+--- modules/nf-core/cat/cat/main.nf
++++ modules/nf-core/cat/cat/main.nf
+@@ -13,6 +13,8 @@
+     output:
+     tuple val(meta), path("${prefix}"), emit: file_out
+     path "versions.yml"               , emit: versions
++
++    tuple val("$task.process"), val("pigz"), eval("pigz --version 2>&1 | sed 's/pigz //g'"), topic: version
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/cat/cat/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/cat/cat/tests/nextflow_zipped_unzipped.config' is unchanged
+'modules/nf-core/cat/cat/tests/tags.yml' is unchanged
+'modules/nf-core/cat/cat/tests/nextflow_unzipped_zipped.config' is unchanged
+'modules/nf-core/cat/cat/tests/main.nf.test' is unchanged
+************************************************************

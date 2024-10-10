@@ -23,6 +23,8 @@ process FASTP {
     tuple val(meta), path('*.merged.fastq.gz'), optional:true, emit: reads_merged
     path "versions.yml"                       , emit: versions
 
+    tuple val("$task.process"), val("fastp"), eval("fastp --version 2>&1 | sed -e "s/fastp //g""), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

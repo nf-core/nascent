@@ -21,6 +21,9 @@ process STAR_ALIGN {
     tuple val(meta), path('*Log.progress.out'), emit: log_progress
     path  "versions.yml"                      , emit: versions
 
+    tuple val("$task.process"), val("star"), eval("STAR --version 2>&1 | sed 's/.* //'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     tuple val(meta), path('*d.out.bam')              , optional:true, emit: bam
     tuple val(meta), path('*sortedByCoord.out.bam')  , optional:true, emit: bam_sorted
     tuple val(meta), path('*toTranscriptome.out.bam'), optional:true, emit: bam_transcript

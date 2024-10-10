@@ -14,6 +14,8 @@ process BED2SAF {
     tuple val(meta), path("*.saf"), emit: saf
     path "versions.yml", emit: versions
 
+    tuple val("$task.process"), val("gawk"), eval("gawk --version 2>&1 | sed 's/^.*GNU Awk //; s/, .*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

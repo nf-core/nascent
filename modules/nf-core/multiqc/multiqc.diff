@@ -2,17 +2,220 @@ Changes in module 'nf-core/multiqc'
 Changes in 'multiqc/environment.yml':
 --- modules/nf-core/multiqc/environment.yml
 +++ modules/nf-core/multiqc/environment.yml
-@@ -2,4 +2,4 @@
+@@ -1,7 +1,5 @@
+-name: multiqc
+ channels:
    - conda-forge
    - bioconda
+-  - defaults
  dependencies:
--  - bioconda::multiqc=1.24.1
+-  - bioconda::multiqc=1.23
 +  - bioconda::multiqc=1.25
 
-'modules/nf-core/multiqc/meta.yml' is unchanged
-'modules/nf-core/multiqc/main.nf' is unchanged
-'modules/nf-core/multiqc/tests/main.nf.test.snap' is unchanged
+Changes in 'multiqc/meta.yml':
+--- modules/nf-core/multiqc/meta.yml
++++ modules/nf-core/multiqc/meta.yml
+@@ -1,5 +1,6 @@
+ name: multiqc
+-description: Aggregate results from bioinformatics analyses across many samples into a single report
++description: Aggregate results from bioinformatics analyses across many samples into
++  a single report
+ keywords:
+   - QC
+   - bioinformatics tools
+@@ -12,53 +13,59 @@
+       homepage: https://multiqc.info/
+       documentation: https://multiqc.info/docs/
+       licence: ["GPL-3.0-or-later"]
++      identifier: biotools:multiqc
+ input:
+-  - multiqc_files:
+-      type: file
+-      description: |
+-        List of reports / files recognised by MultiQC, for example the html and zip output of FastQC
+-  - multiqc_config:
+-      type: file
+-      description: Optional config yml for MultiQC
+-      pattern: "*.{yml,yaml}"
+-  - extra_multiqc_config:
+-      type: file
+-      description: Second optional config yml for MultiQC. Will override common sections in multiqc_config.
+-      pattern: "*.{yml,yaml}"
+-  - multiqc_logo:
+-      type: file
+-      description: Optional logo file for MultiQC
+-      pattern: "*.{png}"
+-  - replace_names:
+-      type: file
+-      description: |
+-        Optional two-column sample renaming file. First column a set of
+-        patterns, second column a set of corresponding replacements. Passed via
+-        MultiQC's `--replace-names` option.
+-      pattern: "*.{tsv}"
+-  - sample_names:
+-      type: file
+-      description: |
+-        Optional TSV file with headers, passed to the MultiQC --sample_names
+-        argument.
+-      pattern: "*.{tsv}"
++  - - multiqc_files:
++        type: file
++        description: |
++          List of reports / files recognised by MultiQC, for example the html and zip output of FastQC
++  - - multiqc_config:
++        type: file
++        description: Optional config yml for MultiQC
++        pattern: "*.{yml,yaml}"
++  - - extra_multiqc_config:
++        type: file
++        description: Second optional config yml for MultiQC. Will override common sections
++          in multiqc_config.
++        pattern: "*.{yml,yaml}"
++  - - multiqc_logo:
++        type: file
++        description: Optional logo file for MultiQC
++        pattern: "*.{png}"
++  - - replace_names:
++        type: file
++        description: |
++          Optional two-column sample renaming file. First column a set of
++          patterns, second column a set of corresponding replacements. Passed via
++          MultiQC's `--replace-names` option.
++        pattern: "*.{tsv}"
++  - - sample_names:
++        type: file
++        description: |
++          Optional TSV file with headers, passed to the MultiQC --sample_names
++          argument.
++        pattern: "*.{tsv}"
+ output:
+   - report:
+-      type: file
+-      description: MultiQC report file
+-      pattern: "multiqc_report.html"
++      - "*multiqc_report.html":
++          type: file
++          description: MultiQC report file
++          pattern: "multiqc_report.html"
+   - data:
+-      type: directory
+-      description: MultiQC data dir
+-      pattern: "multiqc_data"
++      - "*_data":
++          type: directory
++          description: MultiQC data dir
++          pattern: "multiqc_data"
+   - plots:
+-      type: file
+-      description: Plots created by MultiQC
+-      pattern: "*_data"
++      - "*_plots":
++          type: file
++          description: Plots created by MultiQC
++          pattern: "*_data"
+   - versions:
+-      type: file
+-      description: File containing software versions
+-      pattern: "versions.yml"
++      - versions.yml:
++          type: file
++          description: File containing software versions
++          pattern: "versions.yml"
+ authors:
+   - "@abhi18av"
+   - "@bunop"
+
+Changes in 'multiqc/main.nf':
+--- modules/nf-core/multiqc/main.nf
++++ modules/nf-core/multiqc/main.nf
+@@ -3,8 +3,8 @@
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+-        'https://depot.galaxyproject.org/singularity/multiqc:1.23--pyhdfd78af_0' :
+-        'biocontainers/multiqc:1.23--pyhdfd78af_0' }"
++        'https://depot.galaxyproject.org/singularity/multiqc:1.25--pyhdfd78af_0' :
++        'biocontainers/multiqc:1.25--pyhdfd78af_0' }"
+ 
+     input:
+     path  multiqc_files, stageAs: "?/*"
+@@ -20,14 +20,17 @@
+     path "*_plots"             , optional:true, emit: plots
+     path "versions.yml"        , emit: versions
+ 
++    tuple val("$task.process"), val("multiqc"), eval("multiqc --version 2>&1 | sed 's/^.*multiqc, version //'"), topic: version
++
+     when:
+     task.ext.when == null || task.ext.when
+ 
+     script:
+     def args = task.ext.args ?: ''
++    def prefix = task.ext.prefix ? "--filename ${task.ext.prefix}.html" : ''
+     def config = multiqc_config ? "--config $multiqc_config" : ''
+     def extra_config = extra_multiqc_config ? "--config $extra_multiqc_config" : ''
+-    def logo = multiqc_logo ? /--cl-config 'custom_logo: "${multiqc_logo}"'/ : ''
++    def logo = multiqc_logo ? "--cl-config 'custom_logo: \"${multiqc_logo}\"'" : ''
+     def replace = replace_names ? "--replace-names ${replace_names}" : ''
+     def samples = sample_names ? "--sample-names ${sample_names}" : ''
+     """
+@@ -35,6 +38,7 @@
+         --force \\
+         $args \\
+         $config \\
++        $prefix \\
+         $extra_config \\
+         $logo \\
+         $replace \\
+
+Changes in 'multiqc/tests/main.nf.test.snap':
+--- modules/nf-core/multiqc/tests/main.nf.test.snap
++++ modules/nf-core/multiqc/tests/main.nf.test.snap
+@@ -2,7 +2,7 @@
+     "multiqc_versions_single": {
+         "content": [
+             [
+-                "versions.yml:md5,87904cd321df21fac35d18f0fc01bb19"
++                "versions.yml:md5,8c8724363a5efe0c6f43ab34faa57efd"
+             ]
+         ],
+         "meta": {
+@@ -17,7 +17,7 @@
+                 "multiqc_report.html",
+                 "multiqc_data",
+                 "multiqc_plots",
+-                "versions.yml:md5,87904cd321df21fac35d18f0fc01bb19"
++                "versions.yml:md5,8c8724363a5efe0c6f43ab34faa57efd"
+             ]
+         ],
+         "meta": {
+@@ -29,7 +29,7 @@
+     "multiqc_versions_config": {
+         "content": [
+             [
+-                "versions.yml:md5,87904cd321df21fac35d18f0fc01bb19"
++                "versions.yml:md5,8c8724363a5efe0c6f43ab34faa57efd"
+             ]
+         ],
+         "meta": {
+@@ -38,4 +38,4 @@
+         },
+         "timestamp": "2024-07-10T11:26:56.709849369"
+     }
+-}+}
+
 'modules/nf-core/multiqc/tests/tags.yml' is unchanged
-'modules/nf-core/multiqc/tests/nextflow.config' is unchanged
-'modules/nf-core/multiqc/tests/main.nf.test' is unchanged
+'modules/nf-core/multiqc/tests/nextflow.config' was created
+Changes in 'multiqc/tests/main.nf.test':
+--- modules/nf-core/multiqc/tests/main.nf.test
++++ modules/nf-core/multiqc/tests/main.nf.test
+@@ -7,6 +7,8 @@
+     tag "modules"
+     tag "modules_nfcore"
+     tag "multiqc"
++
++    config "./nextflow.config"
+ 
+     test("sarscov2 single-end [fastqc]") {
+ 
+
 ************************************************************

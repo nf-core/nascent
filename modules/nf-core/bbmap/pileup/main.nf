@@ -15,6 +15,10 @@ process BBMAP_PILEUP {
     tuple val(meta), path("*.hist.txt") , emit: hist
     path "versions.yml"                 , emit: versions
 
+    tuple val("$task.process"), val("BBMap"), eval("bbversion.sh | grep -v 'Duplicate cpuset'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("echo $(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*$//'"), topic: version
+    tuple val("$task.process"), val("pigz"), eval("pigz --version | sed 's/pigz //g'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 
@@ -33,7 +37,7 @@ process BBMAP_PILEUP {
     "${task.process}":
         bbmap: \$(bbversion.sh | grep -v "Duplicate cpuset")
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
-        pigz: \$( pigz --version 2>&1 | sed 's/pigz //g' )
+        pigz: \$( pigz --version | sed 's/pigz //g' )
     END_VERSIONS
     """
 }

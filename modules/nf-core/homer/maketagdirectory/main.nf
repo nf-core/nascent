@@ -18,6 +18,9 @@ process HOMER_MAKETAGDIRECTORY {
     tuple val(meta), path("*_tagdir/tagInfo.txt"), emit: taginfo
     path  "versions.yml"                         , emit: versions
 
+    tuple val("$task.process"), val("homer"), eval("makeTagDirectory 2>&1 | sed 's/.*Version: //'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

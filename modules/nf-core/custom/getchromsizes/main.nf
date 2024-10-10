@@ -16,6 +16,8 @@ process CUSTOM_GETCHROMSIZES {
     tuple val(meta), path ("*.gzi")  , emit: gzi, optional: true
     path  "versions.yml"             , emit: versions
 
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 
@@ -27,7 +29,7 @@ process CUSTOM_GETCHROMSIZES {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        getchromsizes: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
+        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
 
@@ -41,7 +43,7 @@ process CUSTOM_GETCHROMSIZES {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        getchromsizes: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
+        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
 }

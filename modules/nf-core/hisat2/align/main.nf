@@ -19,6 +19,9 @@ process HISAT2_ALIGN {
     tuple val(meta), path("*fastq.gz"), optional:true, emit: fastq
     path  "versions.yml"                             , emit: versions
 
+    tuple val("$task.process"), val("hisat2"), eval("hisat2 --version 2>&1 | sed 's/.* //'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

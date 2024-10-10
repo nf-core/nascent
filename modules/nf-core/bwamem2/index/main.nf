@@ -15,6 +15,8 @@ process BWAMEM2_INDEX {
     tuple val(meta), path("bwamem2"), emit: index
     path "versions.yml"             , emit: versions
 
+    tuple val("$task.process"), val("bwamem2"), eval("bwa-mem2 version 2>&1 | sed 's/.* //'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 

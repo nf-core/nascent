@@ -14,6 +14,8 @@ process SAMTOOLS_IDXSTATS {
     tuple val(meta), path("*.idxstats"), emit: idxstats
     path  "versions.yml"               , emit: versions
 
+    tuple val("$task.process"), val("samtools"), eval("samtools --version 2>&1 | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
+
     when:
     task.ext.when == null || task.ext.when
 
