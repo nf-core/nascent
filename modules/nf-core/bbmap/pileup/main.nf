@@ -16,7 +16,7 @@ process BBMAP_PILEUP {
     path "versions.yml"                 , emit: versions
 
     tuple val("$task.process"), val("BBMap"), eval("bbversion.sh | grep -v 'Duplicate cpuset'"), topic: version
-    tuple val("$task.process"), val("samtools"), eval("echo $(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*$//'"), topic: version
+    tuple val("$task.process"), val("samtools"), eval("samtools --version | sed 's/^.*samtools //; s/Using.*\$//'"), topic: version
     tuple val("$task.process"), val("pigz"), eval("pigz --version | sed 's/pigz //g'"), topic: version
 
     when:

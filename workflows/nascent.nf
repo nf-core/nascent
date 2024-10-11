@@ -84,7 +84,6 @@ workflow NASCENT {
         ch_bowtie2_index,
         ch_hisat2_index,
     )
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
     ch_fasta = PREPARE_GENOME.out.fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] }
 
     //
@@ -94,13 +93,11 @@ workflow NASCENT {
         ch_samplesheet
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     ch_reads = Channel.empty()
     if(!params.skip_trimming) {
         FASTP ( ch_samplesheet, [], false, false, false )
         ch_reads = FASTP.out.reads
-        ch_versions = ch_versions.mix(FASTP.out.versions.first())
     } else {
         ch_reads = ch_samplesheet
     }
@@ -130,7 +127,6 @@ workflow NASCENT {
         ch_samtools_flagstat = FASTQ_ALIGN_BWA.out.flagstat
         ch_samtools_idxstats = FASTQ_ALIGN_BWA.out.idxstats
 
-        ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     } else if (!params.skip_alignment && params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2 (
             ch_reads,
@@ -144,7 +140,6 @@ workflow NASCENT {
         ch_samtools_flagstat = ALIGN_BWAMEM2.out.flagstat
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'dragmap') {
         ALIGN_DRAGMAP (
             ch_reads,
@@ -158,7 +153,6 @@ workflow NASCENT {
         ch_samtools_flagstat = ALIGN_DRAGMAP.out.flagstat
         ch_samtools_idxstats = ALIGN_DRAGMAP.out.idxstats
 
-        ch_versions = ch_versions.mix(ALIGN_DRAGMAP.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'bowtie2') {
         FASTQ_ALIGN_BOWTIE2 (
             ch_reads,
@@ -174,11 +168,9 @@ workflow NASCENT {
         ch_samtools_idxstats = FASTQ_ALIGN_BOWTIE2.out.idxstats
 
         ch_bowtie2_multiqc = FASTQ_ALIGN_BOWTIE2.out.log_out
-        ch_versions = ch_versions.mix(FASTQ_ALIGN_BOWTIE2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'hisat2') {
         if (ch_hisat2_index.endsWith('.tar.gz')) {
             ch_hisat2_index = UNTAR_HISAT2_INDEX ( [ [:], ch_hisat2_index ] ).untar
-            ch_versions = ch_versions.mix(UNTAR_HISAT2_INDEX.out.versions)
         } else {
             // TODO Give the meta from basename or genome?
             ch_hisat2_index = [ [meta: "Genome"], file(ch_hisat2_index) ]
@@ -197,7 +189,6 @@ workflow NASCENT {
         ch_samtools_idxstats = FASTQ_ALIGN_HISAT2.out.idxstats
 
         ch_HISAT2_multiqc = FASTQ_ALIGN_HISAT2.out.summary
-        ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
     } else if (!params.skip_alignment && params.aligner == 'star') {
         if(!ch_star_index) {
             ch_star_index = STAR_GENOMEGENERATE (
@@ -206,7 +197,6 @@ workflow NASCENT {
             ).index
         } else if (ch_star_index.endsWith('.tar.gz')) {
             ch_star_index = UNTAR_STAR_INDEX ( [ [:], ch_star_index ] ).untar
-            ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
         } else {
             // TODO Give the meta from basename or genome?
             ch_star_index = [ [meta: "Genome"], file(ch_star_index) ]
@@ -242,8 +232,6 @@ workflow NASCENT {
         ch_samtools_stats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.stats
         ch_samtools_flagstat = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.flagstat
         ch_samtools_idxstats = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.idxstats
-
-        ch_versions = ch_versions.mix(BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.versions)
     }
 
     ch_genome_bam_bai = ch_genome_bam.join(ch_genome_bai, by: [0], remainder: true)
@@ -252,7 +240,6 @@ workflow NASCENT {
         ch_genome_bam_bai,
         PREPARE_GENOME.out.gene_bed
     )
-    ch_versions = ch_versions.mix(QUALITY_CONTROL.out.versions)
 
     COVERAGE_GRAPHS (
         ch_genome_bam_bai,
@@ -260,7 +247,6 @@ workflow NASCENT {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai
     )
-    ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions)
 
     //
     // SUBWORKFLOW: Transcript indetification
@@ -296,7 +282,6 @@ workflow NASCENT {
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
     ch_homer_multiqc = ch_homer_multiqc.mix(TRANSCRIPT_INDENTIFICATION.out.homer_tagdir)
-    ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions)
 
     SUBREAD_FEATURECOUNTS_PREDICTED (
         ch_group_bam.combine(
@@ -305,12 +290,10 @@ workflow NASCENT {
             ).saf.map { it[1] }
         )
     )
-    ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.versions.first())
 
     SUBREAD_FEATURECOUNTS_GENE (
         ch_group_bam.combine(PREPARE_GENOME.out.gtf)
     )
-    ch_versions = ch_versions.mix(SUBREAD_FEATURECOUNTS_GENE.out.versions.first())
 
     //
     // Collate and save software versions
