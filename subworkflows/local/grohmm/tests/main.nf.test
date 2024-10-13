@@ -27,8 +27,10 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
         }
 
     }
@@ -55,8 +57,10 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
         }
 
     }
@@ -84,8 +88,10 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
         }
 
     }
