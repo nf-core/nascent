@@ -71,10 +71,13 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                workflow.trace.tasks().size(),
-            ).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                ).match()
+                }
+            )
         }
     }
 
@@ -91,10 +94,13 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                workflow.trace.tasks().size(),
-            ).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                ).match()
+                }
+            )
         }
 
     }
