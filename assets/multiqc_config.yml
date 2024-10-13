@@ -35,6 +35,7 @@ sp:
     fn: "./grohmm/*.tdplot.jpg"
 ignore_images: false
 
-export_plots: true
+# BUG https://github.com/MultiQC/MultiQC/pull/2888
+export_plots: false
 
 disable_version_detection: true
