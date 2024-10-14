@@ -143,7 +143,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "cf17ca47590cc578dfb47db1c2a44ef86f89976d",
+                        "git_sha": "b80f5fd12ff7c43938f424dd76392a2704fa2396",
                         "installed_by": ["modules"]
                     },
                     "pints/caller": {
