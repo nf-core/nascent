@@ -30,7 +30,6 @@ sp:
     fn: "*.tdplot_mqc.jpg"
 ignore_images: false
 
-# BUG https://github.com/MultiQC/MultiQC/pull/2888
-export_plots: false
+export_plots: true
 
 disable_version_detection: true
