@@ -20,13 +20,6 @@ run_modules:
   - featureCounts
   - homer
 
-module_order:
-  - fastqc:
-      name: "FastQC (raw)"
-      info: "This section of the report shows FastQC results before adapter trimming."
-      path_filters:
-        - "./fastqc/*.zip"
-
 custom_data:
   grohmm_plot:
     section_name: "groHMM TD Plot"
