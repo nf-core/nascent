@@ -1,6 +1,8 @@
 process BWA_INDEX {
     tag "$fasta"
-    label 'process_single'
+    // NOTE https://bio-bwa.sourceforge.net/bwa.shtml#8
+    // requires 5.37N memory where N is the size of the database
+    memory { 6.B * fasta.size() }
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

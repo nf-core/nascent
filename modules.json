@@ -48,7 +48,8 @@
                     "bwa/index": {
                         "branch": "master",
                         "git_sha": "e0ff65e1fb313677de09f5f477ae3da30ce19b7b",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/bwa/index/bwa-index.diff"
                     },
                     "bwa/mem": {
                         "branch": "master",
@@ -58,7 +59,8 @@
                     "bwamem2/index": {
                         "branch": "master",
                         "git_sha": "7081e04c18de9480948d34513a1c1e2d0fa9126d",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/bwamem2/index/bwamem2-index.diff"
                     },
                     "bwamem2/mem": {
                         "branch": "master",
