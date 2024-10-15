@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#137](https://github.com/nf-core/nascent/pull/137) - Use singularity containers for PINTS
 - [#142](https://github.com/nf-core/nascent/pull/142) - Updated CHM13 references
 - [#171](https://github.com/nf-core/nascent/pull/171) - Use assertAll in tests
+- [#165](https://github.com/nf-core/nascent/pull/165) - groHMM overhaul. Removed R mclapply calls and replaced with Nextflow scatter gather for parameter tuning. This creates a job for each parameter set.
 
 ### Fixed
 
@@ -29,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Support for groHMM tuning files
+- [[#165](https://github.com/nf-core/nascent/pull/165)] - Removed support for groHMM tuning files.
 
 ## v2.2.0 - 2024-03-05
 
