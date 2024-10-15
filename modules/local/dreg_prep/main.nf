@@ -11,6 +11,7 @@ process DREG_PREP {
     input:
     tuple val(meta), path(bam_file), val(index)
     path  sizes
+    val assay_type
 
     output:
     tuple val(meta), path("${prefix}.pos.bw"), path("${prefix}.neg.bw"), emit: dreg_bigwig
@@ -21,6 +22,10 @@ process DREG_PREP {
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"
+    // NOTE https://github.com/hyulab/PINTS/blob/700f2c44b967413a19fc6b66bd876b53b6f31002/pints/io_engine.py#L436-L446
+    def forwardStranded_assays = ["PROseq", "mNETseq"]
+    def forwardStranded = forwardStranded_assays.contains(assay_type)
+
     if (meta.single_end) {
         """
         echo "Creating BigWigs suitable as inputs to dREG"
@@ -74,7 +79,7 @@ process DREG_PREP {
         echo "bedGraph to bigwig done"
         """
     } else {
-        if (params.forwardStranded) {
+        if (forwardStranded) {
             """
             samtools view -@ $task.cpus -bf 0x2 ${bam_file} | samtools sort -n -@ $task.cpus \\
                 > ${prefix}.dreg.bam
