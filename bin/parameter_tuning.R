@@ -161,7 +161,7 @@ transcripts_ranges <- transcripts_ranges[!is.na(start(transcripts_ranges)) & !is
 print("Collapse annotations in preparation for overlap")
 kg_consensus <- makeConsensusAnnotations(
   transcripts_ranges,
-  mc.cores = args$cores
+  mc.cores = min(args$cores, 10) # 10 the number they had hardcoded in the grohmm package for some reason
 )
 print("Finished consensus annotations")
 
