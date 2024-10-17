@@ -180,8 +180,13 @@ for (i in 1:num_chunks) {
 
   kg_consensus_chunk <- makeConsensusAnnotations(
     chunk,
-    mc.cores = min(args$cores, 4)  # Limit cores to reduce memory usage
+    mc.cores <- min(args$cores, 4) # Adjust based on your HPC setup
   )
+
+  # Preserve gene_id or other relevant metadata
+  if ("gene_id" %in% names(mcols(chunk))) {
+      mcols(kg_consensus_chunk)$gene_id <- mcols(chunk)$gene_id[1]
+  }
 
   kg_consensus <- c(kg_consensus, kg_consensus_chunk)
 
@@ -190,7 +195,12 @@ for (i in 1:num_chunks) {
 }
 
 # Final reduction step to ensure non-overlapping annotations
-kg_consensus <- reduce(kg_consensus)
+kg_consensus <- reduce(kg_consensus, ignore.strand = FALSE)
+
+# If gene_id was preserved, ensure it's not lost in the reduction
+if ("gene_id" %in% names(mcols(kg_consensus))) {
+  kg_consensus <- kg_consensus[!is.na(kg_consensus$gene_id)]
+}
 
 print("Finished consensus annotations for CHM13")
 
