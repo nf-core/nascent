@@ -148,6 +148,8 @@ print(e)
 
 # Write the combined data to a CSV file without row names
 write.csv(tune, file = paste0(args$outprefix, ".tuning.csv"), row.names = FALSE)
+# Write kg_consensus to a bed file for testing
+export.bed(kg_consensus, con = paste0(args$outprefix, ".tuning.consensus.bed"))
 
 ########################
 ## CITE PACKAGES USED ##
