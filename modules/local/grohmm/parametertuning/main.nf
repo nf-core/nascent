@@ -34,6 +34,7 @@ process GROHMM_PARAMETERTUNING {
         --ltprobb $LtProbB \\
         --outdir ./ \\
         --cores $task.cpus \\
+        --memory ${task.memory.toMega()} \\
         $args
 
     cat <<-END_VERSIONS > versions.yml

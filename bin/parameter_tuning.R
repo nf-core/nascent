@@ -167,8 +167,23 @@ transcripts_ranges_filtered <- transcripts_ranges[seqnames(transcripts_ranges) %
 # Sort the ranges (important for efficient processing)
 transcripts_ranges_filtered <- sort(transcripts_ranges_filtered)
 
+# The memory allocation is passed as an argument (in MB)
+allocated_memory <- args$memory
+
+# Calculate chunk size dynamically
+# Let's aim to use about 80% of allocated memory, assuming each range takes about 1KB
+memory_per_range <- 1 / 1024 # 1KB in MB
+chunk_size <- floor(0.8 * allocated_memory / memory_per_range)
+
+print(paste("Allocated memory:", allocated_memory, "MB"))
+print(paste("Calculated chunk size:", chunk_size))
+
+# Ensure chunk size is reasonable (not too small or too large)
+chunk_size <- max(min(chunk_size, 100000), 10000)
+
+print(paste("Final chunk size:", chunk_size))
+
 # Process in chunks
-chunk_size <- 50000  # Adjust based on your available memory
 num_chunks <- ceiling(length(transcripts_ranges_filtered) / chunk_size)
 
 kg_consensus <- GRanges()
