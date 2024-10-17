@@ -159,11 +159,40 @@ seqlevels(transcripts_ranges) <- seqlevels(gtf)
 transcripts_ranges <- transcripts_ranges[!is.na(start(transcripts_ranges)) & !is.na(end(transcripts_ranges))]
 
 print("Collapse annotations in preparation for overlap")
-kg_consensus <- makeConsensusAnnotations(
-  transcripts_ranges,
-  mc.cores = min(args$cores, 10) # 10 the number they had hardcoded in the grohmm package for some reason
-)
-print("Finished consensus annotations")
+
+# Filter out non-standard chromosomes
+standard_chromosomes <- paste0("chr", c(1:22, "X", "Y", "M"))
+transcripts_ranges_filtered <- transcripts_ranges[seqnames(transcripts_ranges) %in% standard_chromosomes]
+
+# Sort the ranges (important for efficient processing)
+transcripts_ranges_filtered <- sort(transcripts_ranges_filtered)
+
+# Process in chunks
+chunk_size <- 50000  # Adjust based on your available memory
+num_chunks <- ceiling(length(transcripts_ranges_filtered) / chunk_size)
+
+kg_consensus <- GRanges()
+for (i in 1:num_chunks) {
+  print(paste("Processing chunk", i, "of", num_chunks))
+  start_idx <- (i-1) * chunk_size + 1
+  end_idx <- min(i * chunk_size, length(transcripts_ranges_filtered))
+  chunk <- transcripts_ranges_filtered[start_idx:end_idx]
+
+  kg_consensus_chunk <- makeConsensusAnnotations(
+    chunk,
+    mc.cores = min(args$cores, 4)  # Limit cores to reduce memory usage
+  )
+
+  kg_consensus <- c(kg_consensus, kg_consensus_chunk)
+
+  # Force garbage collection to free up memory
+  gc()
+}
+
+# Final reduction step to ensure non-overlapping annotations
+kg_consensus <- reduce(kg_consensus)
+
+print("Finished consensus annotations for CHM13")
 
 ############
 ## TUNING ##
