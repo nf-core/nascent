@@ -14,6 +14,7 @@ process GROHMM_PARAMETERTUNING {
 
     output:
     tuple val(meta), path("*.tuning.csv"), emit: tuning
+    tuple val(meta), path("*.tuning.consensus.bed"), emit: bed
     path  "versions.yml", emit: versions
 
     when:
