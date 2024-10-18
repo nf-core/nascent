@@ -34,7 +34,7 @@ custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) 
 
     # Use tapply instead of split to avoid creating intermediate lists
     ar_list <- tapply(ar, mcols(ar)$gene_id, identity, simplify = FALSE)
-    singles <- ar_list[lengths(ar_list) == 1]
+    singles <- do.call(c, ar_list[lengths(ar_list) == 1])
     isoforms <- ar_list[lengths(ar_list) > 1]
 
     message("Reduce isoforms(", length(isoforms),") ... ", appendLF=FALSE)
@@ -70,24 +70,37 @@ custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) 
     isoforms <- unlist(GRangesList(isoforms))
     message("OK")
 
+    # Ensure singles is a GRanges object
+    if (!is(singles, "GRanges")) {
+        singles <- unlist(GRangesList(singles))
+    }
+
     # Combine removeRedundant operations
     removeRedundant <- function(annox) {
-        o <- findOverlaps(annox, drop.self = TRUE, type = "any", drop.redundant = TRUE)
-        annox[-unique(c(
-            queryHits(o)[width(annox)[queryHits(o)] <= width(annox)[subjectHits(o)]],
-            subjectHits(o)[width(annox)[queryHits(o)] > width(annox)[subjectHits(o)]]
-        ))]
+        if (is(annox, "GRanges")) {
+            o <- findOverlaps(annox, drop.self = TRUE, type = "any", drop.redundant = TRUE)
+            annox[-unique(c(
+                queryHits(o)[width(annox)[queryHits(o)] <= width(annox)[subjectHits(o)]],
+                subjectHits(o)[width(annox)[queryHits(o)] > width(annox)[subjectHits(o)]]
+            ))]
+        } else {
+            warning("Input to removeRedundant is not a GRanges object")
+            print(class(annox))  # Debug: Print class of annox
+            print(str(annox))    # Debug: Print structure of annox
+            return(annox)
+        }
     }
 
     isoforms <- removeRedundant(isoforms)
-    singles <- removeRedundant(do.call(c, singles))
+    singles <- removeRedundant(singles)
 
     # Use setdiff instead of multiple findOverlaps
-    singles <- setdiff(singles, isoforms)
+    singles <- GenomicRanges::setdiff(singles, isoforms)
 
     noiso <- sort(c(isoforms, singles))
     message("Truncate overlapped ranges ... ", appendLF=FALSE)
-# Optimize the while loop
+
+    # Optimize the while loop
     while(!isDisjoint(noiso)) {
         ol <- findOverlaps(noiso, drop.self=TRUE, drop.redundant=TRUE)
         ol_df <- as.data.frame(ol)
@@ -95,23 +108,18 @@ custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) 
 
         # Vectorized operations instead of lapply
         ol_df$new_end <- ifelse(ol_df$strand == "+",
-            start(noiso)[ol_df$subjectHits] - minGap,
-            end(noiso)[ol_df$queryHits]
-        )
+                                start(noiso)[ol_df$subjectHits] - minGap,
+                                end(noiso)[ol_df$queryHits])
         ol_df$new_start <- ifelse(ol_df$strand == "+",
-            start(noiso)[ol_df$queryHits],
-            end(noiso)[ol_df$queryHits] + minGap
-        )
+                                  start(noiso)[ol_df$queryHits],
+                                  end(noiso)[ol_df$queryHits] + minGap)
 
         # Update ranges in one operation
-        noiso <- c(
-            noiso[-unique(c(ol_df$queryHits, ol_df$subjectHits))],
-            GRanges(seqnames(noiso)[ol_df$queryHits],
-                IRanges(ol_df$new_start, ol_df$new_end),
-                strand = ol_df$strand,
-                gene_id = mcols(noiso)$gene_id[ol_df$queryHits]
-            )
-        )
+        noiso <- c(noiso[-unique(c(ol_df$queryHits, ol_df$subjectHits))],
+                   GRanges(seqnames(noiso)[ol_df$queryHits],
+                           IRanges(ol_df$new_start, ol_df$new_end),
+                           strand=ol_df$strand,
+                           gene_id=mcols(noiso)$gene_id[ol_df$queryHits]))
     }
     message("OK")
 
@@ -139,11 +147,11 @@ suppressPackageStartupMessages(library(groHMM))
 suppressPackageStartupMessages(library(testthat))
 suppressPackageStartupMessages(library(GenomicRanges))
 suppressPackageStartupMessages(library(rtracklayer))
+# Load the GTF file
+gtf_url <- "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf"
+gtf <- import(gtf_url)
 
 test_that("custom_makeConsensusAnnotations maintains accuracy", {
-    # Load the GTF file
-    gtf_url <- "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf"
-    gtf <- import(gtf_url)
 
     # Extract transcripts from the GTF
     transcripts <- gtf[gtf$type == "transcript"]
@@ -171,4 +179,26 @@ test_that("custom_makeConsensusAnnotations maintains accuracy", {
     expect_equal(sum(width(original_result)), sum(width(refactored_result)))
     expect_equal(sort(unique(mcols(original_result)$gene_id)),
                 sort(unique(mcols(refactored_result)$gene_id)))
+})
+
+test_that("custom_makeConsensusAnnotations maintains accuracy large", {
+    # Extract transcripts from the GTF
+    transcripts <- gtf[gtf$type == "transcript"]
+
+    # Create a sample GRanges object
+    set.seed(42)
+    sample_ranges <- transcripts
+    print(sample_ranges)
+
+    # Run both original and refactored functions
+    original_result <- groHMM::makeConsensusAnnotations(sample_ranges)
+    refactored_result <- custom_makeConsensusAnnotations(sample_ranges)
+
+    # Compare results
+    expect_equal(length(original_result), length(refactored_result))
+    expect_equal(sum(width(original_result)), sum(width(refactored_result)))
+    expect_equal(
+        sort(unique(mcols(original_result)$gene_id)),
+        sort(unique(mcols(refactored_result)$gene_id))
+    )
 })
