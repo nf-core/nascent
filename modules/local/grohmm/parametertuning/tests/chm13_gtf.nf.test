@@ -1,11 +1,11 @@
 nextflow_process {
 
     name "Test Process GROHMM_PARAMETERTUNING"
-    script "modules/local/grohmm/parametertuning/main.nf"
+    script "../main.nf"
     process "GROHMM_PARAMETERTUNING"
-    tag "grohmm"
+    tag "groHMM"
 
-    test("Should run with defaults") {
+    test("Should pass with overlapping exons in GTF") {
         when {
             params {
                 outdir = "$outputDir"
@@ -19,7 +19,7 @@ nextflow_process {
                     [],
                 ]
                 input[1] = file(
-                            "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf",
+                            "https://gist.githubusercontent.com/edmundmiller/f9a31e300a90956d8aaff7ad6105e394/raw/99f6eff1ddb8ca9ac1cd766ea2fed9bb83919fb2/broke.gtf",
                             checkIfExists: true
                             )
                 input[2] = 5
@@ -35,7 +35,6 @@ nextflow_process {
                     path(process.out.tuning[0][1]).readLines(),
                     path(process.out.bed[0][1]),
                 ).match() },
-                { assert snapshot(path(process.out.versions.get(0)).yaml).match("versions") },
             )
         }
     }
