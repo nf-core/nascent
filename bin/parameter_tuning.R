@@ -8,76 +8,76 @@ suppressPackageStartupMessages(library(groHMM))
 parser <- ArgumentParser(description = "Run groHMM on some bam files")
 
 parser$add_argument(
-  "-i",
-  "--bam_files",
-  type = "character",
-  nargs = "+",
-  metavar = "path",
-  help = "GRO SEQ data in bam files.",
-  required = TRUE
+    "-i",
+    "--bam_files",
+    type = "character",
+    nargs = "+",
+    metavar = "path",
+    help = "GRO SEQ data in bam files.",
+    required = TRUE
 )
 parser$add_argument(
-  "-o",
-  "--outdir",
-  type = "character",
-  default = "./",
-  metavar = "path",
-  help = "Output directory."
+    "-o",
+    "--outdir",
+    type = "character",
+    default = "./",
+    metavar = "path",
+    help = "Output directory."
 )
 parser$add_argument(
-  "-l",
-  "--ltprobb",
-  type = "integer",
-  default = -200,
-  metavar = "integer",
-  help = cat(
-    "Log-transformed transition probability of switching from transcribed
+    "-l",
+    "--ltprobb",
+    type = "integer",
+    default = -200,
+    metavar = "integer",
+    help = cat(
+        "Log-transformed transition probability of switching from transcribed
         state to non-transcribed state"
-  )
+    )
 )
 parser$add_argument(
-  "-u",
-  "--uts",
-  type = "integer",
-  default = 5,
-  metavar = "integer",
-  help = cat(
-    "Variance of the emission probability for reads in the
+    "-u",
+    "--uts",
+    type = "integer",
+    default = 5,
+    metavar = "integer",
+    help = cat(
+        "Variance of the emission probability for reads in the
         non-transcribed state, respectively."
-  )
+    )
 )
 parser$add_argument(
-  "-p",
-  "--outprefix",
-  type = "character",
-  default = "grohmm",
-  metavar = "string",
-  help = "Output prefix."
+    "-p",
+    "--outprefix",
+    type = "character",
+    default = "grohmm",
+    metavar = "string",
+    help = "Output prefix."
 )
 parser$add_argument(
-  "-g",
-  "--gtf",
-  type = "character",
-  default = NULL,
-  metavar = "string",
-  help = "GTF File to create TxDb",
-  required = TRUE
+    "-g",
+    "--gtf",
+    type = "character",
+    default = NULL,
+    metavar = "string",
+    help = "GTF File to create TxDb",
+    required = TRUE
 )
 parser$add_argument(
-  "-c",
-  "--cores",
-  type = "integer",
-  default = 1,
-  metavar = "integer",
-  help = "Number of cores."
+    "-c",
+    "--cores",
+    type = "integer",
+    default = 1,
+    metavar = "integer",
+    help = "Number of cores."
 )
 parser$add_argument(
-  "-m",
-  "--memory",
-  type = "integer",
-  default = 56000,
-  metavar = "integer",
-  help = "Amount of memory in MB"
+    "-m",
+    "--memory",
+    type = "integer",
+    default = 56000,
+    metavar = "integer",
+    help = "Amount of memory in MB"
 )
 
 args <- parser$parse_args()
@@ -87,19 +87,19 @@ memory.limit(size = args$memory)
 setwd(args$outdir)
 
 if (is.null(args$bam_files)) {
-  print_help(args)
-  stop("Please provide a bam file", call. = FALSE)
+    print_help(args)
+    stop("Please provide a bam file", call. = FALSE)
 }
 
 # Load alignment files
 # TODO? CHANGE BASED ON PAIRED OR SINGLE END
 alignments <- c()
 for (bam in args$bam_files) {
-  alignments <- append(
-    alignments,
-    as(readGAlignments(bam), "GRanges")
-  )
-  alignments <- keepStandardChromosomes(alignments, pruning.mode = "coarse")
+    alignments <- append(
+        alignments,
+        as(readGAlignments(bam), "GRanges")
+    )
+    alignments <- keepStandardChromosomes(alignments, pruning.mode = "coarse")
 }
 
 print("Input transcript annotations")
@@ -116,7 +116,7 @@ exons_gtf <- gtf[gtf$type == "exon", ]
 
 # Ensure that the 'transcript_id' and 'gene_id' columns are present
 if (!all(c("transcript_id", "gene_id") %in% names(mcols(exons_gtf)))) {
-  stop("The GTF file lacks 'transcript_id' or 'gene_id' in its attributes.")
+    stop("The GTF file lacks 'transcript_id' or 'gene_id' in its attributes.")
 }
 
 # Group exons by transcript_id
@@ -134,14 +134,14 @@ print(paste("Number of transcripts_ranges after reduction:", length(transcripts_
 
 # Create mapping dataframe
 mapping_df <- data.frame(
-  transcript_id = names(transcripts_ranges),
-  gene_id = vapply(exons_by_transcript[names(transcripts_ranges)], function(x) unique(x$gene_id)[1], character(1)),
-  stringsAsFactors = FALSE
+    transcript_id = names(transcripts_ranges),
+    gene_id = vapply(exons_by_transcript[names(transcripts_ranges)], function(x) unique(x$gene_id)[1], character(1)),
+    stringsAsFactors = FALSE
 )
 
 # Check for length mismatch
 if (nrow(mapping_df) != length(transcripts_ranges)) {
-  stop(paste("Length mismatch between mapping_df and transcripts_ranges:", nrow(mapping_df), length(transcripts_ranges)))
+    stop(paste("Length mismatch between mapping_df and transcripts_ranges:", nrow(mapping_df), length(transcripts_ranges)))
 }
 
 # Assign metadata
@@ -167,74 +167,108 @@ transcripts_ranges_filtered <- transcripts_ranges[seqnames(transcripts_ranges) %
 # Sort the ranges (important for efficient processing)
 transcripts_ranges_filtered <- sort(transcripts_ranges_filtered)
 
-# The memory allocation is passed as an argument (in MB)
+# Define a custom memory-efficient makeConsensusAnnotations function
+custom_makeConsensusAnnotations <- function(transcripts, chunk_size = 10000, mc.cores = 1) {
+    require(GenomicRanges)
+
+    # Function to safely truncate ranges
+    safe_truncate <- function(gr) {
+        ol <- findOverlaps(gr, drop.self = TRUE, drop.redundant = TRUE)
+        if (length(ol) > 0) {
+            hits <- as.data.frame(ol)
+            for (i in 1:nrow(hits)) {
+                q <- hits$queryHits[i]
+                s <- hits$subjectHits[i]
+                if (strand(gr)[q] == "+") {
+                    new_end <- min(end(gr)[q], start(gr)[s] - 1)
+                    if (new_end >= start(gr)[q]) {
+                        end(gr)[q] <- new_end
+                    }
+                } else {
+                    new_start <- max(start(gr)[q], end(gr)[s] + 1)
+                    if (new_start <= end(gr)[q]) {
+                        start(gr)[q] <- new_start
+                    }
+                }
+            }
+        }
+        return(gr[width(gr) > 0]) # Remove any zero-width ranges
+    }
+
+    # Process in smaller chunks
+    process_chunk <- function(chunk) {
+        reduced <- reduce(chunk)
+        safe_truncate(reduced)
+    }
+
+    # Split transcripts into chunks
+    n_chunks <- ceiling(length(transcripts) / chunk_size)
+    chunks <- vector("list", n_chunks)
+    for (i in 1:n_chunks) {
+        start_idx <- (i - 1) * chunk_size + 1
+        end_idx <- min(i * chunk_size, length(transcripts))
+        chunks[[i]] <- transcripts[start_idx:end_idx]
+    }
+
+    # Process chunks in parallel
+    results <- parallel::mclapply(chunks, process_chunk, mc.cores = mc.cores)
+
+    # Combine results
+    gr <- do.call(c, results)
+
+    # Final reduction and truncation
+    gr <- reduce(gr)
+    gr <- safe_truncate(gr)
+
+    # Preserve gene_id if available
+    if ("gene_id" %in% names(mcols(transcripts))) {
+        gene_ids <- unique(transcripts$gene_id)
+        mcols(gr)$gene_id <- rep(gene_ids, length.out = length(gr))
+    }
+
+    return(gr)
+}
+
+# In the main script
 allocated_memory <- args$memory
-
-# Calculate chunk size dynamically
-# Let's aim to use about 80% of allocated memory, assuming each range takes about 1KB
 memory_per_range <- 1 / 1024 # 1KB in MB
-chunk_size <- floor(0.8 * allocated_memory / memory_per_range)
+chunk_size <- floor(0.1 * allocated_memory / memory_per_range) # Use 10% of memory for each chunk
+chunk_size <- max(min(chunk_size, 50000), 5000) # Ensure reasonable chunk size
 
-print(paste("Allocated memory:", allocated_memory, "MB"))
-print(paste("Calculated chunk size:", chunk_size))
+print(paste("Using chunk size:", chunk_size))
 
-# Ensure chunk size is reasonable (not too small or too large)
-chunk_size <- max(min(chunk_size, 100000), 10000)
+kg_consensus <- custom_makeConsensusAnnotations(
+    transcripts_ranges_filtered,
+    chunk_size = chunk_size,
+    mc.cores = args$cores
+)
 
-print(paste("Final chunk size:", chunk_size))
+print("Finished consensus annotations")
 
-# Process in chunks
-num_chunks <- ceiling(length(transcripts_ranges_filtered) / chunk_size)
-
-kg_consensus <- GRanges()
-for (i in 1:num_chunks) {
-  print(paste("Processing chunk", i, "of", num_chunks))
-  start_idx <- (i-1) * chunk_size + 1
-  end_idx <- min(i * chunk_size, length(transcripts_ranges_filtered))
-  chunk <- transcripts_ranges_filtered[start_idx:end_idx]
-
-  kg_consensus_chunk <- makeConsensusAnnotations(
-    chunk,
-    mc.cores <- min(args$cores, 4) # Adjust based on your HPC setup
-  )
-
-  # Preserve gene_id or other relevant metadata
-  if ("gene_id" %in% names(mcols(chunk))) {
-      mcols(kg_consensus_chunk)$gene_id <- mcols(chunk)$gene_id[1]
-  }
-
-  kg_consensus <- c(kg_consensus, kg_consensus_chunk)
-
-  # Force garbage collection to free up memory
-  gc()
-}
-
-# Final reduction step to ensure non-overlapping annotations
-kg_consensus <- reduce(kg_consensus, ignore.strand = FALSE)
-
-# If gene_id was preserved, ensure it's not lost in the reduction
+# If gene_id was preserved, ensure it's not lost
 if ("gene_id" %in% names(mcols(kg_consensus))) {
-  kg_consensus <- kg_consensus[!is.na(kg_consensus$gene_id)]
+    kg_consensus <- kg_consensus[!is.na(kg_consensus$gene_id)]
 }
 
-print("Finished consensus annotations for CHM13")
+# Export results
+export.bed(kg_consensus, con = paste0(args$outprefix, ".tuning.consensus.bed"))
 
 ############
 ## TUNING ##
 ############
 print("Starting tuning run")
 tune <- data.frame(
-  LtProbB = args$ltprobb,
-  UTS = args$uts
+    LtProbB = args$ltprobb,
+    UTS = args$uts
 )
 Fp <- windowAnalysis(alignments, strand = "+", windowSize = 50)
 Fm <- windowAnalysis(alignments, strand = "-", windowSize = 50)
 hmm <- detectTranscripts(
-  Fp = Fp,
-  Fm = Fm,
-  reads = alignments,
-  LtProbB = args$ltprobb,
-  UTS = args$uts
+    Fp = Fp,
+    Fm = Fm,
+    reads = alignments,
+    LtProbB = args$ltprobb,
+    UTS = args$uts
 )
 print("Evaluating")
 e <- evaluateHMMInAnnotations(hmm$transcripts, kg_consensus)
@@ -244,7 +278,7 @@ eval_metrics <- as.data.frame(e$eval)
 
 # If eval_metrics is a list of lists, unlist it
 if (is.list(eval_metrics[[1]])) {
-  eval_metrics <- as.data.frame(t(sapply(e$eval, unlist)))
+    eval_metrics <- as.data.frame(t(sapply(e$eval, unlist)))
 }
 
 # Combine the tuning parameters with the evaluation metrics
@@ -255,8 +289,6 @@ print(e)
 
 # Write the combined data to a CSV file without row names
 write.csv(tune, file = paste0(args$outprefix, ".tuning.csv"), row.names = FALSE)
-# Write kg_consensus to a bed file for testing
-export.bed(kg_consensus, con = paste0(args$outprefix, ".tuning.consensus.bed"))
 
 ########################
 ## CITE PACKAGES USED ##
@@ -271,8 +303,8 @@ citation("AnnotationDbi")
 ####################
 r_log_file <- "R_sessionInfo.log"
 if (file.exists(r_log_file) == FALSE) {
-  sink(r_log_file)
-  a <- sessionInfo()
-  print(a)
-  sink()
+    sink(r_log_file)
+    a <- sessionInfo()
+    print(a)
+    sink()
 }
