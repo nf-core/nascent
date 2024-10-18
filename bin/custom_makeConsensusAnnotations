@@ -26,12 +26,11 @@
 #' # tx <- tx[grep("random", as.character(seqnames(tx)), invert=TRUE),]
 #' # ca <- makeConsensusAnnotations(tx)
 custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) {
-    # check missing gene_id
-    missing <- elementNROWS(mcols(ar)[,"gene_id"]) == 0
-    if (any(missing)) {
-        ar <- ar[!missing,]
-        warning(sum(missing), " ranges do not have gene_id and they are
-            dropped")
+    # Check and remove ranges with missing or multiple gene_ids
+    valid_ranges <- vapply(mcols(ar)$gene_id, function(x) length(x) == 1, logical(1))
+    if (any(!valid_ranges)) {
+        warning(sum(!valid_ranges), " ranges have missing or multiple gene_id and they are dropped")
+        ar <- ar[valid_ranges]
     }
 
     many <- elementNROWS(mcols(ar)[, "gene_id"]) > 1
@@ -41,42 +40,58 @@ custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) 
             dropped")
     }
 
-    ar_list <- split(ar, unlist(mcols(ar)[, "gene_id"]))
-    singles <- unlist(ar_list[elementNROWS(ar_list) == 1])
-    isoforms <- ar_list[elementNROWS(ar_list) > 1]
+    # Split into single-isoform and multi-isoform genes
+    gene_counts <- table(mcols(ar)$gene_id)
+    singles <- ar[mcols(ar)$gene_id %in% names(gene_counts[gene_counts == 1])]
+    multi_isoform_genes <- names(gene_counts[gene_counts > 1])
 
-    message("Reduce isoforms(", length(isoforms),") ... ", appendLF=FALSE)
-    isoforms <- GRangesList(mclapply(isoforms, function(x) {
-        # For mixed strands or chrom, choose the longest
-        if ((length(seqlevelsInUse(x)) > 1) ||
-                (length(unique(strand(x))) > 1)) {
-            result <- x[which.max(width(x)), "gene_id"]
-        } else {
-            dx <- disjoin(x)
-            mcols(dx)$gene_id <- mcols(x)$gene_id[1]
-            olcnt <- countOverlaps(dx, x)
+    # Process multi-isoform genes in chunks
+    chunk_size <- 1000  # Adjust based on available memory
+    num_chunks <- ceiling(length(multi_isoform_genes) / chunk_size)
 
-            multi <- dx[olcnt > 1]    # Use the disjoint ranges
-                                      # covered more than once
-            if (length(multi) == 0) { # For non-overlapping isoforms,
-                                      # choose the longest
+    isoforms <- GRangesList()
+    for (i in 1:num_chunks) {
+        chunk_start <- (i - 1) * chunk_size + 1
+        chunk_end <- min(i * chunk_size, length(multi_isoform_genes))
+        chunk_genes <- multi_isoform_genes[chunk_start:chunk_end]
+
+        chunk_isoforms <- ar[mcols(ar)$gene_id %in% chunk_genes]
+        chunk_list <- split(chunk_isoforms, mcols(chunk_isoforms)$gene_id)
+
+        message("Reduce isoforms (chunk ", i, "/", num_chunks, ") ... ", appendLF=FALSE)
+        chunk_result <- GRangesList(mclapply(chunk_list, function(x) {
+            # For mixed strands or chrom, choose the longest
+            if ((length(seqlevelsInUse(x)) > 1) ||
+                    (length(unique(strand(x))) > 1)) {
                 result <- x[which.max(width(x)), "gene_id"]
-            } else if (length(multi) == 1) {
-                result <- multi
             } else {
-                reduced <- reduce(multi)
-                if (length(reduced) == 1)
-                    result <- reduced
-                else (length(reduced) > 1)
-                    result <- reduced[which.max(width(reduced)),]
+                dx <- disjoin(x)
+                mcols(dx)$gene_id <- mcols(x)$gene_id[1]
+                olcnt <- countOverlaps(dx, x)
 
+                multi <- dx[olcnt > 1]    # Use the disjoint ranges
+                                          # covered more than once
+                if (length(multi) == 0) { # For non-overlapping isoforms,
+                                          # choose the longest
+                    result <- x[which.max(width(x)), "gene_id"]
+                } else if (length(multi) == 1) {
+                    result <- multi
+                } else {
+                    reduced <- reduce(multi)
+                    if (length(reduced) == 1)
+                        result <- reduced
+                    else (length(reduced) > 1)
+                        result <- reduced[which.max(width(reduced)),]
+
+                }
+                mcols(result)$gene_id <- mcols(x)$gene_id[1]
             }
-            mcols(result)$gene_id <- mcols(x)$gene_id[1]
-        }
-        return(result)
-    }, ...))
+            return(result)
+        }, ...))
+        isoforms <- c(isoforms, chunk_result)
+        message("OK")
+    }
     isoforms <- unlist(isoforms)
-    message("OK")
 
     # Check redundancy
     isoforms <- removeRedundant(isoforms)
