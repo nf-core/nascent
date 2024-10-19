@@ -10,7 +10,7 @@ process GROHMM_TRANSCRIPTCALLING {
 
     input:
     tuple val(meta), path(bams), path(bais), path(tuning_file)
-    path gtf
+    path gxf
 
     output:
     tuple val(meta), path("*.transcripts.txt"), emit: transcripts
@@ -32,7 +32,7 @@ process GROHMM_TRANSCRIPTCALLING {
         --bam_file ${bams} \\
         --tuning_file ${tuning_file} \\
         --outprefix ${prefix} \\
-        --gtf $gtf \\
+        --gxf $gxf \\
         --outdir ./ \\
         --cores $task.cpus \\
         --memory ${task.memory.toMega()} \\

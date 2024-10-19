@@ -10,7 +10,7 @@ process GROHMM_PARAMETERTUNING {
 
     input:
     tuple val(meta), path(bams), path(bais)
-    path gtf
+    path gxf
     each UTS
     each LtProbB
 
@@ -29,7 +29,7 @@ process GROHMM_PARAMETERTUNING {
     parameter_tuning.R \\
         --bam_file ${bams} \\
         --outprefix ${prefix} \\
-        --gtf $gtf \\
+        --gxf $gxf \\
         --uts $UTS \\
         --ltprobb $LtProbB \\
         --outdir ./ \\

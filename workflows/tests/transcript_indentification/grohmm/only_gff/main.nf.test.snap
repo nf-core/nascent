@@ -1,0 +1,136 @@
+{
+    "output_files": {
+        "content": [
+            217,
+            "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
+            "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
+            [
+                "cd4_intersect.bed:md5,51800dceda87c980e91db92b265b7ec6",
+                "jurkat_intersect.bed:md5,6d205f43e81053ab3a8af5096c065b66"
+            ],
+            [
+                "cd4_filtered.bed:md5,3de4c6a675817a0661bb24edfd06d155",
+                "jurkat_filtered.bed:md5,191963fbc44ef9e5c3261a3fb96361a0"
+            ],
+            [
+                "cd4_intersect.bed:md5,51800dceda87c980e91db92b265b7ec6",
+                "jurkat_intersect.bed:md5,6d205f43e81053ab3a8af5096c065b66"
+            ],
+            [
+                "cd4_filtered.bed:md5,3de4c6a675817a0661bb24edfd06d155",
+                "jurkat_filtered.bed:md5,191963fbc44ef9e5c3261a3fb96361a0"
+            ],
+            "cd4.eval.txt:md5,b58c1db2cceac1fe1d89dec5838317d1",
+            "cd4.final.transcripts.bed:md5,a34dc280b3b023186b4935780d379338",
+            "cd4.tdFinal.txt:md5,8b49613bc2aa4dcbc23d852e46c41fb7",
+            true,
+            "cd4.transcripts.txt:md5,891a07c573dac76de5c466453c206c4f",
+            "jurkat.eval.txt:md5,1b9b3cf2f8b832ee4863168a07630db7",
+            "jurkat.final.transcripts.bed:md5,0d60cc43aadb918debf7cbd9113d53b4",
+            "jurkat.tdFinal.txt:md5,d10046e79b6c6ccff86d42b1bd59cfa4",
+            true,
+            "jurkat.transcripts.txt:md5,aae6fb7cf85d2cc91db484a9399da876",
+            true
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-19T21:30:10.156904"
+    },
+    "software_versions": {
+        "content": [
+            {
+                "BBMAP_PILEUP": {
+                    "bbmap": 39.01,
+                    "samtools": "1.16.1",
+                    "pigz": 2.6
+                },
+                "BEDTOOLS_GENOMECOV_MINUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_GENOMECOV_PLUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT_FILTER": {
+                    "bedtools": "2.31.1"
+                },
+                "BWA_INDEX": {
+                    "bwa": "0.7.18-r1243-dirty"
+                },
+                "BWA_MEM": {
+                    "bwa": "0.7.18-r1243-dirty",
+                    "samtools": 1.2
+                },
+                "CUSTOM_GETCHROMSIZES": {
+                    "getchromsizes": 1.2
+                },
+                "DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.1"
+                },
+                "DEEPTOOLS_BAMCOVERAGE_PLUS": {
+                    "deeptools": "3.5.1"
+                },
+                "FASTP": {
+                    "fastp": "0.23.4"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GROHMM_PARAMETERTUNING": {
+                    "r-base": "4.3.3",
+                    "bioconductor-grohmm": "1.39.0"
+                },
+                "GTF2BED": {
+                    "perl": "5.26.2"
+                },
+                "GUNZIP_GFF": {
+                    "gunzip": 1.1
+                },
+                "HOMER_MAKETAGDIRECTORY": {
+                    "homer": 4.11,
+                    "samtools": 1.11
+                },
+                "PINTS_CALLER": {
+                    "python": "3.10.6",
+                    "pints": "1.1.8"
+                },
+                "PRESEQ_CCURVE": {
+                    "preseq": "3.1.1"
+                },
+                "PRESEQ_LCEXTRAP": {
+                    "preseq": "3.1.1"
+                },
+                "RSEQC_INFEREXPERIMENT": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDISTRIBUTION": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDUPLICATION": {
+                    "rseqc": "5.0.2"
+                },
+                "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
+                    "subread": "2.0.1"
+                },
+                "Workflow": {
+                    "nf-core/nascent": "v2.3.0dev"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-19T21:30:10.110132"
+    }
+}
