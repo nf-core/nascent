@@ -33,13 +33,6 @@ custom_makeConsensusAnnotations <- function(ar, minGap=1L, minWidth=1000L, ...) 
         ar <- ar[valid_ranges]
     }
 
-    many <- elementNROWS(mcols(ar)[, "gene_id"]) > 1
-    if (any(many)) {
-        ar <- ar[!many, ]
-        warning(sum(many), " ranges have multiple gene_id and they are
-            dropped")
-    }
-
     # Split into single-isoform and multi-isoform genes
     gene_counts <- table(mcols(ar)$gene_id)
     singles <- ar[mcols(ar)$gene_id %in% names(gene_counts[gene_counts == 1])]
@@ -173,13 +166,67 @@ suppressPackageStartupMessages(library(testthat))
 suppressPackageStartupMessages(library(GenomicRanges))
 suppressPackageStartupMessages(library(rtracklayer))
 
-test_that("custom_makeConsensusAnnotations maintains accuracy", {
-    # Load the GTF file
-    gtf_url <- "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf"
-    gtf <- import(gtf_url)
+# test_that("custom_makeConsensusAnnotations maintains accuracy", {
+#     # Load the GTF file
+#     gtf_url <- "https://gist.github.com/edmundmiller/c142801995689ed8d15ebcf40b2fb042/raw/eca3b955312209b5845cca084bb506d5250b3d33/hg19.chr7.refGene.gtf"
+#     gtf <- import(gtf_url)
 
+#     # Extract transcripts from the GTF
+#     transcripts <- gtf[gtf$type == "transcript"]
+
+#     # Create a sample GRanges object
+#     set.seed(42)
+#     n <- 100
+#     sample_ranges <- transcripts
+#     print("Sample ranges:")
+#     print(sample_ranges)
+
+#     # Run both original and refactored functions
+#     original_result <- groHMM::makeConsensusAnnotations(sample_ranges)
+#     refactored_result <- custom_makeConsensusAnnotations(sample_ranges)
+
+#     print("Refactored result:")
+#     print(refactored_result)
+
+#     # Compare results
+#     expect_equal(length(original_result), length(refactored_result))
+#     expect_equal(sum(width(original_result)), sum(width(refactored_result)))
+
+#     if (length(original_result) > 0 && length(refactored_result) > 0) {
+#         expect_equal(
+#             sort(unique(mcols(original_result)$gene_id)),
+#             sort(unique(mcols(refactored_result)$gene_id))
+#         )
+#     } else {
+#         print("Warning: One or both results are empty.")
+#     }
+
+#     # Additional detailed comparisons
+#     print(paste("Original result length:", length(original_result)))
+#     print(paste("Refactored result length:", length(refactored_result)))
+#     print(paste("Original result total width:", sum(width(original_result))))
+#     print(paste("Refactored result total width:", sum(width(refactored_result))))
+#     print(paste("Original result unique gene_ids:", length(unique(mcols(original_result)$gene_id))))
+#     print(paste("Refactored result unique gene_ids:", length(unique(mcols(refactored_result)$gene_id))))
+
+#     # Compare the first few entries
+#     print("First 5 entries of original result:")
+#     print(head(original_result, 5))
+#     print("First 5 entries of refactored result:")
+#     print(head(refactored_result, 5))
+# })
+
+test_that("chm13 custom_makeConsensusAnnotations maintains accuracy", {
+    # Load the GTF file
+    gff_url <- "./chm13v2.0_RefSeq_Liftoff_v5.1.gff3.gz"
+    gff <- import(gff_url)
+
+    print("GFF:")
+    print(gff)
     # Extract transcripts from the GTF
-    transcripts <- gtf[gtf$type == "transcript"]
+    transcripts <- gff[gff$type == "transcript"]
+    print("Transcripts:")
+    print(transcripts)
 
     # Create a sample GRanges object
     set.seed(42)
