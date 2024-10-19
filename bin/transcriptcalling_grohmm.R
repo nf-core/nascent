@@ -64,11 +64,11 @@ parser$add_argument(
 )
 parser$add_argument(
   "-g",
-  "--gtf",
+  "--gxf",
   type = "character",
   default = NULL,
   metavar = "string",
-  help = "GTF File to create TxDb",
+  help = "GFF/GTF File to create TxDb",
   required = TRUE
 )
 parser$add_argument(
@@ -143,7 +143,7 @@ write.table(
 )
 
 print("Input transcript annotations")
-kg_db <- makeTxDbFromGFF(args$gtf)
+kg_db <- makeTxDbFromGFF(args$gxf)
 kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
 # TODO I wonder if I could speed things up by filtering by chromosome at the Nextflow level
 # https://github.com/google/deepvariant/issues/744

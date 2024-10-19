@@ -14,7 +14,7 @@ include { BEDTOOLS_INTERSECT } from '../../modules/nf-core/bedtools/intersect/ma
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
     group_bam_bai
-    gtf
+    gxf
     fasta
     chrom_sizes
 
@@ -25,7 +25,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
     grohmm_td_plot = Channel.empty()
     if(!params.skip_grohmm && params.assay_type == "GROseq") {
-        GROHMM ( group_bam_bai, gtf )
+        GROHMM ( group_bam_bai, gxf )
         ch_identification_bed = ch_identification_bed.mix(GROHMM.out.bed)
         grohmm_td_plot = GROHMM.out.td_plot
         ch_versions = ch_versions.mix(GROHMM.out.versions.first())

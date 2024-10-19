@@ -165,6 +165,7 @@ suppressPackageStartupMessages(library(groHMM))
 suppressPackageStartupMessages(library(testthat))
 suppressPackageStartupMessages(library(GenomicRanges))
 suppressPackageStartupMessages(library(rtracklayer))
+library(GenomicFeatures)
 
 # test_that("custom_makeConsensusAnnotations maintains accuracy", {
 #     # Load the GTF file
@@ -216,6 +217,17 @@ suppressPackageStartupMessages(library(rtracklayer))
 #     print(head(refactored_result, 5))
 # })
 
+gff <- "./chm13v2.0_RefSeq_Liftoff_v5.1.gff3.gz"
+kg_db <- makeTxDbFromGFF(gff)
+kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
+print("Collapse annotations in preparation for overlap")
+kg_consensus <- makeConsensusAnnotations(
+    kg_tx,
+    mc.cores = 2
+)
+print("Kg consensus:")
+print(kg_consensus)
+
 test_that("chm13 custom_makeConsensusAnnotations maintains accuracy", {
     # Load the GTF file
     gff_url <- "./chm13v2.0_RefSeq_Liftoff_v5.1.gff3.gz"
@@ -239,6 +251,8 @@ test_that("chm13 custom_makeConsensusAnnotations maintains accuracy", {
     original_result <- groHMM::makeConsensusAnnotations(sample_ranges)
     refactored_result <- custom_makeConsensusAnnotations(sample_ranges)
 
+    print("Original result:")
+    print(original_result)
     print("Refactored result:")
     print(refactored_result)
 

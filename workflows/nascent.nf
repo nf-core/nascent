@@ -286,9 +286,11 @@ workflow NASCENT {
 
     ch_group_bam_bai = ch_group_bam.join(ch_group_bai, by: [0])
 
+    ch_gxf = ch_gff ? ch_gff : PREPARE_GENOME.out.gtf
+
     TRANSCRIPT_INDENTIFICATION (
         ch_group_bam_bai,
-        PREPARE_GENOME.out.gtf,
+        ch_gxf,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.chrom_sizes,
     )
