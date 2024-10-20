@@ -71,19 +71,21 @@ workflow TRANSCRIPT_INDENTIFICATION {
 
     if(params.filter_bed) {
         ch_filter_bed = Channel.from(params.filter_bed)
-        BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed), chrom_sizes.map { [ [:], it ] } )
+        BEDTOOLS_INTERSECT_FILTER ( ch_identification_bed.combine(ch_filter_bed.first()), chrom_sizes.map { [ [:], it ] } )
         ch_identification_bed = BEDTOOLS_INTERSECT_FILTER.out.intersect
         ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT_FILTER.out.versions.first())
     }
     if(params.intersect_bed) {
         ch_intersect_bed = Channel.from(params.intersect_bed)
-        BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed), chrom_sizes.map { [ [:], it ] } )
+        BEDTOOLS_INTERSECT ( ch_identification_bed.combine(ch_intersect_bed.first()), chrom_sizes.map { [ [:], it ] } )
         ch_identification_bed = BEDTOOLS_INTERSECT.out.intersect
         ch_versions = ch_versions.mix(BEDTOOLS_INTERSECT.out.versions.first())
     }
 
     ch_identification_bed
         // Drop any empty bed files
+        // Prevents throwing an error in featurecounts
+        // FIXME This drops one of the samples in the test data, jurkat
         .filter { meta, bed -> bed.size() > 0 }
         .set { ch_identification_bed_clean }
 
