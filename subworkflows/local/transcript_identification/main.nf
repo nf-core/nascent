@@ -2,14 +2,14 @@
  * Calls Transcripts and Transcript Start Sites and various cleaning steps
  */
 
-include { GROHMM } from './grohmm/main'
-include { HOMER_GROSEQ } from '../nf-core/homer/groseq/main'
-include { PINTS_CALLER } from '../../modules/nf-core/pints/caller/main'
-include { CAT_CAT } from '../../modules/nf-core/cat/cat/main'
-include { BEDTOOLS_MERGE } from '../../modules/nf-core/bedtools/merge/main'
-include { BEDTOOLS_SORT } from '../../modules/nf-core/bedtools/sort/main'
-include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER } from '../../modules/nf-core/bedtools/intersect/main'
-include { BEDTOOLS_INTERSECT } from '../../modules/nf-core/bedtools/intersect/main'
+include { GROHMM } from '../grohmm'
+include { HOMER_GROSEQ } from '../../nf-core/homer/groseq/main'
+include { PINTS_CALLER } from '../../../modules/nf-core/pints/caller/main'
+include { CAT_CAT } from '../../../modules/nf-core/cat/cat/main'
+include { BEDTOOLS_MERGE } from '../../../modules/nf-core/bedtools/merge/main'
+include { BEDTOOLS_SORT } from '../../../modules/nf-core/bedtools/sort/main'
+include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER } from '../../../modules/nf-core/bedtools/intersect/main'
+include { BEDTOOLS_INTERSECT } from '../../../modules/nf-core/bedtools/intersect/main'
 
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
