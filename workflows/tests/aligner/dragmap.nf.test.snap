@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            77,
+            90,
             [
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
@@ -80,20 +80,20 @@
             "cd4.bed:md5,96b0e0bf77f3a04efcbfaf0fcdae926a",
             "jurkat.bed:md5,31454804c53975171a763d3049406598",
             [
-                "cd4_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_intersect.bed:md5,a5d31a685d89293ae64daff9a9054568",
                 "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "cd4_filtered.bed:md5,063a59e4a2612e8eedaa443d02f6d271",
-                "jurkat_filtered.bed:md5,6625c2c4f2bbbf9ff2c93e587990b906"
+                "cd4_filtered.bed:md5,8624dd128e0a4b1d73296ceacc553beb",
+                "jurkat_filtered.bed:md5,3a939a0a1c8a747f2ee68cc49eded20c"
             ],
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-11T20:13:30.191639621"
+        "timestamp": "2024-11-07T20:41:37.262053277"
     },
     "software_versions": {
         "content": [
@@ -114,6 +114,15 @@
                 },
                 "BEDTOOLS_INTERSECT_FILTER": {
                     "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
                 },
                 "CUSTOM_GETCHROMSIZES": {
                     "getchromsizes": 1.2
@@ -146,8 +155,8 @@
                     "samtools": 1.11
                 },
                 "PINTS_CALLER": {
-                    "python": "3.10.6",
-                    "pints": "1.1.8"
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -182,15 +191,18 @@
                 "SUBREAD_FEATURECOUNTS_GENE": {
                     "subread": "2.0.1"
                 },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
+                    "subread": "2.0.1"
+                },
                 "Workflow": {
                     "nf-core/nascent": "v2.3.0dev"
                 }
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-09-12T13:24:45.988211144"
+        "timestamp": "2024-11-07T20:41:36.959938207"
     }
 }
