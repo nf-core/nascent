@@ -180,7 +180,19 @@ con_expressed <- get_expressed_annotations(
 b_plus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "+")
 b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
 tx_broken <- c(b_plus, b_minus)
-tx_final <- combineTranscripts(tx_broken, kg_consensus)
+# Assign unique IDs if they're missing
+if (is.null(mcols(tx_broken)$transcript_id) || any(is.na(mcols(tx_broken)$transcript_id))) {
+    mcols(tx_broken)$transcript_id <- paste0("TX", seq_along(tx_broken))
+}
+
+# Filter out any transcripts with NA values in start or end positions
+tx_broken_filtered <- tx_broken[!is.na(start(tx_broken)) & !is.na(end(tx_broken))]
+
+# Ensure that kg_consensus also doesn't contain NA values
+kg_consensus_filtered <- kg_consensus[!is.na(start(kg_consensus)) & !is.na(end(kg_consensus))]
+
+# Now call combineTranscripts with the filtered data
+tx_final <- combineTranscripts(tx_broken_filtered, kg_consensus_filtered)
 export(
   tx_final,
   con = paste(args$outprefix, ".final.transcripts.bed", sep = "")
