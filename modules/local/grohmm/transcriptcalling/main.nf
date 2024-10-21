@@ -28,7 +28,7 @@ process GROHMM_TRANSCRIPTCALLING {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    transcriptcalling_grohmm.R \\
+    grohmm_transcriptcalling.R \\
         --bam_file ${bams} \\
         --tuning_file ${tuning_file} \\
         --outprefix ${prefix} \\

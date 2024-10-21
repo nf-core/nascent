@@ -145,7 +145,8 @@ write.table(
 print("Input transcript annotations")
 kg_db <- makeTxDbFromGFF(args$gxf)
 kg_tx <- transcripts(kg_db, columns = c("gene_id", "tx_id", "tx_name"))
-# TODO I wonder if I could speed things up by filtering by chromosome at the Nextflow level
+# TODO I wonder if I could speed things up by filtering
+# by chromosome at the Nextflow level...
 # https://github.com/google/deepvariant/issues/744
 #                         filter=list(tx_chrom="chr7"))
 # exclude any transcripts that are located on chromosomes labeled with "random".
@@ -170,8 +171,10 @@ get_expressed_annotations <- function(features, reads) {
   f_limit <- limitToXkb(features)
   count <- countOverlaps(f_limit, reads)
   features <- features[count != 0, ]
-  return(features[(quantile(width(features), .05) < width(features)) &
-    (width(features) < quantile(width(features), .95)), ])
+  return(features[
+    (quantile(width(features), .05) < width(features)) &
+      (width(features) < quantile(width(features), .95)),
+  ])
 }
 con_expressed <- get_expressed_annotations(
   features = kg_consensus,
@@ -181,15 +184,20 @@ b_plus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "+")
 b_minus <- breakTranscriptsOnGenes(tx_hmm, kg_consensus, strand = "-")
 tx_broken <- c(b_plus, b_minus)
 # Assign unique IDs if they're missing
-if (is.null(mcols(tx_broken)$transcript_id) || any(is.na(mcols(tx_broken)$transcript_id))) {
-    mcols(tx_broken)$transcript_id <- paste0("TX", seq_along(tx_broken))
+if (
+  is.null(mcols(tx_broken)$transcript_id) ||
+    any(is.na(mcols(tx_broken)$transcript_id))
+) {
+  mcols(tx_broken)$transcript_id <- paste0("TX", seq_along(tx_broken))
 }
 
 # Filter out any transcripts with NA values in start or end positions
-tx_broken_filtered <- tx_broken[!is.na(start(tx_broken)) & !is.na(end(tx_broken))]
+tx_broken_filtered <-
+  tx_broken[!is.na(start(tx_broken)) & !is.na(end(tx_broken))]
 
 # Ensure that kg_consensus also doesn't contain NA values
-kg_consensus_filtered <- kg_consensus[!is.na(start(kg_consensus)) & !is.na(end(kg_consensus))]
+kg_consensus_filtered <-
+  kg_consensus[!is.na(start(kg_consensus)) & !is.na(end(kg_consensus))]
 
 # Now call combineTranscripts with the filtered data
 tx_final <- combineTranscripts(tx_broken_filtered, kg_consensus_filtered)
@@ -212,7 +220,10 @@ capture.output(td_final, file = paste0(args$outprefix, ".tdFinal.txt"))
 
 # Write the data used in the plot to a CSV file
 data_to_write <- data.frame(x = td_final$x, profile = td_final$profile)
-write.csv(data_to_write, file = paste0(args$outprefix, ".tdFinal_mqc.csv"), row.names = FALSE)
+write.csv(data_to_write,
+  file = paste0(args$outprefix, ".tdFinal_mqc.csv"),
+  row.names = FALSE
+)
 
 ########################
 ## CITE PACKAGES USED ##

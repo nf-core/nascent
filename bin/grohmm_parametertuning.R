@@ -119,8 +119,8 @@ tune <- data.frame(
   LtProbB = args$ltprobb,
   UTS = args$uts
 )
-Fp <- windowAnalysis(alignments, strand = "+", windowSize = 50)
-Fm <- windowAnalysis(alignments, strand = "-", windowSize = 50)
+fp <- windowAnalysis(alignments, strand = "+", windowSize = 50)
+fm <- windowAnalysis(alignments, strand = "-", windowSize = 50)
 hmm <- detectTranscripts(
   Fp = Fp,
   Fm = Fm,
