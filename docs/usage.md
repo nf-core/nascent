@@ -79,7 +79,36 @@ The default transcript identification option is PINTS, and HOMER if the transcri
 
 ### GroHMM
 
-When selecting GroHMM as an option, the pipeline by default tests a list of preset hold-out parameters to select for the combination of arguments which would result in the lowest possible error rate during the transcript identification process. The user may also choose to provide their own list of hold-out parameters to test, or skip the tuning process altogether due to time constraints. If the tuning process is skipped ('--skip_tuning') then the user may indicate the specific holdout parameters to use ('--uts' and '--ltprobb') or choose to use the default parameters.
+groHMM is split into two steps: parameter tuning and transcript identification.
+
+When running the pipeline with groHMM as a transcript identification method, the pipeline will automatically perform a parameter tuning process. This process is unique to the groHMM transcript identification method and is designed to select the optimal hold-out parameters for the groHMM algorithm. See [this issue](https://github.com/dankoc/groHMM/issues/4) for more information.
+
+In the groHMM vignette, the code is ran using a single mclapply call, which is a scatter gather approach. This is not ideal for large datasets, because it ends up being bottlenecked by the memory available on your local machine. To improve this, we have written a Nextflow script that runs the pipeline with a scatter gather approach. This is done by running the pipeline with a single hold-out parameter, and then the next parameter, and so on. This is more memory efficient and scales better to larger datasets. The results are then combined then combined in the end as intended and used in the transcript identification process.
+
+#### groHMM Parameters
+
+> The detectTranscripts function also uses two hold-out parameters. These parameters, specified by the arguments LtProbB and UTS, represents the log-transformed transition probability of switching from transcribed state to non-transcribed state and variance of the emission probability for reads in the non-transcribed state, respectively. Holdout parameters are used to optimize the performance of HMM predictions on known genes.
+
+In the pipeline, the parameters are specified as follows:
+grohmm_min_uts = 5
+grohmm_max_uts = 45
+grohmm_min_ltprobb = -100
+grohmm_max_ltprobb = -400
+
+Which will then create a job for each parameter combination. For example (5,-100), (5,-150), (10,-100), (10,-150)...
+
+If you have indentified a good set of parameters, you can run the pipeline with those parameters by specifying, all 4 values.
+
+For example if you have indentified that the best parameters for your data are 15,-200:
+
+```json
+{
+  "grohmm_min_uts": 15,
+  "grohmm_max_uts": 15,
+  "grohmm_min_ltprobb": -200,
+  "grohmm_max_ltprobb": -200
+}
+```
 
 ## Running the pipeline
 

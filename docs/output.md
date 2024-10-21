@@ -326,7 +326,7 @@ For more information about how PINTS works, see the paper [A comparison of exper
   - `*.eval.txt`: Evaluation of HMM Annotations
   - `*.final.transcripts.bed`: Predicted transcripts
   - `*.tdFinal.txt`: Final quality metrics
-  - `*.tdplot_mqc.jpg`: TD plot included in MultiQC
+  - `*.tdplot_mqc.png`: TD plot included in MultiQC
   - `*.transcripts.txt`: Predicted transcripts in txt form
   - `*.tuning.csv`: The tuning csv that was used
 
