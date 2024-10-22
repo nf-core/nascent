@@ -14,7 +14,7 @@ nextflow_pipeline {
                 outdir = "$outputDir"
                 skip_grohmm = false
                 gff = 'https://huggingface.co/datasets/edmundmiller/nascent-test-data/resolve/main/chm13v2.0_RefSeq_Liftoff_v5.1.chr21.gff3.gz'
-                // TODO Use CHM13 Fasta
+                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/chm13v2.0.chr21.fa.gz'
                 gtf = null
                 bed = null
             }
