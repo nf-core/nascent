@@ -1,6 +1,6 @@
 process PINTS_CALLER {
     tag "$meta.id" + "${chr_name ? ' | ' + chr_name : ''}"
-    label 'process_medium'
+    label 'process_high'
 
     conda "${moduleDir}/environment.yml"
     // NOTE Stopped publishing at 1.1.9 https://quay.io/repository/biocontainers/pypints?tab=tags
