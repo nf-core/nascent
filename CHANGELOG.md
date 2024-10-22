@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - [#171](https://github.com/nf-core/nascent/pull/171) - Clean up MultiQC report
+- [#173](https://github.com/nf-core/nascent/pull/173) - Fix config selectors
 
 ### Changed
 
