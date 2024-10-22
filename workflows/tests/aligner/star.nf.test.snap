@@ -358,7 +358,7 @@
                 "jurkat_transcriptome.stats:md5,322d7e620bcce35529aca042d0c8b3e8",
                 "Genome:md5,612664e3cfde5e1b73ad541d93752b31",
                 "SA:md5,074ae54177bb7b9cb981382f043f36e5",
-                "SAindex:md5,1c9cd646313f1abb1cfc205ccab73464",
+                "SAindex:md5,c8cae2d81bec99f68eddc0afe570090b",
                 "chrLength.txt:md5,b0be0a56ddefa84552742c72d4859eac",
                 "chrName.txt:md5,e99d7d1051eee43ceab5563c2d09fcee",
                 "chrNameLength.txt:md5,c985a141685e8431ec27c782816cb744",
@@ -366,7 +366,7 @@
                 "exonGeTrInfo.tab:md5,ea42dd46e177f95a72a8f6a2925f7348",
                 "exonInfo.tab:md5,42a3ce2024f396b2298c0a84b07fb6e4",
                 "geneInfo.tab:md5,d0092fb1ea6fcdac270c4df788de70fb",
-                "genomeParameters.txt:md5,2fec04098057094f4b2e5a9ec4371a7d",
+                "genomeParameters.txt:md5,9e6f272d058d48c729d355ede94f8c87",
                 "sjdbInfo.txt:md5,12fb05dc7cea89735a0c19e1c0df61cb",
                 "sjdbList.fromGTF.out.tab:md5,5d9761b49920fb70a77d74e390d196b9",
                 "sjdbList.out.tab:md5,766fbca932681f8666b3a9e5fb3640bd",
@@ -386,7 +386,7 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.2"
         },
-        "timestamp": "2024-12-20T21:16:25.416797"
+        "timestamp": "2024-12-21T10:42:07.059182"
     },
     "gzip_software_versions": {
         "content": [
