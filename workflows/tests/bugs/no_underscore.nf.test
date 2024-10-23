@@ -1,0 +1,23 @@
+nextflow_pipeline {
+
+    name "Samplesheet with no underscores"
+    script "../../../main.nf"
+    tag "bug"
+
+    // https://github.com/nf-core/nascent/issues/158
+    test("Should work with samples that don't have an underscore") {
+        when {
+            params {
+                outdir = "$outputDir"
+                input = "${projectDir}/tests/config/samplesheets/no_underscore.csv"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
+    }
+}
