@@ -48,7 +48,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .splitFasta(record: [id: true])
         .map { record -> record.id }
         .filter { it != "chrY" } // Remove chrY as it doesn't have much signal
-        .filter { it != "_random" } // FIXME If there's no signal the PINTS throws an error
+        .filter { !it.contains("_random") } // Filter out random chromosomes that may cause PINTS errors
 
     PINTS_CALLER(
         group_bam_bai,
