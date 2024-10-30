@@ -48,8 +48,10 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .splitFasta(record: [id: true])
         .map { record -> record.id }
         .filter { it != "chrY" } // Remove chrY as it doesn't have much signal
-        .filter { !it.contains("_random") } // Filter out random chromosomes that may cause PINTS errors
+        // Filter out random chromosomes that may cause PINTS errors
+        .filter { !it.contains("_random") }
         .filter { !it.contains("chrUn_") }
+        .filter { !it.contains("chrEBV") }
 
     PINTS_CALLER(
         group_bam_bai,
