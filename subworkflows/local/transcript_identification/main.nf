@@ -52,6 +52,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .filter { !it.contains("_random") }
         .filter { !it.contains("chrUn_") }
         .filter { !it.contains("chrEBV") }
+        .filter { !it.contains("chrM") }
 
     PINTS_CALLER(
         group_bam_bai,
