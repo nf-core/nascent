@@ -1,16 +1,16 @@
 process DREG_PREP {
 
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0' :
-        'biocontainers/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0'
+        : 'biocontainers/mulled-v2-f01e242bdea19948f0576fdca94777242fe4c2cb:4238fb992d2a93e648108c86e3a9f51348e834a9-0'}"
 
     input:
     tuple val(meta), path(bam_file), val(index)
-    path  sizes
+    path sizes
     val assay_type
 
     output:
@@ -78,10 +78,11 @@ process DREG_PREP {
 
         echo "bedGraph to bigwig done"
         """
-    } else {
+    }
+    else {
         if (forwardStranded) {
             """
-            samtools view -@ $task.cpus -bf 0x2 ${bam_file} | samtools sort -n -@ $task.cpus \\
+            samtools view -@ ${task.cpus} -bf 0x2 ${bam_file} | samtools sort -n -@ ${task.cpus} \\
                 > ${prefix}.dreg.bam
 
             bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\
@@ -118,9 +119,10 @@ process DREG_PREP {
                 ${prefix}.unsorted.bedGraph \\
                 > ${prefix}.bedGraph
             """
-        } else {
+        }
+        else {
             """
-            samtools view -@ $task.cpus -bf 0x2 ${bam_file} | samtools sort -n -@ $task.cpus \\
+            samtools view -@ ${task.cpus} -bf 0x2 ${bam_file} | samtools sort -n -@ ${task.cpus} \\
                 > ${prefix}.dreg.bam
 
             bedtools bamtobed -bedpe -mate1 -i ${prefix}.dreg.bam \\

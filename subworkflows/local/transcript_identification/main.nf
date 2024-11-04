@@ -37,7 +37,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     homer_peaks = Channel.empty()
     homer_tagdir = Channel.empty()
     if (params.assay_type == "GROseq") {
-        group_bam = group_bam_bai.map { meta, bam, bai -> [meta, bam] }
+        group_bam = group_bam_bai.map { meta, bam, _bai -> [meta, bam] }
         HOMER_GROSEQ(group_bam, fasta, uniqmap)
         ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
         homer_peaks = HOMER_GROSEQ.out.peaks
@@ -78,7 +78,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     // TODO Tests don't seem to hit this because there's no bidirectional_TREs
     // Need to collect all of the beds for each chromosome/sample and concatenate them
     // Nextflow makes this super easy
-    def ch_bidirectional_tres = PINTS_CALLER.out.unidirectional_TREs.groupTuple(by: [0]).map { meta, beds ->
+    ch_bidirectional_tres = PINTS_CALLER.out.unidirectional_TREs.groupTuple(by: [0]).map { meta, beds ->
         [meta, beds.flatten()]
     }
 
@@ -106,7 +106,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     }
 
     ch_identification_bed
-        .filter { meta, bed -> bed.size() > 0 }
+        .filter { _meta, bed -> bed.size() > 0 }
         .set { ch_identification_bed_clean }
 
     emit:

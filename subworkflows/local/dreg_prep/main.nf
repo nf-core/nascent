@@ -10,5 +10,4 @@ workflow DREG_PREP {
     BEDTOOLS_BAMTOBED(
         bam
     )
-
 }
