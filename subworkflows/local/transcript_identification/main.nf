@@ -44,15 +44,11 @@ workflow TRANSCRIPT_INDENTIFICATION {
     }
 
     // Scatter the chromosomes
+    skip_chr = ["chrY", "_random", "chrUn_", "chrEBV", "chrM"]
     ch_chr = fasta
         .splitFasta(record: [id: true])
         .map { record -> record.id }
-        .filter { it != "chrY" } // Remove chrY as it doesn't have much signal
-        // Filter out random chromosomes that may cause PINTS errors
-        .filter { !it.contains("_random") }
-        .filter { !it.contains("chrUn_") }
-        .filter { !it.contains("chrEBV") }
-        .filter { !it.contains("chrM") }
+        .filter { !(it in skip_chr) }
 
     PINTS_CALLER(
         group_bam_bai,
