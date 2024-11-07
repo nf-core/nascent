@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#142](https://github.com/nf-core/nascent/pull/142) - Updated CHM13 references
 - [#171](https://github.com/nf-core/nascent/pull/171) - Use assertAll in tests
 - [#165](https://github.com/nf-core/nascent/pull/165) - groHMM overhaul. Removed R mclapply calls and replaced with Nextflow scatter gather for parameter tuning. This creates a job for each parameter set.
+- [#174](https://github.com/nf-core/nascent/pull/174) - PINTS Scatter gather pattern by chromosome
 
 ### Fixed
 
