@@ -1,4 +1,7 @@
 Changes in module 'nf-core/pints/caller'
+'modules/nf-core/pints/caller/environment.yml' is unchanged
+'modules/nf-core/pints/caller/meta.yml' is unchanged
+Changes in 'pints/caller/main.nf':
 --- modules/nf-core/pints/caller/main.nf
 +++ modules/nf-core/pints/caller/main.nf
 @@ -1,6 +1,6 @@
@@ -9,34 +12,40 @@ Changes in module 'nf-core/pints/caller'
 +    label 'process_high'
  
      conda "${moduleDir}/environment.yml"
-     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-@@ -8,7 +8,9 @@
-         'biocontainers/pypints:1.1.8--pyh7cba7a3_0' }"
+     // NOTE Stopped publishing at 1.1.9 https://quay.io/repository/biocontainers/pypints?tab=tags
+@@ -9,7 +9,7 @@
+         'community.wave.seqera.io/library/pybedtools_bedtools_htslib_pip_pypints:39699b96998ec5f6' }"
  
      input:
--    tuple val(meta), path(bams)
-+    tuple val(meta), path(bams), path(bais)
-+    val assay_type
-+    each chr_name // optional
+-    tuple val(meta), path(bams), path(bais)
++    tuple val(meta), path(bams), path(bais), val(chr_name) 
+     val assay_type
  
      output:
-     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
-@@ -23,6 +25,7 @@
+@@ -24,11 +24,12 @@
+ 
      script:
      def args = task.ext.args ?: ''
-     def prefix = task.ext.prefix ?: "${meta.id}"
-+    def chr = chr_name ? "--chromosome-start-with $chr_name" : ''
+-    def prefix = task.ext.prefix ?: "${meta.id}"
++    def prefix = task.ext.prefix ?: "${meta.id}" + (chr_name ? '_' + chr_name : '_all')
      // TODO handle bigwigs
      // def input_type  = ("${input[0]}".endsWith(".bam")) ? "--bam-file $input" :
      //                    ("$input".contains(".bw")) ? "--bw-pl ${input[0]} --bw-mn ${input[1]}" :
-@@ -34,6 +37,8 @@
-         --file-prefix $prefix \\
+     //                    error "Please use bam or BigWig files"
++    def chr = chr_name ? "--chromosome-start-with $chr_name" : ''
+     """
+     pints_caller \\
+         --bam-file $bams \\
+@@ -37,6 +38,7 @@
          --thread $task.cpus \\
          --dont-check-updates \\
-+        --exp-type $assay_type \\
+         --exp-type $assay_type \\
 +        $chr \\
          $args
  
      cat <<-END_VERSIONS > versions.yml
 
+'modules/nf-core/pints/caller/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/pints/caller/tests/nextflow.config' is unchanged
+'modules/nf-core/pints/caller/tests/main.nf.test' is unchanged
 ************************************************************

@@ -44,6 +44,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     }
 
     // Scatter the chromosomes
+    // TODO Might turn this into a param
     skip_chr = ["chrY", "_random", "chrUn_", "chrEBV", "chrM"]
     ch_chr = fasta
         .splitFasta(record: [id: true])
@@ -51,9 +52,8 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .filter { !(it in skip_chr) }
 
     PINTS_CALLER(
-        group_bam_bai,
-        params.assay_type,
-        ch_chr,
+        group_bam_bai.combine(ch_chr),
+        params.assay_type
     )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
 

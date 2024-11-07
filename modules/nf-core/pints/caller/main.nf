@@ -9,9 +9,8 @@ process PINTS_CALLER {
         'community.wave.seqera.io/library/pybedtools_bedtools_htslib_pip_pypints:39699b96998ec5f6' }"
 
     input:
-    tuple val(meta), path(bams), path(bais)
+    tuple val(meta), path(bams), path(bais), val(chr_name)
     val assay_type
-    each chr_name // optional
 
     output:
     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
