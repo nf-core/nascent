@@ -18,7 +18,7 @@ Changes in 'pints/caller/main.nf':
  
      input:
 -    tuple val(meta), path(bams), path(bais)
-+    tuple val(meta), path(bams), path(bais), val(chr_name) 
++    tuple val(meta), path(bams, arity: '1..*'), path(bais), val(chr_name)
      val assay_type
  
      output:

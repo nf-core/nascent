@@ -9,7 +9,7 @@ process PINTS_CALLER {
         'community.wave.seqera.io/library/pybedtools_bedtools_htslib_pip_pypints:39699b96998ec5f6' }"
 
     input:
-    tuple val(meta), path(bams), path(bais), val(chr_name)
+    tuple val(meta), path(bams, arity: '1..*'), path(bais), val(chr_name)
     val assay_type
 
     output:
