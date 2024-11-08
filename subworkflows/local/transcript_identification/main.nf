@@ -61,9 +61,10 @@ workflow TRANSCRIPT_INDENTIFICATION {
     // TODO Tests don't seem to hit this because there's no bidirectional_TREs
     // Need to collect all of the beds for each chromosome/sample and concatenate them
     // Nextflow makes this super easy
-    def ch_bidirectional_TREs = PINTS_CALLER.out.unidirectional_TREs
-        .groupTuple(by: [0])
-        .map { meta, beds -> [meta, beds.flatten()] }
+    def ch_bidirectional_TREs =
+        PINTS_CALLER.out.unidirectional_TREs.groupTuple(by: [0]).map { meta, beds ->
+        [meta, beds.toSortedList()]
+    }
 
     // HACK Not sure if this is as good as reporting all of them, but it should
     // reduce the overall noise.
