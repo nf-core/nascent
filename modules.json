@@ -219,6 +219,11 @@
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_dedup_stats_samtools_umitools", "bam_sort_stats_samtools"]
                     },
+                    "samtools/merge": {
+                        "branch": "master",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/sort": {
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",

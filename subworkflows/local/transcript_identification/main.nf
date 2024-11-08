@@ -5,6 +5,7 @@
 include { GROHMM                                          } from '../grohmm'
 include { HOMER_GROSEQ                                    } from '../../nf-core/homer/groseq/main'
 include { PINTS_CALLER                                    } from '../../../modules/nf-core/pints/caller/main'
+include { SAMTOOLS_MERGE                                  } from '../../../modules/nf-core/samtools/merge/main'
 include { CAT_CAT                                         } from '../../../modules/nf-core/cat/cat/main'
 include { BEDTOOLS_MERGE                                  } from '../../../modules/nf-core/bedtools/merge/main'
 include { BEDTOOLS_SORT                                   } from '../../../modules/nf-core/bedtools/sort/main'
@@ -51,8 +52,23 @@ workflow TRANSCRIPT_INDENTIFICATION {
         .map { record -> record.id }
         .filter { !(it in skip_chr) }
 
+    // NOTE https://github.com/hyulab/PINTS/issues/15
+    // We want to run PINTS once per biological/technical sample.
+    // Let Nextflow handle the parallelization Per the docs
+    // Per the docs:
+    // {SID} will be replaced with the number of samples that peaks are called from,
+    // if you only provide PINTS with one sample, then {SID} will be replaced with 1,
+    // if you try to use PINTS with three replicates (--bam-file A.bam B.bam C.bam),
+    // then {SID} for peaks identified from A.bam will be replaced with 1.
+    SAMTOOLS_MERGE(
+        group_bam_bai.map { meta, bams, _bais -> [meta, bams] },
+        [[], []],
+        [[], []]
+    )
+    ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
+
     PINTS_CALLER(
-        group_bam_bai.combine(ch_chr),
+        SAMTOOLS_MERGE.out.bam.combine(ch_chr),
         params.assay_type
     )
     ch_versions = ch_versions.mix(PINTS_CALLER.out.versions.first())
@@ -61,9 +77,8 @@ workflow TRANSCRIPT_INDENTIFICATION {
     // TODO Tests don't seem to hit this because there's no bidirectional_TREs
     // Need to collect all of the beds for each chromosome/sample and concatenate them
     // Nextflow makes this super easy
-    def ch_bidirectional_TREs =
-        PINTS_CALLER.out.unidirectional_TREs.groupTuple(by: [0]).map { meta, beds ->
-        [meta, beds.toSortedList()]
+    def ch_bidirectional_TREs = PINTS_CALLER.out.unidirectional_TREs.groupTuple(by: [0]).map { meta, beds ->
+        [meta, beds.flatten()]
     }
 
     // HACK Not sure if this is as good as reporting all of them, but it should

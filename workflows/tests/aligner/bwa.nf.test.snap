@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            147,
+            149,
             [
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
@@ -141,26 +141,26 @@
                 "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "cd4_filtered.bed:md5,9d602f0b63502f05fce25d27a8cb179b",
-                "jurkat_filtered.bed:md5,7c59749ca5b3eb090415420830f8d394"
+                "cd4_filtered.bed:md5,9765d778862a20feefb94d407773bef3",
+                "jurkat_filtered.bed:md5,cae11a1bfb707ea2df5fe612ae7268c8"
             ],
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:27:43.485041"
+        "timestamp": "2024-11-08T19:59:26.10702"
     },
     "Should work with gzipped references": {
         "content": [
-            53
+            55
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-03T07:39:38.160960801"
+        "timestamp": "2024-11-08T20:00:53.869213"
     },
     "software_versions": {
         "content": [
@@ -239,6 +239,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
                     "subread": "2.0.1"
                 },
@@ -251,10 +254,10 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:27:42.702359"
+        "timestamp": "2024-11-08T19:59:25.439456"
     },
     "Should work with BWA Index": {
         "content": [

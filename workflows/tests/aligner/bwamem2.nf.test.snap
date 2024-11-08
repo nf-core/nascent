@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            90,
+            92,
             [
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
@@ -84,16 +84,16 @@
                 "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "cd4_filtered.bed:md5,686cb2e55d18a584632711be1874a9f8",
+                "cd4_filtered.bed:md5,fe48a92889bc118c41e436989f85c65e",
                 "jurkat_filtered.bed:md5,f1dde43c4ad9dec972ff9fa38cc6f2fe"
             ],
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:30:34.98243"
+        "timestamp": "2024-11-08T20:02:08.759585"
     },
     "software_versions": {
         "content": [
@@ -181,6 +181,9 @@
                 "SAMTOOLS_INDEX": {
                     "samtools": 1.2
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_SORT": {
                     "samtools": 1.2
                 },
@@ -199,9 +202,9 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:30:34.70143"
+        "timestamp": "2024-11-08T20:02:08.491193"
     }
 }

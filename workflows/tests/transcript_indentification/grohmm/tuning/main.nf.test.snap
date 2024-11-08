@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            110,
+            112,
             "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
             "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
             [
@@ -33,10 +33,10 @@
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:54:30.70811"
+        "timestamp": "2024-11-08T20:23:19.772674"
     },
     "software_versions": {
         "content": [
@@ -119,6 +119,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
                     "subread": "2.0.1"
                 },
@@ -131,9 +134,9 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.0"
         },
-        "timestamp": "2024-11-07T14:54:30.687342"
+        "timestamp": "2024-11-08T20:23:19.755524"
     }
 }
