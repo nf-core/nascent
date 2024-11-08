@@ -12,6 +12,7 @@ process HOMER_FINDPEAKS {
 
     output:
     tuple val(meta), path("*.peaks.txt"), emit: txt
+    tuple val(meta), path("*.peaks.gtf"), emit: gtf
     path "versions.yml", emit: versions
 
     when:
@@ -29,6 +30,7 @@ process HOMER_FINDPEAKS {
         ${tagDir} \\
         ${args} \\
         -o ${prefix}.peaks.txt \\
+        -gtf ${prefix}.peaks.gtf \\
         ${uniqmap_flag}
 
     cat <<-END_VERSIONS > versions.yml
