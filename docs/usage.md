@@ -77,6 +77,14 @@ The current options for transcript identification include [GroHMM](https://bioco
 
 The default transcript identification option is PINTS, and HOMER if the transcript `assay_type` is `GROseq` but this may change in future releases.
 
+### PINTS
+
+PINTS handles the majority of the transcript identification, since it covers all of the supported assays.
+
+PINTS can use a lot of memory while running, so [a scatter-gather pattern was implemented](https://github.com/nf-core/nascent/blob/136a9ca2390121639e823e39e508afe9b6970d77/subworkflows/local/transcript_identification/main.nf#L47-L74).
+
+It splits the identification up by the chromosomes available in the provided FASTA file. Some of the chromosomes are skipped because PINTS throws an error when it doesn't find any regions. If this causes an issue with your analysis please open an issue.
+
 ### GroHMM
 
 groHMM is split into two steps: parameter tuning and transcript identification.

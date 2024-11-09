@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            134,
+            149,
             [
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
@@ -137,30 +137,30 @@
             "cd4.bed:md5,ab94918610a560772fdbec591200295f",
             "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
             [
-                "cd4_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_intersect.bed:md5,c45718bf5c21eb28b810d4800296728b",
                 "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "cd4_filtered.bed:md5,22a41b0aef6da7f4fa0f0644cc60ef32",
-                "jurkat_filtered.bed:md5,a491231815327b0d0fab1885b8a8662e"
+                "cd4_filtered.bed:md5,9765d778862a20feefb94d407773bef3",
+                "jurkat_filtered.bed:md5,cae11a1bfb707ea2df5fe612ae7268c8"
             ],
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-11T14:09:09.905409258"
+        "timestamp": "2024-11-08T19:59:26.10702"
     },
     "Should work with gzipped references": {
         "content": [
-            53
+            55
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-03T07:39:38.160960801"
+        "timestamp": "2024-11-08T20:00:53.869213"
     },
     "software_versions": {
         "content": [
@@ -182,12 +182,21 @@
                 "BEDTOOLS_INTERSECT_FILTER": {
                     "bedtools": "2.31.1"
                 },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
                 "BWA_INDEX": {
                     "bwa": "0.7.18-r1243-dirty"
                 },
                 "BWA_MEM": {
                     "bwa": "0.7.18-r1243-dirty",
                     "samtools": 1.2
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
                 },
                 "CUSTOM_GETCHROMSIZES": {
                     "getchromsizes": 1.2
@@ -212,8 +221,8 @@
                     "samtools": 1.11
                 },
                 "PINTS_CALLER": {
-                    "python": "3.10.6",
-                    "pints": "1.1.8"
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -230,7 +239,13 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
                     "subread": "2.0.1"
                 },
                 "Workflow": {
@@ -239,10 +254,10 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-09-12T12:57:24.191417844"
+        "timestamp": "2024-11-08T19:59:25.439456"
     },
     "Should work with BWA Index": {
         "content": [

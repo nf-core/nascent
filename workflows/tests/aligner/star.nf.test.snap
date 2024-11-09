@@ -1,17 +1,17 @@
 {
     "Should run with gzipped gtf": {
         "content": [
-            83
+            98
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-10T23:12:22.87545483"
+        "timestamp": "2024-11-08T20:07:47.754134"
     },
     "output_files": {
         "content": [
-            82,
+            97,
             [
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
@@ -90,20 +90,20 @@
             "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
             "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
             [
-                "cd4_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "cd4_intersect.bed:md5,a5d31a685d89293ae64daff9a9054568",
                 "jurkat_intersect.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "cd4_filtered.bed:md5,ae17ebd0485c6fc2648dcdb31eeb59b2",
-                "jurkat_filtered.bed:md5,f671cf2998b8d2422554c8cee21ee91f"
+                "cd4_filtered.bed:md5,57cde1c26fabdc9c416326ba825b3f15",
+                "jurkat_filtered.bed:md5,95a5279ec2387dfa0b4c2e7820083527"
             ],
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-08-11T13:24:35.500633327"
+        "timestamp": "2024-11-08T20:05:33.881075"
     },
     "software_versions": {
         "content": [
@@ -124,6 +124,15 @@
                 },
                 "BEDTOOLS_INTERSECT_FILTER": {
                     "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
                 },
                 "CUSTOM_GETCHROMSIZES": {
                     "getchromsizes": 1.2
@@ -148,8 +157,8 @@
                     "samtools": 1.11
                 },
                 "PINTS_CALLER": {
-                    "python": "3.10.6",
-                    "pints": "1.1.8"
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -166,7 +175,13 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
                     "subread": "2.0.1"
                 },
                 "Workflow": {
@@ -175,10 +190,10 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-09-12T13:36:46.329601446"
+        "timestamp": "2024-11-08T20:05:33.084407"
     },
     "gzip_software_versions": {
         "content": [
@@ -199,6 +214,15 @@
                 },
                 "BEDTOOLS_INTERSECT_FILTER": {
                     "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
                 },
                 "CUSTOM_GETCHROMSIZES": {
                     "getchromsizes": 1.2
@@ -226,8 +250,8 @@
                     "samtools": 1.11
                 },
                 "PINTS_CALLER": {
-                    "python": "3.10.6",
-                    "pints": "1.1.8"
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -244,7 +268,13 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
                     "subread": "2.0.1"
                 },
                 "Workflow": {
@@ -253,9 +283,9 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-09-12T13:42:56.284149051"
+        "timestamp": "2024-11-08T20:07:47.638876"
     }
 }

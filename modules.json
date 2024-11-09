@@ -150,7 +150,7 @@
                     },
                     "pints/caller": {
                         "branch": "master",
-                        "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
+                        "git_sha": "ac55541b663c35e9ff50f79d32049ce7492a6ea5",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/pints/caller/pints-caller.diff"
                     },
@@ -218,6 +218,11 @@
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_dedup_stats_samtools_umitools", "bam_sort_stats_samtools"]
+                    },
+                    "samtools/merge": {
+                        "branch": "master",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
                     },
                     "samtools/sort": {
                         "branch": "master",

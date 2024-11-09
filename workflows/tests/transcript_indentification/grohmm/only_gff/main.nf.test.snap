@@ -1,42 +1,42 @@
 {
     "output_files": {
         "content": [
-            217,
-            "cd4.bed:md5,b55e5290d78941f36c3d1ecfef8e0062",
-            "jurkat.bed:md5,383cfaf10535dbe5d7f47607e345f4cb",
+            112,
+            "cd4.bed:md5,202652821e59d0357c699b217d02f755",
+            "jurkat.bed:md5,7c37a46578dac48f8bf15155cd78b214",
             [
-                "cd4_intersect.bed:md5,51800dceda87c980e91db92b265b7ec6",
-                "jurkat_intersect.bed:md5,6d205f43e81053ab3a8af5096c065b66"
+                "cd4_intersect.bed:md5,af5866394906d9262d99ff691f0a63db",
+                "jurkat_intersect.bed:md5,c4ee0f73a5d2f4f210cad1090237fb8b"
             ],
             [
-                "cd4_filtered.bed:md5,3de4c6a675817a0661bb24edfd06d155",
-                "jurkat_filtered.bed:md5,191963fbc44ef9e5c3261a3fb96361a0"
+                "cd4_filtered.bed:md5,e87e37f217df119d7b782150db375494",
+                "jurkat_filtered.bed:md5,e31353bc7016b44a2ad8a93dc26501e1"
             ],
             [
-                "cd4_intersect.bed:md5,51800dceda87c980e91db92b265b7ec6",
-                "jurkat_intersect.bed:md5,6d205f43e81053ab3a8af5096c065b66"
+                "cd4_intersect.bed:md5,af5866394906d9262d99ff691f0a63db",
+                "jurkat_intersect.bed:md5,c4ee0f73a5d2f4f210cad1090237fb8b"
             ],
             [
-                "cd4_filtered.bed:md5,3de4c6a675817a0661bb24edfd06d155",
-                "jurkat_filtered.bed:md5,191963fbc44ef9e5c3261a3fb96361a0"
+                "cd4_filtered.bed:md5,e87e37f217df119d7b782150db375494",
+                "jurkat_filtered.bed:md5,e31353bc7016b44a2ad8a93dc26501e1"
             ],
-            "cd4.eval.txt:md5,b58c1db2cceac1fe1d89dec5838317d1",
-            "cd4.final.transcripts.bed:md5,a34dc280b3b023186b4935780d379338",
-            "cd4.tdFinal.txt:md5,8b49613bc2aa4dcbc23d852e46c41fb7",
+            "cd4.eval.txt:md5,de1f790f721a67dfd1e1bf1592a7971a",
+            "cd4.final.transcripts.bed:md5,3707df9ae8e7a95b6b5bfc336cfb1c8a",
+            "cd4.tdFinal.txt:md5,f8db76ddb3212459405e0d780c1dc807",
             true,
-            "cd4.transcripts.txt:md5,891a07c573dac76de5c466453c206c4f",
-            "jurkat.eval.txt:md5,1b9b3cf2f8b832ee4863168a07630db7",
-            "jurkat.final.transcripts.bed:md5,0d60cc43aadb918debf7cbd9113d53b4",
-            "jurkat.tdFinal.txt:md5,d10046e79b6c6ccff86d42b1bd59cfa4",
+            "cd4.transcripts.txt:md5,48d15103e5f67abc30b4da71a595243b",
+            "jurkat.eval.txt:md5,f8f6402c871cd55d6cfb9c2be04627b6",
+            "jurkat.final.transcripts.bed:md5,cd3ce78611dcad5a1893a6da3d70a39f",
+            "jurkat.tdFinal.txt:md5,4bb6a220a6ba29941d4ab28696816afd",
             true,
-            "jurkat.transcripts.txt:md5,aae6fb7cf85d2cc91db484a9399da876",
+            "jurkat.transcripts.txt:md5,901825bc4b6b93e718f7082fb4c2c579",
             true
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-10-19T21:30:10.156904"
+        "timestamp": "2024-11-08T20:17:44.462822"
     },
     "software_versions": {
         "content": [
@@ -58,12 +58,21 @@
                 "BEDTOOLS_INTERSECT_FILTER": {
                     "bedtools": "2.31.1"
                 },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
                 "BWA_INDEX": {
                     "bwa": "0.7.18-r1243-dirty"
                 },
                 "BWA_MEM": {
                     "bwa": "0.7.18-r1243-dirty",
                     "samtools": 1.2
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
                 },
                 "CUSTOM_GETCHROMSIZES": {
                     "getchromsizes": 1.2
@@ -90,6 +99,9 @@
                 "GTF2BED": {
                     "perl": "5.26.2"
                 },
+                "GUNZIP_FASTA": {
+                    "gunzip": 1.1
+                },
                 "GUNZIP_GFF": {
                     "gunzip": 1.1
                 },
@@ -98,8 +110,8 @@
                     "samtools": 1.11
                 },
                 "PINTS_CALLER": {
-                    "python": "3.10.6",
-                    "pints": "1.1.8"
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -116,6 +128,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
                 "SUBREAD_FEATURECOUNTS_GENE": {
                     "subread": "2.0.1"
                 },
@@ -128,9 +143,9 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.0"
         },
-        "timestamp": "2024-10-19T21:30:10.110132"
+        "timestamp": "2024-11-08T20:17:44.444383"
     }
 }
