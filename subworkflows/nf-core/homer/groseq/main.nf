@@ -2,6 +2,9 @@
  * Identify transcripts with homer
  */
 
+include { HOMER_GETMAPPABLEREGIONS } from '../../../../modules/nf-core/homer/getmappableregions/main'
+include { HOMER_CREATEUNIQMAP     } from '../../../../modules/nf-core/homer/createuniqmap/main'
+
 include { HOMER_MAKETAGDIRECTORY } from '../../../../modules/nf-core/homer/maketagdirectory/main'
 include { HOMER_MAKEUCSCFILE     } from '../../../../modules/nf-core/homer/makeucscfile/main'
 include { HOMER_FINDPEAKS        } from '../../../../modules/nf-core/homer/findpeaks/main'
@@ -15,6 +18,20 @@ workflow HOMER_GROSEQ {
     main:
 
     ch_versions = Channel.empty()
+
+    // Generate mappable regions
+    HOMER_GETMAPPABLEREGIONS (
+        fasta,
+        params.read_length,
+        params.parallel_sequences,
+    )
+    ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
+
+    // Create uniqmap directory
+    HOMER_CREATEUNIQMAP (
+        HOMER_GETMAPPABLEREGIONS.out.txt
+    )
+    ch_versions = ch_versions.mix(HOMER_CREATEUNIQMAP.out.versions)
 
     /*
     * Create a Tag Directory From The GRO-Seq experiment
