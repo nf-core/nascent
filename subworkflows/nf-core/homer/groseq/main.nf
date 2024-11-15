@@ -28,8 +28,8 @@ workflow HOMER_GROSEQ {
     HOMER_GETMAPPABLEREGIONS(
         split_fastas,
         // 10000,
-        // 1000000000,
-        1000000,
+        1000000000,
+        // 1000000,
         50
     )
     ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
@@ -55,7 +55,7 @@ workflow HOMER_GROSEQ {
     /*
     * Find transcripts directly from GRO-Seq
     */
-    HOMER_FINDPEAKS(HOMER_MAKETAGDIRECTORY.out.tagdir)
+    HOMER_FINDPEAKS(HOMER_MAKETAGDIRECTORY.out.tagdir, HOMER_CREATEUNIQMAP.out.uniqmap_dir)
     ch_versions = ch_versions.mix(HOMER_FINDPEAKS.out.versions.first())
 
     /*

@@ -1,6 +1,7 @@
 process HOMER_GETMAPPABLEREGIONS {
     tag "${fasta_files[0].baseName}"
     label 'process_high_memory'
+    label 'process_long'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -13,7 +14,7 @@ process HOMER_GETMAPPABLEREGIONS {
     val(read_length)
 
     output:
-    tuple val(meta), path("*.txt"), emit: txt
+    path("*.txt"), emit: txt
     path "versions.yml"           , emit: versions
 
     when:

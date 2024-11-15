@@ -10,6 +10,7 @@ process HOMER_FINDPEAKS {
 
     input:
     tuple val(meta), path(tagDir)
+    path uniqmap
 
     output:
     tuple val(meta), path("*.peaks.txt"), emit: txt
@@ -27,7 +28,8 @@ process HOMER_FINDPEAKS {
     findPeaks \\
         $tagDir \\
         $args \\
-        -o ${prefix}.peaks.txt
+        -o ${prefix}.peaks.txt \\
+        -uniqmap $uniqmap
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
