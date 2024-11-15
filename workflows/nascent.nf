@@ -60,6 +60,7 @@ workflow NASCENT {
     ch_hisat2_index
     ch_star_index
 
+
     main:
 
     ch_versions = Channel.empty()

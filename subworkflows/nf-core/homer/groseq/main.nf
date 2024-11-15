@@ -2,8 +2,9 @@
  * Identify transcripts with homer
  */
 
-include { HOMER_GETMAPPABLEREGIONS } from '../../../../modules/nf-core/homer/getmappableregions/main'
-include { HOMER_CREATEUNIQMAP      } from '../../../../modules/nf-core/homer/createuniqmap/main'
+include { HOMER_GETMAPPABLEREGIONS } from '../../../../modules/local/homer/getmappableregions/main'
+include { HOMER_CREATEUNIQMAP      } from '../../../../modules/local/homer/createuniqmap/main'
+include { UNZIP                    } from '../../../../modules/nf-core/unzip/main'
 
 include { HOMER_MAKETAGDIRECTORY   } from '../../../../modules/nf-core/homer/maketagdirectory/main'
 include { HOMER_MAKEUCSCFILE       } from '../../../../modules/nf-core/homer/makeucscfile/main'
@@ -19,26 +20,32 @@ workflow HOMER_GROSEQ {
 
     ch_versions = Channel.empty()
 
-    // Split FASTA by chromosome
-    split_fastas = fasta
-        .splitFasta(by: 1, file: true)
-        .toSortedList()
+    ch_uniqmap = Channel.empty()
+    if (!params.homer_uniqmap) {
+        // Split FASTA by chromosome
+        split_fastas = fasta
+            .splitFasta(by: 1, file: true)
+            .toSortedList()
 
-    // Generate mappable regions
-    HOMER_GETMAPPABLEREGIONS(
-        split_fastas,
-        // 10000,
-        1000000000,
-        // 1000000,
-        50
-    )
-    ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
+        // Generate mappable regions
+        HOMER_GETMAPPABLEREGIONS(
+            split_fastas,
+            1000000000,
+            50
+        )
+        ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
 
-    // Create uniqmap directory
-    HOMER_CREATEUNIQMAP(
-        HOMER_GETMAPPABLEREGIONS.out.txt
-    )
-    ch_versions = ch_versions.mix(HOMER_CREATEUNIQMAP.out.versions)
+        // Create uniqmap directory
+        HOMER_CREATEUNIQMAP(
+            HOMER_GETMAPPABLEREGIONS.out.txt
+        )
+        ch_versions = ch_versions.mix(HOMER_CREATEUNIQMAP.out.versions)
+
+        ch_uniqmap = HOMER_CREATEUNIQMAP.out.uniqmap_dir
+    }
+    else {
+        ch_uniqmap = UNZIP([[:], params.homer_uniqmap]).map { it[1] }
+    }
 
     /*
     * Create a Tag Directory From The GRO-Seq experiment
@@ -55,7 +62,7 @@ workflow HOMER_GROSEQ {
     /*
     * Find transcripts directly from GRO-Seq
     */
-    HOMER_FINDPEAKS(HOMER_MAKETAGDIRECTORY.out.tagdir, HOMER_CREATEUNIQMAP.out.uniqmap_dir)
+    HOMER_FINDPEAKS(HOMER_MAKETAGDIRECTORY.out.tagdir, ch_uniqmap)
     ch_versions = ch_versions.mix(HOMER_FINDPEAKS.out.versions.first())
 
     /*

@@ -36,6 +36,7 @@ params.dragmap = getGenomeAttribute('dragmap')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
 params.hisat2_index = getGenomeAttribute('hisat2')
 params.star_index = null
+params.homer_uniqmap = getGenomeAttribute('uniqmap')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
