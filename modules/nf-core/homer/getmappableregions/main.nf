@@ -1,16 +1,16 @@
 process HOMER_GETMAPPABLEREGIONS {
-    tag "$fasta_files[0].baseName"
+    tag "${fasta_files[0].baseName}"
     label 'process_high_memory'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/homer:4.11--pl526hc9558a2_3' :
-        'biocontainers/homer:4.11--pl526hc9558a2_3' }"
+        'community.wave.seqera.io/library/homer:4.11--e7dc4a041f589d54' }"
 
     input:
     path(fasta_files, arity: '1..*')
-    val(read_length)
     val(parallel_sequences)
+    val(read_length)
 
     output:
     tuple val(meta), path("*.txt"), emit: txt

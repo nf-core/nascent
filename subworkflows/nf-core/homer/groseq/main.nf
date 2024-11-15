@@ -27,7 +27,9 @@ workflow HOMER_GROSEQ {
     // Generate mappable regions
     HOMER_GETMAPPABLEREGIONS(
         split_fastas,
-        1000000000,
+        // 10000,
+        // 1000000000,
+        1000000,
         50
     )
     ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
