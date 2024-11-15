@@ -3,12 +3,12 @@
  */
 
 include { HOMER_GETMAPPABLEREGIONS } from '../../../../modules/nf-core/homer/getmappableregions/main'
-include { HOMER_CREATEUNIQMAP     } from '../../../../modules/nf-core/homer/createuniqmap/main'
+include { HOMER_CREATEUNIQMAP      } from '../../../../modules/nf-core/homer/createuniqmap/main'
 
-include { HOMER_MAKETAGDIRECTORY } from '../../../../modules/nf-core/homer/maketagdirectory/main'
-include { HOMER_MAKEUCSCFILE     } from '../../../../modules/nf-core/homer/makeucscfile/main'
-include { HOMER_FINDPEAKS        } from '../../../../modules/nf-core/homer/findpeaks/main'
-include { HOMER_POS2BED          } from '../../../../modules/nf-core/homer/pos2bed/main'
+include { HOMER_MAKETAGDIRECTORY   } from '../../../../modules/nf-core/homer/maketagdirectory/main'
+include { HOMER_MAKEUCSCFILE       } from '../../../../modules/nf-core/homer/makeucscfile/main'
+include { HOMER_FINDPEAKS          } from '../../../../modules/nf-core/homer/findpeaks/main'
+include { HOMER_POS2BED            } from '../../../../modules/nf-core/homer/pos2bed/main'
 
 workflow HOMER_GROSEQ {
     take:
@@ -19,16 +19,21 @@ workflow HOMER_GROSEQ {
 
     ch_versions = Channel.empty()
 
+    // Split FASTA by chromosome
+    split_fastas = fasta
+        .splitFasta(by: 1, file: true)
+        .toSortedList()
+
     // Generate mappable regions
-    HOMER_GETMAPPABLEREGIONS (
-        fasta,
-        params.read_length,
-        params.parallel_sequences,
+    HOMER_GETMAPPABLEREGIONS(
+        split_fastas,
+        1000000000,
+        50
     )
     ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
 
     // Create uniqmap directory
-    HOMER_CREATEUNIQMAP (
+    HOMER_CREATEUNIQMAP(
         HOMER_GETMAPPABLEREGIONS.out.txt
     )
     ch_versions = ch_versions.mix(HOMER_CREATEUNIQMAP.out.versions)
@@ -36,32 +41,31 @@ workflow HOMER_GROSEQ {
     /*
     * Create a Tag Directory From The GRO-Seq experiment
     */
-    HOMER_MAKETAGDIRECTORY ( bam, fasta )
+    HOMER_MAKETAGDIRECTORY(bam, fasta)
     ch_versions = ch_versions.mix(HOMER_MAKETAGDIRECTORY.out.versions.first())
 
     /*
     * Creating UCSC Visualization Files
     */
-    HOMER_MAKEUCSCFILE ( HOMER_MAKETAGDIRECTORY.out.tagdir )
+    HOMER_MAKEUCSCFILE(HOMER_MAKETAGDIRECTORY.out.tagdir)
     ch_versions = ch_versions.mix(HOMER_MAKEUCSCFILE.out.versions.first())
 
     /*
     * Find transcripts directly from GRO-Seq
     */
-    HOMER_FINDPEAKS ( HOMER_MAKETAGDIRECTORY.out.tagdir )
+    HOMER_FINDPEAKS(HOMER_MAKETAGDIRECTORY.out.tagdir)
     ch_versions = ch_versions.mix(HOMER_FINDPEAKS.out.versions.first())
 
     /*
     * Convert peak file to bed file
     */
-    HOMER_POS2BED ( HOMER_FINDPEAKS.out.txt )
+    HOMER_POS2BED(HOMER_FINDPEAKS.out.txt)
     ch_versions = ch_versions.mix(HOMER_POS2BED.out.versions.first())
 
     emit:
-    tagdir             = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tagdir ] ]
-    bed_graph          = HOMER_MAKEUCSCFILE.out.bedGraph   // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
-    peaks              = HOMER_FINDPEAKS.out.txt           // channel: [ val(meta), [ *peaks.txt ] ]
-    bed                = HOMER_POS2BED.out.bed             // channel: [ val(meta), [ *peaks.txt ] ]
-
-    versions = ch_versions                                 // channel: [ versions.yml ]
+    tagdir    = HOMER_MAKETAGDIRECTORY.out.tagdir // channel: [ val(meta), [ tagdir ] ]
+    bed_graph = HOMER_MAKEUCSCFILE.out.bedGraph // channel: [ val(meta), [ tag_dir/*ucsc.bedGraph.gz ] ]
+    peaks     = HOMER_FINDPEAKS.out.txt // channel: [ val(meta), [ *peaks.txt ] ]
+    bed       = HOMER_POS2BED.out.bed // channel: [ val(meta), [ *peaks.txt ] ]
+    versions  = ch_versions // channel: [ versions.yml ]
 }

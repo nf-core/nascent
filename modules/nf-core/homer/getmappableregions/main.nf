@@ -1,5 +1,5 @@
 process HOMER_GETMAPPABLEREGIONS {
-    tag "$meta.id"
+    tag "$fasta_files[0].baseName"
     label 'process_high_memory'
 
     conda "${moduleDir}/environment.yml"
@@ -8,7 +8,7 @@ process HOMER_GETMAPPABLEREGIONS {
         'biocontainers/homer:4.11--pl526hc9558a2_3' }"
 
     input:
-    tuple val(meta), path(fasta_files)
+    path(fasta_files, arity: '1..*')
     val(read_length)
     val(parallel_sequences)
 
@@ -21,7 +21,7 @@ process HOMER_GETMAPPABLEREGIONS {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${fasta_files[0].baseName}"
     def VERSION = '4.11'
     """
     getMappableRegions \\
