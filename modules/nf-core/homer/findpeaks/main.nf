@@ -23,13 +23,14 @@ process HOMER_FINDPEAKS {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def VERSION = '4.11' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
+    def uniqmap_flag = uniqmap ? "-uniqmap $uniqmap" : ""
     """
 
     findPeaks \\
         $tagDir \\
         $args \\
         -o ${prefix}.peaks.txt \\
-        -uniqmap $uniqmap
+        $uniqmap_flag
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -2,49 +2,32 @@
  * Identify transcripts with homer
  */
 
-include { HOMER_GETMAPPABLEREGIONS } from '../../../../modules/local/homer/getmappableregions/main'
-include { HOMER_CREATEUNIQMAP      } from '../../../../modules/local/homer/createuniqmap/main'
-include { UNZIP                    } from '../../../../modules/nf-core/unzip/main'
+include { UNZIP                  } from '../../../../modules/nf-core/unzip/main'
 
-include { HOMER_MAKETAGDIRECTORY   } from '../../../../modules/nf-core/homer/maketagdirectory/main'
-include { HOMER_MAKEUCSCFILE       } from '../../../../modules/nf-core/homer/makeucscfile/main'
-include { HOMER_FINDPEAKS          } from '../../../../modules/nf-core/homer/findpeaks/main'
-include { HOMER_POS2BED            } from '../../../../modules/nf-core/homer/pos2bed/main'
+include { HOMER_MAKETAGDIRECTORY } from '../../../../modules/nf-core/homer/maketagdirectory/main'
+include { HOMER_MAKEUCSCFILE     } from '../../../../modules/nf-core/homer/makeucscfile/main'
+include { HOMER_FINDPEAKS        } from '../../../../modules/nf-core/homer/findpeaks/main'
+include { HOMER_POS2BED          } from '../../../../modules/nf-core/homer/pos2bed/main'
 
 workflow HOMER_GROSEQ {
     take:
-    bam   // channel: [ val(meta), [ reads ] ]
-    fasta //    file: /path/to/bwa/index/
+    bam     // channel: [ val(meta), [ reads ] ]
+    fasta   //    file: /path/to/bwa/index/
+    uniqmap
 
     main:
 
     ch_versions = Channel.empty()
 
     ch_uniqmap = Channel.empty()
-    if (!params.homer_uniqmap) {
-        // Split FASTA by chromosome
-        split_fastas = fasta
-            .splitFasta(by: 1, file: true)
-            .toSortedList()
-
-        // Generate mappable regions
-        HOMER_GETMAPPABLEREGIONS(
-            split_fastas,
-            1000000000,
-            50
-        )
-        ch_versions = ch_versions.mix(HOMER_GETMAPPABLEREGIONS.out.versions)
-
-        // Create uniqmap directory
-        HOMER_CREATEUNIQMAP(
-            HOMER_GETMAPPABLEREGIONS.out.txt
-        )
-        ch_versions = ch_versions.mix(HOMER_CREATEUNIQMAP.out.versions)
-
-        ch_uniqmap = HOMER_CREATEUNIQMAP.out.uniqmap_dir
+    if (!uniqmap) {
+        ch_uniqmap = []
+    }
+    else if (uniqmap.endsWith('.zip')) {
+        ch_uniqmap = UNZIP([[:], uniqmap]).unzipped_archive.map { it[1] }
     }
     else {
-        ch_uniqmap = UNZIP([[:], params.homer_uniqmap]).map { it[1] }
+        ch_uniqmap = uniqmap
     }
 
     /*

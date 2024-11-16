@@ -59,6 +59,7 @@ workflow NASCENT {
     ch_bowtie2_index
     ch_hisat2_index
     ch_star_index
+    ch_uniqmap
 
 
     main:
@@ -294,6 +295,7 @@ workflow NASCENT {
         ch_gxf,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.chrom_sizes,
+        ch_uniqmap
     )
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
