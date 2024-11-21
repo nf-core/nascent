@@ -117,6 +117,14 @@
                         "R2_3"
                     ]
                 },
+
+                "use_homer_uniqmap": {
+                    "type": "boolean",
+                    "description": "Use HOMER uniqmap for transcript identification.",
+                    "fa_icon": "fas fa-dna",
+                    "help_text": "Enable this to use HOMER's uniqmap functionality for more accurate transcript identification in repetitive regions.",
+                    "default": false
+                },
                 "skip_grohmm": {
                     "type": "boolean",
                     "description": "Skip groHMM all together",

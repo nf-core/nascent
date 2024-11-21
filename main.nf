@@ -69,7 +69,7 @@ workflow NFCORE_NASCENT {
         params.bowtie2_index,
         params.hisat2_index,
         params.star_index,
-        params.homer_uniqmap
+        params.use_homer_uniqmap ? params.homer_uniqmap : []
     )
     emit:
     multiqc_report = NASCENT.out.multiqc_report // channel: /path/to/multiqc_report.html
