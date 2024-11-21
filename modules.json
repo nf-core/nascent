@@ -126,7 +126,8 @@
                     "homer/findpeaks": {
                         "branch": "master",
                         "git_sha": "cf3ed075695639b0a0924eb0901146df1996dc08",
-                        "installed_by": ["homer/groseq"]
+                        "installed_by": ["homer/groseq"],
+                        "patch": "modules/nf-core/homer/findpeaks/homer-findpeaks.diff"
                     },
                     "homer/maketagdirectory": {
                         "branch": "master",
@@ -258,6 +259,11 @@
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
+                    },
+                    "unzip": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["homer/groseq"]
                     }
                 }
             },

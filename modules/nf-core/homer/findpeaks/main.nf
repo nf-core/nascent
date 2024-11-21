@@ -10,7 +10,7 @@ process HOMER_FINDPEAKS {
 
     input:
     tuple val(meta), path(tagDir)
-    path uniqmap
+    path uniqmap // optional
 
     output:
     tuple val(meta), path("*.peaks.txt"), emit: txt
