@@ -118,6 +118,53 @@ For example if you have indentified that the best parameters for your data are 1
 }
 ```
 
+### Homer
+
+HOMER is used for transcript identification when the `assay_type` is set to `GROseq`. HOMER's GRO-seq analysis capabilities include:
+
+- De novo transcript identification from GRO-seq data
+- Support for analyzing nascent RNA production
+- Detection of various RNA species including:
+  - Protein coding transcripts
+  - Promoter anti-sense transcripts
+  - Enhancer templated transcripts (eRNAs)
+  - Long and short non-coding RNAs
+  - miRNA transcripts
+  - Pol III and Pol I transcripts
+
+HOMER uses uniquely mappable regions to improve transcript detection in repetitive regions. The pipeline can automatically download the appropriate uniqmap files for supported genomes:
+
+- Human: hg19, hg38
+- Mouse: mm10
+- Fly: dm6
+
+**This setting is off by default**
+
+To find the full list of uniqmaps supplied by the author check http://homer.ucsd.edu/homer/data/uniqmap/.
+
+The transcript detection algorithm:
+
+1. Tracks along each strand looking for continuous GRO-seq signal
+2. Starts transcripts when encountering high read density
+3. Stops transcripts when signal decreases significantly
+4. Creates new transcripts when signal increases sustainably
+5. Filters out artifactual spikes that don't extend over distance
+
+Key parameters that can be tuned:
+
+- tssFold: Fold change required at transcript start (default: 4)
+- bodyFold: Fold change required in transcript body (default: 3)
+- minBodySize: Minimum transcript body size (default: 600bp)
+- maxBodySize: Maximum transcript body size (default: 10000bp)
+
+```nextflow
+withName: HOMER_FINDPEAKS {
+    ext.args = "-style groseq -tssFold 4 -bodyFold 3"
+}
+```
+
+For more info check the [Homer GRO-seq Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:

@@ -10,7 +10,10 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": [
+                "input",
+                "outdir"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -53,7 +56,14 @@
                     "type": "string",
                     "default": "bwa",
                     "fa_icon": "fas fa-puzzle-piece",
-                    "enum": ["bwa", "bwamem2", "dragmap", "bowtie2", "hisat2", "star"],
+                    "enum": [
+                        "bwa",
+                        "bwamem2",
+                        "dragmap",
+                        "bowtie2",
+                        "hisat2",
+                        "star"
+                    ],
                     "description": "Specify aligner to be used to map reads to reference genome."
                 },
                 "skip_alignment": {
@@ -117,13 +127,13 @@
                         "R2_3"
                     ]
                 },
-
                 "use_homer_uniqmap": {
                     "type": "boolean",
                     "description": "Use HOMER uniqmap for transcript identification.",
                     "fa_icon": "fas fa-dna",
                     "help_text": "Enable this to use HOMER's uniqmap functionality for more accurate transcript identification in repetitive regions.",
-                    "default": false
+                    "default": false,
+                    "hidden": true
                 },
                 "skip_grohmm": {
                     "type": "boolean",
@@ -172,7 +182,9 @@
                     "help_text": "Histone Modifications(H3K4me1 and H3K27ac), or known TREs from the PINTS element matrix are examples"
                 }
             },
-            "required": ["assay_type"],
+            "required": [
+                "assay_type"
+            ],
             "fa_icon": "fas fa-microscope"
         },
         "reference_genome_options": {
@@ -266,7 +278,8 @@
                     "type": "string",
                     "description": "Path to HOMER uniqmap file or URL to download.",
                     "fa_icon": "fas fa-file-archive",
-                    "help_text": "> **NB** If none provided, will be downloaded automatically from the HOMER website. See nf-core/references for generation"
+                    "help_text": "> **NB** If none provided, will be downloaded automatically from the HOMER website. See nf-core/references for generation",
+                    "hidden": true
                 },
                 "save_reference": {
                     "type": "boolean",
@@ -365,7 +378,14 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "enum": [
+                        "symlink",
+                        "rellink",
+                        "link",
+                        "copy",
+                        "copyNoFollow",
+                        "move"
+                    ],
                     "hidden": true
                 },
                 "email_on_fail": {
