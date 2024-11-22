@@ -140,7 +140,7 @@ HOMER uses uniquely mappable regions to improve transcript detection in repetiti
 
 **This setting is off by default**
 
-To find the full list of uniqmaps supplied by the author check http://homer.ucsd.edu/homer/data/uniqmap/.
+To find the full list of uniqmaps supplied by the author check http://homer.ucsd.edu/homer/data/uniqmap/. To build a uniqmap for a genome that isn't supported, check out [homer-uniqmap-nf](https://github.com/Functional-Genomics-Lab/homer-uniqmap-nf).
 
 The transcript detection algorithm:
 
