@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2 aligner
 - [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
 - [#149](https://github.com/nf-core/nascent/pull/149) - Add Software citations to MultiQC
+- [#175](https://github.com/nf-core/nascent/pull/175) - Add HOMER uniqmap support
 
 ### Fixed
 
