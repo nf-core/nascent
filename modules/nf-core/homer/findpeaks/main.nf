@@ -21,7 +21,7 @@ process HOMER_FINDPEAKS {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: uniqmap ? "${meta.id}-${uniqmap.baseName}" : "${meta.id}"
     def VERSION = '4.11' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     def uniqmap_flag = uniqmap ? "-uniqmap $uniqmap" : ""
     """
