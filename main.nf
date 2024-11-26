@@ -36,6 +36,7 @@ params.dragmap = getGenomeAttribute('dragmap')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
 params.hisat2_index = getGenomeAttribute('hisat2')
 params.star_index = null
+params.homer_uniqmap = getGenomeAttribute('uniqmap')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,6 +69,7 @@ workflow NFCORE_NASCENT {
         params.bowtie2_index,
         params.hisat2_index,
         params.star_index,
+        params.use_homer_uniqmap ? params.homer_uniqmap : []
     )
     emit:
     multiqc_report = NASCENT.out.multiqc_report // channel: /path/to/multiqc_report.html

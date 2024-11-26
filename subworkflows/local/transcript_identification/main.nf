@@ -3,7 +3,7 @@
  */
 
 include { GROHMM                                          } from '../grohmm'
-include { HOMER_GROSEQ                                    } from '../../nf-core/homer/groseq/main'
+include { HOMER_GROSEQ                                    } from '../../nf-core/homer_groseq'
 include { PINTS_CALLER                                    } from '../../../modules/nf-core/pints/caller/main'
 include { SAMTOOLS_MERGE                                  } from '../../../modules/nf-core/samtools/merge/main'
 include { CAT_CAT                                         } from '../../../modules/nf-core/cat/cat/main'
@@ -18,6 +18,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     gxf
     fasta
     chrom_sizes
+    uniqmap
 
     main:
 
@@ -37,7 +38,7 @@ workflow TRANSCRIPT_INDENTIFICATION {
     homer_tagdir = Channel.empty()
     if (params.assay_type == "GROseq") {
         group_bam = group_bam_bai.map { meta, bam, bai -> [meta, bam] }
-        HOMER_GROSEQ(group_bam, fasta)
+        HOMER_GROSEQ(group_bam, fasta, uniqmap)
         ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
         homer_peaks = HOMER_GROSEQ.out.peaks
         homer_tagdir = HOMER_GROSEQ.out.tagdir

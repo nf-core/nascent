@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2 aligner
 - [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
 - [#149](https://github.com/nf-core/nascent/pull/149) - Add Software citations to MultiQC
+- [#175](https://github.com/nf-core/nascent/pull/175) - Add HOMER uniqmap support
 
 ### Fixed
 
 - [#171](https://github.com/nf-core/nascent/pull/171) - Clean up MultiQC report
+- [#170](https://github.com/nf-core/nascent/pull/170) - Remove "Access to undefined parameter forwardStranded" warnings
 
 ### Changed
 
@@ -24,10 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#171](https://github.com/nf-core/nascent/pull/171) - Use assertAll in tests
 - [#165](https://github.com/nf-core/nascent/pull/165) - groHMM overhaul. Removed R mclapply calls and replaced with Nextflow scatter gather for parameter tuning. This creates a job for each parameter set.
 - [#174](https://github.com/nf-core/nascent/pull/174) - PINTS Scatter gather pattern by chromosome
-
-### Fixed
-
-- [#170](https://github.com/nf-core/nascent/pull/170) - Remove "Access to undefined parameter forwardStranded" warnings
 
 ### Removed
 

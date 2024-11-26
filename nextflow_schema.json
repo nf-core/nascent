@@ -117,6 +117,14 @@
                         "R2_3"
                     ]
                 },
+                "use_homer_uniqmap": {
+                    "type": "boolean",
+                    "description": "Use HOMER uniqmap for transcript identification.",
+                    "fa_icon": "fas fa-dna",
+                    "help_text": "Enable this to use HOMER's uniqmap functionality for more accurate transcript identification in repetitive regions.",
+                    "default": false,
+                    "hidden": true
+                },
                 "skip_grohmm": {
                     "type": "boolean",
                     "description": "Skip groHMM all together",
@@ -253,6 +261,13 @@
                     "description": "Path to STAR indices.",
                     "fa_icon": "fas fa-copy",
                     "help_text": "> **NB** If none provided, index will be generated automatically from the FASTA reference."
+                },
+                "homer_uniqmap": {
+                    "type": "string",
+                    "description": "Path to HOMER uniqmap file or URL to download.",
+                    "fa_icon": "fas fa-file-archive",
+                    "help_text": "> **NB** If none provided, will be downloaded automatically from the HOMER website. See nf-core/references for generation",
+                    "hidden": true
                 },
                 "save_reference": {
                     "type": "boolean",
