@@ -152,7 +152,7 @@
                 },
                 "HOMER_MAKETAGDIRECTORY": {
                     "homer": 4.11,
-                    "samtools": 1.11
+                    "samtools": 1.21
                 },
                 "PINTS_CALLER": {
                     "python": "3.12.6",

@@ -3,7 +3,7 @@
  */
 
 include { GROHMM                                          } from '../grohmm'
-include { HOMER_GROSEQ                                    } from '../../nf-core/homer/groseq/main'
+include { HOMER_GROSEQ                                    } from '../../nf-core/homer_groseq'
 include { PINTS_CALLER                                    } from '../../../modules/nf-core/pints/caller/main'
 include { SAMTOOLS_MERGE                                  } from '../../../modules/nf-core/samtools/merge/main'
 include { CAT_CAT                                         } from '../../../modules/nf-core/cat/cat/main'
