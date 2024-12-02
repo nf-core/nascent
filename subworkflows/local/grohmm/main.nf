@@ -27,10 +27,8 @@ workflow GROHMM {
     ch_ltprobb = channel.fromList((params.grohmm_min_ltprobb..params.grohmm_max_ltprobb).step(50))
 
     GROHMM_PARAMETERTUNING (
-        bams_bais,
-        gtf,
-        ch_uts,
-        ch_ltprobb,
+        bams_bais.combine(ch_uts).combine(ch_ltprobb),
+        gtf
     )
         .tuning
         .collectFile(
