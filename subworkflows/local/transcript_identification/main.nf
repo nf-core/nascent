@@ -11,6 +11,7 @@ include { BEDTOOLS_MERGE                                  } from '../../../modul
 include { BEDTOOLS_SORT                                   } from '../../../modules/nf-core/bedtools/sort/main'
 include { BEDTOOLS_INTERSECT as BEDTOOLS_INTERSECT_FILTER } from '../../../modules/nf-core/bedtools/intersect/main'
 include { BEDTOOLS_INTERSECT                              } from '../../../modules/nf-core/bedtools/intersect/main'
+include { CONCAT_TRANSCRIPT_BEDS                          } from '../../../modules/local/concat_transcript_beds'
 
 workflow TRANSCRIPT_INDENTIFICATION {
     take:
@@ -40,7 +41,6 @@ workflow TRANSCRIPT_INDENTIFICATION {
         group_bam = group_bam_bai.map { meta, bam, bai -> [meta, bam] }
         HOMER_GROSEQ(group_bam, fasta, uniqmap)
         ch_identification_bed = ch_identification_bed.mix(HOMER_GROSEQ.out.bed)
-        homer_peaks = HOMER_GROSEQ.out.peaks
         homer_tagdir = HOMER_GROSEQ.out.tagdir
         ch_versions = ch_versions.mix(HOMER_GROSEQ.out.versions.first())
     }
@@ -91,6 +91,10 @@ workflow TRANSCRIPT_INDENTIFICATION {
     BEDTOOLS_MERGE(BEDTOOLS_SORT.out.sorted)
     ch_identification_bed = ch_identification_bed.mix(BEDTOOLS_MERGE.out.bed)
     ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions.first())
+
+    // MERGE into one DB
+    // We want to keep the caller/group that was used: E2_40m_grohmm
+    CONCAT_TRANSCRIPT_BEDS(ch_identification_bed.groupTuple(by: [0]))
 
     if (params.filter_bed) {
         ch_filter_bed = Channel.from(params.filter_bed)
