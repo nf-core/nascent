@@ -15,32 +15,26 @@ nextflow_pipeline {
         }
 
         then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // bam_files: All bam files
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
-                    workflow.trace.tasks().size(),
-                    UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),
-                    bam("$outputDir/star/cd4_REP1.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/star/cd4_REP2.sorted.bam").getSamLinesMD5(),
-                    bam("$outputDir/star/jurkat.sorted.bam").getSamLinesMD5(),
-                    // NOTE Not deterministic
-                    // path("$outputDir/star/log").list(),
-                    path("$outputDir/star/samtools_stats").list(),
-                    path("$outputDir/quality_control/bbsplit").list(),
-                    UTILS.getAllFilesFromDir("$outputDir/quality_control/preseq", ".txt"),
-                    path("$outputDir/quality_control/rseqc/read_duplication/xls").list(),
-                    path("$outputDir/quality_control/rseqc/read_duplication/rscript").list(),
-                    path("$outputDir/quality_control/rseqc/infer_experiment").list(),
-                    path("$outputDir/quality_control/rseqc/read_distribution").list(),
-                    path("$outputDir/coverage_graphs/").list(),
-                    path("$outputDir/transcript_identification/homer/cd4.bed"),
-                    path("$outputDir/transcript_identification/homer/jurkat.bed"),
-                    path("$outputDir/transcript_identification/intersect/").list(),
-                    path("$outputDir/transcript_identification/filtered/").list(),
-                    path("$outputDir/multiqc/multiqc_report.html").exists(),
-                ).match("output_files")
-                }
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
+                    // All stable path name
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All bam files
+                    bam_files.collect{ file -> [ file.getName(), bam(file.toString()).getReadsMD5() ] }
+                ).match() }
             )
         }
     }
