@@ -15,7 +15,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
+                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
                     workflow.trace.tasks().size(),
                     UTILS.getAllFilesFromDir("$outputDir/preprocessing/fastp/", ".json"),

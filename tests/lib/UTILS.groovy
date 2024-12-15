@@ -1,13 +1,4 @@
 class UTILS {
-    // Function to remove Nextflow version from pipeline_software_mqc_versions.yml
-    public static Object removeNextflowVersion(pipeline_software_mqc_versions) {
-        def softwareVersions = path(pipeline_software_mqc_versions).yaml
-        if (softwareVersions.containsKey("Workflow")) {
-            softwareVersions.Workflow.remove("Nextflow")
-        }
-        return softwareVersions
-    }
-
     // Recursively list all files in a directory and its sub-directories, matching a given suffix
     // TODO: use regex pattern instead of suffix?
     public static getAllFilesFromDir(dir, suffix) {
