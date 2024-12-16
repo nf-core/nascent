@@ -20,7 +20,7 @@ pipeline_info/*.{html,json,txt,yml}
 **/*.command.log
 **/*.bedGraph.gz
 **/tagInfo.txt
-**/*.bam
+**/*.{bam,bai}
 **/*.featureCounts.txt
 **/*.featureCounts.txt.summary
 **/DupRate_plot.pdf
