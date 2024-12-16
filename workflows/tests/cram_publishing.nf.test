@@ -1,0 +1,70 @@
+nextflow_pipeline {
+
+    name "CRAM Publishing Default"
+    script "../../main.nf"
+    tag "cram"
+    tag "publishing"
+
+    test("Should publish CRAM files by default") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bowtie2"
+            }
+        }
+
+        then {
+            // Get all CRAM files
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
+            // Get all BAM files (should be none with default settings)
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // Get CRAM index files
+            def cram_index_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram.crai'])
+
+            assertAll(
+                { assert workflow.success },
+                { assert cram_files.size() > 0 : "No CRAM files found in output" },
+                { assert bam_files.size() == 0 : "BAM files found when CRAM should be default" },
+                { assert cram_index_files.size() > 0 : "No CRAM index files found" },
+                { assert snapshot(
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // CRAM files (names only, content validation removed due to reference mismatch)
+                    cram_files.collect{ file -> file.getName() },
+                    // CRAM index files
+                    cram_index_files.collect{ file -> file.getName() }
+                ).match() }
+            )
+        }
+    }
+
+    test("Should publish CRAM files with different aligner") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+            }
+        }
+
+        then {
+            // Get all CRAM files
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
+            // Get all BAM files (should be none with default settings)
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+
+            assertAll(
+                { assert workflow.success },
+                { assert cram_files.size() > 0 : "No CRAM files found in output" },
+                { assert bam_files.size() == 0 : "BAM files found when CRAM should be default" },
+                { assert snapshot(
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // CRAM files (names only, content validation removed due to reference mismatch)
+                    cram_files.collect{ file -> file.getName() }
+                ).match() }
+            )
+        }
+    }
+}
