@@ -19,7 +19,7 @@ include { UNTAR as UNTAR_STAR_INDEX                                } from '../mo
 include { STAR_GENOMEGENERATE                                      } from '../modules/nf-core/star/genomegenerate/main'
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_GENE      } from '../modules/nf-core/subread/featurecounts/main'
 include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../modules/nf-core/subread/featurecounts/main'
-
+include { SAMTOOLS_CONVERT                                         } from '../modules/nf-core/samtools/convert/main'
 
 include { FASTQC                                                   } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                                  } from '../modules/nf-core/multiqc/main'
@@ -255,6 +255,14 @@ workflow NASCENT {
     }
 
     ch_genome_bam_bai = ch_genome_bam.join(ch_genome_bai, by: [0], remainder: true)
+
+    // Publish CRAM files
+    // https://nf-co.re/docs/guidelines/pipelines/recommendations/file_formats
+    SAMTOOLS_CONVERT(
+        ch_genome_bam_bai,
+        ch_fasta,
+        PREPARE_GENOME.out.fai.map { [[:], it] },
+    )
 
     QUALITY_CONTROL(
         ch_genome_bam_bai,
