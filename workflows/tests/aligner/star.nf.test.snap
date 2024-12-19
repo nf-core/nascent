@@ -94,8 +94,6 @@
                 }
             },
             [
-                "bed2saf",
-                "bed2saf/cd4_intersect.saf",
                 "cat",
                 "cat/cd4.bed",
                 "cat/jurkat.bed",
@@ -330,7 +328,6 @@
                 "transcript_identification/pints/jurkat_chr21_1_unidirectional_peaks.bed"
             ],
             [
-                "cd4_intersect.saf:md5,2528ed58898f6e1f9d3d54fc1381c4c6",
                 "cd4.bed:md5,26765aa153cb1d6bb668f5786da5763e",
                 "jurkat.bed:md5,15a3bec7a3ffb53c1e621665b3f45873",
                 "cd4_REP1.dreg.bedGraph:md5,6ecfb93ba1a56308ce7d3c4703e0e5e3",
@@ -391,8 +388,6 @@
                 "sjdbList.fromGTF.out.tab:md5,5d9761b49920fb70a77d74e390d196b9",
                 "sjdbList.out.tab:md5,766fbca932681f8666b3a9e5fb3640bd",
                 "transcriptInfo.tab:md5,21c1f470ffe3b55b23900e7b7eaec2f4",
-                "cd4_filtered.bed:md5,57cde1c26fabdc9c416326ba825b3f15",
-                "jurkat_filtered.bed:md5,95a5279ec2387dfa0b4c2e7820083527",
                 "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
                 "cd4.peaks.txt:md5,4ab7c16a5f6d0e78275448bbce7c21c2",
                 "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",

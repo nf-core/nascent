@@ -332,8 +332,6 @@
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
                 "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2",
-                "cd4_filtered.bed:md5,057f04ad44d3c2bf223be225b390fe0e",
-                "jurkat_filtered.bed:md5,bd6458d033db136523d32ffba259f564",
                 "cd4.bed:md5,d8c78818eb1666575ef4c2534ea3727e",
                 "cd4.peaks.txt:md5,8bb1c5655a1cce187290a3409e82a43b",
                 "jurkat.bed:md5,7298daa579135dfb8924067abaa2ba4e",

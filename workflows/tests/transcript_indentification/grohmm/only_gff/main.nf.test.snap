@@ -104,9 +104,6 @@
                 }
             },
             [
-                "bed2saf",
-                "bed2saf/cd4_intersect.saf",
-                "bed2saf/jurkat_intersect.saf",
                 "bwa",
                 "bwa/cd4_REP1.sorted.bam",
                 "bwa/cd4_REP1.sorted.bam.bai",
@@ -326,8 +323,6 @@
                 "transcript_identification/pints/jurkat_chr21_1_unidirectional_peaks.bed"
             ],
             [
-                "cd4_intersect.saf:md5,f1a0ef77b0e1409b859bba18190788ae",
-                "jurkat_intersect.saf:md5,8a0c5a2917d938c5bd055546eac53a99",
                 "cd4_REP1.sorted.bam.flagstat:md5,98ee509d07c1db03ccce634ccf410d07",
                 "cd4_REP1.sorted.bam.idxstats:md5,3f30696c4c8628b47029f63d9521f0e7",
                 "cd4_REP1.sorted.bam.stats:md5,4902e9a7e501f6150549e195b7dc44c0",
@@ -357,8 +352,6 @@
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
                 "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2",
-                "cd4_filtered.bed:md5,e87e37f217df119d7b782150db375494",
-                "jurkat_filtered.bed:md5,e31353bc7016b44a2ad8a93dc26501e1",
                 "cd4.SE.tuning.csv:md5,9d76e9a83079d587459fda16af8c4da8",
                 "cd4.eval.txt:md5,de1f790f721a67dfd1e1bf1592a7971a",
                 "cd4.final.transcripts.bed:md5,3707df9ae8e7a95b6b5bfc336cfb1c8a",

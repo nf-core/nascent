@@ -111,8 +111,6 @@
                 }
             },
             [
-                "bed2saf",
-                "bed2saf/cd4_intersect.saf",
                 "bwa",
                 "bwa/cd4_REP1.sorted.bam",
                 "bwa/cd4_REP1.sorted.bam.bai",
@@ -391,7 +389,6 @@
                 "transcript_identification/pints/jurkat_chr21_1_unidirectional_peaks.bed"
             ],
             [
-                "cd4_intersect.saf:md5,635fcd8e2c060dc75db25564c2a664dc",
                 "cd4_REP1.sorted.bam.flagstat:md5,863e2d506d5cc4239af98a5f31bbc906",
                 "cd4_REP1.sorted.bam.idxstats:md5,b1dd8bcbd23c53c21f0e11082d9315f2",
                 "cd4_REP1.sorted.bam.stats:md5,1536c80bae78b2062508e1de210f6387",
@@ -448,8 +445,6 @@
                 "cd4_REP4.trimmed.fastp.json:md5,c073bd26609ddca91396d0f374ec5b80",
                 "jurkat_REP1.trimmed.fastp.json:md5,329fd8e56421a196fc2ebd37ab3bc22d",
                 "jurkat_REP2.trimmed.fastp.json:md5,8bad5b02a27e5386255b998a6a69db15",
-                "cd4_filtered.bed:md5,9765d778862a20feefb94d407773bef3",
-                "jurkat_filtered.bed:md5,cae11a1bfb707ea2df5fe612ae7268c8",
                 "cd4.bed:md5,ab94918610a560772fdbec591200295f",
                 "cd4.peaks.txt:md5,6edefe0a75b76240d3b49d12e49cb600",
                 "jurkat.bed:md5,41908723fa423a78476feb2e7627a3a4",
