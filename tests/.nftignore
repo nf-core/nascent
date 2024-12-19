@@ -10,6 +10,7 @@ multiqc/multiqc_data/rseqc_read_dups.txt
 multiqc/multiqc_data/multiqc_software_versions.txt
 multiqc/multiqc_data/multiqc_sources.txt
 multiqc/multiqc_report.html
+multiqc/multiqc_plots/**
 multiqc/multiqc_plots/{pdf,png,svg}/*.{pdf,png,svg}
 pipeline_info/*.{html,json,txt,yml}
 
