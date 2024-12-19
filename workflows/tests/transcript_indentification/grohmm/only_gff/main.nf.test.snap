@@ -378,8 +378,6 @@
                 "jurkat.bed:md5,7c37a46578dac48f8bf15155cd78b214",
                 "jurkat.peaks.txt:md5,4cc5640d1e7c84db1116d6514265a4c3",
                 "versions.yml:md5,7c0dcd0a18b3c753def73b96cb825792",
-                "cd4_intersect.bed:md5,af5866394906d9262d99ff691f0a63db",
-                "jurkat_intersect.bed:md5,c4ee0f73a5d2f4f210cad1090237fb8b",
                 "cd4_merged.bed:md5,f79432639c3f1b86787947e8d7242c75",
                 "jurkat_merged.bed:md5,a94e1ec47f0564122ae1eb0f73be4ebd",
                 "cd4_chr21_1_unidirectional_peaks.bed:md5,60e0da7e5691e55d86eb9df9f6ea0c46",

@@ -26,6 +26,7 @@ pipeline_info/*.{html,json,txt,yml}
 **/*.pdf
 
 transcript_identification/homer/*_tagdir/*
+transcript_identification/intersect/*_intersect.bed
 
 quality_control/bbsplit/*.stats.txt
 quality_control/**
