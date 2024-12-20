@@ -329,6 +329,15 @@
                 "jurkat.minus.bigWig:md5,8a0ca6db6626d3fefb518f0d35dd1abc",
                 "jurkat.plus.bedGraph:md5,835edbd98f6d5d69e56de05e1a837b7c",
                 "jurkat.plus.bigWig:md5,66e82005e6c6730e970f7506bf93325c",
+                "cd4_REP1.sorted.bam.flagstat:md5,aa26d19a689b2fe97e254f125e1f7bcb",
+                "cd4_REP1.sorted.bam.idxstats:md5,d523e6e25ce8659871df4104dab503b0",
+                "cd4_REP1.sorted.bam.stats:md5,57b98494241870644c74edda7d503232",
+                "cd4_REP2.sorted.bam.flagstat:md5,6235482c2c1be02a23826261e2f8a033",
+                "cd4_REP2.sorted.bam.idxstats:md5,89de35c9f4f1eafa6944d5d574db1675",
+                "cd4_REP2.sorted.bam.stats:md5,aaa17a5a0018fa03cbadb1f5e354fa49",
+                "jurkat.sorted.bam.flagstat:md5,8e59ad91dd9df6003cb6c3070b0aa34c",
+                "jurkat.sorted.bam.idxstats:md5,56608a565532fc8ae2b93a3be28d5e8d",
+                "jurkat.sorted.bam.stats:md5,e100d7f3a79bb29ea3a99e610245e6c8",
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
                 "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
                 "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2",
@@ -355,6 +364,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.2"
         },
-        "timestamp": "2024-12-18T07:36:18.855708"
+        "timestamp": "2024-12-20T06:18:38.954985"
     }
 }
