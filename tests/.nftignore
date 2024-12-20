@@ -15,6 +15,8 @@ multiqc/multiqc_plots/{pdf,png,svg}/*.{pdf,png,svg}
 pipeline_info/*.{html,json,txt,yml}
 
 */alignments/logs/*.txt
+star/log/*.Log.{final.out,out,progress.out}
+star/star/Log.out
 */deduplicated/logs/*.txt
 */{reports,summary}/*.{html,txt}
 **/*.command.log
