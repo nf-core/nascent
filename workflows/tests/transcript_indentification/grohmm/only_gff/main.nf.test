@@ -21,36 +21,26 @@ nextflow_pipeline {
         }
 
         then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'multiqc/multiqc_plots', 'multiqc/multiqc_plots/**'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // bam_files: All bam files
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
                 { assert snapshot(
-                    workflow.trace.tasks().size(),
-                    path("$outputDir/transcript_identification/homer/cd4.bed"),
-                    path("$outputDir/transcript_identification/homer/jurkat.bed"),
-                    // FIXME Not determinstic because of the order of files
-                    // Add to the other tests when fixed
-                    // UTILS.getAllFilesFromDir("$outputDir/transcript_identification/pints/", ".bed"),
-                    path("$outputDir/transcript_identification/intersect/").list(),
-                    path("$outputDir/transcript_identification/filtered/").list(),
-                    path("$outputDir/transcript_identification/intersect/").list(),
-                    path("$outputDir/transcript_identification/filtered/").list(),
-                    path("$outputDir/transcript_identification/grohmm/cd4.eval.txt"),
-                    path("$outputDir/transcript_identification/grohmm/cd4.final.transcripts.bed"),
-                    path("$outputDir/transcript_identification/grohmm/cd4.tdFinal.txt"),
-                    path("$outputDir/transcript_identification/grohmm/cd4.tdplot_mqc.png").exists(),
-                    path("$outputDir/transcript_identification/grohmm/cd4.transcripts.txt"),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.eval.txt"),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.final.transcripts.bed"),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.tdFinal.txt"),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.tdplot_mqc.png").exists(),
-                    path("$outputDir/transcript_identification/grohmm/jurkat.transcripts.txt"),
-                    // FIXME Not determinstic because of the order of files
-                    // Add to the other tests when fixed
-                    // path("$outputDir/quantification/").list(),
-                    path("$outputDir/multiqc/multiqc_report.html").exists(),
-                ).match("output_files")
-                }
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
+                    // All stable path name
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All bam files
+                    // FIXME bam_files.collect{ file -> [ file.getName(), bam(file.toString()).getReadsMD5() ] }
+                ).match() }
             )
         }
     }
