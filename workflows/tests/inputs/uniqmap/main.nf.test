@@ -21,7 +21,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") },
+                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_nascent_software_mqc_versions.yml")).match("software_versions") },
                 // Files should have -uniqmap <directory> in the header
                 { assert path("$outputDir/transcript_identification/homer/cd4.bed").readLines()[18].contains("uniqMapDirectory = uniqmap.GRCh38_chr21.50nt") },
                 { assert path("$outputDir/transcript_identification/homer/cd4.bed").readLines()[20].contains("-uniqmap") },
