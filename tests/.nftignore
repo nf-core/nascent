@@ -17,6 +17,8 @@ pipeline_info/*.{html,json,txt,yml}
 */alignments/logs/*.txt
 star/log/*.Log.{final.out,out,progress.out}
 star/star/Log.out
+# FIXME idk why star outputs this
+samtools/*
 hisat2/log/*.hisat2.summary.log
 */deduplicated/logs/*.txt
 */{reports,summary}/*.{html,txt}
