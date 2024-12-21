@@ -125,7 +125,7 @@
                     },
                     "homer/findpeaks": {
                         "branch": "master",
-                        "git_sha": "b108745a1d59778e21577c217a963e17b8ba9bc2",
+                        "git_sha": "cac282aeb4099300e04b60167a3a12d8c96c4978",
                         "installed_by": ["homer_groseq"]
                     },
                     "homer/maketagdirectory": {
@@ -315,7 +315,7 @@
                     },
                     "homer_groseq": {
                         "branch": "master",
-                        "git_sha": "b108745a1d59778e21577c217a963e17b8ba9bc2",
+                        "git_sha": "cac282aeb4099300e04b60167a3a12d8c96c4978",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {
