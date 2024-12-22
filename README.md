@@ -94,7 +94,7 @@ For more details about the output files and reports, please refer to the
 
 nf-core/nascent was originally written by Ignacio Tripodi ([@ignaciot](https://github.com/ignaciot)) and Margaret Gruca ([@magruca](https://github.com/magruca)).
 
-The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@Emiller88](https://github.com/emiller88)) and Sruthi Suresh ([@sruthipsuresh](https://github.com/sruthipsuresh)) from [The Functional Genomics Laboratory](https://taehoonkim.org/) at [The Univeristy of Texas at Dallas](https://www.utdallas.edu/)
+The pipeline was re-written in Nextflow DSL2 by Edmund Miller ([@edmundmiller](https://github.com/edmundmiller)) and Sruthi Suresh ([@sruthipsuresh](https://github.com/sruthipsuresh)) from [The Functional Genomics Laboratory](https://taehoonkim.org/) at [The Univeristy of Texas at Dallas](https://www.utdallas.edu/)
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
