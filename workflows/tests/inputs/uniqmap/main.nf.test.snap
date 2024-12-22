@@ -96,7 +96,7 @@
                     "7za": 16.02
                 },
                 "Workflow": {
-                    "nf-core/nascent": "v2.3.0dev"
+                    "nf-core/nascent": "v2.3.0"
                 }
             }
         ],
