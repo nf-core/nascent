@@ -31,6 +31,9 @@ hisat2/log/*.hisat2.summary.log
 transcript_identification/homer/*_tagdir/*
 transcript_identification/filtered/*_filtered.bed
 transcript_identification/intersect/*_intersect.bed
+transcript_identification/grohmm/*.tdFinal.txt
+transcript_identification/grohmm/*.tdFinal_mqc.csv
+transcript_identification/grohmm/*.tdplot_mqc.png
 
 quality_control/bbsplit/*.stats.txt
 quality_control/**
