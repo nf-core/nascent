@@ -1,5 +1,16 @@
-Changes in module 'nf-core/pints/caller'
-'modules/nf-core/pints/caller/environment.yml' is unchanged
+Changes in component 'nf-core/pints/caller'
+Changes in 'pints/caller/environment.yml':
+--- modules/nf-core/pints/caller/environment.yml
++++ modules/nf-core/pints/caller/environment.yml
+@@ -5,6 +5,7 @@
+   - pybedtools
+   - bedtools
+   - htslib
++  - python=3.12.6
+   - pip
+   - pip: # FIXME https://github.com/nf-core/modules/issues/5814
+       # NOTE PINTS isn't adding conda builds and is a few versions behind.
+
 'modules/nf-core/pints/caller/meta.yml' is unchanged
 Changes in 'pints/caller/main.nf':
 --- modules/nf-core/pints/caller/main.nf
