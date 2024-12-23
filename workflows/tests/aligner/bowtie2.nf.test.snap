@@ -87,7 +87,7 @@
                     "subread": "2.0.1"
                 },
                 "Workflow": {
-                    "nf-core/nascent": "v2.3.0dev"
+                    "nf-core/nascent": "v2.3.0"
                 }
             },
             [

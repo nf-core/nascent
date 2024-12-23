@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v2.3.0dev - [date]
+## v2.3.0 - 2024-12-23
 
 ### Added
 
@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
 - [#149](https://github.com/nf-core/nascent/pull/149) - Add Software citations to MultiQC
 - [#175](https://github.com/nf-core/nascent/pull/175) - Add HOMER uniqmap support
+- [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
+- [14fdbb8](https://github.com/nf-core/nascent/commit/14fdbb83fe944fc4d8d77e804f0332510d82fea4) - Update pipeline template to [nf-core/tools 3.0.0](https://github.com/nf-core/tools/releases/tag/3.0.0)
+- [b4ac8c5](https://github.com/nf-core/nascent/commit/b4ac8c5) - Update pipeline template to [nf-core/tools 3.0.1](https://github.com/nf-core/tools/releases/tag/3.0.1)
+- [a9ae47a](https://github.com/nf-core/nascent/commit/a9ae47a) - Update pipeline template to [nf-core/tools 3.0.1](https://github.com/nf-core/tools/releases/tag/3.0.2)
+- [bfcd97c](https://github.com/nf-core/nascent/commit/bfcd97c) - Update pipeline template to [nf-core/tools 3.1.0](https://github.com/nf-core/tools/releases/tag/3.1.0)
+- [7a4e356](https://github.com/nf-core/nascent/commit/7a4e356) - Update pipeline template to [nf-core/tools 3.1.1](https://github.com/nf-core/tools/releases/tag/3.1.1)
 
 ### Fixed
 
