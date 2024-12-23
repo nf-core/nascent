@@ -343,13 +343,13 @@
                 "jurkat.SJ.out.tab:md5,8e5de2dc83e2478528528a86a2ffd456",
                 "cd4_REP1_genome.flagstat:md5,6379888a79d90e28dd969e21f7b03a33",
                 "cd4_REP1_genome.idxstats:md5,65e8e2d1ed65620f9750f2981e997a9d",
-                "cd4_REP1_genome.stats:md5,49ea194b2d955cef24987a32dea3f6bb",
+                "cd4_REP1_genome.stats:md5,98b8edc46f4553462af6a395fa36ccb1",
                 "cd4_REP2_genome.flagstat:md5,ab83e3fbca17cf463fc5293a82e4bb3a",
                 "cd4_REP2_genome.idxstats:md5,9cdf3dd50a9862a02592c3768071fe32",
-                "cd4_REP2_genome.stats:md5,f878081edfbda2977e38685d12434c43",
+                "cd4_REP2_genome.stats:md5,5b0f411f23fce70ed0c509f1e5a2aa01",
                 "jurkat_genome.flagstat:md5,b5f1d127de493e406882aced667210c9",
                 "jurkat_genome.idxstats:md5,5e4a68fda75c954324d659af58d12c62",
-                "jurkat_genome.stats:md5,5bf21e33fb56e0a38b53faf34b3be2ea",
+                "jurkat_genome.stats:md5,e69e49feae0a1840403894aea26c4a33",
                 "Genome:md5,612664e3cfde5e1b73ad541d93752b31",
                 "SA:md5,074ae54177bb7b9cb981382f043f36e5",
                 "SAindex:md5,c8cae2d81bec99f68eddc0afe570090b",
@@ -380,7 +380,7 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.2"
         },
-        "timestamp": "2024-12-21T11:55:35.046966"
+        "timestamp": "2024-12-28T21:46:42.36263"
     },
     "gzip_software_versions": {
         "content": [

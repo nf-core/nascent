@@ -66,22 +66,22 @@
                     "rseqc": "5.0.2"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": 1.2
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": 1.2
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": 1.2
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": 1.2
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": 1.2
+                    "samtools": 1.21
                 },
                 "SUBREAD_FEATURECOUNTS_GENE": {
                     "subread": "2.0.1"
@@ -286,13 +286,13 @@
                 "jurkat.bowtie2.log:md5,24031e901f4ce11cfb227c7d30d1373a",
                 "cd4_REP1.sorted.bam.flagstat:md5,14e684e73cb41155ab1168a0a99a97e6",
                 "cd4_REP1.sorted.bam.idxstats:md5,e32ac3215ba948bb7dd1559dab6c3c36",
-                "cd4_REP1.sorted.bam.stats:md5,490f84b5520b83daa95653671ce43921",
+                "cd4_REP1.sorted.bam.stats:md5,9dcac9f6f5e9afbb3b2880aaf3256603",
                 "cd4_REP2.sorted.bam.flagstat:md5,e00d036bcbea6f944d45fb5cb7c34516",
                 "cd4_REP2.sorted.bam.idxstats:md5,0803f2dce4b972ccc14943e22145c3e8",
-                "cd4_REP2.sorted.bam.stats:md5,f8872ba7ef4b4e66b16a4ca3d63c1a65",
+                "cd4_REP2.sorted.bam.stats:md5,c7882ce1e3e7ae5cf9889479f897307d",
                 "jurkat.sorted.bam.flagstat:md5,1b24ceabc8cecf34d745d06cf9d43cd0",
                 "jurkat.sorted.bam.idxstats:md5,15e67d4d9d71c6cc6c37d5ce5414ede0",
-                "jurkat.sorted.bam.stats:md5,ff1a4b8f6456a539943a14c8daeb75d3",
+                "jurkat.sorted.bam.stats:md5,396021be96da9e3a14e07849c1e1abc8",
                 "cd4_REP1.dreg.bedGraph:md5,f48ab66b1ddaf0d1b4867183aedb670a",
                 "cd4_REP1.minus.bedGraph:md5,6930097f008d44b850d8bb5c681e0d1d",
                 "cd4_REP1.minus.bigWig:md5,a28d277b360522476ceead81b28adc7f",
@@ -322,6 +322,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.2"
         },
-        "timestamp": "2024-12-18T07:25:45.87987"
+        "timestamp": "2024-12-28T21:38:27.737347"
     }
 }
