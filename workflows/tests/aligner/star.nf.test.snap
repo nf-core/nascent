@@ -43,10 +43,10 @@
                     "getchromsizes": 1.2
                 },
                 "DEEPTOOLS_BAMCOVERAGE_MINUS": {
-                    "deeptools": "3.5.1"
+                    "deeptools": "3.5.5"
                 },
                 "DEEPTOOLS_BAMCOVERAGE_PLUS": {
-                    "deeptools": "3.5.1"
+                    "deeptools": "3.5.5"
                 },
                 "FASTP": {
                     "fastp": "0.23.4"
@@ -415,10 +415,10 @@
                     "getchromsizes": 1.2
                 },
                 "DEEPTOOLS_BAMCOVERAGE_MINUS": {
-                    "deeptools": "3.5.1"
+                    "deeptools": "3.5.5"
                 },
                 "DEEPTOOLS_BAMCOVERAGE_PLUS": {
-                    "deeptools": "3.5.1"
+                    "deeptools": "3.5.5"
                 },
                 "FASTP": {
                     "fastp": "0.23.4"
