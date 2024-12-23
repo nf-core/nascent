@@ -81,7 +81,7 @@ workflow NASCENT {
         ch_bwamem2_index,
         ch_dragmap,
         ch_bowtie2_index,
-        ch_hisat2_index
+        ch_hisat2_index,
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
     ch_fasta = PREPARE_GENOME.out.fasta.map { fasta -> [[id: fasta.baseName], fasta] }
@@ -122,7 +122,7 @@ workflow NASCENT {
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
             false,
-            ch_fasta
+            ch_fasta,
         )
         ch_genome_bam = FASTQ_ALIGN_BWA.out.bam
         ch_genome_bai = FASTQ_ALIGN_BWA.out.bai
@@ -137,7 +137,7 @@ workflow NASCENT {
             ch_reads,
             PREPARE_GENOME.out.bwa_index,
             false,
-            ch_fasta
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_BWAMEM2.out.bam
         ch_genome_bai = ALIGN_BWAMEM2.out.bai
@@ -152,7 +152,7 @@ workflow NASCENT {
             ch_reads,
             PREPARE_GENOME.out.dragmap,
             false,
-            ch_fasta
+            ch_fasta,
         )
         ch_genome_bam = ALIGN_DRAGMAP.out.bam
         ch_genome_bai = ALIGN_DRAGMAP.out.bai
@@ -168,7 +168,7 @@ workflow NASCENT {
             PREPARE_GENOME.out.bowtie2_index,
             false,
             false,
-            ch_fasta
+            ch_fasta,
         )
         ch_genome_bam = FASTQ_ALIGN_BOWTIE2.out.bam
         ch_genome_bai = FASTQ_ALIGN_BOWTIE2.out.bai
@@ -193,7 +193,7 @@ workflow NASCENT {
             ch_reads,
             ch_hisat2_index,
             [[:], []],
-            ch_fasta
+            ch_fasta,
         )
         ch_genome_bam = FASTQ_ALIGN_HISAT2.out.bam
         ch_genome_bai = FASTQ_ALIGN_HISAT2.out.bai
@@ -208,7 +208,7 @@ workflow NASCENT {
         if (!ch_star_index) {
             ch_star_index = STAR_GENOMEGENERATE(
                 ch_fasta,
-                PREPARE_GENOME.out.gtf.map { [[:], it] }
+                PREPARE_GENOME.out.gtf.map { [[:], it] },
             ).index
         }
         else if (ch_star_index.endsWith('.tar.gz')) {
@@ -228,7 +228,7 @@ workflow NASCENT {
             '',
             '',
             ch_fasta,
-            Channel.of([[:], []])
+            Channel.of([[:], []]),
         )
         ch_genome_bam = FASTQ_ALIGN_STAR.out.bam
         ch_genome_bai = FASTQ_ALIGN_STAR.out.bai
@@ -243,7 +243,7 @@ workflow NASCENT {
     if (params.with_umi) {
         BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS(
             ch_genome_bam.join(ch_genome_bai, by: [0]),
-            params.umitools_dedup_stats
+            params.umitools_dedup_stats,
         )
         ch_genome_bam = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.bam
         ch_genome_bai = BAM_DEDUP_STATS_SAMTOOLS_UMITOOLS.out.bai
@@ -269,7 +269,7 @@ workflow NASCENT {
 
     QUALITY_CONTROL(
         ch_genome_bam_bai,
-        PREPARE_GENOME.out.gene_bed
+        PREPARE_GENOME.out.gene_bed,
     )
     ch_versions = ch_versions.mix(QUALITY_CONTROL.out.versions)
 
@@ -277,7 +277,7 @@ workflow NASCENT {
         ch_genome_bam_bai,
         PREPARE_GENOME.out.chrom_sizes,
         PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai
+        PREPARE_GENOME.out.fai,
     )
     ch_versions = ch_versions.mix(COVERAGE_GRAPHS.out.versions)
 
@@ -315,7 +315,7 @@ workflow NASCENT {
         ch_gxf,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.chrom_sizes,
-        ch_uniqmap
+        ch_uniqmap,
     )
     ch_grohmm_multiqc = TRANSCRIPT_INDENTIFICATION.out.grohmm_td_plot.collect()
     ch_homer_multiqc = TRANSCRIPT_INDENTIFICATION.out.homer_peaks
@@ -344,7 +344,7 @@ workflow NASCENT {
             storeDir: "${params.outdir}/pipeline_info",
             name: 'nf_core_' + 'nascent_software_' + 'mqc_' + 'versions.yml',
             sort: true,
-            newLine: true
+            newLine: true,
         )
         .set { ch_collated_versions }
 
@@ -382,7 +382,7 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_methods_description.collectFile(
             name: 'methods_description_mqc.yaml',
-            sort: true
+            sort: true,
         )
     )
 
@@ -408,7 +408,7 @@ workflow NASCENT {
         ch_multiqc_custom_config.toList(),
         ch_multiqc_logo.toList(),
         [],
-        []
+        [],
     )
 
     emit:
