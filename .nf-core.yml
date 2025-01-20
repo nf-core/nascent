@@ -4,7 +4,7 @@ lint:
     - .github/workflows/linting.yml
     - LICENSE
     - assets/email_template.html
-nf_core_version: 3.1.1
+nf_core_version: 3.1.2
 repository_type: pipeline
 template:
   author: Edmund Miller, Ignacio Tripodi, Margaret Gruca
@@ -14,4 +14,4 @@ template:
   name: nascent
   org: nf-core
   outdir: .
-  version: 2.3.0dev
+  version: 2.3.0
