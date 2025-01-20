@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v2.3.0 - 2025-04-23
+## v2.3.0 - [date]
 
 ### Added
 
@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [a9ae47a](https://github.com/nf-core/nascent/commit/a9ae47a) - Update pipeline template to [nf-core/tools 3.0.1](https://github.com/nf-core/tools/releases/tag/3.0.2)
 - [bfcd97c](https://github.com/nf-core/nascent/commit/bfcd97c) - Update pipeline template to [nf-core/tools 3.1.0](https://github.com/nf-core/tools/releases/tag/3.1.0)
 - [7a4e356](https://github.com/nf-core/nascent/commit/7a4e356) - Update pipeline template to [nf-core/tools 3.1.1](https://github.com/nf-core/tools/releases/tag/3.1.1)
+- [7a4e356](https://github.com/nf-core/nascent/commit/debe6a9) - Update pipeline template to [nf-core/tools 3.1.2](https://github.com/nf-core/tools/releases/tag/3.1.2)
 
 ### Fixed
 
