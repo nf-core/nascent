@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [bfcd97c](https://github.com/nf-core/nascent/commit/bfcd97c) - Update pipeline template to [nf-core/tools 3.1.0](https://github.com/nf-core/tools/releases/tag/3.1.0)
 - [7a4e356](https://github.com/nf-core/nascent/commit/7a4e356) - Update pipeline template to [nf-core/tools 3.1.1](https://github.com/nf-core/tools/releases/tag/3.1.1)
 - [7a4e356](https://github.com/nf-core/nascent/commit/debe6a9) - Update pipeline template to [nf-core/tools 3.1.2](https://github.com/nf-core/tools/releases/tag/3.1.2)
+- [7a4e356](https://github.com/nf-core/nascent/commit/f60a3cb) - Update pipeline template to [nf-core/tools 3.2.0](https://github.com/nf-core/tools/releases/tag/3.2.0)
 
 ### Fixed
 
