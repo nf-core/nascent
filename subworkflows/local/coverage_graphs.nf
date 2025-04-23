@@ -2,9 +2,6 @@
  * Create bigWig and bedGraph files
  */
 
-include { BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_PLUS        } from '../../modules/nf-core/bedtools/genomecov/main'
-include { BEDTOOLS_GENOMECOV as BEDTOOLS_GENOMECOV_MINUS       } from '../../modules/nf-core/bedtools/genomecov/main'
-
 include { DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS  } from '../../modules/nf-core/deeptools/bamcoverage/main'
 include { DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../modules/nf-core/deeptools/bamcoverage/main'
 
@@ -24,22 +21,6 @@ workflow COVERAGE_GRAPHS {
     ch_versions = Channel.empty()
 
     ch_genomecov_bam = bam.combine(Channel.from(1))
-
-    BEDTOOLS_GENOMECOV_PLUS(
-        ch_genomecov_bam,
-        sizes,
-        'bedGraph',
-        true
-    )
-    ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_PLUS.out.versions.first())
-
-    BEDTOOLS_GENOMECOV_MINUS(
-        ch_genomecov_bam,
-        sizes,
-        'bedGraph',
-        true
-    )
-    ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV_MINUS.out.versions.first())
 
     DEEPTOOLS_BAMCOVERAGE_PLUS(
         bam_bai,
@@ -64,8 +45,6 @@ workflow COVERAGE_GRAPHS {
     )
 
     emit:
-    plus_bedGraph  = BEDTOOLS_GENOMECOV_PLUS.out.genomecov
-    minus_bedGraph = BEDTOOLS_GENOMECOV_MINUS.out.genomecov
     plus_minus     = ch_plus_minus
     versions       = ch_versions
 }
