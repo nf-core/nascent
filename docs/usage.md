@@ -85,6 +85,25 @@ PINTS can use a lot of memory while running, so [a scatter-gather pattern was im
 
 It splits the identification up by the chromosomes available in the provided FASTA file. Some of the chromosomes are skipped because PINTS throws an error when it doesn't find any regions. If this causes an issue with your analysis please open an issue.
 
+Assays that PINTS supports:
+
+- CoPRO
+- GROcap
+- PROcap
+- CAGE
+- NETCAGE
+- RAMPAGE
+- csRNAseq
+- STRIPEseq
+- PROseq
+- GROseq
+- R_5
+- R_3
+- R1_5
+- R1_3
+- R2_5
+- R2_3
+
 ### GroHMM
 
 groHMM is split into two steps: parameter tuning and transcript identification.
