@@ -230,6 +230,7 @@ The majority of RSeQC scripts generate output files which can be plotted and sum
 
 - `quality_control/preseq/`
   - `*.lc_extrap.txt`: Preseq expected future yield file.
+  - `*.c_curve.txt`: Preseq cumulative coverage curve file.
 - `quality_control/preseq/log/`
   - `*.command.log`: Standard error output from command.
 
@@ -262,6 +263,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 - `coverage_graphs/`
   - `*.minus.bedGraph`: Sample coverage file (negative strand only) in bedGraph format
   - `*.plus.bedGraph`: Sample coverage file (positive strand only) in bedGraph format
+  - `*.dreg.bedGraph`: Sample coverage file (dreg) in bedGraph format prepared using proseq2.0 pipeline
 
 </details>
 
@@ -307,8 +309,8 @@ The pipeline will pool the reads if they are in the same group. See [#153](https
 <summary>Output files</summary>
 
 - `transcript_identification/pints/`
-  - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent)
-  - `*_divergent_peaks.bed`: Divergent TREs
+  - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent) **optional**
+  - `*_divergent_peaks.bed`: Divergent TREs **optional**
   - `*_unidirectional_peaks.bed`: Unidirectional TREs, maybe lncRNAs transcribed from enhancers (e-lncRNAs)
 
 </details>
@@ -372,9 +374,10 @@ They've also created some bed files that might be useful for analysis.
 <summary>Output files</summary>
 
 - `quantification/featurecounts/`
-  - `*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
-  - `*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
-  - `*_mqc.tsv`: MultiQC custom content files used to plot biotypes in report.
+  - `gene/*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
+  - `gene/*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
+  - `nascent/*.featureCounts.txt`: featureCounts of nascent transcripts quantification results for each sample.
+  - `nascent/*.featureCounts.txt.summary`: featureCounts summary file of the nascent transcripts containing overall statistics about the counts.
 
 </details>
 

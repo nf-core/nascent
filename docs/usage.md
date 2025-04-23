@@ -91,7 +91,7 @@ groHMM is split into two steps: parameter tuning and transcript identification.
 
 When running the pipeline with groHMM as a transcript identification method, the pipeline will automatically perform a parameter tuning process. This process is unique to the groHMM transcript identification method and is designed to select the optimal hold-out parameters for the groHMM algorithm. See [this issue](https://github.com/dankoc/groHMM/issues/4) for more information.
 
-In the groHMM vignette, the code is ran using a single mclapply call, which is a scatter gather approach. This is not ideal for large datasets, because it ends up being bottlenecked by the memory available on your local machine. To improve this, we have written a Nextflow script that runs the pipeline with a scatter gather approach. This is done by running the pipeline with a single hold-out parameter, and then the next parameter, and so on. This is more memory efficient and scales better to larger datasets. The results are then combined then combined in the end as intended and used in the transcript identification process.
+In the groHMM vignette, the code is ran using a single mclapply call, which is a scatter gather approach. This is not ideal for large datasets, because it ends up being bottle-necked by the memory available on your local machine. To improve this, we have written a Nextflow script that runs the pipeline with a scatter gather approach. This is done by running the pipeline with a single hold-out parameter, and then the next parameter, and so on. This is more memory efficient and scales better to larger datasets. The results are then combined in the end as intended and used in the transcript identification process.
 
 #### groHMM Parameters
 
@@ -138,7 +138,9 @@ HOMER uses uniquely mappable regions to improve transcript detection in repetiti
 - Mouse: mm10
 - Fly: dm6
 
+:::info
 **This setting is off by default**
+:::
 
 To find the full list of uniqmaps supplied by the author check http://homer.ucsd.edu/homer/data/uniqmap/. To build a uniqmap for a genome that isn't supported, check out [homer-uniqmap-nf](https://github.com/Functional-Genomics-Lab/homer-uniqmap-nf).
 

@@ -2,7 +2,6 @@ name: dreg_prep
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - bioconda::bedtools=2.31.1
   - bioconda::ucsc-bedgraphtobigwig=445
