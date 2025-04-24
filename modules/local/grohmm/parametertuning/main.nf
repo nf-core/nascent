@@ -1,6 +1,7 @@
 process GROHMM_PARAMETERTUNING {
     tag "${meta.id}|${UTS}|${LtProbB}"
     label 'process_high'
+    // TODO: Use array's? Or should this be set at the nf-core/configs level?
     // array 10
 
     conda "${moduleDir}/environment.yml"
