@@ -430,7 +430,7 @@
                     "perl": "5.26.2"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.12
                 },
                 "HOMER_MAKETAGDIRECTORY": {
                     "homer": 4.11,
