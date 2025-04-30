@@ -62,10 +62,10 @@
                     "perl": "5.26.2"
                 },
                 "GUNZIP_FASTA": {
-                    "gunzip": 1.12
+                    "gunzip": 1.13
                 },
                 "GUNZIP_GFF": {
-                    "gunzip": 1.12
+                    "gunzip": 1.13
                 },
                 "HOMER_MAKETAGDIRECTORY": {
                     "homer": 4.11,
