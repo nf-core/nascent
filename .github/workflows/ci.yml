@@ -48,6 +48,8 @@ jobs:
             profile: "conda"
           - isMaster: false
             profile: "singularity"
+          - isMaster: false
+            NXF_VER: "latest-everything"
         shard: [1, 2, 3, 4]
     steps:
       - name: Check out pipeline code
