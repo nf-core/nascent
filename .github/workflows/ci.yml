@@ -24,10 +24,14 @@ concurrency:
 
 jobs:
   test:
+
     name: "${{ matrix.NXF_VER }} | ${{ matrix.test_name }} | ${{ matrix.profile }}"
     # Only run on push if this is the nf-core dev branch (merged PRs)
     if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/nascent') }}"
-    runs-on: ubuntu-latest
+    runs-on:
+      - runs-on=${{ github.run_id }}
+      - runner=4cpu-linux-x64
+      - image=ubuntu22-full-x64
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +54,7 @@ jobs:
             profile: "singularity"
           - isMaster: false
             NXF_VER: "latest-everything"
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5]
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -103,12 +107,12 @@ jobs:
       - name: Clean up Disk space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
-      - name: Run Tests (Shard ${{ matrix.shard }}/4)
+      - name: Run Tests (Shard ${{ matrix.shard }}/5)
         run: |
           NFT_WORKDIR=~ \
           nf-test test \
               --ci \
-              --shard ${{ matrix.shard }}/4 \
+              --shard ${{ matrix.shard }}/5 \
               --changed-since HEAD^ \
               --profile "+${{ matrix.profile }}" \
               --verbose \
