@@ -407,7 +407,7 @@
                 "jurkat_REP2.sorted.bam.flagstat:md5,86ed47bd41a745ab59de473082c7742d",
                 "jurkat_REP2.sorted.bam.idxstats:md5,3db8f88c1f836eb5d10f37ca1df81ae9",
                 "jurkat_REP2.sorted.bam.stats:md5,141032fd40420e3aa80d37c7bf7ed2b1",
-                "cd4.bed:md5,76ee3b56d3e518f88a34b42039ec719c",
+                "cd4.bed:md5,864532d867843d8ad1545b90d5dcd762",
                 "jurkat.bed:md5,862a5e81119acc691845f3b426847401",
                 "cd4_REP1.dreg.bedGraph:md5,8948a8fa86d8f6d413b77983189ff56e",
                 "cd4_REP1.minus.bedGraph:md5,2a1c34f9d9ef9ff1b9da7874b9e3aaad",
@@ -452,7 +452,7 @@
                 "versions.yml:md5,7c0dcd0a18b3c753def73b96cb825792",
                 "cd4_merged.bed:md5,4d8f9dc54f886f379b95609908a08662",
                 "jurkat_merged.bed:md5,cae11a1bfb707ea2df5fe612ae7268c8",
-                "cd4_chr21_1_unidirectional_peaks.bed:md5,76ee3b56d3e518f88a34b42039ec719c",
+                "cd4_chr21_1_unidirectional_peaks.bed:md5,864532d867843d8ad1545b90d5dcd762",
                 "jurkat_chr21_1_unidirectional_peaks.bed:md5,862a5e81119acc691845f3b426847401"
             ]
         ],
