@@ -37,7 +37,7 @@ workflow COVERAGE_GRAPHS {
 
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
-    if (params.assay_type in ["PROseq", "PROcap"]) {
+    if (params.assay_type in ["PROseq", "PROcap", "CoPRO"]) {
         FLIP_STRAND(
             ch_plus_minus,
         )
