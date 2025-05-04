@@ -1,7 +1,7 @@
 {
     "Should run with only a GFF file": {
         "content": [
-            83,
+            87,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -56,6 +56,10 @@
                     "samtools": 1.21
                 },
                 "PINTS_CALLER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
+                "PINTS_VISUALIZER": {
                     "python": "3.12.6",
                     "pints": "1.1.13"
                 },
@@ -312,8 +316,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.3"
+            "nextflow": "25.03.1"
         },
-        "timestamp": "2025-05-10T09:52:45.407215"
+        "timestamp": "2025-05-20T22:11:14.562542"
     }
 }

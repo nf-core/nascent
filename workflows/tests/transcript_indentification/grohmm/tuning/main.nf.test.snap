@@ -60,6 +60,10 @@
                     "python": "3.12.6",
                     "pints": "1.1.13"
                 },
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
                 },
@@ -110,13 +114,10 @@
                 "cat/cd4.bed",
                 "cat/jurkat.bed",
                 "coverage_graphs",
-                "coverage_graphs/cd4_REP1.dreg.bedGraph",
                 "coverage_graphs/cd4_REP1.minus.bigWig",
                 "coverage_graphs/cd4_REP1.plus.bigWig",
-                "coverage_graphs/cd4_REP2.dreg.bedGraph",
                 "coverage_graphs/cd4_REP2.minus.bigWig",
                 "coverage_graphs/cd4_REP2.plus.bigWig",
-                "coverage_graphs/jurkat.dreg.bedGraph",
                 "coverage_graphs/jurkat.minus.bigWig",
                 "coverage_graphs/jurkat.plus.bigWig",
                 "multiqc",
@@ -313,13 +314,10 @@
                 "jurkat.sorted.bam.stats:md5,c9a6ec83d8fb1a14f53351c76cfcd24b",
                 "cd4.bed:md5,0193e58943726af89bfd00e9da2536d8",
                 "jurkat.bed:md5,cb6932229eea2e09f61d48d7dd397ae1",
-                "cd4_REP1.dreg.bedGraph:md5,8948a8fa86d8f6d413b77983189ff56e",
                 "cd4_REP1.minus.bigWig:md5,5280319275c98dcce023779fa389884d",
                 "cd4_REP1.plus.bigWig:md5,72ccab3173f2018a22a4b36841247ba2",
-                "cd4_REP2.dreg.bedGraph:md5,29f865a5668fae4a52a41589ac2b3179",
                 "cd4_REP2.minus.bigWig:md5,5e748c794e037f441741f7f409c8c5ad",
                 "cd4_REP2.plus.bigWig:md5,08674d52e9eeb08807c33ed3e4b3d504",
-                "jurkat.dreg.bedGraph:md5,c25a4fb095e9f7d6766a3ce33e08f7d8",
                 "jurkat.minus.bigWig:md5,d06c8015c996bf520fff17266fd01f84",
                 "jurkat.plus.bigWig:md5,7a02334f2c7300ffdb5a2253c0937390",
                 "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",

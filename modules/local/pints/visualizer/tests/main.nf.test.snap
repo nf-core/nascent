@@ -1,0 +1,54 @@
+{
+    "versions": {
+        "content": [
+            {
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-08T18:07:16.978238"
+    },
+    "flipped_versions": {
+        "content": [
+            {
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-08T18:07:07.331434"
+    },
+    "Should run PINTS_VISUALIZER with PROseq data and produce strand-specific bigwigs": {
+        "content": [
+            "test_sample_pl.bw:md5,6fd3346be91cc84750f839b050c6bc5b",
+            "test_sample_mn.bw:md5,9eecf5936bdf1c0c44ec123636a305f5"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T18:24:13.206646"
+    },
+    "Should run PINTS_VISUALIZER with GROseq data without reverse complement": {
+        "content": [
+            "test_gro_pl.bw:md5,e399e77f224d993e789bf8f7c4b826e1",
+            "test_gro_mn.bw:md5,21c7ef549d8cb39788e13080dc573848"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T18:24:22.747334"
+    }
+}

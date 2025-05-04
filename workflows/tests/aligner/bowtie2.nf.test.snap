@@ -1,7 +1,7 @@
 {
     "Should run with defaults": {
         "content": [
-            68,
+            71,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -43,6 +43,10 @@
                 "HOMER_MAKETAGDIRECTORY": {
                     "homer": 4.11,
                     "samtools": 1.21
+                },
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -296,8 +300,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.3"
+            "nextflow": "25.03.1"
         },
-        "timestamp": "2025-05-11T12:24:05.753243"
+        "timestamp": "2025-05-20T21:52:41.120419"
     }
 }
