@@ -56,6 +56,8 @@ The sample column is essentially a concatenation of the group and replicate colu
 `GM_0h` and `GM_1h` would be grouped for example but `GM0h` and `GM1h` would go through individual transcript identification
 :::
 
+##
+
 ## Alignment Options
 
 By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (i.e. `--aligner bwa`) to map the raw FastQ reads to the reference genome. Research as to which aligner works best with Nascent Transcript and Transcription Start Site assays is pending.
@@ -76,6 +78,13 @@ Currently only featureCounts is supported for quantification. It counts both the
 The current options for transcript identification include [GroHMM](https://bioconductor.org/packages/release/bioc/html/groHMM.html), [HOMER](http://homer.ucsd.edu/), and [PINTS](https://pints.yulab.org/).
 
 The default transcript identification option is PINTS, and HOMER if the transcript `assay_type` is `GROseq` but this may change in future releases.
+
+### Which assays need flipping?
+
+From the [Danko-Lab script](https://github.com/Danko-Lab/proseq2.0/blob/master/proseq2.0.bsh) and previous analysis:
+
+- PROseq, PROcap: Needs strand flipping.
+- GROseq, GROcap, CAGE, NETCAGE, RAMPAGE, csRNAseq, STRIPEseq, R_5, R_3, R1_5, R1_3, R2_5, R2_3: Do not need flipping.
 
 ### PINTS
 
