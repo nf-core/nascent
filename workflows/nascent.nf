@@ -10,7 +10,7 @@ include { PREPARE_GENOME                                           } from '../su
 include { ALIGN_BWAMEM2                                            } from '../subworkflows/local/align_bwamem2/main'
 include { ALIGN_DRAGMAP                                            } from '../subworkflows/local/align_dragmap/main'
 include { QUALITY_CONTROL                                          } from '../subworkflows/local/quality_control.nf'
-include { COVERAGE_GRAPHS                                          } from '../subworkflows/local/coverage_graphs.nf'
+include { COVERAGE_GRAPHS                                          } from '../subworkflows/local/coverage_graphs'
 include { TRANSCRIPT_INDENTIFICATION                               } from '../subworkflows/local/transcript_identification'
 
 include { FASTP                                                    } from '../modules/nf-core/fastp/main'
