@@ -34,18 +34,25 @@ workflow COVERAGE_GRAPHS {
     )
     ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_MINUS.out.versions.first())
 
-
     ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
-    if (params.assay_type in ["PROseq", "PROcap", "CoPRO"]) {
+    if (params.assay_type in ["PROseq", "PROcap"]) {
         FLIP_STRAND(
-            ch_plus_minus,
+            ch_plus_minus
         )
         ch_versions = ch_versions.mix(FLIP_STRAND.out.versions.first())
         ch_plus_minus = FLIP_STRAND.out.flipped_bigwig
     }
 
+    PINTS_VISUALIZER(
+        bam_bai,
+        params.assay_type,
+    )
+    ch_versions = ch_versions.mix(PINTS_VISUALIZER.out.versions.first())
+    ch_pints_plus_minus = PINTS_VISUALIZER.out.plus_bw.join(PINTS_VISUALIZER.out.minus_bw)
+
     emit:
-    plus_minus = ch_plus_minus
-    versions   = ch_versions
+    plus_minus       = ch_plus_minus
+    pints_plus_minus = ch_pints_plus_minus
+    versions         = ch_versions
 }

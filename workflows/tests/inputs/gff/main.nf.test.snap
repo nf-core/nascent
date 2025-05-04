@@ -1,7 +1,7 @@
 {
     "Should run with an unzipped GFF file": {
         "content": [
-            83,
+            86,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -53,6 +53,10 @@
                     "samtools": 1.21
                 },
                 "PINTS_CALLER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
+                "PINTS_VISUALIZER": {
                     "python": "3.12.6",
                     "pints": "1.1.13"
                 },
@@ -311,6 +315,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-10T09:49:17.211427"
+        "timestamp": "2025-05-11T19:48:55.653909"
     }
 }
