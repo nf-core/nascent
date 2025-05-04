@@ -1,7 +1,7 @@
 {
     "Should run with defaults": {
         "content": [
-            83,
+            80,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -101,13 +101,10 @@
                 "cat/cd4.bed",
                 "cat/jurkat.bed",
                 "coverage_graphs",
-                "coverage_graphs/cd4_REP1.dreg.bedGraph",
                 "coverage_graphs/cd4_REP1.minus.bigWig",
                 "coverage_graphs/cd4_REP1.plus.bigWig",
-                "coverage_graphs/cd4_REP2.dreg.bedGraph",
                 "coverage_graphs/cd4_REP2.minus.bigWig",
                 "coverage_graphs/cd4_REP2.plus.bigWig",
-                "coverage_graphs/jurkat.dreg.bedGraph",
                 "coverage_graphs/jurkat.minus.bigWig",
                 "coverage_graphs/jurkat.plus.bigWig",
                 "hisat2",
@@ -302,13 +299,10 @@
             [
                 "cd4.bed:md5,1c4f3b80b9b606855d0e6b1609fc90a3",
                 "jurkat.bed:md5,1a07210f46be7235f6fd3ea7260c2a55",
-                "cd4_REP1.dreg.bedGraph:md5,9afeff7c6ca37640e946de7c6153f77f",
                 "cd4_REP1.minus.bigWig:md5,7430ec6b29bad01cc195bff48e7c3318",
                 "cd4_REP1.plus.bigWig:md5,051b50fa9bb4de523d54a37b2d7353f5",
-                "cd4_REP2.dreg.bedGraph:md5,7db28452604d25f084f5c90a844acfaa",
                 "cd4_REP2.minus.bigWig:md5,59d6c644860efb1852d1d88f12e5328e",
                 "cd4_REP2.plus.bigWig:md5,7e1f1319b32f591d6704050447317108",
-                "jurkat.dreg.bedGraph:md5,2263e002f2867d8c306e52cf0a5ed495",
                 "jurkat.minus.bigWig:md5,8a0ca6db6626d3fefb518f0d35dd1abc",
                 "jurkat.plus.bigWig:md5,66e82005e6c6730e970f7506bf93325c",
                 "cd4_REP1.sorted.bam.flagstat:md5,aa26d19a689b2fe97e254f125e1f7bcb",
@@ -346,6 +340,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-04-24T12:35:19.978989"
+        "timestamp": "2025-05-10T09:42:12.383693"
     }
 }
