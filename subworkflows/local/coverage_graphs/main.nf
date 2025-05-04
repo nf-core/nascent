@@ -5,6 +5,7 @@
 include { DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_PLUS  } from '../../../modules/nf-core/deeptools/bamcoverage/main'
 include { DEEPTOOLS_BAMCOVERAGE as DEEPTOOLS_BAMCOVERAGE_MINUS } from '../../../modules/nf-core/deeptools/bamcoverage/main'
 include { FLIP_STRAND                                          } from '../../../modules/flip_strand'
+include { PINTS_VISUALIZER                                     } from '../../../modules/local/pints/visualizer'
 
 workflow COVERAGE_GRAPHS {
     take:
@@ -33,18 +34,25 @@ workflow COVERAGE_GRAPHS {
     )
     ch_versions = ch_versions.mix(DEEPTOOLS_BAMCOVERAGE_MINUS.out.versions.first())
 
-
-    ch_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
+    ch_deeptools_plus_minus = DEEPTOOLS_BAMCOVERAGE_PLUS.out.bigwig.join(DEEPTOOLS_BAMCOVERAGE_MINUS.out.bigwig)
 
     if (params.assay_type in ["PROseq", "PROcap", "CoPRO"]) {
         FLIP_STRAND(
-            ch_plus_minus,
+            ch_deeptools_plus_minus
         )
         ch_versions = ch_versions.mix(FLIP_STRAND.out.versions.first())
-        ch_plus_minus = FLIP_STRAND.out.flipped_bigwig
+        ch_deeptools_plus_minus = FLIP_STRAND.out.flipped_bigwig
     }
 
+    PINTS_VISUALIZER(
+        bam_bai,
+        params.assay_type,
+    )
+    ch_versions = ch_versions.mix(PINTS_VISUALIZER.out.versions.first())
+    ch_pints_plus_minus = PINTS_VISUALIZER.out.plus_bw.join(PINTS_VISUALIZER.out.minus_bw)
+
     emit:
-    plus_minus = ch_plus_minus
-    versions   = ch_versions
+    deeptools_plus_minus = ch_deeptools_plus_minus
+    pints_plus_minus     = ch_pints_plus_minus
+    versions             = ch_versions
 }

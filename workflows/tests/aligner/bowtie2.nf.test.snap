@@ -1,7 +1,7 @@
 {
     "Should run with defaults": {
         "content": [
-            68,
+            71,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -35,7 +35,7 @@
                     "fastp": "0.23.4"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": null
                 },
                 "GTF2BED": {
                     "perl": "5.26.2"
@@ -43,6 +43,10 @@
                 "HOMER_MAKETAGDIRECTORY": {
                     "homer": 4.11,
                     "samtools": 1.21
+                },
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
                 },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
@@ -298,6 +302,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-11T12:24:05.753243"
+        "timestamp": "2025-05-11T12:32:43.824823"
     }
 }

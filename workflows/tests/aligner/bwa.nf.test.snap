@@ -1,27 +1,27 @@
 {
     "Should work with gzipped references": {
         "content": [
-            49
+            52
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-04-24T12:31:59.546203"
+        "timestamp": "2025-05-11T15:15:07.710999"
     },
     "Should work with BWA Index": {
         "content": [
-            53
+            56
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-04-24T12:31:09.739055"
+        "timestamp": "2025-05-11T15:14:14.361165"
     },
     "Should run with defaults": {
         "content": [
-            130,
+            135,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -73,6 +73,10 @@
                     "samtools": 1.21
                 },
                 "PINTS_CALLER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
+                "PINTS_VISUALIZER": {
                     "python": "3.12.6",
                     "pints": "1.1.13"
                 },
@@ -248,10 +252,10 @@
                 "quality_control/preseq",
                 "quality_control/preseq/cd4_REP1.c_curve.txt",
                 "quality_control/preseq/cd4_REP1.lc_extrap.txt",
+                "quality_control/preseq/cd4_REP2.c_curve.txt",
                 "quality_control/preseq/cd4_REP2.lc_extrap.txt",
                 "quality_control/preseq/cd4_REP3.c_curve.txt",
                 "quality_control/preseq/cd4_REP3.lc_extrap.txt",
-                "quality_control/preseq/cd4_REP4.c_curve.txt",
                 "quality_control/preseq/cd4_REP4.lc_extrap.txt",
                 "quality_control/preseq/jurkat_REP1.c_curve.txt",
                 "quality_control/preseq/jurkat_REP1.lc_extrap.txt",
@@ -417,6 +421,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-11T12:17:47.081915"
+        "timestamp": "2025-05-11T15:13:13.497405"
     }
 }

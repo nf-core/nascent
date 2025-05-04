@@ -1,0 +1,68 @@
+nextflow_process {
+
+    name "Test Process PINTS_VISUALIZER"
+    script "../main.nf"
+    process "PINTS_VISUALIZER"
+    tag "modules"
+    tag "modules_local"
+    tag "pints"
+    tag "pints/visualizer"
+
+    test("Should run PINTS_VISUALIZER with PROseq data and produce strand-specific bigwigs") {
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample', single_end:false ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                    'chr1'
+                ])
+                input[1] = 'PROseq'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.plus_bw.size() == 1 },
+                { assert process.out.minus_bw.size() == 1 },
+                { assert snapshot(
+                    process.out.plus_bw.get(0)[1],
+                    process.out.minus_bw.get(0)[1]
+                    ).match()
+                },
+                { assert snapshot(path(process.out.versions[0]).yaml).match("flipped_versions") }
+            )
+        }
+    }
+
+    test("Should run PINTS_VISUALIZER with GROseq data without reverse complement") {
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_gro', single_end:false ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                    'chr1'
+                ])
+                input[1] = 'GROseq'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.plus_bw.size() == 1 },
+                { assert process.out.minus_bw.size() == 1 },
+                { assert snapshot(
+                    process.out.plus_bw.get(0)[1],
+                    process.out.minus_bw.get(0)[1]
+                    ).match()
+                },
+                { assert snapshot(path(process.out.versions[0]).yaml).match("versions") }
+            )
+        }
+    }
+}
