@@ -3,9 +3,9 @@ nextflow_process {
     name "Test Process GROHMM_PARAMETERTUNING"
     script "modules/local/grohmm/parametertuning/main.nf"
     process "GROHMM_PARAMETERTUNING"
+    tag "grohmm"
 
-    test("Should run without a tuning file") {
-
+    test("Should run with defaults") {
         when {
             params {
                 outdir = "$outputDir"
@@ -13,26 +13,30 @@ nextflow_process {
             process {
                 """
                 input[0] = [
-                    [ id: 'mR1' ],
-                    [ file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/bam/test.single_end.sorted.bam", checkIfExists: true), ]
+                    [ id: 'Sall' ],
+                    [ file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam", checkIfExists: true),
+                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam", checkIfExists: true) ],
+                    [],
                 ]
-                // FIXME This needs to match up with s40
                 input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.gtf",
+                            "https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/hg19.chr7.refGene.gtf",
                             checkIfExists: true
                             )
-                input[2] = []
+                input[2] = 5
+                input[3] = -100
                 """
             }
         }
 
         then {
-            // FIXME Broken test
-            assert process.failed
+            assertAll(
+                { assert process.success },
+                { assert snapshot(
+                    path(process.out.tuning[0][1]).readLines(),
+                    path(process.out.bed[0][1]),
+                ).match() },
+                { assert snapshot(path(process.out.versions.get(0)).yaml).match("versions") },
+            )
         }
-
     }
-
-    // TODO Add a test for with a tuning file
-
 }

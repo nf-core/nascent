@@ -1,11 +1,11 @@
 process BED2SAF {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_single'
 
     conda "conda-forge::gawk=5.1.0"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/ubuntu:20.04' :
-        'nf-core/ubuntu:20.04' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/ubuntu:20.04'
+        : 'nf-core/ubuntu:20.04'}"
 
     input:
     tuple val(meta), path(bed)
@@ -20,7 +20,7 @@ process BED2SAF {
     script:
     """
     awk 'OFS="\\t" {print \$1"."\$2"."\$3, \$1, \$2, \$3, "."}' \\
-        $bed \\
+        ${bed} \\
         > ${bed.baseName}.saf
 
     cat <<-END_VERSIONS > versions.yml

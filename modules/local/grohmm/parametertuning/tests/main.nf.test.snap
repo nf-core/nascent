@@ -1,0 +1,31 @@
+{
+    "versions": {
+        "content": [
+            {
+                "GROHMM_PARAMETERTUNING": {
+                    "r-base": "4.3.3",
+                    "bioconductor-grohmm": "1.39.0"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-09-24T11:44:17.664038682"
+    },
+    "Should run with defaults": {
+        "content": [
+            [
+                "\"LtProbB\",\"UTS\",\"merged\",\"dissociated\",\"total\",\"errorRate\",\"txSize\"",
+                "-100,5,10,0,10,0.00617665225447807,921"
+            ],
+            "Sall_5_-100.tuning.consensus.bed:md5,013b67a2aef7956b6400a61d413f65a8"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-17T20:21:05.448531"
+    }
+}

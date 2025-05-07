@@ -1,0 +1,16 @@
+{
+    "Should pass with overlapping exons in GTF": {
+        "content": [
+            [
+                "\"LtProbB\",\"UTS\",\"merged\",\"dissociated\",\"total\",\"errorRate\",\"txSize\"",
+                "-100,5,0,0,0,0,921"
+            ],
+            "Sall_5_-100.tuning.consensus.bed:md5,90bcbcd2a2fbd8e2c3602152d89d1cd5"
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-10-17T20:16:00.717011"
+    }
+}

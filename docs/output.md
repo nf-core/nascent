@@ -18,6 +18,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [bwa-mem2](#bwa-mem2) - The next version of bwa-mem
   - [DRAGMAP](#dragmap) - Open-source software implementation of the DRAGEN mapper
   - [Bowtie 2](#bowtie-2) - A fast and sensitive gapped read aligner
+  - [HISAT2](#hisat2) - A fast and sensitive gapped read aligner
 - [Alignment post-processing](#alignment-post-processing)
   - [SAMtools](#samtools) - Sort and index alignments
   - [UMI-tools dedup](#umi-tools-dedup) - UMI-based deduplication
@@ -46,7 +47,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `fastqc/`
+- `preprocessing/fastqc`
   - `*_fastqc.html`: FastQC report containing quality metrics.
   - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
@@ -69,7 +70,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<flowcell_id>/`
+- `preprocessing/fastp`
   - `*.fastp.html`: Trimming report in html format.
   - `*.fastp.json`: Trimming report in json format.
   - `*.fastp.log`: Trimming log file.
@@ -133,6 +134,24 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 [Bowtie 2](https://github.com/BenLangmead/bowtie2) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of about 50 up to 100s or 1,000s of characters, and particularly good at aligning to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index to keep its memory footprint small: for the human genome, its memory footprint is typically around 3.2 GB. Bowtie 2 supports gapped, local, and paired-end alignment modes.
 
 The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
+
+### HISAT2
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `hisat2/`
+  - `<SAMPLE>.bam`: The original BAM file containing read alignments to the reference genome.
+- `hisat2/log/`
+  - `*.log`: HISAT2 alignment report containing the mapping results summary.
+- `hisat2/unmapped/`
+  - `*.fastq.gz`: FastQ files containing unmapped reads will be placed in this directory.
+
+</details>
+
+[HISAT2](http://daehwankimlab.github.io/hisat2/) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes as well as to a single reference genome. It introduced a new indexing scheme called a Hierarchical Graph FM index (HGFM) which when combined with several alignment strategies, enable rapid and accurate alignment of sequencing reads. The HISAT2 route through the pipeline is a good option if you have memory limitations on your compute. However, quantification isn't performed if using `--aligner hisat2` due to the lack of an appropriate option to calculate accurate expression estimates from HISAT2 derived genomic alignments. However, you can use this route if you have a preference for the alignment, QC and other types of downstream analysis compatible with the output of HISAT2.
+
+You can choose to align your data with HISAT2 by providing the `--aligner hisat2` parameter.
 
 ## Alignment post-processing
 
@@ -209,9 +228,10 @@ The majority of RSeQC scripts generate output files which can be plotted and sum
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/preseq/`
+- `quality_control/preseq/`
   - `*.lc_extrap.txt`: Preseq expected future yield file.
-- `<ALIGNER>/preseq/log/`
+  - `*.c_curve.txt`: Preseq cumulative coverage curve file.
+- `quality_control/preseq/log/`
   - `*.command.log`: Standard error output from command.
 
 </details>
@@ -225,7 +245,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bbmap/`
+- `quality_control/bbmap/`
   - `*.coverage.hist.txt`: Histogram of read coverage over each chromosome
   - `*.coverage.stats.txt`: Coverage stats broken down by chromosome including %GC, pos/neg read coverage, total coverage, etc.
 
@@ -240,9 +260,10 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `bedtools/`
+- `coverage_graphs/`
   - `*.minus.bedGraph`: Sample coverage file (negative strand only) in bedGraph format
   - `*.plus.bedGraph`: Sample coverage file (positive strand only) in bedGraph format
+  - `*.dreg.bedGraph`: Sample coverage file (dreg) in bedGraph format prepared using proseq2.0 pipeline
 
 </details>
 
@@ -251,7 +272,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `deeptools/`
+- `coverage_graphs/`
   - `*.minus.bigWig`: Sample coverage file (negative strand only) in bigWig format
   - `*.plus.bigWig`: Sample coverage file (positive strand only) in bigWig format
 
@@ -264,7 +285,7 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 <details markdown="1">
 <summary>Output files</summary>
 
-- `homer/`
+- `transcript_identification/homer/`
   - `*.bed`: HOMER Nascent RNA (GroSeq) transcripts after pos2bed
   - `*.peaks.txt`: HOMER Nascent RNA (GroSeq) transcripts
   - `*.bedGraph.gz`: UCSC bedGraph
@@ -276,14 +297,20 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 For now the pipeline only supports the HOMER groseq workflow, feel free to open an issue or PR if you'd like to see others. For more information about how to use HOMER, see the [GRO-Seq Analysis Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
 
+Per the [HOMER GRO-Seq Analysis Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html):
+
+> In the case of technical replicates (i.e. runs from the same sequencing library), it is advisable to always "pool" the data. If they are biological replicates, it is often a good idea to keep them separate for and take advantage of their variability to refine your analysis. For some types of analysis, such as transcript identification, it is a good idea to create a single META-experiment that contains all of the GRO-Seq reads for a given cell type. This will provide increased power for identifying transcripts de novo.
+
+The pipeline will pool the reads if they are in the same group. See [#153](https://github.com/nf-core/nascent/issues/153) for the status of supporting other methods.
+
 ### PINTS
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `pints/`
-  - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent)
-  - `*_divergent_peaks.bed`: Divergent TREs
+- `transcript_identification/pints/`
+  - `*_bidirectional_peaks.bed`: Bidirectional TREs (divergent + convergent) **optional**
+  - `*_divergent_peaks.bed`: Divergent TREs **optional**
   - `*_unidirectional_peaks.bed`: Unidirectional TREs, maybe lncRNAs transcribed from enhancers (e-lncRNAs)
 
 </details>
@@ -297,11 +324,11 @@ For more information about how PINTS works, see the paper [A comparison of exper
 <details markdown="1">
 <summary>Output files</summary>
 
-- `grohmm/`
+- `transcript_identification/grohmm/`
   - `*.eval.txt`: Evaluation of HMM Annotations
   - `*.final.transcripts.bed`: Predicted transcripts
   - `*.tdFinal.txt`: Final quality metrics
-  - `*.tdplot_mqc.jpg`: TD plot included in multiqc
+  - `*.tdplot_mqc.png`: TD plot included in MultiQC
   - `*.transcripts.txt`: Predicted transcripts in txt form
   - `*.tuning.csv`: The tuning csv that was used
 
@@ -346,10 +373,11 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<ALIGNER>/featurecounts/`
-  - `*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
-  - `*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
-  - `*_mqc.tsv`: MultiQC custom content files used to plot biotypes in report.
+- `quantification/featurecounts/`
+  - `gene/*.featureCounts.txt`: featureCounts biotype-level quantification results for each sample.
+  - `gene/*.featureCounts.txt.summary`: featureCounts summary file containing overall statistics about the counts.
+  - `nascent/*.featureCounts.txt`: featureCounts of nascent transcripts quantification results for each sample.
+  - `nascent/*.featureCounts.txt.summary`: featureCounts summary file of the nascent transcripts containing overall statistics about the counts.
 
 </details>
 
@@ -364,9 +392,8 @@ They've also created some bed files that might be useful for analysis.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `genome/`
+- `reference/`
   - `*.fa`, `*.gtf`, `*.gff`, `*.bed`, `.tsv`: If the `--save_reference` parameter is provided then all of the genome reference files will be placed in this directory.
-- `genome/index/`
   - `bwa/`: Directory containing bwa indices.
   - `bwa-mem2/`: Directory containing bwa-mem2 indices.
   - `dragmap/`: Directory containing DRAGMAP indices.

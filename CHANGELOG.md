@@ -3,14 +3,54 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.3.0 - 2025-05-06
+
+### Added
+
+- [5bcfe4f](https://github.com/nf-core/nascent/commit/5bcfe4ff1729b89e9e5741c473d32168b836a57f) - Update pipeline template to [nf-core/tools 2.13](https://github.com/nf-core/tools/releases/tag/2.13)
+- [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
+- [#140](https://github.com/nf-core/nascent/pull/140) - Add HISAT2 aligner
+- [#142](https://github.com/nf-core/nascent/pull/142) - Add STAR aligner
+- [#149](https://github.com/nf-core/nascent/pull/149) - Add Software citations to MultiQC
+- [#175](https://github.com/nf-core/nascent/pull/175) - Add HOMER uniqmap support
+- [a3bc907](https://github.com/nf-core/nascent/commit/a3bc907e9afd9dd2a9572798fa16fbc781c3dcb0) - Update pipeline template to [nf-core/tools 2.13.1](https://github.com/nf-core/tools/releases/tag/2.13.1)
+- [14fdbb8](https://github.com/nf-core/nascent/commit/14fdbb83fe944fc4d8d77e804f0332510d82fea4) - Update pipeline template to [nf-core/tools 3.0.0](https://github.com/nf-core/tools/releases/tag/3.0.0)
+- [b4ac8c5](https://github.com/nf-core/nascent/commit/b4ac8c5) - Update pipeline template to [nf-core/tools 3.0.1](https://github.com/nf-core/tools/releases/tag/3.0.1)
+- [a9ae47a](https://github.com/nf-core/nascent/commit/a9ae47a) - Update pipeline template to [nf-core/tools 3.0.1](https://github.com/nf-core/tools/releases/tag/3.0.2)
+- [bfcd97c](https://github.com/nf-core/nascent/commit/bfcd97c) - Update pipeline template to [nf-core/tools 3.1.0](https://github.com/nf-core/tools/releases/tag/3.1.0)
+- [7a4e356](https://github.com/nf-core/nascent/commit/7a4e356) - Update pipeline template to [nf-core/tools 3.1.1](https://github.com/nf-core/tools/releases/tag/3.1.1)
+- [7a4e356](https://github.com/nf-core/nascent/commit/debe6a9) - Update pipeline template to [nf-core/tools 3.1.2](https://github.com/nf-core/tools/releases/tag/3.1.2)
+- [7a4e356](https://github.com/nf-core/nascent/commit/f60a3cb) - Update pipeline template to [nf-core/tools 3.2.0](https://github.com/nf-core/tools/releases/tag/3.2.0)
+- [852b5f0](https://github.com/nf-core/nascent/commit/852b5f0) - Update pipeline template to [nf-core/tools 3.2.1](https://github.com/nf-core/tools/releases/tag/3.2.1)
+
+### Fixed
+
+- [#171](https://github.com/nf-core/nascent/pull/171) - Clean up MultiQC report
+- [#170](https://github.com/nf-core/nascent/pull/170) - Remove "Access to undefined parameter forwardStranded" warnings
+- [#173](https://github.com/nf-core/nascent/pull/173) - Fix config selectors
+- [#173](https://github.com/nf-core/nascent/pull/173) - Remove STAR transcriptome run
+
+### Changed
+
+- [#137](https://github.com/nf-core/nascent/pull/137) - Use singularity containers for PINTS
+- [#142](https://github.com/nf-core/nascent/pull/142) - Updated CHM13 references
+- [#171](https://github.com/nf-core/nascent/pull/171) - Use assertAll in tests
+- [#165](https://github.com/nf-core/nascent/pull/165) - groHMM overhaul. Removed R mclapply calls and replaced with Nextflow scatter gather for parameter tuning. This creates a job for each parameter set.
+- [#174](https://github.com/nf-core/nascent/pull/174) - PINTS Scatter gather pattern by chromosome
+- [#178](https://github.com/nf-core/nascent/pull/178) - Remove groHMM parameter tuning publishing and remove `each` inputs from parameter tuning module
+
+### Removed
+
+- [[#165](https://github.com/nf-core/nascent/pull/165)] - Removed support for groHMM tuning files.
+
 ## v2.2.0 - 2024-03-05
 
 ### Added
 
-- [1494fff](https://github.com/nf-core/nascent/commit/1494fff2ecd8b498e19d7d0fa3f7ee0f71088ab4) - Update pipeline template to [nf-core/tools 2.12](https://github.com/nf-core/tools/releases/tag/2.12)
-- [ec24cfb](https://github.com/nf-core/nascent/commit/ec24cfb2646904bcc78379a071b50b53a855b9a9) - Update pipeline template to [nf-core/tools 2.11.1](https://github.com/nf-core/tools/releases/tag/2.11.1)
-- [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
 - [9712163](https://github.com/nf-core/nascent/commit/97121638eb77e175b912ff45a669426e532c5d7f) - Update pipeline template to [nf-core/tools 2.10](https://github.com/nf-core/tools/releases/tag/2.10)
+- [15b8ff3](https://github.com/nf-core/nascent/commit/15b8ff31cd43ec2e330ce7958bd6d7d65529b4d3) - Update pipeline template to [nf-core/tools 2.11](https://github.com/nf-core/tools/releases/tag/2.11)
+- [ec24cfb](https://github.com/nf-core/nascent/commit/ec24cfb2646904bcc78379a071b50b53a855b9a9) - Update pipeline template to [nf-core/tools 2.11.1](https://github.com/nf-core/tools/releases/tag/2.11.1)
+- [1494fff](https://github.com/nf-core/nascent/commit/1494fff2ecd8b498e19d7d0fa3f7ee0f71088ab4) - Update pipeline template to [nf-core/tools 2.12](https://github.com/nf-core/tools/releases/tag/2.12)
 - [[#130](https://github.com/nf-core/nascent/pull/130)] - AWS Mega Tests
 - [[#132](https://github.com/nf-core/nascent/pull/132)] - Add Bowtie 2 as an aligner option
 

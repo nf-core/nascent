@@ -1,37 +1,39 @@
 process GROHMM_PARAMETERTUNING {
-    tag "$meta.id"
+    tag "${meta.id}|${UTS}|${LtProbB}"
     label 'process_high'
-    label 'process_long'
+    // TODO: Use array's? Or should this be set at the nf-core/configs level?
+    // array 10
 
-    conda "conda-forge::r-base=4.1.1 conda-forge::r-optparse=1.7.1 conda-forge::r-argparse=2.1.3 bioconda::bioconductor-genomicfeatures=1.46.1 bioconda::bioconductor-grohmm=1.28.0"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-e9a6cb7894dd2753aff7d9446ea95c962cce8c46:0a46dae3241b1c4f02e46468f5d54eadcf64beca-0' :
-        'quay.io/biocontainers/mulled-v2-e9a6cb7894dd2753aff7d9446ea95c962cce8c46:0a46dae3241b1c4f02e46468f5d54eadcf64beca-0' }"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b9/b929af5662486ba6ce2d27eb501e5c7ec71ca7dd8e333fe5d3dcf2803d87cf67/data'
+        : 'community.wave.seqera.io/library/grohmm:833aa94cad4202ac'}"
 
     input:
-    tuple val(meta), path(bam)
-    path gtf
-    path tune_parameter_file
+    tuple val(meta), path(bams), path(bais), val(UTS), val(LtProbB)
+    path gxf
 
     output:
-    path "*.tuning.csv" , emit: tuning
-    path  "versions.yml", emit: versions
+    tuple val(meta), path("*.tuning.csv"), emit: tuning
+    tuple val(meta), path("*.tuning.consensus.bed"), emit: bed
+    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}_${UTS}_${LtProbB}"
     """
-    parameter_tuning.R \\
-        --bam_file ${bam} \\
-        --tuning_file ${tune_parameter_file} \\
+    grohmm_parametertuning.R \\
+        --bam_file ${bams} \\
         --outprefix ${prefix} \\
-        --gtf $gtf \\
+        --gxf ${gxf} \\
+        --uts ${UTS} \\
+        --ltprobb ${LtProbB} \\
         --outdir ./ \\
-        --cores $task.cpus \\
-        $args
+        --cores ${task.cpus} \\
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

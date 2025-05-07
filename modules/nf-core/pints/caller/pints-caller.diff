@@ -1,21 +1,73 @@
-Changes in module 'nf-core/pints/caller'
+Changes in component 'nf-core/pints/caller'
+Changes in 'pints/caller/environment.yml':
+--- modules/nf-core/pints/caller/environment.yml
++++ modules/nf-core/pints/caller/environment.yml
+@@ -5,6 +5,7 @@
+   - pybedtools
+   - bedtools
+   - htslib
++  - python=3.12.6
+   - pip
+   - pip: # FIXME https://github.com/nf-core/modules/issues/5814
+       # NOTE PINTS isn't adding conda builds and is a few versions behind.
+
+'modules/nf-core/pints/caller/meta.yml' is unchanged
+Changes in 'pints/caller/main.nf':
 --- modules/nf-core/pints/caller/main.nf
 +++ modules/nf-core/pints/caller/main.nf
-@@ -9,6 +9,7 @@
+@@ -1,6 +1,6 @@
+ process PINTS_CALLER {
+-    tag "$meta.id"
+-    label 'process_medium'
++    tag "$meta.id" + "${chr_name ? ' | ' + chr_name : ''}"
++    label 'process_high'
+ 
+     conda "${moduleDir}/environment.yml"
+     // NOTE Stopped publishing at 1.1.9 https://quay.io/repository/biocontainers/pypints?tab=tags
+@@ -9,13 +9,13 @@
+         'community.wave.seqera.io/library/pybedtools_bedtools_htslib_pip_pypints:39699b96998ec5f6' }"
  
      input:
-     tuple val(meta), path(bams)
-+    val assay_type
+-    tuple val(meta), path(bams), path(bais)
++    tuple val(meta), path(bam, arity: '1'), val(chr_name)
+     val assay_type
  
      output:
-     tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
-@@ -34,6 +35,7 @@
+-    tuple val(meta), path("*_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
+-    tuple val(meta), path("*_bidirectional_peaks.bed") , optional:true, emit: bidirectional_TREs
+-    tuple val(meta), path("*_unidirectional_peaks.bed"), optional:true, emit: unidirectional_TREs
++    tuple val(meta), path("*_1_divergent_peaks.bed")     , optional:true, emit: divergent_TREs
++    tuple val(meta), path("*_1_bidirectional_peaks.bed") , optional:true, emit: bidirectional_TREs
++    tuple val(meta), path("*_1_unidirectional_peaks.bed"), optional:true, emit: unidirectional_TREs
+     tuple val(meta), path("peakcalling_*.log")                        , emit: peakcalling_log
+     path  "versions.yml"                                              , emit: versions
+ 
+@@ -24,19 +24,21 @@
+ 
+     script:
+     def args = task.ext.args ?: ''
+-    def prefix = task.ext.prefix ?: "${meta.id}"
++    def prefix = task.ext.prefix ?: "${meta.id}" + (chr_name ? '_' + chr_name : '_all')
+     // TODO handle bigwigs
+     // def input_type  = ("${input[0]}".endsWith(".bam")) ? "--bam-file $input" :
+     //                    ("$input".contains(".bw")) ? "--bw-pl ${input[0]} --bw-mn ${input[1]}" :
+     //                    error "Please use bam or BigWig files"
++    def chr = chr_name ? "--chromosome-start-with $chr_name" : ''
+     """
+     pints_caller \\
+-        --bam-file $bams \\
++        --bam-file $bam \\
+         --save-to . \\
          --file-prefix $prefix \\
          --thread $task.cpus \\
          --dont-check-updates \\
-+        --exp-type $assay_type \\
+         --exp-type $assay_type \\
++        $chr \\
          $args
  
      cat <<-END_VERSIONS > versions.yml
 
+'modules/nf-core/pints/caller/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/pints/caller/tests/nextflow.config' is unchanged
+'modules/nf-core/pints/caller/tests/main.nf.test' is unchanged
 ************************************************************

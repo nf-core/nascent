@@ -9,7 +9,16 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { NASCENT } from './workflows/nascent'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nascent_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nascent_pipeline'
+include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nascent_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,66 +26,93 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.gtf = WorkflowMain.getGenomeAttribute(params, 'gtf')
-params.gff = WorkflowMain.getGenomeAttribute(params, 'gff')
-params.gene_bed = WorkflowMain.getGenomeAttribute(params, 'bed12')
-params.bwa_index = WorkflowMain.getGenomeAttribute(params, 'bwa')
-params.bwamem2_index = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
-params.dragmap = WorkflowMain.getGenomeAttribute(params, 'dragmap')
-params.bowtie2_index = WorkflowMain.getGenomeAttribute(params, 'bowtie2')
+params.fasta = getGenomeAttribute('fasta')
+params.gtf = getGenomeAttribute('gtf')
+params.gff = getGenomeAttribute('gff')
+params.gene_bed = getGenomeAttribute('bed12')
+params.bwa_index = getGenomeAttribute('bwa')
+params.bwamem2_index = getGenomeAttribute('bwamem2')
+params.dragmap = getGenomeAttribute('dragmap')
+params.bowtie2_index = getGenomeAttribute('bowtie2')
+params.hisat2_index = getGenomeAttribute('hisat2')
+params.star_index = null
+params.homer_uniqmap = getGenomeAttribute('uniqmap')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE & PRINT PARAMETER SUMMARY
+    NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-include { validateParameters; paramsHelp } from 'plugin/nf-validation'
-
-// Print help message if needed
-if (params.help) {
-    def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
-    def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-    def String command = "nextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker"
-    log.info logo + paramsHelp(command) + citation + NfcoreTemplate.dashedLine(params.monochrome_logs)
-    System.exit(0)
-}
-
-// Validate input parameters
-if (params.validate_params) {
-    validateParameters()
-}
-
-WorkflowMain.initialise(workflow, params, log, args)
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOW FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { NASCENT } from './workflows/nascent'
 
 //
-// WORKFLOW: Run main nf-core/nascent analysis pipeline
+// WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow NFCORE_NASCENT {
-    NASCENT ()
-}
 
+    take:
+    samplesheet // channel: samplesheet read in from --input
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    NASCENT (
+        samplesheet,
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.gene_bed,
+        params.bwa_index,
+        params.bwamem2_index,
+        params.dragmap,
+        params.bowtie2_index,
+        params.hisat2_index,
+        params.star_index,
+        params.use_homer_uniqmap ? params.homer_uniqmap : []
+    )
+    emit:
+    multiqc_report = NASCENT.out.multiqc_report // channel: /path/to/multiqc_report.html
+}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN ALL WORKFLOWS
+    RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// WORKFLOW: Execute a single named workflow for the pipeline
-// See: https://github.com/nf-core/rnaseq/issues/619
-//
 workflow {
-    NFCORE_NASCENT ()
+
+    main:
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input
+    )
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    NFCORE_NASCENT (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        NFCORE_NASCENT.out.multiqc_report
+    )
 }
 
 /*

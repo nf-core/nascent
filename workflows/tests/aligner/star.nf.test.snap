@@ -1,0 +1,478 @@
+{
+    "Should run with gzipped gtf": {
+        "content": [
+            93
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-21T11:57:47.575681"
+    },
+    "Should run with defaults": {
+        "content": [
+            92,
+            {
+                "BBMAP_PILEUP": {
+                    "bbmap": 39.01,
+                    "samtools": "1.16.1",
+                    "pigz": 2.6
+                },
+                "BEDTOOLS_GENOMECOV_MINUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_GENOMECOV_PLUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT_FILTER": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
+                },
+                "CUSTOM_GETCHROMSIZES": {
+                    "getchromsizes": 1.2
+                },
+                "DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.5"
+                },
+                "DEEPTOOLS_BAMCOVERAGE_PLUS": {
+                    "deeptools": "3.5.5"
+                },
+                "FASTP": {
+                    "fastp": "0.23.4"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GTF2BED": {
+                    "perl": "5.26.2"
+                },
+                "HOMER_MAKETAGDIRECTORY": {
+                    "homer": 4.11,
+                    "samtools": 1.21
+                },
+                "PINTS_CALLER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
+                "PRESEQ_CCURVE": {
+                    "preseq": "3.1.1"
+                },
+                "PRESEQ_LCEXTRAP": {
+                    "preseq": "3.1.1"
+                },
+                "RSEQC_INFEREXPERIMENT": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDISTRIBUTION": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDUPLICATION": {
+                    "rseqc": "5.0.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
+                "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
+                    "subread": "2.0.1"
+                },
+                "Workflow": {
+                    "nf-core/nascent": "v2.3.0"
+                }
+            },
+            [
+                "cat",
+                "cat/cd4.bed",
+                "cat/jurkat.bed",
+                "coverage_graphs",
+                "coverage_graphs/cd4_REP1.dreg.bedGraph",
+                "coverage_graphs/cd4_REP1.minus.bedGraph",
+                "coverage_graphs/cd4_REP1.minus.bigWig",
+                "coverage_graphs/cd4_REP1.plus.bedGraph",
+                "coverage_graphs/cd4_REP1.plus.bigWig",
+                "coverage_graphs/cd4_REP2.dreg.bedGraph",
+                "coverage_graphs/cd4_REP2.minus.bedGraph",
+                "coverage_graphs/cd4_REP2.minus.bigWig",
+                "coverage_graphs/cd4_REP2.plus.bedGraph",
+                "coverage_graphs/cd4_REP2.plus.bigWig",
+                "coverage_graphs/jurkat.dreg.bedGraph",
+                "coverage_graphs/jurkat.minus.bedGraph",
+                "coverage_graphs/jurkat.minus.bigWig",
+                "coverage_graphs/jurkat.plus.bedGraph",
+                "coverage_graphs/jurkat.plus.bigWig",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/fastqc-status-check-heatmap.txt",
+                "multiqc/multiqc_data/fastqc_adapter_content_plot.txt",
+                "multiqc/multiqc_data/fastqc_overrepresented_sequences_plot.txt",
+                "multiqc/multiqc_data/fastqc_per_base_n_content_plot.txt",
+                "multiqc/multiqc_data/fastqc_per_base_sequence_quality_plot.txt",
+                "multiqc/multiqc_data/fastqc_per_sequence_gc_content_plot_Counts.txt",
+                "multiqc/multiqc_data/fastqc_per_sequence_gc_content_plot_Percentages.txt",
+                "multiqc/multiqc_data/fastqc_per_sequence_quality_scores_plot.txt",
+                "multiqc/multiqc_data/fastqc_sequence_counts_plot.txt",
+                "multiqc/multiqc_data/fastqc_sequence_duplication_levels_plot.txt",
+                "multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt",
+                "multiqc/multiqc_data/homer-tag-directory-gc-content.txt",
+                "multiqc/multiqc_data/homer-tag-info-dist.txt",
+                "multiqc/multiqc_data/homer-tag-length-dist.txt",
+                "multiqc/multiqc_data/homer_tagdir.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_fastqc.txt",
+                "multiqc/multiqc_data/multiqc_general_stats.txt",
+                "multiqc/multiqc_data/multiqc_rseqc_infer_experiment.txt",
+                "multiqc/multiqc_data/multiqc_rseqc_read_distribution.txt",
+                "multiqc/multiqc_data/multiqc_samtools_flagstat.txt",
+                "multiqc/multiqc_data/multiqc_samtools_idxstats.txt",
+                "multiqc/multiqc_data/multiqc_samtools_stats.txt",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_data/preseq.txt",
+                "multiqc/multiqc_data/preseq_complexity_plot_molecules.txt",
+                "multiqc/multiqc_data/rseqc_infer_experiment_plot.txt",
+                "multiqc/multiqc_data/rseqc_read_distribution_plot.txt",
+                "multiqc/multiqc_data/rseqc_read_dups.txt",
+                "multiqc/multiqc_data/rseqc_read_dups_plot.txt",
+                "multiqc/multiqc_data/samtools-flagstat-dp_Percentage_of_total.txt",
+                "multiqc/multiqc_data/samtools-flagstat-dp_Read_counts.txt",
+                "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
+                "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
+                "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
+                "multiqc/multiqc_data/samtools-stats-dp.txt",
+                "multiqc/multiqc_data/samtools_alignment_plot.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_nascent_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/fastp",
+                "preprocessing/fastp/cd4_REP1.trimmed.fastp.html",
+                "preprocessing/fastp/cd4_REP1.trimmed.fastp.json",
+                "preprocessing/fastp/cd4_REP1.trimmed.fastp.log",
+                "preprocessing/fastp/cd4_REP2.trimmed.fastp.html",
+                "preprocessing/fastp/cd4_REP2.trimmed.fastp.json",
+                "preprocessing/fastp/cd4_REP2.trimmed.fastp.log",
+                "preprocessing/fastp/jurkat.trimmed.fastp.html",
+                "preprocessing/fastp/jurkat.trimmed.fastp.json",
+                "preprocessing/fastp/jurkat.trimmed.fastp.log",
+                "preprocessing/fastqc",
+                "preprocessing/fastqc/cd4_REP1_fastqc.html",
+                "preprocessing/fastqc/cd4_REP1_fastqc.zip",
+                "preprocessing/fastqc/cd4_REP2_fastqc.html",
+                "preprocessing/fastqc/cd4_REP2_fastqc.zip",
+                "preprocessing/fastqc/jurkat_fastqc.html",
+                "preprocessing/fastqc/jurkat_fastqc.zip",
+                "quality_control",
+                "quality_control/bbsplit",
+                "quality_control/bbsplit/cd4_REP1.coverage.hist.txt",
+                "quality_control/bbsplit/cd4_REP1.coverage.stats.txt",
+                "quality_control/bbsplit/cd4_REP2.coverage.hist.txt",
+                "quality_control/bbsplit/cd4_REP2.coverage.stats.txt",
+                "quality_control/bbsplit/jurkat.coverage.hist.txt",
+                "quality_control/bbsplit/jurkat.coverage.stats.txt",
+                "quality_control/preseq",
+                "quality_control/preseq/cd4_REP1.c_curve.txt",
+                "quality_control/preseq/cd4_REP1.lc_extrap.txt",
+                "quality_control/preseq/cd4_REP2.c_curve.txt",
+                "quality_control/preseq/cd4_REP2.lc_extrap.txt",
+                "quality_control/preseq/jurkat.c_curve.txt",
+                "quality_control/preseq/jurkat.lc_extrap.txt",
+                "quality_control/preseq/log",
+                "quality_control/preseq/log/cd4_REP1.command.log",
+                "quality_control/preseq/log/cd4_REP2.command.log",
+                "quality_control/preseq/log/jurkat.command.log",
+                "quality_control/rseqc",
+                "quality_control/rseqc/infer_experiment",
+                "quality_control/rseqc/infer_experiment/cd4_REP1.infer_experiment.txt",
+                "quality_control/rseqc/infer_experiment/cd4_REP2.infer_experiment.txt",
+                "quality_control/rseqc/infer_experiment/jurkat.infer_experiment.txt",
+                "quality_control/rseqc/read_distribution",
+                "quality_control/rseqc/read_distribution/cd4_REP1.read_distribution.txt",
+                "quality_control/rseqc/read_distribution/cd4_REP2.read_distribution.txt",
+                "quality_control/rseqc/read_distribution/jurkat.read_distribution.txt",
+                "quality_control/rseqc/read_duplication",
+                "quality_control/rseqc/read_duplication/pdf",
+                "quality_control/rseqc/read_duplication/pdf/cd4_REP1.DupRate_plot.pdf",
+                "quality_control/rseqc/read_duplication/pdf/cd4_REP2.DupRate_plot.pdf",
+                "quality_control/rseqc/read_duplication/pdf/jurkat.DupRate_plot.pdf",
+                "quality_control/rseqc/read_duplication/rscript",
+                "quality_control/rseqc/read_duplication/rscript/cd4_REP1.DupRate_plot.r",
+                "quality_control/rseqc/read_duplication/rscript/cd4_REP2.DupRate_plot.r",
+                "quality_control/rseqc/read_duplication/rscript/jurkat.DupRate_plot.r",
+                "quality_control/rseqc/read_duplication/xls",
+                "quality_control/rseqc/read_duplication/xls/cd4_REP1.pos.DupRate.xls",
+                "quality_control/rseqc/read_duplication/xls/cd4_REP1.seq.DupRate.xls",
+                "quality_control/rseqc/read_duplication/xls/cd4_REP2.pos.DupRate.xls",
+                "quality_control/rseqc/read_duplication/xls/cd4_REP2.seq.DupRate.xls",
+                "quality_control/rseqc/read_duplication/xls/jurkat.pos.DupRate.xls",
+                "quality_control/rseqc/read_duplication/xls/jurkat.seq.DupRate.xls",
+                "quantification",
+                "quantification/gene",
+                "quantification/gene/cd4.featureCounts.txt",
+                "quantification/gene/cd4.featureCounts.txt.summary",
+                "quantification/gene/jurkat.featureCounts.txt",
+                "quantification/gene/jurkat.featureCounts.txt.summary",
+                "quantification/nascent",
+                "quantification/nascent/cd4-group_cd4_intersect-transcripts.featureCounts.txt",
+                "quantification/nascent/cd4-group_cd4_intersect-transcripts.featureCounts.txt.summary",
+                "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt",
+                "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt.summary",
+                "samtools",
+                "samtools/cd4.bam",
+                "samtools/jurkat.bam",
+                "star",
+                "star/log",
+                "star/log/cd4_REP1.Log.final.out",
+                "star/log/cd4_REP1.Log.out",
+                "star/log/cd4_REP1.Log.progress.out",
+                "star/log/cd4_REP1.SJ.out.tab",
+                "star/log/cd4_REP2.Log.final.out",
+                "star/log/cd4_REP2.Log.out",
+                "star/log/cd4_REP2.Log.progress.out",
+                "star/log/cd4_REP2.SJ.out.tab",
+                "star/log/jurkat.Log.final.out",
+                "star/log/jurkat.Log.out",
+                "star/log/jurkat.Log.progress.out",
+                "star/log/jurkat.SJ.out.tab",
+                "star/samtools_stats",
+                "star/samtools_stats/cd4_REP1_genome.flagstat",
+                "star/samtools_stats/cd4_REP1_genome.idxstats",
+                "star/samtools_stats/cd4_REP1_genome.stats",
+                "star/samtools_stats/cd4_REP2_genome.flagstat",
+                "star/samtools_stats/cd4_REP2_genome.idxstats",
+                "star/samtools_stats/cd4_REP2_genome.stats",
+                "star/samtools_stats/jurkat_genome.flagstat",
+                "star/samtools_stats/jurkat_genome.idxstats",
+                "star/samtools_stats/jurkat_genome.stats",
+                "star/star",
+                "star/star/Genome",
+                "star/star/Log.out",
+                "star/star/SA",
+                "star/star/SAindex",
+                "star/star/chrLength.txt",
+                "star/star/chrName.txt",
+                "star/star/chrNameLength.txt",
+                "star/star/chrStart.txt",
+                "star/star/exonGeTrInfo.tab",
+                "star/star/exonInfo.tab",
+                "star/star/geneInfo.tab",
+                "star/star/genomeParameters.txt",
+                "star/star/sjdbInfo.txt",
+                "star/star/sjdbList.fromGTF.out.tab",
+                "star/star/sjdbList.out.tab",
+                "star/star/transcriptInfo.tab",
+                "transcript_identification",
+                "transcript_identification/filtered",
+                "transcript_identification/filtered/cd4_filtered.bed",
+                "transcript_identification/filtered/jurkat_filtered.bed",
+                "transcript_identification/homer",
+                "transcript_identification/homer/cd4.bed",
+                "transcript_identification/homer/cd4.bedGraph.gz",
+                "transcript_identification/homer/cd4.peaks.txt",
+                "transcript_identification/homer/cd4_tagdir",
+                "transcript_identification/homer/cd4_tagdir/chr21.tags.tsv",
+                "transcript_identification/homer/cd4_tagdir/genomeGCcontent.txt",
+                "transcript_identification/homer/cd4_tagdir/tagAutocorrelation.txt",
+                "transcript_identification/homer/cd4_tagdir/tagCountDistribution.txt",
+                "transcript_identification/homer/cd4_tagdir/tagFreq.txt",
+                "transcript_identification/homer/cd4_tagdir/tagFreqUniq.txt",
+                "transcript_identification/homer/cd4_tagdir/tagGCcontent.txt",
+                "transcript_identification/homer/cd4_tagdir/tagInfo.txt",
+                "transcript_identification/homer/cd4_tagdir/tagLengthDistribution.txt",
+                "transcript_identification/homer/jurkat.bed",
+                "transcript_identification/homer/jurkat.bedGraph.gz",
+                "transcript_identification/homer/jurkat.peaks.txt",
+                "transcript_identification/homer/jurkat_tagdir",
+                "transcript_identification/homer/jurkat_tagdir/chr21.tags.tsv",
+                "transcript_identification/homer/jurkat_tagdir/genomeGCcontent.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagAutocorrelation.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagCountDistribution.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagFreq.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagFreqUniq.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagGCcontent.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagInfo.txt",
+                "transcript_identification/homer/jurkat_tagdir/tagLengthDistribution.txt",
+                "transcript_identification/homer/versions.yml",
+                "transcript_identification/intersect",
+                "transcript_identification/intersect/cd4_intersect.bed",
+                "transcript_identification/intersect/jurkat_intersect.bed",
+                "transcript_identification/merged",
+                "transcript_identification/merged/cd4_merged.bed",
+                "transcript_identification/merged/jurkat_merged.bed",
+                "transcript_identification/pints",
+                "transcript_identification/pints/cd4_chr21_1_unidirectional_peaks.bed",
+                "transcript_identification/pints/jurkat_chr21_1_unidirectional_peaks.bed"
+            ],
+            [
+                "cd4.bed:md5,26765aa153cb1d6bb668f5786da5763e",
+                "jurkat.bed:md5,15a3bec7a3ffb53c1e621665b3f45873",
+                "cd4_REP1.dreg.bedGraph:md5,6ecfb93ba1a56308ce7d3c4703e0e5e3",
+                "cd4_REP1.minus.bedGraph:md5,9e07f1d5637b2193f55da08d6877bd93",
+                "cd4_REP1.minus.bigWig:md5,fa4743c954c2d96c38d1d53511ebf647",
+                "cd4_REP1.plus.bedGraph:md5,c111dc157dc7ecd53e7f6b8ce8d5ccc0",
+                "cd4_REP1.plus.bigWig:md5,37f187a2a476cba99a00ab7683079f84",
+                "cd4_REP2.dreg.bedGraph:md5,949a822bee0b968f118fb4d2d0fcf251",
+                "cd4_REP2.minus.bedGraph:md5,d0bdd2bf54e343a00d620d41da32e2f3",
+                "cd4_REP2.minus.bigWig:md5,9f8cb0bdf31650b1af341b5522cf7634",
+                "cd4_REP2.plus.bedGraph:md5,268311481da2d62204f71a1a8bc5d43b",
+                "cd4_REP2.plus.bigWig:md5,4f5f27b5e3258ebf2ee7bf1f8fe17357",
+                "jurkat.dreg.bedGraph:md5,9a2a287e9d8e73185d5754442051055b",
+                "jurkat.minus.bedGraph:md5,964feef1a4988cbf900840fa572a676e",
+                "jurkat.minus.bigWig:md5,172ea254e30275889eb94a2f2f7f04cf",
+                "jurkat.plus.bedGraph:md5,198a0f027ca6799ecc74196232402c81",
+                "jurkat.plus.bigWig:md5,0bd721f298a8dde14ffdbda6db303f93",
+                "cd4_REP1.trimmed.fastp.json:md5,bd9a3344c1591d6be4d524451f9dca53",
+                "cd4_REP2.trimmed.fastp.json:md5,bc6e3f9ff7835f220535cc393b8eb25f",
+                "jurkat.trimmed.fastp.json:md5,65f7247a87479c7157c7357d575336e2",
+                "cd4_REP1.SJ.out.tab:md5,991ac1fa28719c078a4827fcf66e90b0",
+                "cd4_REP2.SJ.out.tab:md5,5accd405e613d28731f111dfd070a3ba",
+                "jurkat.SJ.out.tab:md5,8e5de2dc83e2478528528a86a2ffd456",
+                "cd4_REP1_genome.flagstat:md5,6379888a79d90e28dd969e21f7b03a33",
+                "cd4_REP1_genome.idxstats:md5,65e8e2d1ed65620f9750f2981e997a9d",
+                "cd4_REP1_genome.stats:md5,98b8edc46f4553462af6a395fa36ccb1",
+                "cd4_REP2_genome.flagstat:md5,ab83e3fbca17cf463fc5293a82e4bb3a",
+                "cd4_REP2_genome.idxstats:md5,9cdf3dd50a9862a02592c3768071fe32",
+                "cd4_REP2_genome.stats:md5,5b0f411f23fce70ed0c509f1e5a2aa01",
+                "jurkat_genome.flagstat:md5,b5f1d127de493e406882aced667210c9",
+                "jurkat_genome.idxstats:md5,5e4a68fda75c954324d659af58d12c62",
+                "jurkat_genome.stats:md5,e69e49feae0a1840403894aea26c4a33",
+                "Genome:md5,612664e3cfde5e1b73ad541d93752b31",
+                "SA:md5,074ae54177bb7b9cb981382f043f36e5",
+                "SAindex:md5,c8cae2d81bec99f68eddc0afe570090b",
+                "chrLength.txt:md5,b0be0a56ddefa84552742c72d4859eac",
+                "chrName.txt:md5,e99d7d1051eee43ceab5563c2d09fcee",
+                "chrNameLength.txt:md5,c985a141685e8431ec27c782816cb744",
+                "chrStart.txt:md5,6925b594ea2eeb964ba87cd6d42ab98f",
+                "exonGeTrInfo.tab:md5,ea42dd46e177f95a72a8f6a2925f7348",
+                "exonInfo.tab:md5,42a3ce2024f396b2298c0a84b07fb6e4",
+                "geneInfo.tab:md5,d0092fb1ea6fcdac270c4df788de70fb",
+                "genomeParameters.txt:md5,9e6f272d058d48c729d355ede94f8c87",
+                "sjdbInfo.txt:md5,12fb05dc7cea89735a0c19e1c0df61cb",
+                "sjdbList.fromGTF.out.tab:md5,5d9761b49920fb70a77d74e390d196b9",
+                "sjdbList.out.tab:md5,766fbca932681f8666b3a9e5fb3640bd",
+                "transcriptInfo.tab:md5,21c1f470ffe3b55b23900e7b7eaec2f4",
+                "cd4.bed:md5,28eafdfa41f98475e5e651fd0e8f95f2",
+                "cd4.peaks.txt:md5,4ab7c16a5f6d0e78275448bbce7c21c2",
+                "jurkat.bed:md5,7e59345b336cc8a9c5f96bf7df7b3d06",
+                "jurkat.peaks.txt:md5,91e7580ebde81aceaf3bb1b1c3c3db1c",
+                "versions.yml:md5,7c0dcd0a18b3c753def73b96cb825792",
+                "cd4_merged.bed:md5,07860f90354c4f5f66eddbed3e5d3bd2",
+                "jurkat_merged.bed:md5,95a5279ec2387dfa0b4c2e7820083527",
+                "cd4_chr21_1_unidirectional_peaks.bed:md5,26765aa153cb1d6bb668f5786da5763e",
+                "jurkat_chr21_1_unidirectional_peaks.bed:md5,15a3bec7a3ffb53c1e621665b3f45873"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-28T21:46:42.36263"
+    },
+    "gzip_software_versions": {
+        "content": [
+            {
+                "BBMAP_PILEUP": {
+                    "bbmap": 39.01,
+                    "samtools": "1.16.1",
+                    "pigz": 2.6
+                },
+                "BEDTOOLS_GENOMECOV_MINUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_GENOMECOV_PLUS": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_INTERSECT_FILTER": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_MERGE": {
+                    "bedtools": "2.31.1"
+                },
+                "BEDTOOLS_SORT": {
+                    "bedtools": "2.31.1"
+                },
+                "CAT_CAT": {
+                    "pigz": "2.3.4"
+                },
+                "CUSTOM_GETCHROMSIZES": {
+                    "getchromsizes": 1.2
+                },
+                "DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.5"
+                },
+                "DEEPTOOLS_BAMCOVERAGE_PLUS": {
+                    "deeptools": "3.5.5"
+                },
+                "FASTP": {
+                    "fastp": "0.23.4"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GTF2BED": {
+                    "perl": "5.26.2"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "HOMER_MAKETAGDIRECTORY": {
+                    "homer": 4.11,
+                    "samtools": 1.21
+                },
+                "PINTS_CALLER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
+                "PRESEQ_CCURVE": {
+                    "preseq": "3.1.1"
+                },
+                "PRESEQ_LCEXTRAP": {
+                    "preseq": "3.1.1"
+                },
+                "RSEQC_INFEREXPERIMENT": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDISTRIBUTION": {
+                    "rseqc": "5.0.2"
+                },
+                "RSEQC_READDUPLICATION": {
+                    "rseqc": "5.0.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
+                "SUBREAD_FEATURECOUNTS_GENE": {
+                    "subread": "2.0.1"
+                },
+                "SUBREAD_FEATURECOUNTS_PREDICTED": {
+                    "subread": "2.0.1"
+                },
+                "Workflow": {
+                    "nf-core/nascent": "v2.3.0"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.1"
+        },
+        "timestamp": "2024-11-25T21:02:16.63526"
+    }
+}

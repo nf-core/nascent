@@ -1,6 +1,17 @@
-repository_type: pipeline
 lint:
+  actions_ci: false
   files_unchanged:
     - .github/workflows/linting.yml
     - LICENSE
     - assets/email_template.html
+nf_core_version: 3.2.1
+repository_type: pipeline
+template:
+  author: Edmund Miller, Ignacio Tripodi, Margaret Gruca
+  description: Global Run-On sequencing analysis pipeline
+  force: false
+  is_nfcore: true
+  name: nascent
+  org: nf-core
+  outdir: .
+  version: 2.3.0
