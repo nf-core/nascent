@@ -278,6 +278,14 @@ The [Preseq](http://smithlabresearch.org/software/preseq/) package is aimed at p
 
 </details>
 
+For PROseq data, the pipeline uses deepTools bamcoverage to generate strand-specific coverage files. The strand handling is configured to:
+
+- Report the 5' end of RNA (--MAP5=TRUE)
+- Report on the opposite strand for PROseq (--OPP=TRUE)
+- Use the 5' end of R1 reads (--RNA5=R1_5prime)
+
+This ensures correct strand-specificity for PROseq data where the RNA strand is opposite to the sequenced read strand.
+
 ## Transcript Identification
 
 ### HOMER

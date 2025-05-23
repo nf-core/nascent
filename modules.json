@@ -15,11 +15,6 @@
                         "git_sha": "1d1cb7bfef6cf67fbc7faafa6992ad8bdc3045b3",
                         "installed_by": ["modules"]
                     },
-                    "bedtools/genomecov": {
-                        "branch": "master",
-                        "git_sha": "1ceaa8ba4d0fd886dbca0e545815d905b7407de7",
-                        "installed_by": ["modules"]
-                    },
                     "bedtools/intersect": {
                         "branch": "master",
                         "git_sha": "575e1bc54b083fb15e7dd8b5fcc40bea60e8ce83",
@@ -105,7 +100,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "08108058ea36a63f141c25c4e75f9f872a5b2296",
+                        "git_sha": "dc94b6ee04a05ddb9f7ae050712ff30a13149164",
                         "installed_by": ["modules"]
                     },
                     "gffread": {
