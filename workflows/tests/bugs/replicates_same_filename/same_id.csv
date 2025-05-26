@@ -1,0 +1,3 @@
+sample,fastq_1,fastq_2
+SAMPLE_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,
+SAMPLE_REP1,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,

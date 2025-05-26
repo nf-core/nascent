@@ -1,0 +1,18 @@
+{
+    "Should fail with replicates that have the same filename": {
+        "content": [0],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-22T12:24:05.004711151"
+    },
+    "Should work with replicates that have the same id and different file names": {
+        "content": [31],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-22T14:52:05.603228732"
+    }
+}
