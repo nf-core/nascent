@@ -1,0 +1,78 @@
+{
+    "nonflipped_bigwig": {
+        "content": [
+            "test_sample.plus.bigWig:md5,f9497639d1179b9145d2b0d9572c6650"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:45:03.268586"
+    },
+    "nonflipped_versions": {
+        "content": [
+            {
+                "COVERAGE_GRAPHS:DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.5"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:45:03.273502"
+    },
+    "flipped_trace": {
+        "content": [
+            {
+                "tasksFailed": 0,
+                "tasksCount": 3,
+                "tasksSucceeded": 3
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:44:56.781572"
+    },
+    "nonflipped_trace": {
+        "content": [
+            {
+                "tasksFailed": 0,
+                "tasksCount": 2,
+                "tasksSucceeded": 2
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:45:03.265038"
+    },
+    "flipped_bigwig": {
+        "content": [
+            "test_sample.flipped.bigWig:md5,a93df4c511c8344407434f718837dd64"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:44:56.792779"
+    },
+    "flipped_versions": {
+        "content": [
+            {
+                "COVERAGE_GRAPHS:DEEPTOOLS_BAMCOVERAGE_MINUS": {
+                    "deeptools": "3.5.5"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-05-04T11:44:56.872212"
+    }
+}

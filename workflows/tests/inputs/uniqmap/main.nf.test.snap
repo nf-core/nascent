@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            78,
+            72,
             "# uniqMapDirectory = uniqmap.GRCh38_chr21.50nt",
             "# cmd = findPeaks cd4_tagdir -style groseq -o cd4-uniqmap.GRCh38_chr21.peaks.txt -uniqmap uniqmap.GRCh38_chr21.50nt",
             "# uniqMapDirectory = uniqmap.GRCh38_chr21.50nt",
@@ -22,9 +22,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.2"
+            "nextflow": "25.03.1"
         },
-        "timestamp": "2024-12-21T07:55:14.410658"
+        "timestamp": "2025-05-20T22:12:52.684402"
     },
     "software_versions": {
         "content": [
@@ -33,12 +33,6 @@
                     "bbmap": 39.01,
                     "samtools": "1.16.1",
                     "pigz": 2.6
-                },
-                "BEDTOOLS_GENOMECOV_MINUS": {
-                    "bedtools": "2.31.1"
-                },
-                "BEDTOOLS_GENOMECOV_PLUS": {
-                    "bedtools": "2.31.1"
                 },
                 "BEDTOOLS_INTERSECT": {
                     "bedtools": "2.31.1"
@@ -71,6 +65,10 @@
                 "GTF2BED": {
                     "perl": "5.26.2"
                 },
+                "PINTS_VISUALIZER": {
+                    "python": "3.12.6",
+                    "pints": "1.1.13"
+                },
                 "PRESEQ_CCURVE": {
                     "preseq": "3.1.1"
                 },
@@ -102,8 +100,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.2"
+            "nextflow": "25.03.1"
         },
-        "timestamp": "2024-12-21T08:17:33.996307"
+        "timestamp": "2025-05-20T21:41:42.367523"
     }
 }
