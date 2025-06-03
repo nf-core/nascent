@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/nascent/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/nascent/main/nextflow_schema.json",
     "title": "nf-core/nascent pipeline parameters",
     "description": "Global Run-On sequencing analysis pipeline",
     "type": "object",
