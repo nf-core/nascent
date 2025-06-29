@@ -256,13 +256,16 @@ workflow NASCENT {
 
     ch_genome_bam_bai = ch_genome_bam.join(ch_genome_bai, by: [0], remainder: true)
 
-    // Publish CRAM files
+    // Publish CRAM files by default, BAM files if --bam is specified
     // https://nf-co.re/docs/guidelines/pipelines/recommendations/file_formats
-    SAMTOOLS_CONVERT(
-        ch_genome_bam_bai,
-        ch_fasta,
-        PREPARE_GENOME.out.fai.map { [[:], it] },
-    )
+    if (!params.bam) {
+        SAMTOOLS_CONVERT(
+            ch_genome_bam_bai,
+            ch_fasta,
+            PREPARE_GENOME.out.fai.map { [[:], it] },
+        )
+        ch_versions = ch_versions.mix(SAMTOOLS_CONVERT.out.versions.first())
+    }
 
     QUALITY_CONTROL(
         ch_genome_bam_bai,
