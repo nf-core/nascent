@@ -1,7 +1,7 @@
 {
     "output_files": {
         "content": [
-            72,
+            75,
             "# uniqMapDirectory = uniqmap.GRCh38_chr21.50nt",
             "# cmd = findPeaks cd4_tagdir -style groseq -o cd4-uniqmap.GRCh38_chr21.peaks.txt -uniqmap uniqmap.GRCh38_chr21.50nt",
             "# uniqMapDirectory = uniqmap.GRCh38_chr21.50nt",
@@ -22,9 +22,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.03.1"
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-20T22:12:52.684402"
+        "timestamp": "2025-06-29T20:29:53.268154"
     },
     "software_versions": {
         "content": [
@@ -84,6 +84,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_CONVERT": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
                 },
@@ -100,8 +103,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.03.1"
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-20T21:41:42.367523"
+        "timestamp": "2025-06-29T20:29:53.145336"
     }
 }
