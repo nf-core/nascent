@@ -1,17 +1,17 @@
 {
     "Should run with gzipped gtf": {
         "content": [
-            87
+            90
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.03.1"
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-20T22:05:06.864437"
+        "timestamp": "2025-06-29T19:53:50.826998"
     },
     "Should run with defaults": {
         "content": [
-            86,
+            89,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -77,6 +77,9 @@
                 },
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
+                },
+                "SAMTOOLS_CONVERT": {
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
@@ -220,10 +223,13 @@
                 "quantification/nascent/cd4-group_cd4_intersect-transcripts.featureCounts.txt.summary",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt.summary",
-                "samtools",
-                "samtools/cd4.bam",
-                "samtools/jurkat.bam",
                 "star",
+                "star/cd4_REP1.cram",
+                "star/cd4_REP1.cram.crai",
+                "star/cd4_REP2.cram",
+                "star/cd4_REP2.cram.crai",
+                "star/jurkat.cram",
+                "star/jurkat.cram.crai",
                 "star/log",
                 "star/log/cd4_REP1.Log.final.out",
                 "star/log/cd4_REP1.Log.out",
@@ -354,13 +360,18 @@
                 "jurkat_merged.bed:md5,95a5279ec2387dfa0b4c2e7820083527",
                 "cd4_chr21_1_unidirectional_peaks.bed:md5,26765aa153cb1d6bb668f5786da5763e",
                 "jurkat_chr21_1_unidirectional_peaks.bed:md5,15a3bec7a3ffb53c1e621665b3f45873"
+            ],
+            [
+                "cd4_REP1.cram",
+                "cd4_REP2.cram",
+                "jurkat.cram"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.03.1"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-05-20T22:02:00.825316"
+        "timestamp": "2025-07-06T23:56:14.617739031"
     },
     "gzip_software_versions": {
         "content": [
@@ -433,6 +444,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_CONVERT": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
                 },
@@ -449,8 +463,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.03.1"
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-20T22:05:05.079173"
+        "timestamp": "2025-06-29T19:53:50.72646"
     }
 }

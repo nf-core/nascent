@@ -1,27 +1,27 @@
 {
     "Should work with gzipped references": {
         "content": [
-            52
+            55
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-11T15:15:07.710999"
+        "timestamp": "2025-06-29T19:45:51.976463"
     },
     "Should work with BWA Index": {
         "content": [
-            56
+            59
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-05-11T15:14:14.361165"
+        "timestamp": "2025-06-29T19:44:37.964822"
     },
     "Should run with defaults": {
         "content": [
-            137,
+            143,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -95,6 +95,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_CONVERT": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
                 },
@@ -110,18 +113,18 @@
             },
             [
                 "bwa",
-                "bwa/cd4_REP1.sorted.bam",
-                "bwa/cd4_REP1.sorted.bam.bai",
-                "bwa/cd4_REP2.sorted.bam",
-                "bwa/cd4_REP2.sorted.bam.bai",
-                "bwa/cd4_REP3.sorted.bam",
-                "bwa/cd4_REP3.sorted.bam.bai",
-                "bwa/cd4_REP4.sorted.bam",
-                "bwa/cd4_REP4.sorted.bam.bai",
-                "bwa/jurkat_REP1.sorted.bam",
-                "bwa/jurkat_REP1.sorted.bam.bai",
-                "bwa/jurkat_REP2.sorted.bam",
-                "bwa/jurkat_REP2.sorted.bam.bai",
+                "bwa/cd4_REP1.cram",
+                "bwa/cd4_REP1.cram.crai",
+                "bwa/cd4_REP2.cram",
+                "bwa/cd4_REP2.cram.crai",
+                "bwa/cd4_REP3.cram",
+                "bwa/cd4_REP3.cram.crai",
+                "bwa/cd4_REP4.cram",
+                "bwa/cd4_REP4.cram.crai",
+                "bwa/jurkat_REP1.cram",
+                "bwa/jurkat_REP1.cram.crai",
+                "bwa/jurkat_REP2.cram",
+                "bwa/jurkat_REP2.cram.crai",
                 "bwa/samtools_stats",
                 "bwa/samtools_stats/cd4_REP1.sorted.bam.flagstat",
                 "bwa/samtools_stats/cd4_REP1.sorted.bam.idxstats",
@@ -323,9 +326,6 @@
                 "quantification/nascent/cd4-group_cd4_intersect-transcripts.featureCounts.txt.summary",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt.summary",
-                "samtools",
-                "samtools/cd4.bam",
-                "samtools/jurkat.bam",
                 "transcript_identification",
                 "transcript_identification/filtered",
                 "transcript_identification/filtered/cd4_filtered.bed",
@@ -416,12 +416,20 @@
                 "jurkat_merged.bed:md5,cae11a1bfb707ea2df5fe612ae7268c8",
                 "cd4_chr21_1_unidirectional_peaks.bed:md5,864532d867843d8ad1545b90d5dcd762",
                 "jurkat_chr21_1_unidirectional_peaks.bed:md5,862a5e81119acc691845f3b426847401"
+            ],
+            [
+                "cd4_REP1.cram",
+                "cd4_REP2.cram",
+                "cd4_REP3.cram",
+                "cd4_REP4.cram",
+                "jurkat_REP1.cram",
+                "jurkat_REP2.cram"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-05-21T04:07:46.607615194"
+        "timestamp": "2025-07-06T23:42:11.465363652"
     }
 }

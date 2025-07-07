@@ -1,7 +1,7 @@
 {
     "Should run with defaults": {
         "content": [
-            86,
+            89,
             {
                 "BBMAP_PILEUP": {
                     "bbmap": 39.01,
@@ -75,6 +75,9 @@
                 "RSEQC_READDUPLICATION": {
                     "rseqc": "5.0.2"
                 },
+                "SAMTOOLS_CONVERT": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_FLAGSTAT": {
                     "samtools": 1.21
                 },
@@ -105,12 +108,12 @@
             },
             [
                 "bwamem2",
-                "bwamem2/cd4_REP1.sorted.bam",
-                "bwamem2/cd4_REP1.sorted.bam.bai",
-                "bwamem2/cd4_REP2.sorted.bam",
-                "bwamem2/cd4_REP2.sorted.bam.bai",
-                "bwamem2/jurkat.sorted.bam",
-                "bwamem2/jurkat.sorted.bam.bai",
+                "bwamem2/cd4_REP1.cram",
+                "bwamem2/cd4_REP1.cram.crai",
+                "bwamem2/cd4_REP2.cram",
+                "bwamem2/cd4_REP2.cram.crai",
+                "bwamem2/jurkat.cram",
+                "bwamem2/jurkat.cram.crai",
                 "bwamem2/samtools_stats",
                 "bwamem2/samtools_stats/cd4_REP1.sorted.bam.flagstat",
                 "bwamem2/samtools_stats/cd4_REP1.sorted.bam.idxstats",
@@ -249,9 +252,6 @@
                 "quantification/nascent/cd4-group_cd4_intersect-transcripts.featureCounts.txt.summary",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt",
                 "quantification/nascent/jurkat-group_cd4_intersect-transcripts.featureCounts.txt.summary",
-                "samtools",
-                "samtools/cd4.bam",
-                "samtools/jurkat.bam",
                 "transcript_identification",
                 "transcript_identification/filtered",
                 "transcript_identification/filtered/cd4_filtered.bed",
@@ -324,12 +324,17 @@
                 "jurkat_merged.bed:md5,f1dde43c4ad9dec972ff9fa38cc6f2fe",
                 "cd4_chr21_1_unidirectional_peaks.bed:md5,0193e58943726af89bfd00e9da2536d8",
                 "jurkat_chr21_1_unidirectional_peaks.bed:md5,cb6932229eea2e09f61d48d7dd397ae1"
+            ],
+            [
+                "cd4_REP1.cram",
+                "cd4_REP2.cram",
+                "jurkat.cram"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.3"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-05-11T12:54:16.867564"
+        "timestamp": "2025-07-06T23:47:48.402842458"
     }
 }

@@ -1,0 +1,37 @@
+{
+    "Should publish CRAM files by default": {
+        "content": [
+            74,
+            [
+                "cd4_REP1.cram",
+                "cd4_REP2.cram",
+                "jurkat.cram"
+            ],
+            [
+                "cd4_REP1.cram.crai",
+                "cd4_REP2.cram.crai",
+                "jurkat.cram.crai"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-06-28T23:06:40.237907"
+    },
+    "Should publish CRAM files with different aligner": {
+        "content": [
+            89,
+            [
+                "cd4_REP1.cram",
+                "cd4_REP2.cram",
+                "jurkat.cram"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-06-28T23:08:55.886843"
+    }
+}

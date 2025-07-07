@@ -25,8 +25,8 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'multiqc/multiqc_plots', 'multiqc/multiqc_plots/**'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            // bam_files: All bam files
-            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // cram_files: All cram files
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
@@ -38,8 +38,9 @@ nextflow_pipeline {
                     stable_name,
                     // All files with stable contents
                     stable_path,
-                    // All bam files
-                    // FIXME bam_files.collect{ file -> [ file.getName(), bam(file.toString()).getReadsMD5() ] }
+                    // All cram files
+                    // TODO https://github.com/nvnieuwk/nft-bam/issues/22 - Add MD5 validation when bug is fixed
+                    cram_files.collect{ file -> file.getName() }
                 ).match() }
             )
         }
