@@ -1,1 +1,19 @@
+lint:
+  files_unchanged:
+    - .github/workflows/linting.yml
+    - LICENSE
+    - assets/email_template.html
+    - assets/nf-core-nascent_logo_light.png
+    - docs/images/nf-core-nascent_logo_light.png
+    - .github/PULL_REQUEST_TEMPLATE.md
+nf_core_version: 3.3.2
 repository_type: pipeline
+template:
+  author: Edmund Miller, Ignacio Tripodi, Margaret Gruca
+  description: Global Run-On sequencing analysis pipeline
+  force: false
+  is_nfcore: true
+  name: nascent
+  org: nf-core
+  outdir: .
+  version: 2.3.0

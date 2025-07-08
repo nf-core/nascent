@@ -4,9 +4,8 @@
   |\\ | |__  __ /  ` /  \\ |__) |__         }  {
   | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
                                         `._,._,'
-  nf-core/nascent v${version}
+  nf-core/nascent ${version}
 ----------------------------------------------------
-
 Run Name: $runName
 
 <% if (success){
