@@ -12,6 +12,7 @@ include { ALIGN_DRAGMAP                                            } from '../su
 include { QUALITY_CONTROL                                          } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS                                          } from '../subworkflows/local/coverage_graphs'
 include { TRANSCRIPT_INDENTIFICATION                               } from '../subworkflows/local/transcript_identification'
+include { TFSEE_ANALYSIS_WORKFLOW                                  } from '../subworkflows/local/tfsee_analysis'
 
 include { FASTP                                                    } from '../modules/nf-core/fastp/main'
 include { UNTAR as UNTAR_HISAT2_INDEX                              } from '../modules/nf-core/untar/main'
@@ -311,6 +312,34 @@ workflow NASCENT {
     ch_homer_multiqc = ch_homer_multiqc.mix(TRANSCRIPT_INDENTIFICATION.out.homer_tagdir)
     ch_versions = ch_versions.mix(TRANSCRIPT_INDENTIFICATION.out.versions)
 
+    //
+    // TFSee Analysis: TF-enhancer prediction
+    //
+    ch_tfsee_results = Channel.empty()
+    ch_tfsee_multiqc = Channel.empty()
+    
+    if (!params.skip_tfsee) {
+        // Prepare optional input channels
+        ch_motif_database = params.tfsee_motif_database ? Channel.fromPath(params.tfsee_motif_database) : Channel.empty()
+        ch_tf_expression = params.tfsee_tf_expression ? Channel.fromPath(params.tfsee_tf_expression) : Channel.empty()
+        ch_tf_chip_peaks = params.tfsee_tf_chip_peaks ? Channel.fromPath(params.tfsee_tf_chip_peaks) : Channel.empty()
+
+        TFSEE_ANALYSIS_WORKFLOW(
+            TRANSCRIPT_INDENTIFICATION.out.transcript_beds,
+            COVERAGE_GRAPHS.out.bigwig_files,
+            PREPARE_GENOME.out.fasta,
+            ch_motif_database,
+            ch_tf_expression,
+            ch_tf_chip_peaks
+        )
+        
+        ch_tfsee_results = TFSEE_ANALYSIS_WORKFLOW.out.results
+        ch_tfsee_multiqc = TFSEE_ANALYSIS_WORKFLOW.out.results
+            .mix(TFSEE_ANALYSIS_WORKFLOW.out.statistics)
+            .mix(TFSEE_ANALYSIS_WORKFLOW.out.clustering_results)
+        ch_versions = ch_versions.mix(TFSEE_ANALYSIS_WORKFLOW.out.versions)
+    }
+
     SUBREAD_FEATURECOUNTS_PREDICTED(
         ch_group_bam.combine(
             BED2SAF(
@@ -390,6 +419,7 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(ch_homer_multiqc.collect { it[1] }.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_PREDICTED.out.summary.collect { it[1] }.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_GENE.out.summary.collect { it[1] }.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_tfsee_multiqc.collect { it[1] }.ifEmpty([]))
 
     MULTIQC(
         ch_multiqc_files.collect(),
