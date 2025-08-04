@@ -35,6 +35,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [HOMER](#homer) - Transcript identification from GROSeq data
   - [PINTS](#pints) - Identifies transcriptional regulatory elements (TREs) identified from nascent-transcript sequencing.
   - [BEDTools Insersect](#bedtools-intersect) - Filtering of predicted TREs
+- [TFSee Analysis](#tfsee-analysis) - TF-enhancer prediction analysis (optional)
 - [Quantification](#quantification)
   - [featureCounts](#featurecounts) - Read counting relative to gene biotype
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
@@ -373,6 +374,97 @@ They've also created some bed files that might be useful for analysis.
 - [promoter for hg38](https://pints.yulab.org/ref/examples/promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (v24)
 - [promoter for hg19](https://pints.yulab.org/ref/examples/hg19_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (v19)
 - [promoter for mm10](https://pints.yulab.org/ref/examples/mm10_promoters_1kb_tss_centered.bed.gz): based on GENCODE annotation (m23)
+
+## TFSee Analysis
+
+TFSee (Total Functional Score of Enhancer Elements) analysis is an optional component that identifies active enhancers and their cognate transcription factors from nascent transcript data. This analysis is only performed when `--skip_tfsee false` is specified.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `tfsee_analysis/`
+  - `*_tfsee_results.csv`: Summary results of TFSee analysis
+  - `*_motif_enrichment.csv`: Motif enrichment analysis results
+  - `*_tf_enhancer_scores.csv`: TF-enhancer association scores
+  - `*_clustering_results.csv`: Multi-view clustering results
+  - `*_feature_matrix.csv`: Comprehensive feature matrix
+  - `*_statistics.csv`: Statistical significance tests
+
+</details>
+
+TFSee integrates multiple genomic data types to predict relationships between transcription factors and enhancers. The analysis workflow includes:
+
+1. **Enhancer Activity Quantification**: Calculates activity scores for enhancer regions identified by PINTS or HOMER using GRO-seq signal intensity
+2. **Motif Analysis**: Scans enhancer sequences for transcription factor binding motifs using provided motif databases
+3. **TF-Enhancer Association**: Scores relationships between transcription factors and enhancers based on motif presence, distance, and optional expression/ChIP-seq data
+4. **Multi-view Clustering**: Groups enhancers and TFs based on regulatory relationship patterns
+5. **Statistical Analysis**: Tests significance of associations and provides confidence measures
+
+### Output File Descriptions
+
+#### `*_tfsee_results.csv`
+Summary file containing key statistics for the TFSee analysis:
+- `analysis_id`: Unique identifier for the analysis
+- `n_enhancers`: Number of enhancers analyzed
+- `n_tf_enhancer_associations`: Number of TF-enhancer pairs evaluated
+- `n_significant_motifs`: Number of significantly enriched motifs
+- `mean_enhancer_activity`: Average enhancer activity score
+- `n_clusters`: Number of clusters identified
+- `top_tf`, `top_enhancer`, `top_association_score`: Highest-scoring TF-enhancer association
+
+#### `*_motif_enrichment.csv`
+Results of motif enrichment analysis:
+- `motif_id`: Identifier for the transcription factor motif
+- `tf_name`: Transcription factor name
+- `n_sequences_with_motif`: Number of enhancer sequences containing the motif
+- `enrichment_score`: Motif enrichment score
+- `p_value`: Statistical significance of enrichment
+- `p_value_corrected`: Multiple testing corrected p-value
+
+#### `*_tf_enhancer_scores.csv`
+TF-enhancer association scores:
+- `tf_name`: Transcription factor name
+- `enhancer_id`: Enhancer region identifier
+- `distance`: Distance between TF and enhancer
+- `motif_score`: Motif-based association score
+- `expression_score`: Expression-based score (if TF expression data provided)
+- `chip_score`: ChIP-seq overlap score (if ChIP-seq data provided)
+- `association_score`: Integrated association score
+- `confidence_score`: Confidence in the association
+
+#### `*_clustering_results.csv`
+Multi-view clustering results:
+- `region_id`: Enhancer region identifier
+- `cluster_label`: Assigned cluster number
+- `cluster_score`: Confidence in cluster assignment
+- `silhouette_score`: Silhouette score for cluster quality
+
+#### `*_feature_matrix.csv`
+Comprehensive feature matrix used for analysis:
+- Enhancer activity features (peak height, width, activity score)
+- TF association scores (one column per TF)
+- Clustering assignments
+- Statistical measures
+
+#### `*_statistics.csv`
+Statistical analysis results:
+- `test_name`: Name of the statistical test
+- `method`: Statistical method used
+- `statistic`: Test statistic value
+- `p_value`: Statistical significance
+- `effect_size`: Effect size measure
+- `confidence_interval`: 95% confidence interval
+
+### Interpretation
+
+TFSee results can be used to:
+
+1. **Identify Active Enhancers**: Regions with high activity scores likely represent functional enhancers
+2. **Discover TF-Enhancer Networks**: High association scores indicate likely regulatory relationships
+3. **Classify Regulatory Programs**: Clustering results group enhancers with similar regulatory patterns
+4. **Prioritize TF Targets**: Statistical significance helps prioritize biologically relevant associations
+
+The analysis provides both individual TF-enhancer predictions and systems-level insights into regulatory networks operating in your samples.
 
 ## Quantification
 

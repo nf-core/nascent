@@ -193,6 +193,142 @@ withName: HOMER_FINDPEAKS {
 
 For more info check the [Homer GRO-seq Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
 
+## TFSee Analysis
+
+TFSee (Total Functional Score of Enhancer Elements) is an optional analysis module that identifies active enhancers and their cognate transcription factors from nascent transcript data. This analysis leverages the enhancer regions identified by PINTS or HOMER and integrates multiple genomic data types to predict TF-enhancer relationships.
+
+### Overview
+
+TFSee implements the methodology described in the [TFSee manuscript](https://vsmalladi.github.io/tfsee-manuscript/) and provides:
+
+- **Enhancer Activity Quantification**: Calculates enhancer activity scores from GRO-seq signal
+- **Motif Analysis**: Identifies transcription factor binding motifs in enhancer regions
+- **TF-Enhancer Association**: Scores relationships between transcription factors and enhancers
+- **Multi-view Clustering**: Groups enhancers and TFs based on regulatory relationships
+- **Statistical Analysis**: Tests significance of associations and provides confidence measures
+
+### Enabling TFSee Analysis
+
+By default, TFSee analysis is skipped. To enable it:
+
+```bash
+nextflow run nf-core/nascent --input samplesheet.csv --skip_tfsee false
+```
+
+### Required Inputs
+
+TFSee analysis works with the enhancer regions automatically identified by PINTS or HOMER during transcript identification. No additional input files are strictly required, but optional data can improve the analysis:
+
+### Optional Inputs
+
+#### Motif Database
+Provide a motif database in MEME format for TF binding site prediction:
+
+```bash
+--tfsee_motif_database /path/to/jaspar_core_vertebrates.meme
+```
+
+Popular motif databases:
+- **JASPAR**: [Download JASPAR Core Vertebrates](https://jaspar.genereg.net/downloads/)
+- **HOCOMOCO**: [Download HOCOMOCO v11](https://hocomoco11.autosome.org/downloads_v11)
+- **CIS-BP**: [Download CIS-BP](http://cisbp.ccbr.utoronto.ca/)
+
+#### TF Expression Data
+Provide transcription factor expression data to improve association scoring:
+
+```bash
+--tfsee_tf_expression /path/to/tf_expression.csv
+```
+
+Expected format:
+```csv
+tf_name,expression_value,sample_id
+FOXA1,12.5,sample1
+SOX2,8.3,sample1
+NANOG,15.2,sample1
+```
+
+#### TF ChIP-seq Peaks
+Provide TF ChIP-seq binding sites to enhance association predictions:
+
+```bash
+--tfsee_tf_chip_peaks /path/to/tf_chip_peaks.bed
+```
+
+Expected BED format with TF names in the 4th column:
+```
+chr1    1000    2000    FOXA1
+chr1    5000    6000    SOX2
+chr2    3000    4000    NANOG
+```
+
+### Configuration Parameters
+
+TFSee analysis can be customized with several parameters:
+
+#### Analysis Parameters
+- `--tfsee_window_size`: Genomic window size around enhancers (default: 2000 bp)
+- `--tfsee_min_peak_height`: Minimum peak height threshold (default: 0.1)
+- `--tfsee_smoothing_sigma`: Gaussian smoothing parameter (default: 2.0)
+
+#### Clustering Parameters
+- `--tfsee_n_clusters`: Number of clusters for analysis (default: 10)
+- `--tfsee_enable_clustering`: Enable multi-view clustering (default: true)
+
+#### Motif Analysis Parameters
+- `--tfsee_motif_threshold`: Motif match score threshold (default: 0.7)
+- `--tfsee_distance_threshold`: Maximum TF-enhancer distance (default: 1,000,000 bp)
+
+#### Statistical Analysis
+- `--tfsee_calculate_statistics`: Enable statistical testing (default: true)
+
+### Example Configuration
+
+```bash
+nextflow run nf-core/nascent \
+  --input samplesheet.csv \
+  --skip_tfsee false \
+  --tfsee_motif_database jaspar_core_vertebrates.meme \
+  --tfsee_tf_expression tf_expression.csv \
+  --tfsee_window_size 2000 \
+  --tfsee_n_clusters 8 \
+  --tfsee_motif_threshold 0.75
+```
+
+### Output Files
+
+TFSee analysis produces several output files in the `tfsee_analysis/` directory:
+
+- `*_tfsee_results.csv`: Summary of TFSee analysis results
+- `*_motif_enrichment.csv`: Motif enrichment analysis results
+- `*_tf_enhancer_scores.csv`: TF-enhancer association scores
+- `*_clustering_results.csv`: Multi-view clustering results
+- `*_feature_matrix.csv`: Comprehensive feature matrix for all enhancers
+- `*_statistics.csv`: Statistical significance tests
+
+### Performance Considerations
+
+TFSee analysis is computationally intensive and may require additional resources:
+
+- **Memory**: Recommend 8-16 GB RAM for typical datasets
+- **CPU**: Benefits from multi-core processing (4-8 cores recommended)
+- **Time**: Analysis time scales with the number of enhancers identified
+
+For large datasets or limited resources, consider:
+- Reducing `--tfsee_window_size` to 1000 bp
+- Setting `--tfsee_enable_clustering false` to skip clustering
+- Using fewer clusters with `--tfsee_n_clusters 5`
+
+### Test Profile
+
+A test configuration with TFSee enabled is available:
+
+```bash
+nextflow run nf-core/nascent -profile test_tfsee,docker
+```
+
+This profile uses optimized parameters suitable for the test dataset and demonstrates TFSee functionality.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
