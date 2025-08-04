@@ -175,6 +175,112 @@
             "required": ["assay_type"],
             "fa_icon": "fas fa-microscope"
         },
+        "tfsee_analysis_options": {
+            "title": "TFSee Analysis Options",
+            "type": "object",
+            "fa_icon": "fas fa-project-diagram",
+            "description": "Options for TF-enhancer prediction analysis using TFSee methodology",
+            "properties": {
+                "skip_tfsee": {
+                    "type": "boolean",
+                    "description": "Skip TFSee analysis",
+                    "fa_icon": "fas fa-fast-forward",
+                    "help_text": "Skip the TF-enhancer prediction analysis. Useful if you only want to run the basic nascent transcript analysis."
+                },
+                "tfsee_motif_database": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to motif database file (JASPAR, HOCOMOCO, etc.)",
+                    "help_text": "Path to a motif database file in MEME format. If not provided, TFSee will skip motif analysis.",
+                    "fa_icon": "fas fa-database"
+                },
+                "tfsee_tf_expression": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to transcription factor expression data (optional)",
+                    "help_text": "Path to a CSV file containing TF expression data. Should have columns: tf_name, expression_value, sample_id.",
+                    "fa_icon": "fas fa-chart-line"
+                },
+                "tfsee_tf_chip_peaks": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Path to TF ChIP-seq peaks BED file (optional)",
+                    "help_text": "Path to a BED file containing TF ChIP-seq peaks. Used to improve TF-enhancer association scoring.",
+                    "fa_icon": "fas fa-map-marker-alt"
+                },
+                "tfsee_window_size": {
+                    "type": "integer",
+                    "default": 2000,
+                    "minimum": 500,
+                    "maximum": 10000,
+                    "description": "Window size for enhancer analysis (bp)",
+                    "fa_icon": "fas fa-ruler",
+                    "help_text": "Size of the genomic window around enhancer centers for feature extraction."
+                },
+                "tfsee_min_peak_height": {
+                    "type": "number",
+                    "default": 0.1,
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Minimum peak height threshold for enhancer calling",
+                    "fa_icon": "fas fa-mountain",
+                    "help_text": "Minimum normalized peak height required to consider a region as an active enhancer."
+                },
+                "tfsee_smoothing_sigma": {
+                    "type": "number",
+                    "default": 2.0,
+                    "minimum": 0.5,
+                    "maximum": 10.0,
+                    "description": "Gaussian smoothing parameter for signal processing",
+                    "fa_icon": "fas fa-wave-square"
+                },
+                "tfsee_n_clusters": {
+                    "type": "integer",
+                    "default": 10,
+                    "minimum": 2,
+                    "maximum": 50,
+                    "description": "Number of clusters for TF-enhancer relationship analysis",
+                    "fa_icon": "fas fa-layer-group",
+                    "help_text": "Number of clusters to identify in the TF-enhancer relationship space. Set to 'auto' for automatic selection."
+                },
+                "tfsee_motif_threshold": {
+                    "type": "number",
+                    "default": 0.7,
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Motif match score threshold",
+                    "fa_icon": "fas fa-bullseye",
+                    "help_text": "Minimum score required for a motif match to be considered significant."
+                },
+                "tfsee_distance_threshold": {
+                    "type": "integer",
+                    "default": 1000000,
+                    "minimum": 1000,
+                    "maximum": 10000000,
+                    "description": "Maximum distance for TF-enhancer associations (bp)",
+                    "fa_icon": "fas fa-arrows-alt-h",
+                    "help_text": "Maximum distance between a TF binding site and an enhancer to consider them associated."
+                },
+                "tfsee_enable_clustering": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable multi-view clustering analysis",
+                    "fa_icon": "fas fa-sitemap",
+                    "help_text": "Perform hierarchical and t-SNE clustering to identify TF-enhancer relationship patterns."
+                },
+                "tfsee_calculate_statistics": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Calculate statistical significance tests",
+                    "fa_icon": "fas fa-calculator",
+                    "help_text": "Perform statistical tests to assess the significance of TF-enhancer associations."
+                }
+            }
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -457,6 +563,9 @@
         },
         {
             "$ref": "#/$defs/transcript_identification_options"
+        },
+        {
+            "$ref": "#/$defs/tfsee_analysis_options"
         },
         {
             "$ref": "#/$defs/reference_genome_options"
