@@ -326,7 +326,7 @@ workflow NASCENT {
 
         TFSEE_ANALYSIS_WORKFLOW(
             TRANSCRIPT_INDENTIFICATION.out.transcript_beds,
-            COVERAGE_GRAPHS.out.bigwig_files,
+            COVERAGE_GRAPHS.out.pints_plus_minus,
             PREPARE_GENOME.out.fasta,
             ch_motif_database,
             ch_tf_expression,

@@ -1,0 +1,13 @@
+name: tfsee_motif_analysis
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bioconda::bedtools=2.31.0
+  - bioconda::biopython=1.81
+  - conda-forge::numpy=1.24.3
+  - conda-forge::pandas=2.0.3
+  - conda-forge::scipy=1.11.1
+  - conda-forge::tqdm=4.65.0
+  - conda-forge::scikit-learn=1.3.0
