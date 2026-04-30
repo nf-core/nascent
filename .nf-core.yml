@@ -6,7 +6,7 @@ lint:
     - assets/nf-core-nascent_logo_light.png
     - docs/images/nf-core-nascent_logo_light.png
     - .github/PULL_REQUEST_TEMPLATE.md
-nf_core_version: 3.5.1
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: Edmund Miller, Ignacio Tripodi, Margaret Gruca
