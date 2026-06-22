@@ -8,14 +8,18 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap        } from 'plugin/nf-schema'
+include { paramsSummaryLog       } from 'plugin/nf-schema'
+include { validateParameters     } from 'plugin/nf-schema'
 include { samplesheetToList       } from 'plugin/nf-schema'
-include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
-include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification          } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
+include { completionEmail         } from 'plugin/nf-core-utils'
+include { completionSummary       } from 'plugin/nf-core-utils'
+include { imNotification          } from 'plugin/nf-core-utils'
+include { checkConfigProvided     } from 'plugin/nf-core-utils'
+include { checkProfileProvided    } from 'plugin/nf-core-utils'
+include { getWorkflowVersion      } from 'plugin/nf-core-utils'
+include { dumpParametersToJSON    } from 'plugin/nf-core-utils'
+include { checkCondaChannels      } from 'plugin/nf-core-utils'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,28 +43,30 @@ workflow PIPELINE_INITIALISATION {
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
     //
-    UTILS_NEXTFLOW_PIPELINE(
-        version,
-        true,
-        outdir,
-        workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
-    )
+    if (version) {
+        log.info("${workflow.manifest.name} ${getWorkflowVersion(workflow.manifest.version, workflow.commitId)}")
+        System.exit(0)
+    }
+
+    dumpParametersToJSON(outdir, params)
+
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        checkCondaChannels()
+    }
 
     //
     // Validate parameters and generate parameter summary to stdout
     //
-    UTILS_NFSCHEMA_PLUGIN(
-        workflow,
-        validate_params,
-        null
-    )
+    log.info paramsSummaryLog(workflow)
+    if (validate_params) {
+        validateParameters()
+    }
 
     //
     // Check config provided to the pipeline
     //
-    UTILS_NFCORE_PIPELINE(
-        nextflow_cli_args
-    )
+    checkConfigProvided()
+    checkProfileProvided(nextflow_cli_args)
 
     //
     // Custom validation for pipeline parameters
@@ -74,11 +80,12 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map { meta, fastq_1, fastq_2 ->
+            def sample = record(id: meta.id, strandedness: meta.strandedness ?: null, single_end: !fastq_2)
             if (!fastq_2) {
-                return [meta.id, meta + [single_end: true], [fastq_1]]
+                return [meta.id, sample, [fastq_1]]
             }
             else {
-                return [meta.id, meta + [single_end: false], [fastq_1, fastq_2]]
+                return [meta.id, sample, [fastq_1, fastq_2]]
             }
         }
         .groupTuple()
@@ -168,18 +175,6 @@ def validateInputSamplesheet(input) {
 
     return [metas[0], fastqs]
 }
-//
-// Get attribute from genome config file e.g. fasta
-//
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[params.genome].containsKey(attribute)) {
-            return params.genomes[params.genome][attribute]
-        }
-    }
-    return null
-}
-
 //
 // Exit pipeline if incorrect --genome key provided
 //

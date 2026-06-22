@@ -38,11 +38,11 @@ workflow GROHMM {
             storeDir: "${params.outdir}/transcript_identification/grohmm/",
         )
     { meta, file ->
-        filename = "${meta.id}.${meta.single_end ? 'SE': 'PE' }.tuning.csv"
+        def filename = "${meta.id}.${meta.single_end ? 'SE': 'PE' }.tuning.csv"
         [filename, file.text]
     }
         .map { path ->
-            meta = [
+            def meta = [
                 id:path.getSimpleName(),
                 single_end: path.getName().split("\\.")[1] == 'SE' ? true : false
             ]

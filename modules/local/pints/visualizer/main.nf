@@ -44,8 +44,8 @@ process PINTS_VISUALIZER {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_${chr_name}_plus.bigwig
-    touch ${prefix}_${chr_name}_minus.bigwig
+    touch ${prefix}_pl.bw
+    touch ${prefix}_mn.bw
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
