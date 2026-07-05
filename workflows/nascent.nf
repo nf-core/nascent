@@ -8,6 +8,7 @@ include { BED2SAF                                                  } from '../mo
 
 include { PREPARE_GENOME                                           } from '../subworkflows/local/prepare_genome'
 include { ALIGN_BWAMEM2                                            } from '../subworkflows/local/align_bwamem2/main'
+include { ALIGN_MINIBWA                                            } from '../subworkflows/local/align_minibwa/main'
 include { ALIGN_DRAGMAP                                            } from '../subworkflows/local/align_dragmap/main'
 include { QUALITY_CONTROL                                          } from '../subworkflows/local/quality_control.nf'
 include { COVERAGE_GRAPHS                                          } from '../subworkflows/local/coverage_graphs'
@@ -52,6 +53,7 @@ workflow NASCENT {
     ch_gene_bed
     ch_bwa_index
     ch_bwamem2_index
+    ch_minibwa_index
     ch_dragmap
     ch_bowtie2_index
     ch_hisat2_index
@@ -79,6 +81,7 @@ workflow NASCENT {
         ch_gene_bed,
         ch_bwa_index,
         ch_bwamem2_index,
+        ch_minibwa_index,
         ch_dragmap,
         ch_bowtie2_index,
         ch_hisat2_index
@@ -148,6 +151,21 @@ workflow NASCENT {
         ch_samtools_idxstats = ALIGN_BWAMEM2.out.idxstats
 
         ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
+    }
+    else if (!params.skip_alignment && params.aligner == 'minibwa') {
+        ALIGN_MINIBWA(
+            ch_reads,
+            PREPARE_GENOME.out.minibwa_index,
+            false,
+            ch_fasta
+        )
+        ch_genome_bam = ALIGN_MINIBWA.out.bam
+        ch_genome_bai = ALIGN_MINIBWA.out.bai
+        ch_samtools_stats = ALIGN_MINIBWA.out.stats
+        ch_samtools_flagstat = ALIGN_MINIBWA.out.flagstat
+        ch_samtools_idxstats = ALIGN_MINIBWA.out.idxstats
+
+        ch_versions = ch_versions.mix(ALIGN_MINIBWA.out.versions)
     }
     else if (!params.skip_alignment && params.aligner == 'dragmap') {
         ALIGN_DRAGMAP(

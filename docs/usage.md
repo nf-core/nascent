@@ -52,6 +52,11 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
+## Alignment options
+
+By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (`--aligner bwa`). Use `--aligner minibwa` to select [MiniBWA](https://github.com/lh3/minibwa), a newer BWA-MEM successor.
+
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
