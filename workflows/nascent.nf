@@ -93,7 +93,9 @@ workflow NASCENT {
         ch_samplesheet
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect { it[1] })
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    ch_fastqc_versions = FASTQC.out.versions_fastqc.map { process, tool, version ->
+        "${process.tokenize(':')[-1]}:\n  ${tool}: ${version}"
+    }.unique()
 
     ch_reads = Channel.empty()
     if (!params.skip_trimming) {
@@ -275,7 +277,7 @@ workflow NASCENT {
     //
     ch_genome_bam
         .map { meta, bam ->
-            fmeta = meta.findAll { it.key != 'read_group' }
+            def fmeta = meta.findAll { it.key != 'read_group' }
             // Split and take the first element
             fmeta.id = fmeta.id.split('_')[0]
             [fmeta, bam]
@@ -286,7 +288,7 @@ workflow NASCENT {
     // Group the index files with bams
     ch_genome_bai
         .map { meta, bai ->
-            fmeta = meta.findAll { it.key != 'read_group' }
+            def fmeta = meta.findAll { it.key != 'read_group' }
             // Split and take the first element
             fmeta.id = fmeta.id.split('_')[0]
             [fmeta, bai]
@@ -329,6 +331,7 @@ workflow NASCENT {
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
+        .mix(ch_fastqc_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
             name: 'nf_core_' + 'nascent_software_' + 'mqc_' + 'versions.yml',
@@ -341,16 +344,6 @@ workflow NASCENT {
     //
     // MODULE: MultiQC
     //
-    ch_multiqc_config = Channel.fromPath(
-        "${projectDir}/assets/multiqc_config.yml",
-        checkIfExists: true
-    )
-    ch_multiqc_custom_config = params.multiqc_config
-        ? Channel.fromPath(params.multiqc_config, checkIfExists: true)
-        : Channel.empty()
-    ch_multiqc_logo = params.multiqc_logo
-        ? Channel.fromPath(params.multiqc_logo, checkIfExists: true)
-        : Channel.empty()
 
     summary_params = paramsSummaryMap(
         workflow,
@@ -392,15 +385,22 @@ workflow NASCENT {
     ch_multiqc_files = ch_multiqc_files.mix(SUBREAD_FEATURECOUNTS_GENE.out.summary.collect { it[1] }.ifEmpty([]))
 
     MULTIQC(
-        ch_multiqc_files.collect(),
-        ch_multiqc_config.toList(),
-        ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList(),
-        [],
-        []
+        ch_multiqc_files.flatten().collect().map { files ->
+            [
+                [id: 'nascent'],
+                files,
+                [
+                    file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
+                    params.multiqc_config ? file(params.multiqc_config, checkIfExists: true) : [],
+                ].flatten(),
+                params.multiqc_logo ? file(params.multiqc_logo, checkIfExists: true) : [],
+                [],
+                [],
+            ]
+        }
     )
 
     emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    multiqc_report = MULTIQC.out.report.map { _meta, report -> [report] }.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions // channel: [ path(versions.yml) ]
 }

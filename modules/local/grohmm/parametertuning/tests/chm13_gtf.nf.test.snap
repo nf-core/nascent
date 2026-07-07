@@ -5,12 +5,12 @@
                 "\"LtProbB\",\"UTS\",\"merged\",\"dissociated\",\"total\",\"errorRate\",\"txSize\"",
                 "-100,5,0,0,0,0,921"
             ],
-            "Sall_5_-100.tuning.consensus.bed:md5,90bcbcd2a2fbd8e2c3602152d89d1cd5"
+            "Sall_5_-100.tuning.consensus.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.2",
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2024-10-17T20:16:00.717011"
+        "timestamp": "2026-07-08T23:29:17.552335"
     }
 }
