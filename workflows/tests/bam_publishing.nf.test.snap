@@ -1,0 +1,55 @@
+{
+    "Should handle --bam parameter with STAR aligner": {
+        "content": [
+            86,
+            [
+                "cd4.bam",
+                "jurkat.bam"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-06-28T23:35:22.265415"
+    },
+    "Should publish BAM files when --bam parameter is used": {
+        "content": [
+            71,
+            [
+                "cd4_REP1.sorted.bam",
+                "cd4_REP2.sorted.bam",
+                "jurkat.sorted.bam",
+                "cd4.bam",
+                "jurkat.bam"
+            ],
+            [
+                "cd4_REP1.sorted.bam.bai",
+                "cd4_REP2.sorted.bam.bai",
+                "jurkat.sorted.bam.bai"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-06-29T14:47:13.244785"
+    },
+    "Should publish BAM files with different aligner when --bam is used": {
+        "content": [
+            86,
+            [
+                "cd4_REP1.sorted.bam",
+                "cd4_REP2.sorted.bam",
+                "jurkat.sorted.bam",
+                "cd4.bam",
+                "jurkat.bam"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2025-06-28T23:31:10.551067"
+    }
+}

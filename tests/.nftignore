@@ -23,7 +23,7 @@ hisat2/log/*.hisat2.summary.log
 **/*.command.log
 **/*.bedGraph.gz
 **/tagInfo.txt
-**/*.{bam,bai}
+**/*.{cram,crai}
 **/*.featureCounts.txt
 **/*.featureCounts.txt.summary
 **/*.pdf

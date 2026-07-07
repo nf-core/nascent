@@ -60,6 +60,31 @@ The sample column is essentially a concatenation of the group and replicate colu
 
 By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (i.e. `--aligner bwa`) to map the raw FastQ reads to the reference genome. Research as to which aligner works best with Nascent Transcript and Transcription Start Site assays is pending.
 
+## Output Format Options
+
+### CRAM vs BAM Files
+
+By default, the pipeline outputs alignment files in CRAM format to save storage space. CRAM files are typically 30-50% smaller than equivalent BAM files while maintaining full data integrity.
+
+**Default behavior (CRAM output):**
+
+```bash
+nextflow run nf-core/nascent --input samplesheet.csv --outdir results
+```
+
+**To output BAM files instead:**
+
+```bash
+nextflow run nf-core/nascent --input samplesheet.csv --outdir results --bam
+```
+
+**Key considerations:**
+
+- **CRAM files**: Space-efficient, require reference genome for some downstream tools
+- **BAM files**: Larger file size, more widely compatible with downstream tools
+- Internal processing always uses BAM format for compatibility
+- Only final output format is affected by this parameter
+
 ## Reference genome files
 
 The minimum reference genome requirements are a FASTA and GTF file, all other files required to run the pipeline can be generated from these files. However, it is more storage and compute friendly if you are able to re-use reference genome files as efficiently as possible. It is recommended to use the `--save_reference` parameter if you are using the pipeline to build new indices (e.g. those unavailable on [AWS iGenomes](https://nf-co.re/usage/reference_genomes)) so that you can save them somewhere locally. The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/BWA/index/'`) or via a custom config file.

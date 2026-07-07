@@ -1,0 +1,102 @@
+nextflow_pipeline {
+
+    name "BAM Publishing with --bam parameter"
+    script "../../main.nf"
+    tag "bam"
+    tag "publishing"
+
+    test("Should publish BAM files when --bam parameter is used") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bowtie2"
+                bam = true
+            }
+        }
+
+        then {
+            // Get all BAM files
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // Get all CRAM files (should be none when --bam is used)
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
+            // Get BAM index files
+            def bam_index_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam.bai'])
+
+            assertAll(
+                { assert workflow.success },
+                { assert bam_files.size() > 0 : "No BAM files found in output when --bam parameter was used" },
+                { assert cram_files.size() == 0 : "CRAM files found when --bam parameter should produce BAM files" },
+                { assert bam_index_files.size() > 0 : "No BAM index files found" },
+                { assert snapshot(
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // BAM files (names only, content validation removed for consistency)
+                    bam_files.collect{ file -> file.getName() },
+                    // BAM index files
+                    bam_index_files.collect{ file -> file.getName() }
+                ).match() }
+            )
+        }
+    }
+
+    test("Should publish BAM files with different aligner when --bam is used") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "bwa"
+                bam = true
+            }
+        }
+
+        then {
+            // Get all BAM files
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // Get all CRAM files (should be none when --bam is used)
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
+
+            assertAll(
+                { assert workflow.success },
+                { assert bam_files.size() > 0 : "No BAM files found in output when --bam parameter was used" },
+                { assert cram_files.size() == 0 : "CRAM files found when --bam parameter should produce BAM files" },
+                { assert snapshot(
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // BAM files (names only, content validation removed for consistency)
+                    bam_files.collect{ file -> file.getName() }
+                ).match() }
+            )
+        }
+    }
+
+    test("Should handle --bam parameter with STAR aligner") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "star"
+                bam = true
+            }
+        }
+
+        then {
+            // Get all BAM files
+            def bam_files = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // Get all CRAM files (should be none when --bam is used)
+            def cram_files = getAllFilesFromDir(params.outdir, include: ['**/*.cram'])
+
+            assertAll(
+                { assert workflow.success },
+                { assert bam_files.size() > 0 : "No BAM files found in output when --bam parameter was used with STAR" },
+                { assert cram_files.size() == 0 : "CRAM files found when --bam parameter should produce BAM files with STAR" },
+                { assert snapshot(
+                    // Number of tasks
+                    workflow.trace.succeeded().size(),
+                    // BAM files (names only, content validation removed for consistency)
+                    bam_files.collect{ file -> file.getName() }
+                ).match() }
+            )
+        }
+    }
+}

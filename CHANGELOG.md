@@ -5,6 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## dev - [date]
 
+### Added
+
+- [#201](https://github.com/nf-core/nascent/pull/201) - Add CRAM output format support with `--bam` parameter to control output format
+
+### Changed
+
+- [#201](https://github.com/nf-core/nascent/pull/201) - Default output format changed from BAM to CRAM for space efficiency
+
 ### Fixed
 
 TODO Remove bedtools bedgraph

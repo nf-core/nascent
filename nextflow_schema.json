@@ -66,6 +66,12 @@
                     "description": "Skip the adapter trimming step.",
                     "help_text": "Use this if your input FastQ files have already been trimmed outside of the workflow or if you're very confident that there is no adapter contamination in your data.",
                     "fa_icon": "fas fa-fast-forward"
+                },
+                "bam": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-file-archive",
+                    "description": "Output BAM alignment files instead of CRAM.",
+                    "help_text": "By default, the pipeline outputs CRAM alignment files which are smaller and more efficient. Use this parameter if you need BAM files for downstream analysis that doesn't support CRAM format."
                 }
             }
         },
