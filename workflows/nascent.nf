@@ -1,5 +1,17 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RECORD TYPES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+record Sample {
+    id: String
+    strandedness: String
+    single_end: Boolean
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -24,8 +36,8 @@ include { SUBREAD_FEATURECOUNTS as SUBREAD_FEATURECOUNTS_PREDICTED } from '../mo
 include { FASTQC                                                   } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                                  } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap                                         } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc                                     } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML                                   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMultiqc                                     } from 'plugin/nf-core-utils'
+include { softwareVersionsToYAML                                   } from 'plugin/nf-core-utils'
 include { methodsDescriptionText                                   } from '../subworkflows/local/utils_nfcore_nascent_pipeline'
 
 //
@@ -275,7 +287,7 @@ workflow NASCENT {
     //
     ch_genome_bam
         .map { meta, bam ->
-            fmeta = meta.findAll { it.key != 'read_group' }
+            def fmeta = meta.findAll { it.key != 'read_group' }
             // Split and take the first element
             fmeta.id = fmeta.id.split('_')[0]
             [fmeta, bam]
@@ -286,7 +298,7 @@ workflow NASCENT {
     // Group the index files with bams
     ch_genome_bai
         .map { meta, bai ->
-            fmeta = meta.findAll { it.key != 'read_group' }
+            def fmeta = meta.findAll { it.key != 'read_group' }
             // Split and take the first element
             fmeta.id = fmeta.id.split('_')[0]
             [fmeta, bai]

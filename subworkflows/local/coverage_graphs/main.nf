@@ -45,7 +45,7 @@ workflow COVERAGE_GRAPHS {
     }
 
     PINTS_VISUALIZER(
-        bam_bai,
+        bam,
         params.assay_type,
     )
     ch_versions = ch_versions.mix(PINTS_VISUALIZER.out.versions.first())
