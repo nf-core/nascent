@@ -101,7 +101,8 @@
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "dc94b6ee04a05ddb9f7ae050712ff30a13149164",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/fastqc/fastqc.diff"
                     },
                     "gffread": {
                         "branch": "master",
