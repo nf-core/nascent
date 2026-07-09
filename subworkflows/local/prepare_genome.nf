@@ -12,7 +12,8 @@ include {
 } from '../../modules/nf-core/gunzip/main'
 include {
     UNTAR as UNTAR_BWA_INDEX ;
-    UNTAR as UNTAR_DRAGMAP
+    UNTAR as UNTAR_DRAGMAP_INDEX ;
+    UNTAR as UNTAR_BOWTIE2_INDEX
 } from '../../modules/nf-core/untar/main'
 include { GFFREAD                   } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX                 } from '../../modules/nf-core/bwa/index/main'

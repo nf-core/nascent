@@ -6,6 +6,8 @@
 
 ## Introduction
 
+<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+
 ## Samplesheet input
 
 You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
@@ -50,149 +52,6 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
-:::info
-The sample column is essentially a concatenation of the group and replicate columns. If all values of sample have the same number of underscores, fields defined by these underscore-separated names may be used in the transcript identification produced by the pipeline, to regain the ability to represent different groupings.
-
-`GM_0h` and `GM_1h` would be grouped for example but `GM0h` and `GM1h` would go through individual transcript identification
-:::
-
-## Alignment Options
-
-By default, the pipeline uses [BWA](https://bio-bwa.sourceforge.net/) (i.e. `--aligner bwa`) to map the raw FastQ reads to the reference genome. Research as to which aligner works best with Nascent Transcript and Transcription Start Site assays is pending.
-
-## Reference genome files
-
-The minimum reference genome requirements are a FASTA and GTF file, all other files required to run the pipeline can be generated from these files. However, it is more storage and compute friendly if you are able to re-use reference genome files as efficiently as possible. It is recommended to use the `--save_reference` parameter if you are using the pipeline to build new indices (e.g. those unavailable on [AWS iGenomes](https://nf-co.re/usage/reference_genomes)) so that you can save them somewhere locally. The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/BWA/index/'`) or via a custom config file.
-
-- If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
-- If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
-
-## Quantification Options
-
-Currently only featureCounts is supported for quantification. It counts both the genes, and the predicted transcripts.
-
-## Transcript Identification Options
-
-The current options for transcript identification include [GroHMM](https://bioconductor.org/packages/release/bioc/html/groHMM.html), [HOMER](http://homer.ucsd.edu/), and [PINTS](https://pints.yulab.org/).
-
-The default transcript identification option is PINTS, and HOMER if the transcript `assay_type` is `GROseq` but this may change in future releases.
-
-### Which assays need flipping?
-
-From the [Danko-Lab script](https://github.com/Danko-Lab/proseq2.0/blob/master/proseq2.0.bsh) and previous analysis:
-
-- PROseq, PROcap: Needs strand flipping.
-- GROseq, GROcap, CAGE, NETCAGE, RAMPAGE, csRNAseq, STRIPEseq, R_5, R_3, R1_5, R1_3, R2_5, R2_3: Do not need flipping.
-
-### PINTS
-
-PINTS handles the majority of the transcript identification, since it covers all of the supported assays.
-
-PINTS can use a lot of memory while running, so [a scatter-gather pattern was implemented](https://github.com/nf-core/nascent/blob/136a9ca2390121639e823e39e508afe9b6970d77/subworkflows/local/transcript_identification/main.nf#L47-L74).
-
-It splits the identification up by the chromosomes available in the provided FASTA file. Some of the chromosomes are skipped because PINTS throws an error when it doesn't find any regions. If this causes an issue with your analysis please open an issue.
-
-Assays that PINTS supports:
-
-- CoPRO
-- GROcap
-- PROcap
-- CAGE
-- NETCAGE
-- RAMPAGE
-- csRNAseq
-- STRIPEseq
-- PROseq
-- GROseq
-- R_5
-- R_3
-- R1_5
-- R1_3
-- R2_5
-- R2_3
-
-### GroHMM
-
-groHMM is split into two steps: parameter tuning and transcript identification.
-
-When running the pipeline with groHMM as a transcript identification method, the pipeline will automatically perform a parameter tuning process. This process is unique to the groHMM transcript identification method and is designed to select the optimal hold-out parameters for the groHMM algorithm. See [this issue](https://github.com/dankoc/groHMM/issues/4) for more information.
-
-In the groHMM vignette, the code is ran using a single mclapply call, which is a scatter gather approach. This is not ideal for large datasets, because it ends up being bottle-necked by the memory available on your local machine. To improve this, we have written a Nextflow script that runs the pipeline with a scatter gather approach. This is done by running the pipeline with a single hold-out parameter, and then the next parameter, and so on. This is more memory efficient and scales better to larger datasets. The results are then combined in the end as intended and used in the transcript identification process.
-
-#### groHMM Parameters
-
-> The detectTranscripts function also uses two hold-out parameters. These parameters, specified by the arguments LtProbB and UTS, represents the log-transformed transition probability of switching from transcribed state to non-transcribed state and variance of the emission probability for reads in the non-transcribed state, respectively. Holdout parameters are used to optimize the performance of HMM predictions on known genes.
-
-In the pipeline, the parameters are specified as follows:
-grohmm_min_uts = 5
-grohmm_max_uts = 45
-grohmm_min_ltprobb = -100
-grohmm_max_ltprobb = -400
-
-Which will then create a job for each parameter combination. For example (5,-100), (5,-150), (10,-100), (10,-150)...
-
-If you have indentified a good set of parameters, you can run the pipeline with those parameters by specifying, all 4 values.
-
-For example if you have indentified that the best parameters for your data are 15,-200:
-
-```json
-{
-  "grohmm_min_uts": 15,
-  "grohmm_max_uts": 15,
-  "grohmm_min_ltprobb": -200,
-  "grohmm_max_ltprobb": -200
-}
-```
-
-### Homer
-
-HOMER is used for transcript identification when the `assay_type` is set to `GROseq`. HOMER's GRO-seq analysis capabilities include:
-
-- De novo transcript identification from GRO-seq data
-- Support for analyzing nascent RNA production
-- Detection of various RNA species including:
-  - Protein coding transcripts
-  - Promoter anti-sense transcripts
-  - Enhancer templated transcripts (eRNAs)
-  - Long and short non-coding RNAs
-  - miRNA transcripts
-  - Pol III and Pol I transcripts
-
-HOMER uses uniquely mappable regions to improve transcript detection in repetitive regions. The pipeline can automatically download the appropriate uniqmap files for supported genomes:
-
-- Human: hg19, hg38
-- Mouse: mm10
-- Fly: dm6
-
-:::info
-**This setting is off by default**
-:::
-
-To find the full list of uniqmaps supplied by the author check http://homer.ucsd.edu/homer/data/uniqmap/. To build a uniqmap for a genome that isn't supported, check out [homer-uniqmap-nf](https://github.com/Functional-Genomics-Lab/homer-uniqmap-nf).
-
-The transcript detection algorithm:
-
-1. Tracks along each strand looking for continuous GRO-seq signal
-2. Starts transcripts when encountering high read density
-3. Stops transcripts when signal decreases significantly
-4. Creates new transcripts when signal increases sustainably
-5. Filters out artifactual spikes that don't extend over distance
-
-Key parameters that can be tuned:
-
-- tssFold: Fold change required at transcript start (default: 4)
-- bodyFold: Fold change required in transcript body (default: 3)
-- minBodySize: Minimum transcript body size (default: 600bp)
-- maxBodySize: Maximum transcript body size (default: 10000bp)
-
-```nextflow
-withName: HOMER_FINDPEAKS {
-    ext.args = "-style groseq -tssFold 4 -bodyFold 3"
-}
-```
-
-For more info check the [Homer GRO-seq Tutorial](http://homer.ucsd.edu/homer/ngs/groseq/groseq.html).
-
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
@@ -217,7 +76,7 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
 > [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -290,7 +149,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
@@ -314,19 +173,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

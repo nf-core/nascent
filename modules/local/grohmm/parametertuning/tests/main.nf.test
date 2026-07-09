@@ -4,6 +4,7 @@ nextflow_process {
     script "modules/local/grohmm/parametertuning/main.nf"
     process "GROHMM_PARAMETERTUNING"
     tag "grohmm"
+    config "./nextflow.config"
 
     test("Should run with defaults") {
         when {
@@ -14,16 +15,13 @@ nextflow_process {
                 """
                 input[0] = [
                     [ id: 'Sall' ],
-                    [ file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S0mR1.bam", checkIfExists: true),
-                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/master/inst/extdata/S40mR1.bam", checkIfExists: true) ],
+                    [ file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/9e4389dc3da8b6d55e066abd1efb8577b13b4a2b/inst/extdata/S0mR1.bam", checkIfExists: true),
+                    file("https://raw.githubusercontent.com/Kraus-Lab/groHMM/9e4389dc3da8b6d55e066abd1efb8577b13b4a2b/inst/extdata/S40mR1.bam", checkIfExists: true) ],
                     [],
+                    5,
+                    -100,
                 ]
-                input[1] = file(
-                            "https://raw.githubusercontent.com/nf-core/test-datasets/nascent/reference/hg19.chr7.refGene.gtf",
-                            checkIfExists: true
-                            )
-                input[2] = 5
-                input[3] = -100
+                input[1] = file("https://raw.githubusercontent.com/nf-core/test-datasets/2d87aaf7c488e77364d3485f2f1cd6b117be06ac/reference/hg19.chr7.refGene.gtf", checkIfExists: true)
                 """
             }
         }

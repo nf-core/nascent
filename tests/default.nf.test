@@ -1,0 +1,22 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("-profile test") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            assert workflow.success
+            assert stable_path.contains('multiqc/multiqc_report.html')
+            assert stable_path.contains('pipeline_info/nf_core_nascent_software_mqc_versions.yml')
+        }
+    }
+}
