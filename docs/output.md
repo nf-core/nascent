@@ -16,6 +16,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Alignment](#alignment)
   - [bwa](#bwa) - Mapping low-divergent sequences against a large reference genome
   - [bwa-mem2](#bwa-mem2) - The next version of bwa-mem
+  - [MiniBWA](#minibwa) - Successor of bwa-mem for short-read alignment
   - [DRAGMAP](#dragmap) - Open-source software implementation of the DRAGEN mapper
   - [Bowtie 2](#bowtie-2) - A fast and sensitive gapped read aligner
   - [HISAT2](#hisat2) - A fast and sensitive gapped read aligner
@@ -106,6 +107,21 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 </details>
 
 [BWA-mem2](https://github.com/bwa-mem2/bwa-mem2) is a software package for mapping low-divergent sequences against a large reference genome.The aligned reads are then coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
+
+### MiniBWA
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `minibwa/`
+  - `*.bam`: BAM file containing read alignments to the reference genome.
+  - `*.bai`: BAI index file for the BAM file.
+- `minibwa/log/`
+  - `*.minibwa.log`: Log of the stderr from the aligner.
+
+</details>
+
+[MiniBWA](https://github.com/lh3/minibwa) is a successor of BWA-MEM for short-read alignment. The aligned reads are coordinate-sorted with [samtools](https://www.htslib.org/doc/samtools.html).
 
 ### DRAGMAP
 
