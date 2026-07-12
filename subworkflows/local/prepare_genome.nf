@@ -18,7 +18,6 @@ include {
 include { GFFREAD                   } from '../../modules/nf-core/gffread/main'
 include { BWA_INDEX                 } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX             } from '../../modules/nf-core/bwamem2/index/main'
-include { MINIBWA_INDEX             } from '../../modules/local/minibwa/index/main'
 include { DRAGMAP_HASHTABLE         } from '../../modules/nf-core/dragmap/hashtable/main'
 include { BOWTIE2_BUILD             } from '../../modules/nf-core/bowtie2/build/main'
 include { CUSTOM_GETCHROMSIZES      } from '../../modules/nf-core/custom/getchromsizes/main'
@@ -32,7 +31,6 @@ workflow PREPARE_GENOME {
     gene_bed
     bwa_index
     bwamem2_index
-    minibwa_index
     dragmap
     bowtie2_index
     hisat2_index
@@ -107,7 +105,6 @@ workflow PREPARE_GENOME {
     // Uncompress BWA index or generate from scratch if required
     //
     ch_bwa_index = Channel.empty()
-    ch_minibwa_index = Channel.empty()
     ch_dragmap = Channel.empty()
     ch_bowtie2_index = Channel.empty()
     // TODO Turn this into a switch
@@ -141,21 +138,6 @@ workflow PREPARE_GENOME {
         else {
             ch_bwa_index = BWAMEM2_INDEX(ch_fasta.map { [[:], it] }).index
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
-        }
-    }
-    else if ('minibwa' in prepare_tool_indices) {
-        if (minibwa_index) {
-            if (minibwa_index.endsWith('.tar.gz') || minibwa_index.endsWith('.tgz')) {
-                ch_minibwa_index = UNTAR_BWA_INDEX([[:], minibwa_index]).untar
-                ch_versions = ch_versions.mix(UNTAR_BWA_INDEX.out.versions)
-            }
-            else {
-                ch_minibwa_index = [[meta: "Genome"], file(minibwa_index)]
-            }
-        }
-        else {
-            ch_minibwa_index = MINIBWA_INDEX(ch_fasta.map { [[:], it] }).index
-            ch_versions = ch_versions.mix(MINIBWA_INDEX.out.versions)
         }
     }
     else if ('dragmap' in prepare_tool_indices) {
@@ -198,7 +180,6 @@ workflow PREPARE_GENOME {
     gene_bed      = ch_gene_bed
     chrom_sizes   = ch_chrom_sizes
     bwa_index     = ch_bwa_index
-    minibwa_index = ch_minibwa_index
     dragmap       = ch_dragmap
     bowtie2_index = ch_bowtie2_index
     versions      = ch_versions.ifEmpty(null)

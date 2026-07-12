@@ -28,10 +28,6 @@
 
   > M. Vasimuddin, S. Misra, H. Li and S. Aluru, "Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems," 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS), 2019, pp. 314-324. doi: 10.1109/IPDPS.2019.00041.
 
-- [MiniBWA](https://arxiv.org/abs/2606.15357)
-
-  > Li H, Homer N. Fast genomic read alignment with minibwa. arXiv 2026. doi: 10.48550/arXiv.2606.15357
-
 - [deepTools](https://github.com/deeptools/deepTools)
 
   > Ramírez, Fidel, Devon P. Ryan, Björn Grüning, Vivek Bhardwaj, Fabian Kilpert, Andreas S. Richter, Steffen Heyne, Friederike Dündar, and Thomas Manke. deepTools2: A next Generation Web Server for Deep-Sequencing Data Analysis. Nucleic Acids Research (2016). doi:10.1093/nar/gkw257.

@@ -32,7 +32,6 @@ params.gff = getGenomeAttribute('gff')
 params.gene_bed = getGenomeAttribute('bed12')
 params.bwa_index = getGenomeAttribute('bwa')
 params.bwamem2_index = getGenomeAttribute('bwamem2')
-params.minibwa_index = getGenomeAttribute('minibwa')
 params.dragmap = getGenomeAttribute('dragmap')
 params.bowtie2_index = getGenomeAttribute('bowtie2')
 params.hisat2_index = getGenomeAttribute('hisat2')
@@ -66,7 +65,6 @@ workflow NFCORE_NASCENT {
         params.gene_bed,
         params.bwa_index,
         params.bwamem2_index,
-        params.minibwa_index,
         params.dragmap,
         params.bowtie2_index,
         params.hisat2_index,

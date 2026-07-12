@@ -53,7 +53,7 @@
                     "type": "string",
                     "default": "bwa",
                     "fa_icon": "fas fa-puzzle-piece",
-                    "enum": ["bwa", "bwamem2", "minibwa", "dragmap", "bowtie2", "hisat2", "star"],
+                    "enum": ["bwa", "bwamem2", "dragmap", "bowtie2", "hisat2", "star"],
                     "description": "Specify aligner to be used to map reads to reference genome."
                 },
                 "skip_alignment": {
@@ -234,13 +234,6 @@
                     "description": "Path to bwa-mem2 mem indices.",
                     "fa_icon": "fas fa-copy",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference.",
-                    "hidden": true
-                },
-                "minibwa_index": {
-                    "type": "string",
-                    "description": "Path to MiniBWA indices.",
-                    "fa_icon": "fas fa-copy",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference, if `--aligner minibwa` is specified. Combine with `--save_reference` to save for future runs.",
                     "hidden": true
                 },
                 "dragmap": {
