@@ -1,4 +1,9 @@
 lint:
+  files_exist:
+    - .github/workflows/nf-test.yml
+    - .github/actions/get-shards/action.yml
+    - .github/actions/nf-test/action.yml
+    - tests/default.nf.test
   files_unchanged:
     - .github/workflows/linting.yml
     - LICENSE
@@ -6,7 +11,10 @@ lint:
     - assets/nf-core-nascent_logo_light.png
     - docs/images/nf-core-nascent_logo_light.png
     - .github/PULL_REQUEST_TEMPLATE.md
-nf_core_version: 4.0.2
+  nextflow_config: false
+  nfcore_components: false
+  schema_params: false
+nf_core_version: 4.0.3
 repository_type: pipeline
 template:
   author: Edmund Miller, Ignacio Tripodi, Margaret Gruca
