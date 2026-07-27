@@ -4,6 +4,9 @@ lint:
     - .github/workflows/linting.yml
     - LICENSE
     - assets/email_template.html
+    - .github/workflows/branch.yml
+  files_exist:
+    - .github/workflows/linting_comment.yml
 nf_core_version: 3.2.1
 repository_type: pipeline
 template:
