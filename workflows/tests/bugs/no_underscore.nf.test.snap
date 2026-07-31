@@ -1,0 +1,12 @@
+{
+    "Should work with samples that don't have an underscore": {
+        "content": [
+            58
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
+        },
+        "timestamp": "2024-08-16T22:12:17.34063593"
+    }
+}

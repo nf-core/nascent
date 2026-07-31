@@ -1,0 +1,4 @@
+sample,fastq_1,fastq_2
+DUTTKE,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T1.fastq.gz,
+EXP,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882903_T2.fastq.gz,
+DUTTKE,https://raw.githubusercontent.com/nf-core/test-datasets/nascent/testdata/SRX882904_T1.fastq.gz,
