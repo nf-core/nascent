@@ -1,0 +1,45 @@
+nextflow_pipeline {
+
+    name "Replicates"
+    script "../../../../main.nf"
+    tag "bug"
+
+    // BUG https://github.com/nf-core/nascent/issues/159
+    test("Should fail with replicates that have the same filename") {
+        when {
+            params {
+                outdir = "$outputDir"
+                input = "${projectDir}/workflows/tests/bugs/replicates_same_filename/replicates_same_filename.csv"
+            }
+        }
+
+        then {
+            // FIXME this fails at FASTQC but should fail at nf-validation
+            // Might get fixed in nf-schema?
+            assert workflow.failed
+            assert snapshot(
+                workflow.trace.tasks().size(),
+            ).match()
+        }
+    }
+
+    // BUG https://github.com/nf-core/nascent/issues/159
+    test("Should work with replicates that have the same id and different file names") {
+        when {
+            params {
+                outdir = "$outputDir"
+                input = "${projectDir}/workflows/tests/bugs/replicates_same_filename/same_id.csv"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.trace.tasks().size(),
+                ).match()
+                }
+            )
+        }
+    }
+}
