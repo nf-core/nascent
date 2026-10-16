@@ -1,0 +1,14 @@
+name: grohmm
+channels:
+  - https://repo.prefix.dev/bioinformaticsorphanage
+  - conda-forge
+  - bioconda
+dependencies:
+  - conda-forge::r-base
+  - conda-forge::r-optparse
+  - conda-forge::r-argparse
+  - bioconda::bioconductor-genomicfeatures
+  # NOTE Can't use the official package because of
+  # https://github.com/dankoc/groHMM/issues/2
+  # - bioconda::bioconductor-grohmm=1.28.0
+  - bioinfoorphanage-grohmm=1.37.0
