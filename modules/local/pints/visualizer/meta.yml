@@ -1,0 +1,66 @@
+name: "pints_visualizer"
+description: Visualization script for creating strand-specific bigWig files from nascent RNA-seq data
+keywords:
+  - bigWig
+  - visualization
+  - CoPRO
+  - GRO-cap
+  - PRO-cap
+  - CAGE
+  - NETCAGE
+  - RAMPAGE
+  - csRNA-seq
+  - STRIPE-seq
+  - PRO-seq
+  - GRO-seq
+tools:
+  - "pints":
+      description: "Peak Identifier for Nascent Transcripts Starts (PINTS)"
+      homepage: "https://pints.yulab.org/"
+      documentation: "https://github.com/hyulab/PINTS/blob/main/README.md"
+      tool_dev_url: "https://github.com/hyulab/PINTS"
+      doi: "10.1038/s41587-022-01211-7"
+      licence: ["GPL v3"]
+      identifier: biotools:pyPINTS
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - bam:
+        type: file
+        description: BAM file to generate bigWig files from
+        pattern: "*.{bam}"
+    - chr_name:
+        type: string
+        description: Optional chromosome name prefix to filter
+  - assay_type:
+      type: string
+      description: Type of experiment (CoPRO/GROcap/GROseq/PROcap/PROseq)
+  - norm_factor:
+      type: float
+      description: Normalization factor for signal
+  - rpm_normalize:
+      type: boolean
+      description: Whether to apply RPM normalization
+  - reverse_complement:
+      type: boolean
+      description: Whether the reads represent the reverse complement of nascent RNAs
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - bigwigs:
+      type: file
+      description: Two strand-specific bigWig files (forward and reverse)
+      pattern: "*_{pl,mn}.bw"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@hyulab"
+  - "@edmiller01"

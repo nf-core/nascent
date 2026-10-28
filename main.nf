@@ -15,7 +15,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { NASCENT  } from './workflows/nascent'
+include { NASCENT } from './workflows/nascent'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nascent_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nascent_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nascent_pipeline'
@@ -26,10 +26,18 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nasc
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
 params.fasta = getGenomeAttribute('fasta')
+params.gtf = getGenomeAttribute('gtf')
+params.gff = getGenomeAttribute('gff')
+params.gene_bed = getGenomeAttribute('bed12')
+params.bwa_index = getGenomeAttribute('bwa')
+params.bwamem2_index = getGenomeAttribute('bwamem2')
+params.minibwa_index = getGenomeAttribute('minibwa')
+params.dragmap = getGenomeAttribute('dragmap')
+params.bowtie2_index = getGenomeAttribute('bowtie2')
+params.hisat2_index = getGenomeAttribute('hisat2')
+params.star_index = null
+params.homer_uniqmap = getGenomeAttribute('uniqmap')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,10 +60,18 @@ workflow NFCORE_NASCENT {
     //
     NASCENT (
         samplesheet,
-        params.multiqc_config,
-        params.multiqc_logo,
-        params.multiqc_methods_description,
-        params.outdir,
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.gene_bed,
+        params.bwa_index,
+        params.bwamem2_index,
+        params.minibwa_index,
+        params.dragmap,
+        params.bowtie2_index,
+        params.hisat2_index,
+        params.star_index,
+        params.use_homer_uniqmap ? params.homer_uniqmap : []
     )
     emit:
     multiqc_report = NASCENT.out.multiqc_report // channel: /path/to/multiqc_report.html
