@@ -1,0 +1,69 @@
+nextflow_workflow {
+
+    name "Test COVERAGE_GRAPHS"
+    script "../main.nf"
+    workflow "COVERAGE_GRAPHS"
+
+    // Required test data
+    test("Should flip strands for PROseq assay") {
+
+        when {
+            params {
+                assay_type = "PROseq"
+            }
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample', strandedness:'forward' ],
+                    file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),
+                    file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai")
+                ])
+                input[1] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.sizes")
+                input[2] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta")
+                input[3] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai")
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.trace).match("flipped_trace") },
+                { assert snapshot(workflow.out.plus_minus.get(0)[1]).match("flipped_bigwig") },
+                { assert snapshot(path(workflow.out.versions.get(0)).yaml).match("flipped_versions") }
+            )
+        }
+    }
+
+    test("Should NOT flip strands for GROseq assay") {
+
+        when {
+            params {
+                assay_type = "GROseq"
+            }
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample', strandedness:'forward' ],
+                    file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam"),
+                    file("https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai")
+                ])
+                input[1] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.sizes")
+                input[2] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta")
+                input[3] = file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai")
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.trace).match("nonflipped_trace") },
+                { assert snapshot(workflow.out.plus_minus.get(0)[1]).match("nonflipped_bigwig") },
+                { assert snapshot(path(workflow.out.versions.get(0)).yaml).match("nonflipped_versions") }
+            )
+        }
+    }
+}

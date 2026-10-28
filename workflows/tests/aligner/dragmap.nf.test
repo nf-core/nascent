@@ -1,0 +1,22 @@
+nextflow_pipeline {
+
+    name "DRAGMAP"
+    script "../../../main.nf"
+
+    test("Should run with defaults") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                aligner = "dragmap"
+            }
+        }
+
+        then {
+            // FIXME Broken on ARM and difficult to maintain, considering deprecating
+            assertAll(
+                { assert workflow.success },
+            )
+        }
+    }
+}
